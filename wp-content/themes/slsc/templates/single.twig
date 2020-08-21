@@ -1,0 +1,14 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+  <!-- Provided by templates/single.twig -->
+  {% embed '@layouts/regions/content/content.twig' %}
+    {% block content %}
+      {% if function( 'get_post_format' ) %}
+        {% include 'post-formats/content-' ~ function( 'get_post_format' ) ~ '.twig' %}
+      {% else %}
+        {% include 'post-formats/content.twig' %}
+      {% endif %}
+    {% endblock %}
+  {% endembed %}
+{% endblock %}
