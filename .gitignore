@@ -1,0 +1,28 @@
+# OS generated files #
+######################
+.DS_Store*
+ehthumbs.db
+Thumbs.db
+._*
+
+# WordPress #
+############
+wp-content/advanced-cache.php
+wp-content/backup-db/
+wp-content/backups/
+wp-content/uploads/
+wp-content/upgrade/
+wp-content/wp-cache-config.php
+sitemap.xml
+sitemap.xml.gz
+wp-config.php
+/.htaccess
+
+# Logs and databases #
+######################
+*.log
+*.sql
+
+# SASS #
+##########
+.sass-cache
