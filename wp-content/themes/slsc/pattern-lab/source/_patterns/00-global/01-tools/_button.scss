@@ -1,12 +1,12 @@
 // @file
 // Button styles
 
-$button-border-radius: 3px !default;
-$button-color-bg: #0071bc !default;
+$button-border-radius: 4px !default;
+$button-color-bg: #fff !default;
 $button-color-bg-active: #112e51 !default;
 $button-color-bg-disabled: #d6d7d9 !default;
-$button-color-bg-hover: #205493 !default;
-$button-color-text: #fff !default;
+$button-color-bg-hover: #330000 !default;
+$button-color-text: #330000 !default;
 $button-color-text-active: #fff !default;
 $button-color-text-disabled: #323a45 !default;
 $button-color-text-hover: #fff !default;
@@ -25,7 +25,7 @@ $button-font-size: $font-size-md !default;
   $font-size: $button-font-size) {
   @extend %base-font-family;
   background-color: $color-bg;
-  border: 0;
+  border: 1px solid #fff;
   border-radius: $border-radius;
   color: $color-text;
   cursor: pointer;

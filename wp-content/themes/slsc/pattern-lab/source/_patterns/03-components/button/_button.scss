@@ -19,12 +19,13 @@
 
 // Drupal outputs this class on buttons that can delete content.
 .button--danger {
-  background-color: #e31c3d;
-  color: #fff;
+  background-color: #fff;
+  border: 1px solid #fff;
+  color: #330000;
 
   &:focus,
   &:hover {
-    background-color: #cd2026;
+    background-color: #330000;
     color: #fff;
   }
 

@@ -970,6 +970,12 @@ h1, h2, h3, h4, h5, h6 {
 .swiper-title {
   font-size: 48px; }
 
+.swiper-pagination {
+  position: relative; }
+
+.swiper-pagination-bullet-active {
+  background: #fff; }
+
 .wp-caption {
   max-width: 100%; }
   .wp-caption .wp-caption-text {
@@ -1006,10 +1012,10 @@ h1, h2, h3, h4, h5, h6 {
   text-decoration: none; }
 
 .button {
-  background-color: #0071bc;
-  border: 0;
-  border-radius: 3px;
-  color: #fff;
+  background-color: #fff;
+  border: 1px solid #fff;
+  border-radius: 4px;
+  color: #330000;
   cursor: pointer;
   display: inline-block;
   font-size: 1rem;
@@ -1024,7 +1030,7 @@ h1, h2, h3, h4, h5, h6 {
   white-space: normal;
   margin: 0 0 0.5em; }
   .button:focus, .button:hover {
-    background-color: #205493;
+    background-color: #330000;
     color: #fff;
     outline: 0; }
   .button:active {
@@ -1042,10 +1048,11 @@ h1, h2, h3, h4, h5, h6 {
       margin-right: 0.5em; }
 
 .button--danger {
-  background-color: #e31c3d;
-  color: #fff; }
+  background-color: #fff;
+  border: 1px solid #fff;
+  color: #330000; }
   .button--danger:focus, .button--danger:hover {
-    background-color: #cd2026;
+    background-color: #330000;
     color: #fff; }
   .button--danger:active {
     background-color: #981b1e;
@@ -2139,7 +2146,7 @@ details.details {
 
 .tabs__link {
   background-color: #d6d7d9;
-  border: 0;
+  border: 1px solid #fff;
   border-radius: 0;
   color: #212121;
   cursor: pointer;

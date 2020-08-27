@@ -20,3 +20,11 @@
 .swiper-title {
   font-size: 48px;
 }
+
+.swiper-pagination {
+  position: relative;
+} 
+
+.swiper-pagination-bullet-active{
+  background: #fff;
+}
