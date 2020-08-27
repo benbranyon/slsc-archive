@@ -30,7 +30,20 @@ $templates = array(
 	'page.twig' 
 );
 // Set the Homepage template.
-if ( is_front_page() ) array_unshift( $templates, 'front-page.twig' );
+if ( is_front_page() ) {
+	$args = array(
+	    // Get post type project
+	    'post_type' => 'get_involved',
+	    // Get all posts
+	    'posts_per_page' => 2,
+	    // Order by post date
+	    'orderby' => array(
+	        'date' => 'DESC'
+	    )
+	);
+	$context['get_involved'] = Timber::get_posts($args);
+	array_unshift( $templates, 'front-page.twig' );
+} 
 // Render twig template.
 if ( post_password_required( $post->ID ) ) {
 	Timber::render( 'components/password-form.twig', $context );
