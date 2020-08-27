@@ -42,6 +42,17 @@ if ( is_front_page() ) {
 	    )
 	);
 	$context['get_involved'] = Timber::get_posts($args);
+	$args = array(
+	    // Get post type project
+	    'post_type' => 'story',
+	    // Get all posts
+	    'posts_per_page' => 5,
+	    // Order by post date
+	    'orderby' => array(
+	        'date' => 'DESC'
+	    )
+	);
+	$context['stories'] = Timber::get_posts($args);
 	array_unshift( $templates, 'front-page.twig' );
 } 
 // Render twig template.

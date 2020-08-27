@@ -6,6 +6,14 @@
     {% block sidebar_main %}
       <div class="frontpage__content">
       	<h2>Stories from the archive</h2>
+      	{% for story in stories %}
+      	  <div>
+      	  	<div>
+      	  		<img src="{{ story.thumbnail.src }}" alt="Image for {{ story.title }}" />
+      	  	</div>
+      	  	<h3>{{ story.post_title }}</h3>
+      	  </div>
+      	{% endfor %}
       </div>
     {% endblock %}
     {% block sidebar_aside %}
