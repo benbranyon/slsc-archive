@@ -1737,6 +1737,8 @@ details.details {
     margin-right: 10px; }
     .menu--main .menu__item::after {
       content: '/'; }
+    .menu--main .menu__item.last::after {
+      display: none; }
   .menu--main .menu__link {
     color: #fff;
     margin-right: 5px;

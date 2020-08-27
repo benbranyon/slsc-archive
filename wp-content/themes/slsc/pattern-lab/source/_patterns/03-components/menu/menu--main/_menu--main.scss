@@ -12,6 +12,11 @@
     &::after {
       content: '/';
     }
+    &.last {
+      &::after {
+        display: none;
+      }
+    }
   }
 
   .menu__link {
