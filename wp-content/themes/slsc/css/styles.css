@@ -450,7 +450,7 @@ html, .button, .tabs__link {
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: "Open Sans", sans-serif; }
+  font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "Geneva,Verdana", sans-serif; }
 
 /* generated with grunt-sass-globbing */
 .l-constrain {
@@ -820,10 +820,10 @@ h1, h2, h3, h4, h5, h6 {
         -ms-flex-pack: justify;
             justify-content: space-between; }
 
-.l-navigation {
+.l-header .menu--main {
   display: none; }
   @media (min-width: 43.75em) {
-    .l-navigation {
+    .l-header .menu--main {
       display: block; } }
 
 .l-section {
@@ -952,7 +952,10 @@ h1, h2, h3, h4, h5, h6 {
   display: block; }
 
 .swiper-container {
-  max-width: 800px; }
+  max-width: 1000px; }
+
+.swiper-wrapper {
+  margin-bottom: 40px; }
 
 .swiper-button-next,
 .swiper-button-prev {
@@ -967,8 +970,15 @@ h1, h2, h3, h4, h5, h6 {
 .swiper-slide {
   text-align: center; }
 
+.swiper-image {
+  margin-bottom: 40px; }
+
 .swiper-title {
-  font-size: 48px; }
+  color: #fff;
+  font-size: 48px;
+  margin: 0 auto;
+  max-width: 531px;
+  margin-bottom: 30px; }
 
 .swiper-pagination {
   position: relative; }

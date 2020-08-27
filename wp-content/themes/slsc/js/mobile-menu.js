@@ -9,7 +9,7 @@ jQuery( document ).ready(function( $ ) {
   var $mobileNav = $('<nav class="mobile-menu" role="navigation"></nav>'),
       $mobileBar = $('<div class="mobile-menu__bar"><button class="mobile-menu__button js-mobile-menu-button mobile-menu__button--menu"><span class="mobile-menu__icon mobile-menu__icon--menu">Menu</span></button></div>'),
       $mobileLinks = $('<div class="mobile-menu__links hidden"></div>'),
-      $mainMenu = $('.l-navigation').find('.menu--main').first().clone();
+      $mainMenu = $('.l-header').find('.menu--main').first().clone();
 
   // Only create mobile menu if there is a main menu.
   if ($mainMenu.length > 0) {

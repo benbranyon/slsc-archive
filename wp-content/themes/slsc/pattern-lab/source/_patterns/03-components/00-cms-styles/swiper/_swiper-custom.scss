@@ -1,5 +1,9 @@
 .swiper-container { 
-  max-width: 800px;
+  max-width: 1000px;
+}
+
+.swiper-wrapper {
+  margin-bottom: 40px;
 }
 
 .swiper-button-next,
@@ -17,8 +21,16 @@
   text-align: center;
 }
 
+.swiper-image {
+  margin-bottom: 40px;
+}
+
 .swiper-title {
+  color: #fff;
   font-size: 48px;
+  margin: 0 auto;
+  max-width: 531px;
+  margin-bottom: 30px;
 }
 
 .swiper-pagination {
