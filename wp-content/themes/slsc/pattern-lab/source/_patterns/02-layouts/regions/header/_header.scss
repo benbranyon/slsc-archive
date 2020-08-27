@@ -1,4 +1,9 @@
 // @file
 // Styles for Header Layout.
 
-.l-header {}
+.l-header {
+  background-color: #330000;
+  .l-constrain {
+    display: flex;
+  }
+}

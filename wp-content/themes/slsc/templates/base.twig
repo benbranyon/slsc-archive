@@ -22,11 +22,6 @@
         'url': site.url,
         'site_name': site.title
       } %}
-    {% endblock  %}
-  {% endembed %}
-
-  {% embed '@layouts/regions/navigation/navigation.twig' %}
-    {% block content %}
       {% include '@components/menu/menu.twig' with {
         'items': primary_menu.items,
         'menu_name': 'main'
@@ -54,7 +49,6 @@
   </main>
 
   {% block footer %}
-    {% include 'footer.twig' %}
     {{ function('wp_footer') }}
   {% endblock %}
 
