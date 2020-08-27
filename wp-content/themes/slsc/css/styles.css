@@ -815,7 +815,10 @@ h1, h2, h3, h4, h5, h6 {
   .l-header .l-constrain {
     display: -webkit-box;
     display: -ms-flexbox;
-    display: flex; }
+    display: flex;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between; }
 
 .l-navigation {
   display: none; }
@@ -1720,9 +1723,20 @@ details.details {
 .menu--main {
   list-style-type: none;
   margin-left: 0;
-  padding-left: 0; }
+  padding-left: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center; }
   .menu--main > li {
     display: inline; }
+  .menu--main .menu__link {
+    color: #fff;
+    text-decoration: none; }
+    .menu--main .menu__link:hover, .menu--main .menu__link:focus {
+      text-decoration: underline; }
 
 .menu--mobile {
   margin: 0.75em 0 0 0; }
@@ -2051,7 +2065,11 @@ details.details {
 
 .site-name {
   color: #fff;
+  padding: 20px 0px;
   text-decoration: none; }
+
+.site-name__text {
+  margin-bottom: 0px; }
 
 .tabs::after {
   clear: both;

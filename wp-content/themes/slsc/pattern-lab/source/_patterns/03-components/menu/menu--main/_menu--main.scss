@@ -3,4 +3,15 @@
 
 .menu--main {
   @include list-inline;
+  display: flex;
+  align-items: center;
+
+  .menu__link {
+    color: #fff;
+    text-decoration: none;
+    &:hover, 
+    &:focus {
+      text-decoration: underline;
+    }
+  }
 }
