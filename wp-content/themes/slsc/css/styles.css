@@ -951,6 +951,25 @@ h1, h2, h3, h4, h5, h6 {
 .sticky {
   display: block; }
 
+.swiper-container {
+  max-width: 800px; }
+
+.swiper-button-next,
+.swiper-button-prev {
+  background-color: #fff;
+  border-radius: 50%;
+  height: 105px;
+  width: 105px; }
+  .swiper-button-next::after,
+  .swiper-button-prev::after {
+    color: #000; }
+
+.swiper-slide {
+  text-align: center; }
+
+.swiper-title {
+  font-size: 48px; }
+
 .wp-caption {
   max-width: 100%; }
   .wp-caption .wp-caption-text {

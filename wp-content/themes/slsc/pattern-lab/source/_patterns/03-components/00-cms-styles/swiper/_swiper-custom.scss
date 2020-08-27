@@ -1,0 +1,22 @@
+.swiper-container { 
+  max-width: 800px;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  background-color: #fff;
+  border-radius: 50%;
+  height: 105px;
+  width: 105px;
+  &::after {
+    color: #000;
+  }
+}
+
+.swiper-slide {
+  text-align: center;
+}
+
+.swiper-title {
+  font-size: 48px;
+}

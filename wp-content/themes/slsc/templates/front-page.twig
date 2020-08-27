@@ -6,14 +6,22 @@
     {% block sidebar_main %}
       <div class="frontpage__content">
       	<h2>Stories from the archive</h2>
-      	{% for story in stories %}
-      	  <div>
-      	  	<div>
-      	  		<img src="{{ story.thumbnail.src }}" alt="Image for {{ story.title }}" />
-      	  	</div>
-      	  	<h3>{{ story.post_title }}</h3>
-      	  </div>
-      	{% endfor %}
+      	<div class="swiper-container">
+      		<div class="swiper-wrapper">
+		      	{% for story in stories %}
+		      	  <div class="swiper-slide">
+		      	  	<div>
+		      	  		<img src="{{ story.thumbnail.src }}" alt="Image for {{ story.title }}" />
+		      	  	</div>
+		      	  	<h3 class="swiper-title">{{ story.post_title }}</h3>
+		      	  	<button class="button">View Story</button>
+		      	  </div>
+		      	{% endfor %}
+		    </div>
+		    <div class="swiper-button-prev"></div>
+		    <div class="swiper-button-next"></div>
+		    <div class="swiper-pagination"></div>
+	      </div>
       </div>
     {% endblock %}
     {% block sidebar_aside %}
