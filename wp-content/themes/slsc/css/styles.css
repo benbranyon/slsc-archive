@@ -1732,8 +1732,16 @@ details.details {
           align-items: center; }
   .menu--main > li {
     display: inline; }
+  .menu--main .menu__item {
+    color: #fff; }
+    .menu--main .menu__item::after {
+      content: '/';
+      position: absolute;
+      margin-right: 5px;
+      right: 5px; }
   .menu--main .menu__link {
     color: #fff;
+    margin-right: 5px;
     text-decoration: none; }
     .menu--main .menu__link:hover, .menu--main .menu__link:focus {
       text-decoration: underline; }

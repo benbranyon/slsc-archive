@@ -6,8 +6,19 @@
   display: flex;
   align-items: center;
 
+  .menu__item {
+    color: #fff;
+    &::after {
+      content: '/';
+      position: absolute;
+      margin-right: 5px;
+      right: 5px;
+    }
+  }
+
   .menu__link {
     color: #fff;
+    margin-right: 5px;
     text-decoration: none;
     &:hover, 
     &:focus {
