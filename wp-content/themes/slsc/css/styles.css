@@ -1733,12 +1733,10 @@ details.details {
   .menu--main > li {
     display: inline; }
   .menu--main .menu__item {
-    color: #fff; }
+    color: #fff;
+    margin-right: 10px; }
     .menu--main .menu__item::after {
-      content: '/';
-      position: absolute;
-      margin-right: 5px;
-      right: 5px; }
+      content: '/'; }
   .menu--main .menu__link {
     color: #fff;
     margin-right: 5px;

@@ -8,11 +8,9 @@
 
   .menu__item {
     color: #fff;
+    margin-right: 10px;
     &::after {
       content: '/';
-      position: absolute;
-      margin-right: 5px;
-      right: 5px;
     }
   }
 
