@@ -6,6 +6,6 @@
   display: none;
 
   @include breakpoint($bp-hide-mobile-menu) {
-    display: block;
+    display: flex;
   }
 }

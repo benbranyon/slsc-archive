@@ -11,6 +11,7 @@
     margin-right: 10px;
     &::after {
       content: '/';
+      color: #ccc;
     }
     &.last {
       &::after {
@@ -21,6 +22,7 @@
 
   .menu__link {
     color: #fff;
+    font-size: 18px;
     margin-right: 5px;
     text-decoration: none;
     &:hover, 

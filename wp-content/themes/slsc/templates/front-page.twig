@@ -5,7 +5,7 @@
   {% embed '@layouts/sidebar/sidebar.twig' %}
     {% block sidebar_main %}
       <div class="frontpage__content">
-      	<h2>Stories from the archive</h2>
+      	<h2 class="story-title">Stories from the archive</h2>
       	<div class="swiper-container">
       		<div class="swiper-wrapper">
 		      	{% for story in stories %}
@@ -33,7 +33,7 @@
    	        <h3>{{ item.post_title }}</h3>
    	      </div>
    	    {% endfor %}
-   	    <a href="#">View All</a>
+   	    <a class="get-involved__link" href="#">View All</a>
    	  <hr/>
    	  <h2>Related</h2>
     {% endblock %}

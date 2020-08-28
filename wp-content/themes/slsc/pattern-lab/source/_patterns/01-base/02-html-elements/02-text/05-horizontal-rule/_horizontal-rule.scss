@@ -2,7 +2,8 @@
 // Horizontal rule styles.
 
 hr {
-  border: 1px solid $color-text-secondary;
+  border: 1px solid #999;
+  border-bottom: 0px;
   box-sizing: content-box;
   height: 0;
   margin: rem($vertical-spacing) 0;

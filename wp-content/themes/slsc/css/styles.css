@@ -118,13 +118,13 @@ var {
   outline: none !important; }
 
 ::-moz-selection {
-  background: #dce4ef;
-  color: #212121;
+  background: #330000;
+  color: #fff;
   text-shadow: none; }
 
 ::selection {
-  background: #dce4ef;
-  color: #212121;
+  background: #330000;
+  color: #fff;
   text-shadow: none; }
 
 * {
@@ -239,13 +239,15 @@ p {
 
 a {
   background-color: transparent;
-  color: #0071bc;
+  color: #330000;
   outline-offset: 0.1em;
+  text-decoration: none;
   -webkit-text-decoration-skip: objects; }
   a:active, a:hover {
     outline: 0; }
   a:hover, a:focus {
-    color: #205493; }
+    color: #330000;
+    text-decoration: underline; }
   @media print {
     a, a:visited {
       text-decoration: none; }
@@ -307,7 +309,8 @@ pre {
       page-break-inside: avoid; } }
 
 hr {
-  border: 1px solid #5b616b;
+  border: 1px solid #999;
+  border-bottom: 0px;
   -webkit-box-sizing: content-box;
           box-sizing: content-box;
   height: 0;
@@ -824,7 +827,9 @@ h1, h2, h3, h4, h5, h6 {
   display: none; }
   @media (min-width: 43.75em) {
     .l-header .menu--main {
-      display: block; } }
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex; } }
 
 .l-section {
   margin-bottom: 2em; }
@@ -950,6 +955,12 @@ h1, h2, h3, h4, h5, h6 {
 
 .sticky {
   display: block; }
+
+.story-title {
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 40px; }
 
 .swiper-container {
   max-width: 1000px; }
@@ -1774,11 +1785,13 @@ details.details {
     color: #fff;
     margin-right: 10px; }
     .menu--main .menu__item::after {
-      content: '/'; }
+      content: '/';
+      color: #ccc; }
     .menu--main .menu__item.last::after {
       display: none; }
   .menu--main .menu__link {
     color: #fff;
+    font-size: 18px;
     margin-right: 5px;
     text-decoration: none; }
     .menu--main .menu__link:hover, .menu--main .menu__link:focus {
@@ -2079,7 +2092,7 @@ details.details {
   overflow: hidden; }
 
 .progress__bar {
-  background-color: #0071bc;
+  background-color: #330000;
   border-radius: 0.15rem;
   height: 1rem;
   -webkit-transition-duration: 0.5s;
@@ -2110,12 +2123,18 @@ details.details {
     float: left; }
 
 .site-name {
-  color: #fff;
+  color: #ccc;
   padding: 20px 0px;
   text-decoration: none; }
+  .site-name:hover, .site-name:focus {
+    color: #ccc; }
 
 .site-name__text {
+  font-size: 24px;
+  font-weight: normal;
   margin-bottom: 0px; }
+  .site-name__text span {
+    color: #fff; }
 
 .tabs::after {
   clear: both;

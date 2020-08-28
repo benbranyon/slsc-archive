@@ -2,11 +2,20 @@
 // Styles for Site name.
 
 .site-name {
-  color: #fff;
+  color: #ccc;
   padding: 20px 0px;
   text-decoration: none;
+  &:hover,
+  &:focus {
+    color: #ccc;
+  }
 }
 
 .site-name__text {
+  font-size: 24px;
+  font-weight: normal;
   margin-bottom: 0px;
+  span {
+    color: #fff;
+  }
 }
