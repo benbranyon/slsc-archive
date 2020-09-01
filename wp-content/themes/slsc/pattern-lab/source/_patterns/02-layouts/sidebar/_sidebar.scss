@@ -7,6 +7,9 @@ $l-sidebar-minor-width: $l-sidebar-width;
 $l-sidebar-gutter: 1rem;
 
 .l-sidebar {
+  .l-sidebar__sidebar {
+    background-color: #dcd2c7;
+  }
   @include breakpoint($l-sidebar-bp) {
     display: flex;
     flex-wrap: wrap;
@@ -30,12 +33,10 @@ $l-sidebar-gutter: 1rem;
     }
 
     .l-sidebar__main {
-      color: #fff;
       padding: 40px 40px 40px 0px;
     }
 
     .l-sidebar__sidebar {
-      background-color: #dcd2c7;
       flex-grow: 1;
       flex-shrink: 0;
       flex-basis: #{$l-sidebar-width};
