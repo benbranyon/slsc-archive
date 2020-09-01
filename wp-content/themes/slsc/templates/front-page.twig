@@ -28,12 +28,20 @@
    	  <p class="fontpage__intro">{{ post.homepage_intro }}/p>
    	  <hr/>
    	  <h2>Get Involved</h2>
+      <div class="get-involved__content">
    	    {% for item in get_involved %}
+          {% set image = Image(item.thumbnail) %}
    	      <div class="get-involved__item">
-   	        <h3>{{ item.post_title }}</h3>
+            <div class="get-involved--image">
+              <img src="{{ image.src }}" alt=""/>
+            </div>
+   	        <h3><a href="{{ item.link }}">{{ item.post_title }}</a></h3>
    	      </div>
    	    {% endfor %}
-   	    <a class="get-involved__link" href="#">View All</a>
+        </div>
+        <div class="get-involved--link">
+   	      <a class="get-involved__link" href="#">View All</a>
+        </div>
    	  <hr/>
    	  <h2>Related</h2>
     {% endblock %}

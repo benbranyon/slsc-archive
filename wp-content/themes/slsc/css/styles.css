@@ -930,6 +930,21 @@ h1, h2, h3, h4, h5, h6 {
 .frontpage__content {
   color: #fff; }
 
+.get-involved__item {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex; }
+
+.get-involved--image {
+  margin-right: 16px;
+  width: 230px; }
+
+.get-involved--link {
+  text-align: center; }
+
+.get-involved__content {
+  margin-bottom: 40px; }
+
 .screen-reader-text {
   clip: rect(1px, 1px, 1px, 1px);
   height: 1px;
