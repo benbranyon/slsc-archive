@@ -173,6 +173,8 @@ body {
   margin: 0;
   padding: 0;
   word-wrap: break-word; }
+  body.archive {
+    background-color: #fff; }
 
 @media print {
   nav {
@@ -1020,6 +1022,14 @@ h1, h2, h3, h4, h5, h6 {
   max-width: 100%; }
   .wp-caption .wp-caption-text {
     max-width: 100%; }
+
+.archive-toolbar {
+  background-color: #efefef;
+  padding: 30px;
+  margin-bottom: 30px;
+  margin-top: -40px;
+  margin-left: -20px;
+  margin-right: -40px; }
 
 .article footer {
   padding-bottom: 1rem; }
