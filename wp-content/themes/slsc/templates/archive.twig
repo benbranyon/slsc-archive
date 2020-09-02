@@ -2,13 +2,17 @@
 
 {% block content %}
   <!-- Provided by templates/archive.twig -->
-  {% embed '@layouts/regions/content/content.twig' %}
-    {% block content %}
-			{% include '@components/page-title/page-title.twig' with {
-  			'page_title': __('Archives: ', 'gesso') ~ title
-	  	}	%}
-			{% include 'templates/components/loop.twig' %}
-			{% include '@components/pager/pager.twig' %}
+  {% embed '@layouts/sidebar/sidebar.twig' %}
+    {% block sidebar_aside %}
+      <div class="arhcive-filters">
+        <h2>Filter By</h2>
+      </div>
+    {% endblock %}
+    {% block sidebar_main %}
+      <div class="archive-results">
+			  {% include 'templates/components/loop.twig' %}
+			  {% include '@components/pager/pager.twig' %}
+      </div>
     {% endblock %}
   {% endembed %}
 {% endblock %}
