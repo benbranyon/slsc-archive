@@ -935,7 +935,8 @@ h1, h2, h3, h4, h5, h6 {
 .get-involved__item {
   display: -webkit-box;
   display: -ms-flexbox;
-  display: flex; }
+  display: flex;
+  margin-bottom: 50px; }
 
 .get-involved--image {
   margin-right: 16px;
