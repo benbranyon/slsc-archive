@@ -815,6 +815,10 @@ h1, h2, h3, h4, h5, h6 {
       -ms-flex-order: 1;
           order: 1; }
 
+.l-content {
+  padding-bottom: 40px;
+  padding-top: 40px; }
+
 .l-header {
   background-color: #330000; }
   .l-header .l-constrain {
@@ -2064,6 +2068,9 @@ details.details {
   .mobile-menu__search .form-text {
     -webkit-box-sizing: border-box;
             box-sizing: border-box; }
+
+.page-title {
+  color: #fff; }
 
 .pager__items {
   list-style-type: none;
