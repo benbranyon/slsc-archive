@@ -295,28 +295,30 @@ final class FacetWP_Helper
      * to move the children directly below their parents
      */
     function sort_taxonomy_values( $values = [], $orderby = 'count' ) {
+        $final = [];
+        $cache = [];
 
         // Create an "order" sort value based on the top-level items
-        $cache = [];
         foreach ( $values as $key => $val ) {
             if ( 0 == $val['depth'] ) {
+                $val['order'] = $key;
                 $cache[ $val['term_id'] ] = $key;
-                $values[ $key ]['order'] = $key;
+                $final[] = $val;
             }
-            else {
-                $new_order = $cache[ $val['parent_id'] ] . ".$key"; // dot-separated hierarchy string
-                $cache[ $val['term_id'] ] = $new_order;
-                $values[ $key ]['order'] = $new_order;
+            elseif ( isset( $cache[ $val['parent_id'] ] ) ) { // skip orphans
+                $val['order'] = $cache[ $val['parent_id'] ] . ".$key"; // dot-separated hierarchy string
+                $cache[ $val['term_id'] ] = $val['order'];
+                $final[] = $val;
             }
         }
 
         // Sort the array based on the new "order" element
-        // Since this is a dot-separated hierarchy string, treat it like version_compare
-        usort( $values, function( $a, $b ) {
+        // Since this is a dot-separated hierarchy string, use version_compare
+        usort( $final, function( $a, $b ) {
             return version_compare( $a['order'], $b['order'] );
         });
 
-        return $values;
+        return $final;
     }
 
 
@@ -533,7 +535,7 @@ final class FacetWP_Helper
     function get_license_key() {
         $license_key = defined( 'FACETWP_LICENSE_KEY' ) ? FACETWP_LICENSE_KEY : get_option( 'facetwp_license' );
         $license_key = apply_filters( 'facetwp_license_key', $license_key );
-        return sanitize_text_field( trim( $license_key ) );
+        return sanitize_key( trim( $license_key ) );
     }
 
 

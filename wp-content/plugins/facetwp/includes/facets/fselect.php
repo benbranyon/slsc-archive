@@ -211,124 +211,14 @@ class FacetWP_Facet_fSelect extends FacetWP_Facet
      * Output admin settings HTML
      */
     function settings_html() {
-?>
-        <div class="facetwp-row">
-            <div><?php _e( 'Default label', 'fwp' ); ?>:</div>
-            <div>
-                <input type="text" class="facet-label-any" value="<?php _e( 'Any', 'fwp' ); ?>" />
-            </div>
-        </div>
-        <div class="facetwp-row" v-show="facet.source.substr(0, 3) == 'tax'">
-            <div>
-                <?php _e('Parent term', 'fwp'); ?>:
-                <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
-                    <div class="facetwp-tooltip-content">
-                        To show only child terms, enter the parent <a href="https://facetwp.com/how-to-find-a-wordpress-terms-id/" target="_blank">term ID</a>.
-                        Otherwise, leave blank.
-                    </div>
-                </div>
-            </div>
-            <div>
-                <input type="text" class="facet-parent-term" />
-            </div>
-        </div>
-        <div class="facetwp-row">
-            <div>
-                <?php _e( 'Multi-select', 'fwp' ); ?>:
-                <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
-                    <div class="facetwp-tooltip-content"><?php _e( 'Allow multiple selections?', 'fwp' ); ?></div>
-                </div>
-            </div>
-            <div>
-                <label class="facetwp-switch">
-                    <input type="checkbox" class="facet-multiple" true-value="yes" false-value="no" />
-                    <span class="facetwp-slider"></span>
-                </label>
-            </div>
-        </div>
-        <div class="facetwp-row">
-            <div>
-                <?php _e('Hierarchical', 'fwp'); ?>:
-                <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
-                    <div class="facetwp-tooltip-content"><?php _e( 'Is this a hierarchical taxonomy?', 'fwp' ); ?></div>
-                </div>
-            </div>
-            <div>
-                <label class="facetwp-switch">
-                    <input type="checkbox" class="facet-hierarchical" true-value="yes" false-value="no" />
-                    <span class="facetwp-slider"></span>
-                </label>
-            </div>
-        </div>
-        <div class="facetwp-row">
-            <div>
-                <?php _e('Show ghosts', 'fwp'); ?>:
-                <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
-                    <div class="facetwp-tooltip-content"><?php _e( 'Show choices that would return zero results?', 'fwp' ); ?></div>
-                </div>
-            </div>
-            <div>
-                <label class="facetwp-switch">
-                    <input type="checkbox" class="facet-ghosts" true-value="yes" false-value="no" />
-                    <span class="facetwp-slider"></span>
-                </label>
-            </div>
-        </div>
-        <div class="facetwp-row" v-show="facet.ghosts == 'yes'">
-            <div>
-                <?php _e('Preserve ghost order', 'fwp'); ?>:
-                <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
-                    <div class="facetwp-tooltip-content"><?php _e( 'Keep ghost choices in the same order?', 'fwp' ); ?></div>
-                </div>
-            </div>
-            <div>
-                <label class="facetwp-switch">
-                    <input type="checkbox" class="facet-preserve-ghosts" true-value="yes" false-value="no" />
-                    <span class="facetwp-slider"></span>
-                </label>
-            </div>
-        </div>
-        <div class="facetwp-row" v-show="facet.multiple == 'yes'">
-            <div>
-                <?php _e('Behavior', 'fwp'); ?>:
-                <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
-                    <div class="facetwp-tooltip-content"><?php _e( 'How should multiple selections affect the results?', 'fwp' ); ?></div>
-                </div>
-            </div>
-            <div>
-                <select class="facet-operator">
-                    <option value="and"><?php _e( 'Narrow the result set', 'fwp' ); ?></option>
-                    <option value="or"><?php _e( 'Widen the result set', 'fwp' ); ?></option>
-                </select>
-            </div>
-        </div>
-        <div class="facetwp-row">
-            <div><?php _e('Sort by', 'fwp'); ?>:</div>
-            <div>
-                <select class="facet-orderby">
-                    <option value="count"><?php _e( 'Highest Count', 'fwp' ); ?></option>
-                    <option value="display_value"><?php _e( 'Display Value', 'fwp' ); ?></option>
-                    <option value="raw_value"><?php _e( 'Raw Value', 'fwp' ); ?></option>
-                    <option value="term_order"><?php _e( 'Term Order', 'fwp' ); ?></option>
-                </select>
-            </div>
-        </div>
-        <div class="facetwp-row">
-            <div>
-                <?php _e('Count', 'fwp'); ?>:
-                <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
-                    <div class="facetwp-tooltip-content"><?php _e( 'The maximum number of facet choices to show', 'fwp' ); ?></div>
-                </div>
-            </div>
-            <div><input type="text" class="facet-count" value="10" /></div>
-        </div>
-<?php
+        $this->render_setting( 'label_any' );
+        $this->render_setting( 'parent_term' );
+        $this->render_setting( 'modifiers' );
+        $this->render_setting( 'hierarchical' );
+        $this->render_setting( 'multiple' );
+        $this->render_setting( 'ghosts' );
+        $this->render_setting( 'operator' );
+        $this->render_setting( 'orderby' );
+        $this->render_setting( 'count' );
     }
 }

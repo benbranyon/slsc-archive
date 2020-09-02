@@ -13,7 +13,7 @@ class FacetWP_Support
 
     function get_html() {
         if ( 0 < $this->payment_id ) {
-            $output = '<iframe src="https://facetwp.com/support/create-ticket/?sysinfo=' . $this->get_sysinfo() .'"></iframe>';
+            $output = '<iframe src="https://facetwp.com/documentation/support/create-ticket/?sysinfo=' . $this->get_sysinfo() .'"></iframe>';
         }
         else {
             $output = '<h3>Active License Required</h3>';
@@ -35,7 +35,7 @@ class FacetWP_Support
 ?>
 Home URL:                   <?php echo home_url(); ?>
 
-Payment ID:                 <?php echo $this->payment_id; ?>
+Payment ID:                 <?php echo (int) $this->payment_id; ?>
 
 WordPress Version:          <?php echo get_bloginfo( 'version' ); ?>
 
@@ -46,9 +46,9 @@ Parent Theme:               <?php echo empty( $parent ) ? '' : $parent->get( 'Na
 
 PHP Version:                <?php echo phpversion(); ?>
 
-MySQL Version:              <?php echo $GLOBALS['wpdb']->db_version(); ?>
+MySQL Version:              <?php echo esc_html( $GLOBALS['wpdb']->db_version() ); ?>
 
-Web Server Info:            <?php echo $_SERVER['SERVER_SOFTWARE']; ?>
+Web Server Info:            <?php echo esc_html( $_SERVER['SERVER_SOFTWARE'] ); ?>
 
 
 <?php

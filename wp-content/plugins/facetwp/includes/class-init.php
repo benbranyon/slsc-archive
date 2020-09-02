@@ -43,8 +43,8 @@ class FacetWP_Init
 
         new FacetWP_Upgrade();
         new FacetWP_Overrides();
-        new FacetWP_API_Fetch();
 
+        FWP()->api          = new FacetWP_API_Fetch();
         FWP()->helper       = new FacetWP_Helper();
         FWP()->facet        = new FacetWP_Renderer();
         FWP()->diff         = new FacetWP_Diff();

@@ -16,6 +16,10 @@
                 $(this).attr('tabindex', 0);
             });
 
+            $('.facetwp-dropdown').each(function() {
+                $(this).attr('aria-label', $(this).find('option:selected').text());
+            });
+
             $('.facetwp-search').each(function() {
                 $(this).attr('aria-label', $(this).attr('placeholder'));
             });

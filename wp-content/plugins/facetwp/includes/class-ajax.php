@@ -15,7 +15,7 @@ class FacetWP_Ajax
             'backup'
         ];
 
-        $action = isset( $_POST['action'] ) ? $_POST['action'] : '';
+        $action = isset( $_POST['action'] ) ? sanitize_key( $_POST['action'] ) : '';
         $is_valid = false;
 
         if ( 0 === strpos( $action, 'facetwp_' ) ) {
@@ -92,16 +92,12 @@ class FacetWP_Ajax
             ];
         }
         elseif ( 'indexer_stats' == $type ) {
-            global $wpdb;
-
-            $row_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}facetwp_index" );
-            $facet_count = $wpdb->get_var( "SELECT COUNT(DISTINCT facet_name) FROM {$wpdb->prefix}facetwp_index" );
             $last_indexed = get_option( 'facetwp_last_indexed' );
-            $last_indexed = $last_indexed ? human_time_diff( $last_indexed ) . ' ago' : 'N/A';
+            $last_indexed = $last_indexed ? human_time_diff( $last_indexed ) . ' ago' : 'never';
 
             $response = [
                 'code' => 'success',
-                'message' => "rows: $row_count, facets: $facet_count, last re-index: $last_indexed"
+                'message' => "last indexed: $last_indexed"
             ];
         }
         elseif ( 'cancel_reindex' == $type ) {
@@ -162,7 +158,7 @@ class FacetWP_Ajax
      * License activation
      */
     function license() {
-        $license = $_POST['license'];
+        $license = sanitize_key( $_POST['license'] );
 
         $request = wp_remote_post( 'http://api.facetwp.com', [
             'body' => [

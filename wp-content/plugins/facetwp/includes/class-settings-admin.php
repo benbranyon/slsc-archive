@@ -56,7 +56,7 @@ class FacetWP_Settings_Admin
                 ]
             ],
             'backup' => [
-                'label' => __( 'Backup', 'fwp' ),
+                'label' => __( 'Import / Export', 'fwp' ),
                 'fields' => [
                     'export' => [
                         'label' => __( 'Export', 'fwp' ),
@@ -129,7 +129,7 @@ class FacetWP_Settings_Admin
 
 <?php elseif ( 'dropdown' == $field_type ) : ?>
 
-        <select class="facetwp-setting slim" v-model="app.settings.<?php echo $setting_name; ?>">
+        <select class="facetwp-setting" v-model="app.settings.<?php echo $setting_name; ?>">
             <?php foreach ( $atts['choices'] as $val => $label ) : ?>
             <option value="<?php echo $val; ?>"><?php echo $label; ?></option>
             <?php endforeach; ?>
@@ -225,7 +225,7 @@ $false_value = isset( $atts['false_value'] ) ? $atts['false_value'] : 'no';
      */
     function get_i18n_strings() {
         return [
-            'Results per row' => __( 'Results per row', 'fwp' ),
+            'Grid columns' => __( 'Grid columns', 'fwp' ),
             'Grid gap' => __( 'Grid gap', 'fwp' ),
             'Text style' => __( 'Text style', 'fwp' ),
             'Text color' => __( 'Text color', 'fwp' ),

@@ -41,7 +41,7 @@ class FacetWP_Diff
         });
 
         // Compare facet properties
-        $to_check = [ 'name', 'type', 'source', 'source_other', 'parent_term', 'hierarchical' ];
+        $to_check = [ 'name', 'type', 'source', 'source_other', 'parent_term', 'hierarchical', 'modifier_type', 'modifier_values' ];
 
         foreach ( $f1 as $index => $facet ) {
             foreach ( $to_check as $attr ) {

@@ -293,7 +293,9 @@ class FacetWP_Builder
         $this->data[ "$name:raw" ] = $value;
 
         // Attach the prefix / suffix to the value
-        $value = $prefix . $value . $suffix;
+        if ( '' != $value ) {
+            $value = $prefix . $value . $suffix;
+        }
 
         // Store the short-tag
         $this->data[ $name ] = $value;

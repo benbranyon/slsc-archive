@@ -64,7 +64,7 @@
                     let settings = {
                         num_columns: {
                             type: 'number',
-                            title: FWP.__('Results per row'),
+                            title: FWP.__('Grid columns '),
                             defaultValue: 1
                         },
                         grid_gap: {
@@ -620,7 +620,7 @@
                     </div>
                     <div class="builder-intro">
                         In the above canvas, build the layout for an individual result.<br><br>
-                        Then in <strong>Layout</strong>, choose the number of results per row.
+                        Then in <strong>Layout</strong>, choose the number of grid columns.
                     </div>
                 </div>
                 <builder-settings :layout="layout"></builder-settings>

@@ -22,7 +22,10 @@ class FacetWP_Integration_SearchWP
 
         if ( $class->is_search ) {
             $this->search_terms = $args['s'];
-            unset( $args['s'] );
+
+            if ( version_compare( SEARCHWP_VERSION, '4.0', '<' ) ) {
+                unset( $args['s'] );
+            }
 
             $args['suppress_filters'] = true;
             if ( empty( $args['post_type'] ) ) {
@@ -102,7 +105,7 @@ class FacetWP_Integration_SearchWP
      */
     function search_engines( $engines ) {
 
-        if ( version_compare( SEARCHWP_VERSION, '4.0.0', '>=' ) ) {
+        if ( version_compare( SEARCHWP_VERSION, '4.0', '>=' ) ) {
             $settings = get_option( SEARCHWP_PREFIX . 'engines' );
 
             foreach ( $settings as $key => $info ) {

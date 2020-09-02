@@ -14,6 +14,7 @@ window.FWP = window.FWP || {};
         'is_refresh': false,
         'is_bfcache': false,
         'is_hash_click': false,
+        'is_load_more': false,
         'auto_refresh': true,
         'soft_refresh': false,
         'frozen_facets':{},
@@ -151,7 +152,7 @@ window.FWP = window.FWP || {};
         $(document).trigger('facetwp-refresh');
 
         // Trigger window.onpopstate
-        if (FWP.loaded && ! FWP.is_popstate) {
+        if (FWP.loaded && ! FWP.is_popstate && ! FWP.is_load_more) {
             FWP.set_hash();
         }
 

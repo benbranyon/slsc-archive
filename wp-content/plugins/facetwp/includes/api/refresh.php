@@ -1,9 +1,10 @@
 <?php
 
 add_action( 'rest_api_init', function() {
-    register_rest_route( 'facetwp/v1/', '/refresh', [
+    register_rest_route( 'facetwp/v1', '/refresh', [
         'methods' => 'POST',
-        'callback' => 'facetwp_api_refresh'
+        'callback' => 'facetwp_api_refresh',
+        'permission_callback' => '__return_true'
     ] );
 });
 

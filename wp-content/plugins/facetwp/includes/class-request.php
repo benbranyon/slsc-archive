@@ -29,7 +29,7 @@ class FacetWP_Request
      * Otherwise, store the GET variables for later use
      */
     function intercept_request() {
-        $action = isset( $_POST['action'] ) ? $_POST['action'] : '';
+        $action = isset( $_POST['action'] ) ? sanitize_key( $_POST['action'] ) : '';
 
         $valid_actions = [
             'facetwp_refresh',
@@ -39,7 +39,7 @@ class FacetWP_Request
         $this->is_refresh = ( 'facetwp_refresh' == $action );
         $this->is_preload = ! in_array( $action, $valid_actions );
         $prefix = FWP()->helper->get_setting( 'prefix' );
-        $tpl = isset( $_POST['data']['template'] ) ? $_POST['data']['template'] : '';
+        $is_css_tpl = isset( $_POST['data']['template'] ) && 'wp' == $_POST['data']['template'];
 
         // Pageload
         if ( $this->is_preload ) {
@@ -49,7 +49,7 @@ class FacetWP_Request
 
             // Store GET variables
             foreach ( $valid_names as $name ) {
-                if ( isset( $_GET[ $prefix . $name ] ) ) {
+                if ( isset( $_GET[ $prefix . $name ] ) && '' !== $_GET[ $prefix . $name ] ) {
                     $new_val = stripslashes_deep( $_GET[ $prefix . $name ] );
                     $new_val = in_array( $name, $features ) ? $new_val : explode( ',', $new_val );
                     $this->url_vars[ $name ] = $new_val;
@@ -64,17 +64,19 @@ class FacetWP_Request
 
             if ( ! empty( $data['http_params']['get'] ) ) {
                 foreach ( $data['http_params']['get'] as $key => $val ) {
-                    $_GET[ $key ] = $val;
+                    if ( ! isset( $_GET[ $key ] ) ) {
+                        $_GET[ $key ] = $val;
+                    }
                 }
             }
         }
 
-        if ( $this->is_preload || 'wp' == $tpl ) {
+        if ( $this->is_preload || $is_css_tpl ) {
             add_action( 'pre_get_posts', [ $this, 'sacrificial_lamb' ], 998 );
             add_action( 'pre_get_posts', [ $this, 'update_query_vars' ], 999 );
         }
 
-        if ( ! $this->is_preload && 'wp' == $tpl && 'facetwp_autocomplete_load' != $action ) {
+        if ( ! $this->is_preload && $is_css_tpl && 'facetwp_autocomplete_load' != $action ) {
             add_action( 'shutdown', [ $this, 'inject_template' ], 0 );
             ob_start();
         }

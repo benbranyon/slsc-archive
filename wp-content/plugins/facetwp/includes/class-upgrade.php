@@ -52,7 +52,7 @@ class FacetWP_Upgrade
     private function run_upgrade() {
         global $wpdb;
 
-        $table = $wpdb->prefix . 'facetwp_index';
+        $table = sanitize_key( $wpdb->prefix . 'facetwp_index' );
 
         if ( version_compare( $this->last_version, '1.9', '<' ) ) {
             $wpdb->query( "ALTER TABLE $table ADD COLUMN term_id INT unsigned default '0' AFTER facet_display_value" );

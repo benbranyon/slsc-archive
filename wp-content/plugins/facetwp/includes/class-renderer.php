@@ -170,25 +170,7 @@ class FacetWP_Renderer
 
         // Debug
         if ( 'on' == FWP()->helper->get_setting( 'debug_mode', 'off' ) ) {
-            $debug = [
-                'query_args'    => $this->query_args,
-                'sql'           => $this->query->request,
-                'facets'        => $this->facets,
-                'template'      => $this->template,
-            ];
-
-            // Reduce debug payload
-            if ( ! empty( $this->query_args['post__in'] ) ) {
-                $debug['query_args']['post__in_count'] = count( $this->query_args['post__in'] );
-                $debug['query_args']['post__in'] = array_slice( $this->query_args['post__in'], 0, 10 );
-
-                $debug['sql'] = preg_replace_callback( '/posts.ID IN \((.*?)\)/s', function( $matches ) {
-                    $count = substr_count( $matches[1], ',' ) + 1;
-                    return "posts.ID IN (<$count IDs>)";
-                }, $debug['sql'] );
-
-                $output['settings']['debug'] = $debug;
-            }
+            $output['settings']['debug'] = $this->get_debug_info();
         }
 
         // Generate the template HTML
@@ -347,7 +329,7 @@ class FacetWP_Renderer
             $main_query = $GLOBALS['wp_the_query'];
 
             // Initial pageload
-            if ( $main_query->is_archive ) {
+            if ( $main_query->is_archive || $main_query->is_search ) {
                 if ( $main_query->is_category ) {
                     $defaults['cat'] = $main_query->get( 'cat' );
                 }
@@ -357,6 +339,9 @@ class FacetWP_Renderer
                 elseif ( $main_query->is_tax ) {
                     $defaults['taxonomy'] = $main_query->get( 'taxonomy' );
                     $defaults['term'] = $main_query->get( 'term' );
+                }
+                elseif ( $main_query->is_search ) {
+                    $defaults['s'] = $main_query->get( 's' );
                 }
 
                 $this->archive_args = $defaults;
@@ -670,5 +655,87 @@ class FacetWP_Renderer
         return apply_filters( 'facetwp_per_page_html', $output, [
             'options' => $options
         ] );
+    }
+
+
+    /**
+     * Get debug info for the browser console
+     * @since 3.5.7
+     */
+    function get_debug_info() {
+        $last_indexed = get_option( 'facetwp_last_indexed' );
+        $last_indexed = $last_indexed ? human_time_diff( $last_indexed ) . ' ago' : 'never';
+
+        $debug = [
+            'query_args'    => $this->query_args,
+            'sql'           => $this->query->request,
+            'facets'        => $this->facets,
+            'template'      => $this->template,
+            'last_indexed'  => $last_indexed,
+            'row_counts'    => FWP()->helper->get_row_counts(),
+            'hooks_used'    => $this->get_hooks_used()
+        ];
+
+        // Reduce debug payload
+        if ( ! empty( $this->query_args['post__in'] ) ) {
+            $debug['query_args']['post__in_count'] = count( $this->query_args['post__in'] );
+            $debug['query_args']['post__in'] = array_slice( $this->query_args['post__in'], 0, 10 );
+
+            $debug['sql'] = preg_replace_callback( '/posts.ID IN \((.*?)\)/s', function( $matches ) {
+                $count = substr_count( $matches[1], ',' ) + 1;
+                return ( $count <= 10 ) ? $matches[0] : "posts.ID IN (<$count IDs>)";
+            }, $debug['sql'] );
+        }
+
+        return $debug;
+    }
+
+
+    /**
+     * Display the location of relevant hooks (for Debug Mode)
+     * @since 3.5.7
+     */
+    function get_hooks_used() {
+        $relevant_hooks = [];
+
+        foreach ( $GLOBALS['wp_filter'] as $tag => $hook_data ) {
+            if ( 0 === strpos( $tag, 'facetwp' ) || 'pre_get_posts' == $tag ) {
+                foreach ( $hook_data->callbacks as $callbacks ) {
+                    foreach ( $callbacks as $cb ) {
+                        if ( is_string( $cb['function'] ) && false !== strpos( $cb['function'], '::' ) ) {
+                            $cb['function'] = explode( '::', $cb['function'] );
+                        }
+
+                        if ( is_array( $cb['function'] ) ) {
+                            $class = is_object( $cb['function'][0] ) ? get_class( $cb['function'][0] ) : $cb['function'][0];
+                            $ref = new ReflectionMethod( $class, $cb['function'][1] );
+                        }
+                        elseif ( is_object( $cb['function'] ) ) {
+                            if ( is_a( $cb['function'], 'Closure' ) ) {
+                                $ref = new ReflectionFunction( $cb['function'] );
+                            }
+                            else {
+                                $class = get_class( $cb['function'] );
+                                $ref = new ReflectionMethod( $class, '__invoke' );
+                            }
+                        }
+                        else {
+                            $ref = new ReflectionFunction( $cb['function'] );
+                        }
+
+                        $filename = str_replace( ABSPATH, '', $ref->getFileName() );
+
+                        // ignore built-in hooks
+                        if ( false === strpos( $filename, 'plugins/facetwp' ) ) {
+                            if ( false !== strpos( $filename, 'wp-content' ) ) {
+                                $relevant_hooks[ $tag ][] = $filename . ':' . $ref->getStartLine();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $relevant_hooks;
     }
 }

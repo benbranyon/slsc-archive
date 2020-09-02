@@ -10,7 +10,7 @@ class FacetWP_API_Fetch
 
     // PHP < 5.3
     function register() {
-        register_rest_route( 'facetwp/v1/', '/fetch', [
+        register_rest_route( 'facetwp/v1', '/fetch', [
             'methods' => 'POST',
             'callback' => [ $this, 'callback' ],
             'permission_callback' => [ $this, 'permission_callback' ]
@@ -56,8 +56,8 @@ class FacetWP_API_Fetch
         $facets = [];
 
         // Validate input
-        $page = (int) $params['query_args']['paged'];
-        $per_page = (int) $params['query_args']['posts_per_page'];
+        $page = isset( $params['query_args']['paged'] ) ? (int) $params['query_args']['paged'] : 1;
+        $per_page = isset( $params['query_args']['posts_per_page'] ) ? (int) $params['query_args']['posts_per_page'] : 10;
 
         $page = max( $page, 1 );
         $per_page = ( 0 === $per_page ) ? 10 : $per_page;
@@ -88,6 +88,10 @@ class FacetWP_API_Fetch
         if ( 0 === $post_ids[0] && 1 === count( $post_ids ) ) {
             $post_ids = [];
         }
+
+        // Set necessary vars (keep this BELOW the empty check)
+        FWP()->facet->query_args['post__in'] = $post_ids;
+        FWP()->facet->query = (object) [ 'found_posts' => count( $post_ids ) ];
 
         // Get valid facets and their values
         foreach ( $valid_facets as $facet_name => $facet ) {

@@ -185,42 +185,9 @@ class FacetWP_Facet_Hierarchy extends FacetWP_Facet
      * Output admin settings HTML
      */
     function settings_html() {
-?>
-        <div class="facetwp-row">
-            <div>
-                <?php _e( 'Default label', 'fwp' ); ?>:
-                <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
-                    <div class="facetwp-tooltip-content">
-                        Customize the "Any" label
-                    </div>
-                </div>
-            </div>
-            <div>
-                <input type="text" class="facet-label-any" value="<?php _e( 'Any', 'fwp' ); ?>" />
-            </div>
-        </div>
-        <div class="facetwp-row">
-            <div><?php _e( 'Sort by', 'fwp' ); ?>:</div>
-            <div>
-                <select class="facet-orderby">
-                    <option value="count"><?php _e( 'Highest Count', 'fwp' ); ?></option>
-                    <option value="display_value"><?php _e( 'Display Value', 'fwp' ); ?></option>
-                    <option value="raw_value"><?php _e( 'Raw Value', 'fwp' ); ?></option>
-                    <option value="term_order"><?php _e( 'Term Order', 'fwp' ); ?></option>
-                </select>
-            </div>
-        </div>
-        <div class="facetwp-row">
-            <div>
-                <?php _e( 'Count', 'fwp' ); ?>:
-                <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
-                    <div class="facetwp-tooltip-content"><?php _e( 'The maximum number of facet choices to show', 'fwp' ); ?></div>
-                </div>
-            </div>
-            <div><input type="text" class="facet-count" value="10" /></div>
-        </div>
-<?php
+        $this->render_setting( 'label_any' );
+        $this->render_setting( 'modifiers' );
+        $this->render_setting( 'orderby' );
+        $this->render_setting( 'count' );
     }
 }
