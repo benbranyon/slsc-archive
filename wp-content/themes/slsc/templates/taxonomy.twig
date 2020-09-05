@@ -2,12 +2,20 @@
 
 {% block content %}
 	<!-- Provided by templates/taxonomy.twig -->
-	{% embed '@layouts/regions/content/content.twig' %}
-	  {% block content %}
-			{% include '@components/page-title/page-title.twig' with {
-				'page_title': __('Taxonomy Archives: ', 'gesso') ~ title
-			} %}
-			{% include 'templates/components/loop.twig' %}
+	{% embed '@layouts/sidebar/sidebar.twig' %}
+	  {% block sidebar_aside %}
+	      <div class="taxonomy-info">
+	        <h1>{{ title }}</h1>
+	        <div class="story-link">
+
+	        </div>
+	        <div class="collection-summary">
+	        	<h3>Collection Overview</h3>
+	        </div>
+	      </div>
+	  {% endblock %}
+	  {% block sidebar_main %}
+			{% include 'templates/components/archive-loop.twig' %}
 			{% include '@components/pager/pager.twig' %}
 		{% endblock %}
 	{% endembed %}
