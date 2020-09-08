@@ -1,0 +1,22 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+  <!-- Provided by templates/single-get_involved.twig -->
+  {% embed '@layouts/regions/content/content.twig' %}
+    {% block content %}
+      {% embed '@components/article/article.twig' with {
+        'article_page_title': post.title
+      } %}
+        {% block footer %}
+          {% include '@components/author/author.twig' with {
+            'url': post.author.link,
+            'author': post.author.display_name
+          } %}
+        {% endblock %}
+        {% block main %}
+          {{ post.content }}
+        {% endblock %}
+      {% endembed %}
+    {% endblock %}
+  {% endembed %}
+{% endblock %}

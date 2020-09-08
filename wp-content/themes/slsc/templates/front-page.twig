@@ -44,6 +44,9 @@
         </div>
    	  <hr/>
    	  <h2>Related</h2>
+      {% for item in post.related_collection %}
+        <div>{{ item }}</div>
+      {% endfor %}
     {% endblock %}
   {% endembed %}
 {% endblock %}

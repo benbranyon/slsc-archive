@@ -20,72 +20,6 @@
             "maxlength": "",
             "rows": "",
             "new_lines": ""
-        },
-        {
-            "key": "field_5f56abd601d02",
-            "label": "Related Collection",
-            "name": "related_collection",
-            "type": "taxonomy",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "taxonomy": "collection",
-            "field_type": "checkbox",
-            "add_term": 1,
-            "save_terms": 0,
-            "load_terms": 0,
-            "return_format": "object",
-            "multiple": 0,
-            "allow_null": 0
-        },
-        {
-            "key": "field_5f56b1b2e721d",
-            "label": "Related Topic",
-            "name": "related_topic",
-            "type": "taxonomy",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "taxonomy": "topic",
-            "field_type": "checkbox",
-            "add_term": 1,
-            "save_terms": 0,
-            "load_terms": 0,
-            "return_format": "object",
-            "multiple": 0,
-            "allow_null": 0
-        },
-        {
-            "key": "field_5f56b1cbe721e",
-            "label": "Related Tag",
-            "name": "related_tag",
-            "type": "taxonomy",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "taxonomy": "post_tag",
-            "field_type": "checkbox",
-            "add_term": 1,
-            "save_terms": 0,
-            "load_terms": 0,
-            "return_format": "object",
-            "multiple": 0,
-            "allow_null": 0
         }
     ],
     "location": [
@@ -105,5 +39,5 @@
     "hide_on_screen": "",
     "active": true,
     "description": "",
-    "modified": 1599517159
+    "modified": 1599598616
 }
