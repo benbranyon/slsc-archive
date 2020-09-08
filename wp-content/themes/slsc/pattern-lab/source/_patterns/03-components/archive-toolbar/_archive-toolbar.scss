@@ -1,7 +1,12 @@
 .archive-toolbar {
   background-color: #efefef;
   padding: 30px;
-  margin-bottom: 30px;
-  margin-top: -40px;
   margin-left: -20px;
+  margin-right: -20px;
+  @include breakpoint($bp-xlarge) {
+    margin-bottom: 30px;
+    margin-top: -40px;
+    margin-right: 0px;
+    margin-left: -20px;
+  }
 }

@@ -1041,9 +1041,14 @@ h1, h2, h3, h4, h5, h6 {
 .archive-toolbar {
   background-color: #efefef;
   padding: 30px;
-  margin-bottom: 30px;
-  margin-top: -40px;
-  margin-left: -20px; }
+  margin-left: -20px;
+  margin-right: -20px; }
+  @media (min-width: 75em) {
+    .archive-toolbar {
+      margin-bottom: 30px;
+      margin-top: -40px;
+      margin-right: 0px;
+      margin-left: -20px; } }
 
 .article footer {
   padding-bottom: 1rem; }
@@ -1840,6 +1845,21 @@ details.details {
     .menu--main .menu__link:hover, .menu--main .menu__link:focus {
       text-decoration: underline; }
 
+.l-header {
+  float: right; }
+  @media (min-width: 37.5em) {
+    .l-header {
+      float: none; } }
+
+.mobile-menu {
+  float: left; }
+  @media (min-width: 37.5em) {
+    .mobile-menu {
+      float: none; } }
+
+.main {
+  clear: both; }
+
 .menu--mobile {
   margin: 0.75em 0 0 0; }
   .menu--mobile .menu__item {
@@ -1991,10 +2011,7 @@ details.details {
     display: none; } }
 
 .mobile-menu__bar {
-  background-color: rgba(243, 243, 243, 0.98);
-  border-bottom: 1px solid #dadada;
-  -webkit-box-shadow: 0 0px 2px 1px rgba(0, 0, 0, 0.4);
-          box-shadow: 0 0px 2px 1px rgba(0, 0, 0, 0.4);
+  background-color: #330000;
   color: #555559;
   height: 2.75em;
   text-align: center; }
@@ -2018,7 +2035,6 @@ details.details {
     outline: thin dotted; }
 
 .mobile-menu__button--menu {
-  border-right: 1px solid #dadada;
   float: left; }
 
 .mobile-menu__button--search {
@@ -2041,14 +2057,14 @@ details.details {
     width: 0; }
 
 .is-active .mobile-menu__icon--menu, .is-active .mobile-menu__icon--search {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(transparent), to(transparent)), url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2222%22%20height%3D%2222%22%20viewBox%3D%220%200%2022%2022%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%3E%0D%0A%3Cpath%20fill%3D%22%23555559%22%20d%3D%22M21.9%202.2l-2.2-2.2-8.8%208.8-8.8-8.8-2.2%202.2%208.8%208.8-8.8%208.8%202.2%202.2%208.8-8.8%208.8%208.8%202.2-2.2-8.8-8.8%208.8-8.8z%22%2F%3E%0D%0A%3C%2Fsvg%3E');
-  background-image: -o-linear-gradient(transparent, transparent), url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2222%22%20height%3D%2222%22%20viewBox%3D%220%200%2022%2022%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%3E%0D%0A%3Cpath%20fill%3D%22%23555559%22%20d%3D%22M21.9%202.2l-2.2-2.2-8.8%208.8-8.8-8.8-2.2%202.2%208.8%208.8-8.8%208.8%202.2%202.2%208.8-8.8%208.8%208.8%202.2-2.2-8.8-8.8%208.8-8.8z%22%2F%3E%0D%0A%3C%2Fsvg%3E');
-  background-image: linear-gradient(transparent, transparent), url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2222%22%20height%3D%2222%22%20viewBox%3D%220%200%2022%2022%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%3E%0D%0A%3Cpath%20fill%3D%22%23555559%22%20d%3D%22M21.9%202.2l-2.2-2.2-8.8%208.8-8.8-8.8-2.2%202.2%208.8%208.8-8.8%208.8%202.2%202.2%208.8-8.8%208.8%208.8%202.2-2.2-8.8-8.8%208.8-8.8z%22%2F%3E%0D%0A%3C%2Fsvg%3E'); }
+  background-image: -webkit-gradient(linear, left top, left bottom, from(transparent), to(transparent)), url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2222%22%20height%3D%2222%22%20viewBox%3D%220%200%2022%2022%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%3E%0D%0A%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M21.9%202.2l-2.2-2.2-8.8%208.8-8.8-8.8-2.2%202.2%208.8%208.8-8.8%208.8%202.2%202.2%208.8-8.8%208.8%208.8%202.2-2.2-8.8-8.8%208.8-8.8z%22%2F%3E%0D%0A%3C%2Fsvg%3E');
+  background-image: -o-linear-gradient(transparent, transparent), url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2222%22%20height%3D%2222%22%20viewBox%3D%220%200%2022%2022%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%3E%0D%0A%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M21.9%202.2l-2.2-2.2-8.8%208.8-8.8-8.8-2.2%202.2%208.8%208.8-8.8%208.8%202.2%202.2%208.8-8.8%208.8%208.8%202.2-2.2-8.8-8.8%208.8-8.8z%22%2F%3E%0D%0A%3C%2Fsvg%3E');
+  background-image: linear-gradient(transparent, transparent), url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2222%22%20height%3D%2222%22%20viewBox%3D%220%200%2022%2022%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%3E%0D%0A%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M21.9%202.2l-2.2-2.2-8.8%208.8-8.8-8.8-2.2%202.2%208.8%208.8-8.8%208.8%202.2%202.2%208.8-8.8%208.8%208.8%202.2-2.2-8.8-8.8%208.8-8.8z%22%2F%3E%0D%0A%3C%2Fsvg%3E'); }
 
 .mobile-menu__icon--menu {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(transparent), to(transparent)), url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2233%22%20height%3D%2222%22%20viewBox%3D%220%200%2033%2022%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%3E%0D%0A%3Cpath%20fill%3D%22%23555559%22%20d%3D%22M0%2022h33.1v-3.7h-33.1v3.7zM0%2012.8h33.1v-3.7h-33.1v3.7zM0%200v3.7h33.1v-3.7h-33.1z%22%2F%3E%0D%0A%3C%2Fsvg%3E');
-  background-image: -o-linear-gradient(transparent, transparent), url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2233%22%20height%3D%2222%22%20viewBox%3D%220%200%2033%2022%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%3E%0D%0A%3Cpath%20fill%3D%22%23555559%22%20d%3D%22M0%2022h33.1v-3.7h-33.1v3.7zM0%2012.8h33.1v-3.7h-33.1v3.7zM0%200v3.7h33.1v-3.7h-33.1z%22%2F%3E%0D%0A%3C%2Fsvg%3E');
-  background-image: linear-gradient(transparent, transparent), url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2233%22%20height%3D%2222%22%20viewBox%3D%220%200%2033%2022%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%3E%0D%0A%3Cpath%20fill%3D%22%23555559%22%20d%3D%22M0%2022h33.1v-3.7h-33.1v3.7zM0%2012.8h33.1v-3.7h-33.1v3.7zM0%200v3.7h33.1v-3.7h-33.1z%22%2F%3E%0D%0A%3C%2Fsvg%3E');
+  background-image: -webkit-gradient(linear, left top, left bottom, from(transparent), to(transparent)), url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2233%22%20height%3D%2222%22%20viewBox%3D%220%200%2033%2022%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%3E%0D%0A%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M0%2022h33.1v-3.7h-33.1v3.7zM0%2012.8h33.1v-3.7h-33.1v3.7zM0%200v3.7h33.1v-3.7h-33.1z%22%2F%3E%0D%0A%3C%2Fsvg%3E');
+  background-image: -o-linear-gradient(transparent, transparent), url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2233%22%20height%3D%2222%22%20viewBox%3D%220%200%2033%2022%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%3E%0D%0A%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M0%2022h33.1v-3.7h-33.1v3.7zM0%2012.8h33.1v-3.7h-33.1v3.7zM0%200v3.7h33.1v-3.7h-33.1z%22%2F%3E%0D%0A%3C%2Fsvg%3E');
+  background-image: linear-gradient(transparent, transparent), url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2233%22%20height%3D%2222%22%20viewBox%3D%220%200%2033%2022%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%3E%0D%0A%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M0%2022h33.1v-3.7h-33.1v3.7zM0%2012.8h33.1v-3.7h-33.1v3.7zM0%200v3.7h33.1v-3.7h-33.1z%22%2F%3E%0D%0A%3C%2Fsvg%3E');
   background-size: 33px 22px;
   width: 33px; }
   .is-active .mobile-menu__icon--menu {
@@ -2061,7 +2077,7 @@ details.details {
 
 .mobile-menu__links {
   background-color: #f3f3f3;
-  background-color: rgba(243, 243, 243, 0.98);
+  background-color: #330000;
   color: #555559;
   position: absolute;
   width: 100%;

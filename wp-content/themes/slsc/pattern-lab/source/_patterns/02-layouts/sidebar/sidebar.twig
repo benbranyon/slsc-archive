@@ -16,13 +16,13 @@
     </aside>
   {% endif %}
 
-    <div class="l-sidebar__main">
+    <div class="l-sidebar__main l-constrain">
       {% block sidebar_main %}
         {{ sidebar_main_content }}
       {% endblock %}
     </div>
 
-    <aside class="l-sidebar__sidebar">
+    <aside class="l-sidebar__sidebar l-constrain">
       {% block sidebar_aside %}
         {{ sidebar_aside_content }}
       {% endblock %}

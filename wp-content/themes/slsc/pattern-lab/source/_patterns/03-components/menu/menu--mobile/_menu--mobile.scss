@@ -8,6 +8,24 @@ $menu-mobile-submenu-bg-color: rgba(255, 255, 255, 0.98) !default;
 $menu-mobile-submenu-text-color: #555559 !default;
 $menu-mobile-submenu-hover-color: #000 !default;
 
+.l-header  {
+  float: right;
+  @include breakpoint($bp-small) {
+    float: none;
+  }
+}
+
+.mobile-menu {
+  float:  left;
+  @include breakpoint($bp-small) {
+    float: none;
+  }
+}
+
+.main {
+  clear: both;
+}
+
 .menu--mobile {
   margin: 0.75em 0 0 0;
 

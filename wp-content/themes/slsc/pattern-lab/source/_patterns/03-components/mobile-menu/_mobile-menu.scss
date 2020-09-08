@@ -2,7 +2,7 @@
 // Styles for the mobile menu.
 
 $mobile-menu-fallback-bg-color: #f3f3f3 !default;
-$mobile-menu-bg-color: rgba(243, 243, 243, 0.98) !default;
+$mobile-menu-bg-color: #330000 !default;
 $mobile-menu-border-color: #dadada !default;
 $mobile-menu-text-color: #555559 !default;
 
@@ -14,8 +14,6 @@ $mobile-menu-text-color: #555559 !default;
 
 .mobile-menu__bar {
   background-color: $mobile-menu-bg-color;
-  border-bottom: 1px solid $mobile-menu-border-color;
-  box-shadow: 0 0px 2px 1px rgba(0, 0, 0, 0.4);
   color: $mobile-menu-text-color;
   height: em(55px);
   text-align: center;
@@ -43,7 +41,6 @@ $mobile-menu-text-color: #555559 !default;
 }
 
 .mobile-menu__button--menu {
-  border-right: 1px solid $mobile-menu-border-color;
   float: left;
 }
 
