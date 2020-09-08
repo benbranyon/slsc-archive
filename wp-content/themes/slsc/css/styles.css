@@ -876,7 +876,7 @@ h1, h2, h3, h4, h5, h6 {
           flex-basis: 100%;
       margin-right: 0; }
     .l-sidebar .l-sidebar__main {
-      padding: 40px 40px 40px 0px; }
+      padding: 40px 0px 40px 0px; }
     .l-sidebar .l-sidebar__sidebar {
       -webkit-box-flex: 1;
           -ms-flex-positive: 1;
@@ -941,6 +941,9 @@ h1, h2, h3, h4, h5, h6 {
 
 .frontpage__content {
   color: #fff; }
+  @media (min-width: 75em) {
+    .frontpage__content {
+      position: fixed; } }
 
 .get-involved__item {
   display: -webkit-box;
@@ -996,7 +999,7 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 40px; }
 
 .swiper-container {
-  max-width: 1000px; }
+  max-width: 1100px; }
 
 .swiper-wrapper {
   margin-bottom: 40px; }
@@ -1040,8 +1043,7 @@ h1, h2, h3, h4, h5, h6 {
   padding: 30px;
   margin-bottom: 30px;
   margin-top: -40px;
-  margin-left: -20px;
-  margin-right: -40px; }
+  margin-left: -20px; }
 
 .article footer {
   padding-bottom: 1rem; }

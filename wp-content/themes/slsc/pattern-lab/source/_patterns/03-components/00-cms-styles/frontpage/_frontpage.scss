@@ -1,5 +1,8 @@
 .frontpage__content {
   color: #fff;
+  @include breakpoint($bp-xlarge) {
+    position: fixed;
+  }
 }
 
 .get-involved__item {
