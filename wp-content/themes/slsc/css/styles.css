@@ -945,6 +945,15 @@ h1, h2, h3, h4, h5, h6 {
 .facetwp-counter {
   display: none; }
 
+.facetwp-selections {
+  display: inline-block; }
+  .facetwp-selections .facetwp-selection-label {
+    display: none; }
+  .facetwp-selections .facetwp-selection-value {
+    font-weight: bold; }
+  .facetwp-selections ul {
+    padding-left: 0px; }
+
 .frontpage__content {
   color: #fff; }
   @media (min-width: 75em) {
@@ -1046,6 +1055,12 @@ h1, h2, h3, h4, h5, h6 {
 
 .archive-toolbar {
   background-color: #efefef;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   padding: 30px;
   margin-left: -20px;
   margin-right: -20px; }
@@ -1055,6 +1070,8 @@ h1, h2, h3, h4, h5, h6 {
       margin-top: -40px;
       margin-right: 0px;
       margin-left: -20px; } }
+  .archive-toolbar .selection-title {
+    font-weight: bold; }
 
 .article footer {
   padding-bottom: 1rem; }

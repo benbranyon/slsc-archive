@@ -1,3 +1,4 @@
 <div class="archive-toolbar">
-	<div>VIEWING ITEMS IN: <span>({{ function( 'facetwp_display', 'counts' ) }} results)</span></div>
+	<div class="archive-toolbar__info"><span class="selection-title">VIEWING ITEMS IN:</span> {{ function('facetwp_display', 'selections' ) }} <span>({{ function( 'facetwp_display', 'counts' ) }} results)</span></div>
+	<div class="archive-toolbar__sort">{{ function( 'facetwp_display', 'sort' ) }}</div>
 </div>

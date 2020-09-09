@@ -1,5 +1,7 @@
 .archive-toolbar {
   background-color: #efefef;
+  display: flex;
+  justify-content: space-between;
   padding: 30px;
   margin-left: -20px;
   margin-right: -20px;
@@ -8,5 +10,8 @@
     margin-top: -40px;
     margin-right: 0px;
     margin-left: -20px;
+  }
+  .selection-title {
+    font-weight: bold;
   }
 }

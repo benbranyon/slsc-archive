@@ -5,3 +5,16 @@
 .facetwp-counter {
   display: none;
 }
+
+.facetwp-selections {
+  display: inline-block;
+  .facetwp-selection-label {
+    display: none;
+  }
+  .facetwp-selection-value {
+    font-weight: bold;
+  }
+  ul {
+    padding-left: 0px;
+  }
+}
