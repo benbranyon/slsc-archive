@@ -21,7 +21,7 @@
     'title': post.title,
     'date':image_teaser_date,
     'image': image_teaser_image ? image_teaser_image : false,
-    'summary': post.preview
+    'summary': post.preview.read_more(false),
   } %}
   {% endembed %}
   <hr/>
