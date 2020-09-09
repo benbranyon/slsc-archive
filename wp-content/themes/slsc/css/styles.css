@@ -939,6 +939,9 @@ h1, h2, h3, h4, h5, h6 {
     float: right;
     margin: 0 0 1em 1em; } }
 
+.facetwp-counts {
+  display: inline-block; }
+
 .frontpage__content {
   color: #fff; }
   @media (min-width: 75em) {
@@ -1300,7 +1303,12 @@ details.details {
   margin: 0 0 1.5rem; }
 
 .form-item__label {
-  display: block; }
+  display: block;
+  font-family: "Courier New", "Courier", "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-decoration: underline;
+  text-transform: uppercase; }
   .is-disabled > .form-item__label {
     color: #5b616b; }
 

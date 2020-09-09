@@ -25,6 +25,11 @@ $form-text-size: $font-size-md !default;
 
 .form-item__label {
   display: block;
+  font-family: $header-font-family-secondary;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-decoration: underline;
+  text-transform: uppercase;
 
   .is-disabled > & {
     color: $color-text-secondary;
