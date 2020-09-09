@@ -17,6 +17,15 @@ $templates = array(
 	'single-' . $post->post_type . '.twig',
 	'single.twig'
 );
+
+if(get_post_type($post) == 'archive') {
+	$referer = wp_get_referer();
+	if (strpos($referer, 'archive') == false) {
+		$referer = '/archive/';
+	}
+	$context['referer'] = $referer;
+}
+
 if ( post_password_required( $post->ID ) ) {
 	Timber::render( 'components/password-form.twig', $context );
 } else {

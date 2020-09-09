@@ -16,18 +16,22 @@
 
 .back-button {
   background-color: #efefef; 
+  font-family: $header-font-family-secondary;
+  font-size: 18px;
+  font-weight: bold;
   padding: 40px;
+  text-transform: uppercase;
 }
 
 .pdfemb-the-canvas {
-  max-width: 75%;
+  max-width: 750px;
   width: auto!important;
   height: auto!important;
 }
 
 .pdfemb-viewer {
   margin: 0 auto!important;
-  max-width: 75%;
+  max-width: 750px;
   height: auto!important;
 }
 
