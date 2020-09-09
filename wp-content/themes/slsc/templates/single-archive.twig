@@ -4,7 +4,14 @@
   <!-- Provided by templates/single.twig -->
   {% embed '@layouts/sidebar/sidebar.twig' %}
     {% block sidebar_aside %}
-    	<h2>{{ post.title }}</h2>
+      <div class="back-button"><a href="#">< Go Back</a></div>
+      <div class="l-constrain">
+        <div class="single-archive-sidebar__content">
+    	    <h2>{{ post.title }}</h2>
+          <h4>Description</h4>
+          <div class="single-archive-description">{{ post.preview.read_more(false) }}</div>
+        </div>
+      </div>
     {% endblock %}
     {% block sidebar_main %}
       {% if function( 'get_post_format' ) %}

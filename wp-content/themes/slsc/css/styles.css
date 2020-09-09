@@ -1006,6 +1006,38 @@ h1, h2, h3, h4, h5, h6 {
   width: auto;
   z-index: 100000; }
 
+.single-archive .l-sidebar__sidebar {
+  background-color: #fff;
+  padding: 0px; }
+
+.single-archive .l-sidebar__main {
+  background-color: #000;
+  margin-left: 0px;
+  padding-left: 1rem; }
+
+.single-archive-sidebar__content {
+  padding: 40px; }
+
+.back-button {
+  background-color: #efefef;
+  padding: 40px; }
+
+.pdfemb-the-canvas {
+  max-width: 75%;
+  width: auto !important;
+  height: auto !important; }
+
+.pdfemb-viewer {
+  margin: 0 auto !important;
+  max-width: 75%;
+  height: auto !important; }
+
+.pdfemb-pagescontainer {
+  height: auto !important; }
+
+.pdfemb-inner-div {
+  height: auto !important; }
+
 .sticky {
   display: block; }
 
