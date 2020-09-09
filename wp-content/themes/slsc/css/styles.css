@@ -942,6 +942,9 @@ h1, h2, h3, h4, h5, h6 {
 .facetwp-counts {
   display: inline-block; }
 
+.facetwp-counter {
+  display: none; }
+
 .frontpage__content {
   color: #fff; }
   @media (min-width: 75em) {
