@@ -954,6 +954,9 @@ h1, h2, h3, h4, h5, h6 {
   .facetwp-selections ul {
     padding-left: 0px; }
 
+.facetwp-template {
+  margin-right: 40px; }
+
 .frontpage__content {
   color: #fff; }
   @media (min-width: 75em) {
@@ -1714,6 +1717,15 @@ details.details {
   padding: 1em;
   position: absolute;
   right: 5%; }
+
+.image-teaser__title {
+  color: #330000;
+  font-size: 21px;
+  margin-bottom: 0px; }
+
+.image-teaser__summary {
+  color: #000;
+  font-size: 21px; }
 
 .list--border {
   list-style: none;

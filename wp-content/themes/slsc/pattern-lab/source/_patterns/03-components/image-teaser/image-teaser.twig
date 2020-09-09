@@ -6,9 +6,8 @@
       </div>
     {% endif %}
     <div class="l-media__content">
-      <h2><a href="{{ url }}">{{ title }}</a></h2>
-      {{ summary }}
-      {{ comments }}
+      <h2 class="image-teaser__title"><a href="{{ url }}">{{ title }}</a></h2>
+      <div class="image-teaser__summary">{{ summary }}</div>
       {% block functions %}
         {# used by WordPress #}
       {% endblock %}
