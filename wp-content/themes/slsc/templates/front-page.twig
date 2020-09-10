@@ -4,23 +4,20 @@
   <!-- Provided by templates/front-page.twig -->
   {% embed '@layouts/sidebar/sidebar.twig' %}
     {% block sidebar_main %}
-      <div class="frontpage__content">
+      <div class="frontpage__content sticky" data-sticky-class="sticky-active">
       	<h2 class="story-title">Stories from the archive</h2>
       	<div class="swiper-container">
       		<div class="swiper-wrapper">
 		      	{% for story in stories %}
-		      	  <div class="swiper-slide">
-		      	  	<div class="swiper-image">
-		      	  		<img src="{{ story.thumbnail.src }}" alt="Image for {{ story.title }}" />
-		      	  	</div>
+		      	  <div class="swiper-slide" style="background-image: url( {{ story.thumbnail.src }} );">
 		      	  	<h3 class="swiper-title">{{ story.post_title }}</h3>
-		      	  	<a href="{{ story.link }}" class="button">View Story</a>
+		      	  	<a href="{{ story.link }}" class="button swiper-button">View Story</a>
 		      	  </div>
 		      	{% endfor %}
-		    </div>
-		    <div class="swiper-button-prev"></div>
-		    <div class="swiper-button-next"></div>
-		    <div class="swiper-pagination"></div>
+		      </div>
+		      <div class="swiper-button-prev"></div>
+		      <div class="swiper-button-next"></div>
+		      <div class="swiper-pagination"></div>
 	      </div>
       </div>
     {% endblock %}

@@ -1,7 +1,7 @@
 .frontpage__content {
   color: #fff;
+  position: relative;
   @include breakpoint($bp-xlarge) {
-    position: fixed;
   }
 }
 
@@ -21,4 +21,10 @@
 
 .get-involved__content {
    margin-bottom: 40px;
+}
+
+.admin-bar {
+  .sticky-active {
+    top: 32px!important;
+  }
 }

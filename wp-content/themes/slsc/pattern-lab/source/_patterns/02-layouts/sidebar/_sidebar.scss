@@ -19,10 +19,6 @@ $l-sidebar-gutter: 1rem;
       flex-grow: 1;
       flex-shrink: 1;
       flex-basis: calc(100% - #{$l-sidebar-width} - #{$l-sidebar-gutter * 2});
-      margin-left: $l-sidebar-gutter;
-      &:last-child {
-        margin-left: 0;
-      }
     }
 
     .l-sidebar__full {
@@ -33,7 +29,7 @@ $l-sidebar-gutter: 1rem;
     }
 
     .l-sidebar__main {
-      padding: 40px 0px 40px 0px;
+      padding: 0px;
     }
 
     .l-sidebar__sidebar {

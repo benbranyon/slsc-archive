@@ -62,6 +62,9 @@ function gesso_scripts() {
   wp_register_script('gessomodernizr', get_template_directory_uri() . '/js/lib/modernizr.min.js', array('jquery') ); // Modernizr
   wp_enqueue_script('gessomodernizr');
 
+  wp_register_script('sticky-js', get_template_directory_uri() . '/js/lib/sticky.js', array('jquery') );
+  wp_enqueue_script('sticky-js');
+
   if ( is_singular() && comments_open() ) {
     wp_enqueue_script( "comment-reply" );
   }

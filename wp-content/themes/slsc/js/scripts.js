@@ -23,6 +23,7 @@ jQuery( document ).ready(function( $ ) {
     // Optional parameters
     direction: 'horizontal',
     loop: true,
+    preloadImages: true,
 
     // If we need pagination
     pagination: {
@@ -40,5 +41,7 @@ jQuery( document ).ready(function( $ ) {
       el: '.swiper-scrollbar',
     },
   });
+
+  var sticky = new Sticky('.sticky');
 
 });

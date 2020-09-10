@@ -46,6 +46,7 @@ $button-font-size: $font-size-md !default;
     background-color: $color-bg-hover;
     color: $color-text-hover;
     outline: 0;
+    text-decoration: none;
   }
 
   &:active {
