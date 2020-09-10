@@ -23,6 +23,22 @@
   text-transform: uppercase;
 }
 
+.single-archive__title {
+  color: #330000;
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.single-archive-description {
+  margin-bottom: 40px;
+}
+
+.single-archive__metadata {
+  span {
+    font-weight: bold;
+  }
+}
+
 .pdfemb-the-canvas {
   max-width: 750px;
   width: auto!important;
