@@ -1,3 +1,17 @@
+.homepage {
+  .l-sidebar__main {
+    background-color: #fff;
+    position: relative;
+    &::before {
+      content: '';
+      height: 100%;
+      position: absolute;
+      width: 100%;
+      background-color: rgba(51, 0, 0, 0.5);
+    }
+  }
+}
+
 .frontpage__content {
   color: #fff;
   position: relative;

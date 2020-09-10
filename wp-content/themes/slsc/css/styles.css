@@ -955,6 +955,16 @@ h1, h2, h3, h4, h5, h6 {
   margin-left: 30px;
   margin-right: 30px; }
 
+.homepage .l-sidebar__main {
+  background-color: #fff;
+  position: relative; }
+  .homepage .l-sidebar__main::before {
+    content: '';
+    height: 100%;
+    position: absolute;
+    width: 100%;
+    background-color: rgba(51, 0, 0, 0.5); }
+
 .frontpage__content {
   color: #fff;
   position: relative; }
