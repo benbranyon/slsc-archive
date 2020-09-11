@@ -957,7 +957,9 @@ h1, h2, h3, h4, h5, h6 {
 
 .homepage .l-sidebar__main {
   background-color: #fff;
-  position: relative; }
+  position: relative;
+  padding-left: 0px;
+  padding-right: 0px; }
   .homepage .l-sidebar__main::before {
     content: '';
     height: 100%;
@@ -967,7 +969,9 @@ h1, h2, h3, h4, h5, h6 {
 
 .home-page .l-sidebar__main {
   background-color: #fff;
-  position: relative; }
+  position: relative;
+  padding-left: 0px;
+  padding-right: 0px; }
   .home-page .l-sidebar__main::before {
     content: '';
     height: 100%;
