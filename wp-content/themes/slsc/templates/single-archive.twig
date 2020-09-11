@@ -20,7 +20,8 @@
           <label class="form-item__label">Additional Metadata</label>
           <div class="single-archive__metadata">
             <div class="single-archive__date"><span>Date:</span> {{ post.date|date("F Y") }}</div>
-            <div class="single-archive__type"></div>
+            <div class="single-archive__author"><span>Author:</span> {{ post.archive_author }}</div>
+            <div class="single-archive__type"><span>Type:</span> {{ post.terms('file_type')[0] }}</div>
           </div>
         </div>
       </div>
