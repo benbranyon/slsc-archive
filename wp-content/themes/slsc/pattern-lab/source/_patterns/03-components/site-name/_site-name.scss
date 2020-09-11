@@ -12,10 +12,13 @@
 }
 
 .site-name__text {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: normal;
   margin-bottom: 0px;
   span {
     color: #fff;
+  }
+  @include breakpoint($bp-small) {
+    font-size: 24px;
   }
 }

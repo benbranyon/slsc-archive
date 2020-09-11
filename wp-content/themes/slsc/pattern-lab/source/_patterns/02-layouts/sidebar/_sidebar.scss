@@ -42,6 +42,12 @@ $l-sidebar-gutter: 1rem;
   }
 }
 
+.archive {
+  .l-sidebar__main {
+    background-color: #fff;
+  }
+}
+
 
 .l-sidebar--multi-2 {
   @include breakpoint($l-sidebar-bp) {

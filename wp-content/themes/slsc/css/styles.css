@@ -173,8 +173,6 @@ body {
   margin: 0;
   padding: 0;
   word-wrap: break-word; }
-  body.archive {
-    background-color: #fff; }
 
 @media print {
   nav {
@@ -884,6 +882,9 @@ h1, h2, h3, h4, h5, h6 {
           flex-basis: 500px;
       padding: 40px;
       min-height: 100vh; } }
+
+.archive .l-sidebar__main {
+  background-color: #fff; }
 
 @media (min-width: 56.25em) {
   .l-sidebar--multi-2 > * {
@@ -2352,11 +2353,14 @@ details.details {
     color: #ccc; }
 
 .site-name__text {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: normal;
   margin-bottom: 0px; }
   .site-name__text span {
     color: #fff; }
+  @media (min-width: 37.5em) {
+    .site-name__text {
+      font-size: 24px; } }
 
 .tabs::after {
   clear: both;
