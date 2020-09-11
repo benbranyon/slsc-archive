@@ -23,3 +23,25 @@
   margin-left: 30px;
   margin-right: 30px;	
 }
+
+.facetwp-checkbox {
+  background-image: url('/wp-content/themes/slsc/images/checkobx.png')!important;
+  font-family: $base-font-family; 
+}
+
+.facetwp-checkbox.checked {
+  background-image: url('/wp-content/plugins/facetwp/assets/images/checkbox-on.png')!important;
+}
+
+.arhcive-filters {
+  background-color: #fff;
+  padding: 20px;
+  h2 {
+    color: #330000;
+    font-family: $base-font-family;
+    font-weight: bold;
+    @include breakpoint($bp-medium) {
+      font-size: 40px;
+    }
+  }
+}
