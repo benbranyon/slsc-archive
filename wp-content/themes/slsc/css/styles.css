@@ -882,7 +882,8 @@ h1, h2, h3, h4, h5, h6 {
           flex-shrink: 0;
       -ms-flex-preferred-size: 500px;
           flex-basis: 500px;
-      padding: 40px; } }
+      padding: 40px;
+      min-height: 100vh; } }
 
 @media (min-width: 56.25em) {
   .l-sidebar--multi-2 > * {
