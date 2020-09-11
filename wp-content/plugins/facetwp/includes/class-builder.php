@@ -546,6 +546,9 @@ class FacetWP_Builder
                 $value = $exists_clause ? '' : $value[0];
             }
 
+            // Support dynamic URL vars
+            $value = $this->parse_uri_tags( $value );
+
             // Prepend with "date|" so we can populate with hydrate_date_values()
             if ( 'DATE' == $type ) {
                 $value = 'date|' . $value;
@@ -740,5 +743,42 @@ class FacetWP_Builder
         }
 
         return $query_args;
+    }
+
+
+    /**
+     * Let users pull URI or GET params into the query builder
+     * E.g. "http:uri", "http:uri:0", or "http:get:year"
+     * @since 3.6.0
+     */
+    function parse_uri_tags( $values ) {
+        $temp = (array) $values;
+
+        foreach ( $temp as $key => $value ) {
+            if ( 0 === strpos( $value, 'http:uri' ) ) {
+                $uri = FWP()->helper->get_uri();
+                $uri_parts = explode( '/', $uri );
+                $tag_parts = explode( ':', $value );
+                if ( isset( $tag_parts[2] ) ) {
+                    $index = (int) $tag_parts[2];
+                    $index = ( $index < 0 ) ? count( $uri_parts ) + $index : $index;
+                    $temp[ $key ] = isset( $uri_parts[ $index ] ) ? $uri_parts[ $index ] : '';
+                }
+                else {
+                    $temp[ $key ] = $uri;
+                }
+            }
+            elseif ( 0 === strpos( $value, 'http:get:' ) ) {
+                $tag_parts = explode( ':', $value );
+                if ( isset( $_GET[ $tag_parts[2] ] ) ) {
+                    $temp[ $key ] = $_GET[ $tag_parts[2] ];
+                }
+                else {
+                    $temp[ $key ] = '';
+                }
+            }
+        }
+
+        return is_array( $values ) ? $temp : $temp[0];
     }
 }

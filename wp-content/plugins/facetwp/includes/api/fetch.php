@@ -73,7 +73,7 @@ class FacetWP_API_Fetch
             if ( false !== $facet ) {
                 $facet['selected_values'] = (array) $facet_value;
                 $valid_facets[ $facet_name ] = $facet;
-                FWP()->facet->facets[] = $facet;
+                FWP()->facet->facets[ $facet_name ] = $facet;
             }
         }
 
@@ -112,13 +112,20 @@ class FacetWP_API_Fetch
             if ( method_exists( $facet_types[ $facet['type'] ], 'load_values' ) ) {
                 $choices = $facet_types[ $facet['type'] ]->load_values( $args );
                 foreach ( $choices as $key => $choice ) {
-                    $choices[ $key ] = [
+                    $row = [
                         'value'     => $choice['facet_value'],
                         'label'     => $choice['facet_display_value'],
                         'depth'     => (int) $choice['depth'],
                         'count'     => (int) $choice['counter'],
                     ];
+
+                    if ( isset( $choice['parent_id'] ) ) {
+                        $row['parent_id'] = (int) $choice['parent_id'];
+                    }
+
+                    $choices[ $key ] = $row;
                 }
+
                 $facet_data['choices'] = $choices;
             }
 

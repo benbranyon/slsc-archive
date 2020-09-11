@@ -127,13 +127,21 @@ class FacetWP_Updater
             $response = json_decode( $response, true );
 
             foreach ( $response as $slug => $info ) {
-                if ( isset( $plugins[ $slug ] ) && version_compare( $plugins[ $slug ]['version'], $info['version'], '<' ) ) {
-                    $transient->response[ $plugins[ $slug ]['plugin_path'] ] = (object) [
+                if ( isset( $plugins[ $slug ] ) ) {
+                    $plugin_path = $plugins[ $slug ]['plugin_path'];
+                    $response_obj = (object) [
                         'slug'          => $slug,
-                        'plugin'        => $plugins[ $slug ]['plugin_path'],
+                        'plugin'        => $plugin_path,
                         'new_version'   => $info['version'],
                         'package'       => $info['package'],
                     ];
+
+                    if ( version_compare( $plugins[ $slug ]['version'], $info['version'], '<' ) ) {
+                        $transient->response[ $plugin_path ] = $response_obj;
+                    }
+                    else {
+                        $transient->no_update[ $plugin_path ] = $response_obj;
+                    }
                 }
             }
         }

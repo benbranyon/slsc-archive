@@ -31,11 +31,12 @@ final class FacetWP_Helper
      * Get the current page URI
      */
     function get_uri() {
-        $uri = $_SERVER['REQUEST_URI'];
-        if ( false !== ( $pos = strpos( $uri, '?' ) ) ) {
-            $uri = substr( $uri, 0, $pos );
+        if ( isset( FWP()->facet->http_params ) ) {
+            return FWP()->facet->http_params['uri'];
         }
-        return trim( $uri, '/' );
+
+        $uri = parse_url( $_SERVER['REQUEST_URI'] );
+        return trim( $uri['path'], '/' );
     }
 
 

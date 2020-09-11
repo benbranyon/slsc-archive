@@ -124,16 +124,16 @@ class FacetWP_Renderer
             // Pagination
             $this->query_args['paged'] = empty( $params['paged'] ) ? 1 : (int) $params['paged'];
 
-            // Narrow the posts based on the selected facets
-            $post_ids = $this->get_filtered_post_ids();
-
             // Preserve SQL_CALC_FOUND_ROWS
             unset( $this->query_args['no_found_rows'] );
+
+            // Narrow posts based on facet selections
+            $post_ids = $this->get_filtered_post_ids();
 
             // Update the SQL query
             if ( ! empty( $post_ids ) ) {
                 $this->query_args['post__in'] = $post_ids;
-                $this->where_clause = "AND post_id IN (" . implode( ',', $post_ids ) . ")";
+                $this->where_clause = " AND post_id IN (" . implode( ',', $post_ids ) . ")";
             }
 
             // Sort handler
@@ -392,10 +392,9 @@ class FacetWP_Renderer
         ] );
 
         $query = new WP_Query( $args );
-        $post_ids = (array) $query->posts;
 
         // Allow hooks to modify the default post IDs
-        $post_ids = apply_filters( 'facetwp_pre_filtered_post_ids', $post_ids, $this );
+        $post_ids = apply_filters( 'facetwp_pre_filtered_post_ids', $query->posts, $this );
 
         // Store the unfiltered post IDs
         FWP()->unfiltered_post_ids = $post_ids;
@@ -464,12 +463,7 @@ class FacetWP_Renderer
         }
 
         // Return a zero array if no matches
-        if ( empty( $post_ids ) ) {
-            $post_ids = [ 0 ];
-        }
-
-        // Reset any array keys
-        $post_ids = array_values( $post_ids );
+        $post_ids = empty( $post_ids ) ? [ 0 ] : array_values( $post_ids );
 
         return apply_filters( 'facetwp_filtered_post_ids', $post_ids, $this );
     }

@@ -72,6 +72,7 @@ class FacetWP_Request
         }
 
         if ( $this->is_preload || $is_css_tpl ) {
+            add_filter( 'posts_pre_query', [ $this, 'abort_query' ], 10, 2 );
             add_action( 'pre_get_posts', [ $this, 'sacrificial_lamb' ], 998 );
             add_action( 'pre_get_posts', [ $this, 'update_query_vars' ], 999 );
         }
@@ -83,8 +84,30 @@ class FacetWP_Request
     }
 
 
+    /**
+     * FacetWP runs the archive query before WP gets the chance.
+     * This hook prevents the query from running twice, by letting us inject the
+     * first query's posts (and counts) into the "main" query.
+     */
+    function abort_query( $posts, $query ) {
+        $do_abort = apply_filters( 'facetwp_archive_abort_query', true, $query );
+        $is_main_query = ( true === $query->get( 'facetwp', false ) );
+        $has_query_run = ( ! empty( FWP()->facet->query ) );
+
+        if ( $do_abort && $is_main_query && $has_query_run ) {
+            $posts = FWP()->facet->query->posts;
+            $query->found_posts = FWP()->facet->query->found_posts;
+            $query->max_num_pages = FWP()->facet->query->max_num_pages;
+        }
+
+        return $posts;
+    }
+
+
+    /**
+     * Fixes https://core.trac.wordpress.org/ticket/40393
+     */
     function sacrificial_lamb( $query ) {
-        // Fix for WP core issue #40393
     }
 
 
@@ -126,17 +149,20 @@ class FacetWP_Request
             // Notify
             do_action( 'facetwp_found_main_query' );
 
-            // No URL variables
-            if ( $this->is_preload && empty( $this->url_vars ) ) {
-                return;
-            }
-
             // Generate the FWP output
             $data = ( $this->is_preload ) ? $this->process_preload_data() : $this->process_post_data();
             $this->output = FWP()->facet->render( $data );
 
-            // Set up the updated query_vars
-            $query->query_vars = FWP()->facet->query_args;
+            // Set the updated query vars
+            if ( ! $this->is_preload || ! empty( $this->url_vars ) ) {
+                $query->query_vars = FWP()->facet->query_args;
+            }
+
+            if ( 'product_query' == $query->get( 'wc_query' ) ) {
+                wc_set_loop_prop( 'total', FWP()->facet->pager_args['total_rows'] );
+                wc_set_loop_prop( 'total_pages', FWP()->facet->pager_args['total_pages'] );
+                wc_set_loop_prop( 'current_page', FWP()->facet->pager_args['page'] );
+            }
         }
     }
 
@@ -210,6 +236,11 @@ class FacetWP_Request
             'extras'            => [],
             'paged'             => 1,
         ];
+
+        // Support "/page/X/" on preload
+        if ( ! empty( $this->query_vars['paged'] ) ) {
+            $params['paged'] = (int) $this->query_vars['paged'];
+        }
 
         foreach ( $this->url_vars as $key => $val ) {
             if ( 'paged' == $key ) {

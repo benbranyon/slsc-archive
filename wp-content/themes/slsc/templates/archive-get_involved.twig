@@ -1,0 +1,23 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+  <!-- Provided by templates/archive-archive.twig -->
+  {% embed '@layouts/sidebar/sidebar.twig' %}
+    {% block sidebar_aside %}
+      <div class="arhcive-filters">
+        <h2>Filter By</h2>
+        <label class="form-item__label">Topic</label>
+        {{ function( 'facetwp_display', 'facet', 'topic' ) }}
+      </div>
+    {% endblock %}
+    {% block sidebar_main %}
+      <div class="archive-results">
+        {% include '@components/archive-toolbar/archive-toolbar.twig' %}
+        <div class="facetwp-template">
+			  {% include 'templates/components/archive-loop.twig' %}
+			  {% include '@components/pager/pager.twig' %}
+        </div>
+      </div>
+    {% endblock %}
+  {% endembed %}
+{% endblock %}

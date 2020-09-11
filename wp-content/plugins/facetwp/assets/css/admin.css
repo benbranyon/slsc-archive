@@ -302,20 +302,6 @@ a:hover {
     display: initial;
 }
 
-.facetwp-region .icon-question {
-    display: inline-block;
-    margin-left: 4px;
-    padding: 0 3px;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    cursor: pointer;
-    line-height: 1;
-}
-
-.facetwp-region .icon-question:before {
-    content: none;
-}
-
 .facetwp-region .side-link {
     float: right;
     color: #50b7ff;
@@ -501,7 +487,9 @@ a:hover {
 /* Tooltips */
 
 .facetwp-tooltip {
-    display: inline;
+    display: inline-block;
+    border-bottom: 1px dashed #ddd;
+    cursor: help;
 }
 
 .facetwp-tooltip-content {
@@ -523,18 +511,6 @@ a:hover {
     position: absolute;
     z-index: 1000;
     max-width: 400px;
-}
-
-#powerTip:before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: -10px;
-    border-bottom: 5px solid transparent;
-    border-top: 5px solid transparent;
-    margin-top: -5px;
-    border-right: 10px solid #333;
-    border-right: 10px solid rgba(0, 0, 0, 0.8);
 }
 
 /* Edit screens */

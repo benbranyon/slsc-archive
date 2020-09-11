@@ -188,9 +188,8 @@ class FacetWP_Facet_Pager extends FacetWP_Facet
         </div>
         <div class="facetwp-row" v-show="facet.pager_type == 'numbers'">
             <div>
-                <?php _e('Inner size', 'fwp'); ?>:
                 <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
+                    <?php _e('Inner size', 'fwp'); ?>:
                     <div class="facetwp-tooltip-content"><?php _e( 'Number of pages to show on each side of the current page', 'fwp' ); ?></div>
                 </div>
             </div>
@@ -198,9 +197,8 @@ class FacetWP_Facet_Pager extends FacetWP_Facet
         </div>
         <div class="facetwp-row" v-show="facet.pager_type == 'numbers'">
             <div>
-                <?php _e('Dots label', 'fwp'); ?>:
                 <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
+                    <?php _e('Dots label', 'fwp'); ?>:
                     <div class="facetwp-tooltip-content"><?php _e( 'The filler between the inner and outer pages', 'fwp' ); ?></div>
                 </div>
             </div>
@@ -208,9 +206,8 @@ class FacetWP_Facet_Pager extends FacetWP_Facet
         </div>
         <div class="facetwp-row" v-show="facet.pager_type == 'numbers'">
             <div>
-                <?php _e('Prev button label', 'fwp'); ?>:
                 <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
+                    <?php _e('Prev button label', 'fwp'); ?>:
                     <div class="facetwp-tooltip-content"><?php _e( 'Leave blank to hide', 'fwp' ); ?></div>
                 </div>
             </div>
@@ -218,9 +215,8 @@ class FacetWP_Facet_Pager extends FacetWP_Facet
         </div>
         <div class="facetwp-row" v-show="facet.pager_type == 'numbers'">
             <div>
-                <?php _e('Next button label', 'fwp'); ?>:
                 <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
+                    <?php _e('Next button label', 'fwp'); ?>:
                     <div class="facetwp-tooltip-content"><?php _e( 'Leave blank to hide', 'fwp' ); ?></div>
                 </div>
             </div>
@@ -228,9 +224,8 @@ class FacetWP_Facet_Pager extends FacetWP_Facet
         </div>
         <div class="facetwp-row" v-show="facet.pager_type == 'counts'">
             <div>
-                <?php _e('Count text (plural)', 'fwp'); ?>:
                 <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
+                    <?php _e('Count text (plural)', 'fwp'); ?>:
                     <div class="facetwp-tooltip-content"><?php _e( 'Available tags: [lower], [upper], and [total]', 'fwp' ); ?></div>
                 </div>
             </div>
@@ -258,9 +253,8 @@ class FacetWP_Facet_Pager extends FacetWP_Facet
         </div>
         <div class="facetwp-row" v-show="facet.pager_type == 'per_page'">
             <div>
-                <?php _e('Per page options', 'fwp'); ?>:
                 <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
+                    <?php _e('Per page options', 'fwp'); ?>:
                     <div class="facetwp-tooltip-content"><?php _e( 'A comma-separated list of choices', 'fwp' ); ?></div>
                 </div>
             </div>

@@ -51,7 +51,8 @@ class FacetWP_Integration_ACF
     function facet_orderby( $orderby, $facet ) {
         if ( isset( $facet['source'] ) && isset( $facet['orderby'] ) ) {
             if ( 0 === strpos( $facet['source'], 'acf/' ) && 'term_order' == $facet['orderby'] ) {
-                $field_id = array_pop( explode( '/', $facet['source'] ) );
+                $source_parts = explode( '/', $facet['source'] );
+                $field_id = array_pop( $source_parts );
                 $field_object = get_field_object( $field_id );
                 if ( ! empty( $field_object['choices'] ) ) {
                     $choices = $field_object['choices'];

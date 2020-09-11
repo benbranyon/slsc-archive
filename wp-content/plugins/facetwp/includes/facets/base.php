@@ -22,7 +22,7 @@ class FacetWP_Facet
             $orderby = 'f.facet_value ASC';
         }
         // Term order
-        elseif ('term_order' == $key && 'tax' == substr( $facet['source'], 0, 3 ) ) {
+        elseif ( 'term_order' == $key && 'tax' == substr( $facet['source'], 0, 3 ) ) {
             $term_ids = get_terms( [
                 'taxonomy' => str_replace( 'tax/', '', $facet['source'] ),
                 'term_order' => true, // Custom flag
@@ -109,12 +109,9 @@ class FacetWP_Facet
 ?>
         <div class="facetwp-row">
             <div>
-                <?php _e( 'Default label', 'fwp' ); ?>:
                 <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
-                    <div class="facetwp-tooltip-content">
-                        Customize the "Any" label
-                    </div>
+                    <?php _e( 'Default label', 'fwp' ); ?>:
+                    <div class="facetwp-tooltip-content">Customize the "Any" label</div>
                 </div>
             </div>
             <div>
@@ -126,9 +123,8 @@ class FacetWP_Facet
 ?>
         <div class="facetwp-row" v-show="facet.source.substr(0, 3) == 'tax'">
             <div>
-                <?php _e('Parent term', 'fwp'); ?>:
                 <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
+                    <?php _e( 'Parent term', 'fwp' ); ?>:
                     <div class="facetwp-tooltip-content">
                         To show only child terms, enter the parent <a href="https://facetwp.com/how-to-find-a-wordpress-terms-id/" target="_blank">term ID</a>.
                         Otherwise, leave blank.
@@ -144,9 +140,8 @@ class FacetWP_Facet
 ?>
         <div class="facetwp-row" v-show="facet.source.substr(0, 3) == 'tax'">
             <div>
-                <?php _e('Hierarchical', 'fwp'); ?>:
                 <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
+                    <?php _e( 'Hierarchical', 'fwp' ); ?>:
                     <div class="facetwp-tooltip-content"><?php _e( 'Is this a hierarchical taxonomy?', 'fwp' ); ?></div>
                 </div>
             </div>
@@ -162,9 +157,8 @@ class FacetWP_Facet
 ?>
         <div class="facetwp-row" v-show="facet.hierarchical == 'yes'">
             <div>
-                <?php _e('Show expanded', 'fwp'); ?>:
                 <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
+                    <?php _e( 'Show expanded', 'fwp' ); ?>:
                     <div class="facetwp-tooltip-content"><?php _e( 'Should child terms be visible by default?', 'fwp' ); ?></div>
                 </div>
             </div>
@@ -180,9 +174,8 @@ class FacetWP_Facet
 ?>
         <div class="facetwp-row">
             <div>
-                <?php _e( 'Multi-select', 'fwp' ); ?>:
                 <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
+                    <?php _e( 'Multi-select', 'fwp' ); ?>:
                     <div class="facetwp-tooltip-content"><?php _e( 'Allow multiple selections?', 'fwp' ); ?></div>
                 </div>
             </div>
@@ -198,9 +191,8 @@ class FacetWP_Facet
 ?>
         <div class="facetwp-row">
             <div>
-                <?php _e('Show ghosts', 'fwp'); ?>:
                 <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
+                    <?php _e( 'Show ghosts', 'fwp' ); ?>:
                     <div class="facetwp-tooltip-content"><?php _e( 'Show choices that would return zero results?', 'fwp' ); ?></div>
                 </div>
             </div>
@@ -213,9 +205,8 @@ class FacetWP_Facet
         </div>
         <div class="facetwp-row" v-show="facet.ghosts == 'yes'">
             <div>
-                <?php _e('Preserve ghost order', 'fwp'); ?>:
                 <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
+                    <?php _e( 'Preserve ghost order', 'fwp' ); ?>:
                     <div class="facetwp-tooltip-content"><?php _e( 'Keep ghost choices in the same order?', 'fwp' ); ?></div>
                 </div>
             </div>
@@ -231,9 +222,8 @@ class FacetWP_Facet
 ?>
         <div class="facetwp-row">
             <div>
-                <?php _e('Value modifiers', 'fwp'); ?>:
                 <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
+                    <?php _e( 'Value modifiers', 'fwp' ); ?>:
                     <div class="facetwp-tooltip-content"><?php _e( 'Include or exclude certain values?', 'fwp' ); ?></div>
                 </div>
             </div>
@@ -254,9 +244,8 @@ class FacetWP_Facet
 ?>
         <div class="facetwp-row">
             <div>
-                <?php _e('Behavior', 'fwp'); ?>:
                 <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
+                    <?php _e( 'Behavior', 'fwp' ); ?>:
                     <div class="facetwp-tooltip-content"><?php _e( 'How should multiple selections affect the results?', 'fwp' ); ?></div>
                 </div>
             </div>
@@ -271,7 +260,7 @@ class FacetWP_Facet
         elseif ( 'orderby' == $name ) :
 ?>
         <div class="facetwp-row">
-            <div><?php _e('Sort by', 'fwp'); ?>:</div>
+            <div><?php _e( 'Sort by', 'fwp' ); ?>:</div>
             <div>
                 <select class="facet-orderby">
                     <option value="count"><?php _e( 'Highest Count', 'fwp' ); ?></option>
@@ -286,9 +275,8 @@ class FacetWP_Facet
 ?>
         <div class="facetwp-row">
             <div>
-                <?php _e('Count', 'fwp'); ?>:
                 <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
+                    <?php _e( 'Count', 'fwp' ); ?>:
                     <div class="facetwp-tooltip-content"><?php _e( 'The maximum number of choices to show (-1 for no limit)', 'fwp' ); ?></div>
                 </div>
             </div>
@@ -299,9 +287,8 @@ class FacetWP_Facet
 ?>
         <div class="facetwp-row">
             <div>
-                <?php _e('Soft Limit', 'fwp'); ?>:
                 <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
+                    <?php _e( 'Soft limit', 'fwp' ); ?>:
                     <div class="facetwp-tooltip-content"><?php _e( 'Show a toggle link after this many choices', 'fwp' ); ?></div>
                 </div>
             </div>

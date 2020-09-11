@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FacetWP\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-05 19:19+0000\n"
+"POT-Creation-Date: 2020-09-04 12:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Matt Gibbs <hello@facetwp.com>\n"
 "Language-Team: \n"
@@ -15,337 +15,6 @@ msgstr ""
 "X-Generator: Loco https://localise.biz/\n"
 "X-Loco-Version: 2.4.1; wp-5.4.2"
 
-#: includes/facets/proximity.php:191
-msgid "(Optional) use a separate longitude field"
-msgstr ""
-
-#: includes/facets/pager.php:264
-msgid "A comma-separated list of choices"
-msgstr ""
-
-#: includes/class-settings-admin.php:95
-msgid "Activate"
-msgstr ""
-
-#: includes/class-settings-admin.php:319
-msgid "Activating"
-msgstr ""
-
-#: includes/class-settings-admin.php:290
-msgid "Add filter"
-msgstr ""
-
-#: templates/page-settings.php:131 templates/page-settings.php:158
-msgid "Add new"
-msgstr ""
-
-#: includes/class-settings-admin.php:289
-msgid "Add sort"
-msgstr ""
-
-#. Description of the plugin
-msgid "Advanced Filtering for WordPress"
-msgstr ""
-
-#: includes/class-settings-admin.php:275
-msgid "All post types"
-msgstr ""
-
-#: includes/facets/base.php:186
-msgid "Allow multiple selections?"
-msgstr ""
-
-#: includes/class-settings-admin.php:276
-msgid "and show"
-msgstr ""
-
-#: includes/facets/base.php:121
-msgid "Any"
-msgstr ""
-
-#: includes/class-settings-admin.php:251
-msgid "Author field"
-msgstr ""
-
-#: includes/facets/search.php:80
-msgid "Auto refresh"
-msgstr ""
-
-#: includes/facets/autocomplete.php:10
-msgid "Autocomplete"
-msgstr ""
-
-#: includes/facets/search.php:83
-msgid "Automatically refresh the results while typing?"
-msgstr ""
-
-#: includes/facets/pager.php:234
-msgid "Available tags: [lower], [upper], and [total]"
-msgstr ""
-
-#: includes/class-settings-admin.php:233
-msgid "Background color"
-msgstr ""
-
-#: includes/facets/slider.php:149 includes/facets/number_range.php:141
-#: includes/facets/date_range.php:151
-msgid "Basic"
-msgstr ""
-
-#: includes/facets/base.php:257
-msgid "Behavior"
-msgstr ""
-
-#: includes/class-settings-admin.php:234
-msgid "Border"
-msgstr ""
-
-#: includes/class-settings-admin.php:241
-msgid "Border color"
-msgstr ""
-
-#: includes/class-settings-admin.php:235
-msgid "Border style"
-msgstr ""
-
-#: includes/class-settings-admin.php:242
-msgid "Border width"
-msgstr ""
-
-#: includes/class-settings-admin.php:272
-msgid "Button border"
-msgstr ""
-
-#: includes/class-settings-admin.php:245
-msgid "Button padding"
-msgstr ""
-
-#: includes/class-settings-admin.php:243
-msgid "Button text"
-msgstr ""
-
-#: includes/class-settings-admin.php:244
-msgid "Button text color"
-msgstr ""
-
-#: includes/facets/checkboxes.php:7
-msgid "Checkboxes"
-msgstr ""
-
-#: includes/class-settings-admin.php:291
-msgid "Clear"
-msgstr ""
-
-#: includes/class-settings-admin.php:298
-msgid "Column"
-msgstr ""
-
-#: includes/class-settings-admin.php:248
-msgid "Column widths"
-msgstr ""
-
-#: includes/facets/slider.php:146 includes/facets/number_range.php:138
-#: includes/facets/date_range.php:148
-msgid "Compare type"
-msgstr ""
-
-#: includes/class-settings-admin.php:249 includes/class-settings-admin.php:295
-msgid "Content"
-msgstr ""
-
-#: includes/class-settings-admin.php:324
-msgid "Convert to query args"
-msgstr ""
-
-#: includes/class-settings-admin.php:317
-msgid "Copied!"
-msgstr ""
-
-#: includes/class-settings-admin.php:303
-msgid "Copy shortcode"
-msgstr ""
-
-#: includes/facets/base.php:289
-msgid "Count"
-msgstr ""
-
-#: includes/facets/pager.php:244
-msgid "Count text (no results)"
-msgstr ""
-
-#: includes/facets/pager.php:231
-msgid "Count text (plural)"
-msgstr ""
-
-#: includes/facets/pager.php:240
-msgid "Count text (singular)"
-msgstr ""
-
-#: includes/class-settings-admin.php:271
-msgid "CSS class"
-msgstr ""
-
-#: includes/class-settings-admin.php:247
-msgid "Custom CSS"
-msgstr ""
-
-#: includes/class-settings-admin.php:286 includes/class-helper.php:468
-msgid "Custom Fields"
-msgstr ""
-
-#: includes/class-settings-admin.php:265
-msgid "Custom URL"
-msgstr ""
-
-#: includes/class-settings-admin.php:238
-msgid "Dashed"
-msgstr ""
-
-#: includes/class-settings-admin.php:304
-msgid "Data source"
-msgstr ""
-
-#: includes/class-settings-admin.php:257
-msgid "Date"
-msgstr ""
-
-#: includes/class-settings-admin.php:259
-msgid "Date format"
-msgstr ""
-
-#: includes/facets/date_range.php:7
-msgid "Date Range"
-msgstr ""
-
-#: includes/class-settings-admin.php:35
-msgid "Debug mode"
-msgstr ""
-
-#: includes/integrations/searchwp/searchwp.php:119
-msgid "Default"
-msgstr ""
-
-#: includes/facets/base.php:112 includes/facets/pager.php:256
-msgid "Default label"
-msgstr ""
-
-#: includes/facets/proximity.php:257
-msgid "Default radius"
-msgstr ""
-
-#: includes/class-settings-admin.php:325
-msgid "Delete item?"
-msgstr ""
-
-#: includes/class-settings-admin.php:307
-msgid "Display"
-msgstr ""
-
-#: includes/class-settings-admin.php:310
-msgid "Display Code"
-msgstr ""
-
-#: includes/facets/date_range.php:170
-msgid "Display format"
-msgstr ""
-
-#: templates/page-settings.php:166
-msgid "Display mode"
-msgstr ""
-
-#: includes/class-settings-admin.php:252
-msgid "Display name"
-msgstr ""
-
-#: includes/facets/base.php:278
-msgid "Display Value"
-msgstr ""
-
-#: includes/class-ajax.php:119
-msgid "Done, please re-index"
-msgstr ""
-
-#: includes/facets/pager.php:201
-msgid "Dots label"
-msgstr ""
-
-#: includes/class-settings-admin.php:239
-msgid "Dotted"
-msgstr ""
-
-#: includes/class-settings-admin.php:240
-msgid "Double"
-msgstr ""
-
-#: includes/facets/proximity.php:220 includes/facets/dropdown.php:7
-msgid "Dropdown"
-msgstr ""
-
-#: includes/class-settings-admin.php:48
-msgid "Enable if your store uses variable products."
-msgstr ""
-
-#: includes/facets/number_range.php:142 includes/facets/date_range.php:152
-msgid "Enclose"
-msgstr ""
-
-#: includes/facets/date_range.php:164
-msgid "End Date"
-msgstr ""
-
-#: includes/class-settings-admin.php:292
-msgid "Enter term slugs"
-msgstr ""
-
-#: includes/class-settings-admin.php:293
-msgid "Enter values"
-msgstr ""
-
-#: includes/class-ajax.php:181
-msgid "Error"
-msgstr ""
-
-#: includes/class-ajax.php:63
-msgid "Error: invalid JSON"
-msgstr ""
-
-#: includes/facets/number_range.php:131
-msgid "Exact"
-msgstr ""
-
-#: includes/facets/date_range.php:162
-msgid "Exact Date"
-msgstr ""
-
-#: includes/facets/base.php:243
-msgid "Exclude these values"
-msgstr ""
-
-#: includes/class-settings-admin.php:211
-msgid "expires"
-msgstr ""
-
-#: includes/class-settings-admin.php:62 includes/class-settings-admin.php:119
-msgid "Export"
-msgstr ""
-
-#: templates/page-settings.php:137
-msgid "Facet"
-msgstr ""
-
-#: includes/class-settings-admin.php:302
-msgid "Facet type"
-msgstr ""
-
-#: templates/page-settings.php:93 templates/page-settings.php:126
-#: templates/page-settings.php:130
-msgid "Facets"
-msgstr ""
-
-#. Name of the plugin
-msgid "FacetWP"
-msgstr ""
-
 #: index.php:72
 #, php-format
 msgid ""
@@ -353,52 +22,97 @@ msgid ""
 "upgrade."
 msgstr ""
 
-#: includes/class-request.php:293
-msgid "FacetWP was unable to auto-detect the post listing"
-msgstr ""
-
-#. Author of the plugin
-msgid "FacetWP, LLC"
-msgstr ""
-
-#: includes/class-settings-admin.php:274
-msgid "Fetch"
-msgstr ""
-
-#: includes/class-settings-admin.php:255
-msgid "Field type"
-msgstr ""
-
-#: includes/facets/number_range.php:127 includes/facets/date_range.php:158
-msgid "Fields to show"
-msgstr ""
-
-#: includes/class-settings-admin.php:232
-msgid "Font size"
-msgstr ""
-
-#: includes/facets/slider.php:176
-msgid "Format"
-msgstr ""
-
-#: includes/facets/fselect.php:7
-msgid "fSelect"
-msgstr ""
-
-#: includes/class-settings-admin.php:369
-msgid "full"
+#: includes/class-init.php:138 templates/page-settings.php:95
+msgid "Settings"
 msgstr ""
 
 #: includes/class-settings-admin.php:14
 msgid "General"
 msgstr ""
 
-#: includes/class-settings-admin.php:101
-msgid "Get an API key"
+#: includes/class-settings-admin.php:17
+msgid "License key"
 msgstr ""
 
 #: includes/class-settings-admin.php:21
 msgid "Google Maps API key"
+msgstr ""
+
+#: includes/class-settings-admin.php:25
+msgid "Separators"
+msgstr ""
+
+#: includes/class-settings-admin.php:29
+msgid "URL prefix"
+msgstr ""
+
+#: includes/class-settings-admin.php:35
+msgid "Debug mode"
+msgstr ""
+
+#: includes/class-settings-admin.php:44
+#: includes/integrations/woocommerce/woocommerce.php:60
+msgid "WooCommerce"
+msgstr ""
+
+#: includes/class-settings-admin.php:47
+msgid "Support product variations?"
+msgstr ""
+
+#: includes/class-settings-admin.php:48
+msgid "Enable if your store uses variable products."
+msgstr ""
+
+#: includes/class-settings-admin.php:52
+msgid "Include all products?"
+msgstr ""
+
+#: includes/class-settings-admin.php:53
+msgid "Show facet choices for out-of-stock products?"
+msgstr ""
+
+#: includes/class-settings-admin.php:59
+msgid "Import / Export"
+msgstr ""
+
+#: includes/class-settings-admin.php:62 includes/class-settings-admin.php:119
+msgid "Export"
+msgstr ""
+
+#: includes/class-settings-admin.php:66 includes/class-settings-admin.php:127
+msgid "Import"
+msgstr ""
+
+#: includes/class-settings-admin.php:95
+msgid "Activate"
+msgstr ""
+
+#: includes/class-settings-admin.php:101
+msgid "Get an API key"
+msgstr ""
+
+#: includes/class-settings-admin.php:124
+msgid "Paste the import code here"
+msgstr ""
+
+#: includes/class-settings-admin.php:125
+msgid "Overwrite existing items?"
+msgstr ""
+
+#: includes/class-settings-admin.php:187 includes/class-settings-admin.php:204
+msgid "Not yet activated"
+msgstr ""
+
+#: includes/class-settings-admin.php:194
+msgid "License active until"
+msgstr ""
+
+#: includes/class-settings-admin.php:210
+msgid "License active"
+msgstr ""
+
+#: includes/class-settings-admin.php:211
+msgid "expires"
 msgstr ""
 
 #: includes/class-settings-admin.php:228
@@ -409,125 +123,132 @@ msgstr ""
 msgid "Grid gap"
 msgstr ""
 
-#: includes/class-settings-admin.php:309
-msgid "Help"
+#: includes/class-settings-admin.php:230
+msgid "Text style"
 msgstr ""
 
-#: includes/class-settings-admin.php:269
-msgid "Hide item?"
+#: includes/class-settings-admin.php:231
+msgid "Text color"
 msgstr ""
 
-#: includes/facets/base.php:147
-msgid "Hierarchical"
+#: includes/class-settings-admin.php:232
+msgid "Font size"
 msgstr ""
 
-#: includes/facets/hierarchy.php:7
-msgid "Hierarchy"
+#: includes/class-settings-admin.php:233
+msgid "Background color"
 msgstr ""
 
-#: includes/facets/base.php:277
-msgid "Highest Count"
+#: includes/class-settings-admin.php:234
+msgid "Border"
 msgstr ""
 
-#: includes/class-settings-admin.php:288
-msgid "Hit Enter"
+#: includes/class-settings-admin.php:235
+msgid "Border style"
 msgstr ""
 
-#: includes/facets/base.php:260
-msgid "How should multiple selections affect the results?"
+#: includes/class-settings-admin.php:236 includes/facets/proximity.php:221
+msgid "None"
 msgstr ""
 
-#. Author URI of the plugin
-msgid "https://facetwp.com/"
+#: includes/class-settings-admin.php:237
+msgid "Solid"
+msgstr ""
+
+#: includes/class-settings-admin.php:238
+msgid "Dashed"
+msgstr ""
+
+#: includes/class-settings-admin.php:239
+msgid "Dotted"
+msgstr ""
+
+#: includes/class-settings-admin.php:240
+msgid "Double"
+msgstr ""
+
+#: includes/class-settings-admin.php:241
+msgid "Border color"
+msgstr ""
+
+#: includes/class-settings-admin.php:242
+msgid "Border width"
+msgstr ""
+
+#: includes/class-settings-admin.php:243
+msgid "Button text"
+msgstr ""
+
+#: includes/class-settings-admin.php:244
+msgid "Button text color"
+msgstr ""
+
+#: includes/class-settings-admin.php:245
+msgid "Button padding"
+msgstr ""
+
+#: includes/class-settings-admin.php:246
+msgid "Separator"
+msgstr ""
+
+#: includes/class-settings-admin.php:247
+msgid "Custom CSS"
+msgstr ""
+
+#: includes/class-settings-admin.php:248
+msgid "Column widths"
+msgstr ""
+
+#: includes/class-settings-admin.php:249 includes/class-settings-admin.php:295
+msgid "Content"
 msgstr ""
 
 #: includes/class-settings-admin.php:250
 msgid "Image size"
 msgstr ""
 
-#: includes/class-settings-admin.php:66 includes/class-settings-admin.php:127
-msgid "Import"
+#: includes/class-settings-admin.php:251
+msgid "Author field"
 msgstr ""
 
-#: includes/class-settings-admin.php:59
-msgid "Import / Export"
+#: includes/class-settings-admin.php:252
+msgid "Display name"
 msgstr ""
 
-#: includes/class-ajax.php:255
-msgid "Imported"
+#: includes/class-settings-admin.php:253
+msgid "User login"
 msgstr ""
 
-#: includes/class-settings-admin.php:323
-msgid "Importing"
+#: includes/class-settings-admin.php:254
+msgid "User ID"
 msgstr ""
 
-#: includes/class-builder.php:215
-msgid "In Stock"
+#: includes/class-settings-admin.php:255
+msgid "Field type"
 msgstr ""
 
-#: includes/class-settings-admin.php:52
-msgid "Include all products?"
+#: includes/class-settings-admin.php:256
+msgid "Text"
 msgstr ""
 
-#: includes/facets/base.php:237
-msgid "Include or exclude certain values?"
+#: includes/class-settings-admin.php:257
+msgid "Date"
 msgstr ""
 
-#: includes/class-settings-admin.php:313
-msgid "Indexing"
+#: includes/class-settings-admin.php:258
+msgid "Number"
 msgstr ""
 
-#: includes/class-settings-admin.php:314
-msgid "Indexing complete"
-msgstr ""
-
-#: includes/facets/pager.php:191
-msgid "Inner size"
+#: includes/class-settings-admin.php:259
+msgid "Date format"
 msgstr ""
 
 #: includes/class-settings-admin.php:260
 msgid "Input format"
 msgstr ""
 
-#: includes/facets/slider.php:150 includes/facets/number_range.php:143
-#: includes/facets/date_range.php:153
-msgid "Intersect"
-msgstr ""
-
-#: includes/facets/base.php:150
-msgid "Is this a hierarchical taxonomy?"
-msgstr ""
-
-#: includes/facets/base.php:219
-msgid "Keep ghost choices in the same order?"
-msgstr ""
-
-#: includes/facets/proximity.php:210
-msgid "Kilometers"
-msgstr ""
-
-#: includes/class-settings-admin.php:300
-msgid "Label"
-msgstr ""
-
-#: includes/class-settings-admin.php:294
-msgid "Layout"
-msgstr ""
-
-#: includes/facets/pager.php:214 includes/facets/pager.php:224
-msgid "Leave blank to hide"
-msgstr ""
-
-#: includes/class-settings-admin.php:210
-msgid "License active"
-msgstr ""
-
-#: includes/class-settings-admin.php:194
-msgid "License active until"
-msgstr ""
-
-#: includes/class-settings-admin.php:17
-msgid "License key"
+#: includes/class-settings-admin.php:261
+msgid "Number format"
 msgstr ""
 
 #: includes/class-settings-admin.php:262
@@ -538,416 +259,164 @@ msgstr ""
 msgid "Link type"
 msgstr ""
 
-#: includes/facets/pager.php:184
-msgid "Load more"
+#: includes/class-settings-admin.php:264
+msgid "Post URL"
 msgstr ""
 
-#: includes/facets/pager.php:248
-msgid "Load more text"
-msgstr ""
-
-#: includes/class-settings-admin.php:322
-msgid "Loading"
-msgstr ""
-
-#: includes/facets/pager.php:252
-msgid "Loading text"
-msgstr ""
-
-#: includes/facets/proximity.php:188
-msgid "Longitude"
-msgstr ""
-
-#: includes/class-settings-admin.php:315
-msgid "Looking"
-msgstr ""
-
-#: includes/facets/number_range.php:133
-msgid "Max"
-msgstr ""
-
-#: includes/class-settings-admin.php:285
-msgid "Menu Order"
-msgstr ""
-
-#: includes/facets/proximity.php:209
-msgid "Miles"
-msgstr ""
-
-#: includes/facets/number_range.php:132
-msgid "Min"
-msgstr ""
-
-#: includes/facets/number_range.php:130
-msgid "Min + Max"
-msgstr ""
-
-#: includes/facets/base.php:183
-msgid "Multi-select"
-msgstr ""
-
-#: includes/class-settings-admin.php:301
-msgid "Name"
-msgstr ""
-
-#: includes/class-settings-admin.php:287
-msgid "Narrow results by"
-msgstr ""
-
-#: includes/facets/base.php:265
-msgid "Narrow the result set"
-msgstr ""
-
-#: includes/facets/pager.php:221
-msgid "Next button label"
-msgstr ""
-
-#: includes/class-display.php:146
-msgid "No results found"
-msgstr ""
-
-#: includes/class-settings-admin.php:236 includes/facets/proximity.php:222
-msgid "None"
-msgstr ""
-
-#: includes/class-settings-admin.php:187 includes/class-settings-admin.php:204
-msgid "Not yet activated"
-msgstr ""
-
-#: includes/class-ajax.php:219
-msgid "Nothing to import"
-msgstr ""
-
-#: includes/class-settings-admin.php:258
-msgid "Number"
-msgstr ""
-
-#: includes/class-settings-admin.php:261
-msgid "Number format"
-msgstr ""
-
-#: includes/facets/pager.php:194
-msgid "Number of pages to show on each side of the current page"
-msgstr ""
-
-#: includes/facets/number_range.php:7
-msgid "Number Range"
-msgstr ""
-
-#: includes/facets/base.php:242
-msgid "Off"
-msgstr ""
-
-#: includes/class-builder.php:220
-msgid "On Sale"
+#: includes/class-settings-admin.php:265
+msgid "Custom URL"
 msgstr ""
 
 #: includes/class-settings-admin.php:266
 msgid "Open in new tab?"
 msgstr ""
 
-#: includes/facets/slider.php:130 includes/facets/number_range.php:111
-#: includes/facets/date_range.php:132
-msgid "Other data source"
+#: includes/class-settings-admin.php:267 includes/facets/slider.php:156
+msgid "Prefix"
 msgstr ""
 
-#: includes/class-builder.php:215
-msgid "Out of Stock"
+#: includes/class-settings-admin.php:268 includes/facets/slider.php:165
+msgid "Suffix"
 msgstr ""
 
-#: includes/class-settings-admin.php:125
-msgid "Overwrite existing items?"
+#: includes/class-settings-admin.php:269
+msgid "Hide item?"
 msgstr ""
 
 #: includes/class-settings-admin.php:270
 msgid "Padding"
 msgstr ""
 
-#: includes/facets/pager.php:182
-msgid "Page numbers"
+#: includes/class-settings-admin.php:271
+msgid "CSS class"
 msgstr ""
 
-#: includes/facets/pager.php:10
-msgid "Pager"
+#: includes/class-settings-admin.php:272
+msgid "Button border"
 msgstr ""
 
-#: includes/facets/pager.php:179
-msgid "Pager type"
+#: includes/class-settings-admin.php:273
+msgid "Term URL"
 msgstr ""
 
-#: includes/facets/base.php:129
-msgid "Parent term"
+#: includes/class-settings-admin.php:274
+msgid "Fetch"
 msgstr ""
 
-#: includes/class-settings-admin.php:124
-msgid "Paste the import code here"
+#: includes/class-settings-admin.php:275
+msgid "All post types"
 msgstr ""
 
-#: includes/facets/pager.php:185
-msgid "Per page"
+#: includes/class-settings-admin.php:276
+msgid "and show"
 msgstr ""
 
 #: includes/class-settings-admin.php:277
 msgid "per page"
 msgstr ""
 
-#: includes/facets/pager.php:261
-msgid "Per page options"
+#: includes/class-settings-admin.php:278 includes/facets/base.php:263
+msgid "Sort by"
 msgstr ""
 
-#: includes/facets/search.php:75 includes/facets/autocomplete.php:153
-msgid "Placeholder text"
+#: includes/class-settings-admin.php:279 includes/class-helper.php:455
+msgid "Posts"
 msgstr ""
 
-#: includes/class-updater.php:155
-#, php-format
-msgid ""
-"Please <a href=\"%s\" target=\"_blank\">renew your license</a> for automatic "
-"updates."
-msgstr ""
-
-#: includes/class-updater.php:160
-msgid "Please activate your FacetWP license for automatic updates."
-msgstr ""
-
-#: includes/class-helper.php:458
-msgid "Post Author"
-msgstr ""
-
-#: includes/class-settings-admin.php:283 includes/class-helper.php:455
-msgid "Post Date"
-msgstr ""
-
-#: includes/class-settings-admin.php:284 includes/class-helper.php:456
-msgid "Post Modified"
+#: includes/class-settings-admin.php:280 includes/class-helper.php:460
+msgid "Post Title"
 msgstr ""
 
 #: includes/class-settings-admin.php:281
 msgid "Post Name"
 msgstr ""
 
-#: includes/class-settings-admin.php:280 includes/class-helper.php:457
-msgid "Post Title"
-msgstr ""
-
-#: includes/class-settings-admin.php:282 includes/class-helper.php:454
+#: includes/class-settings-admin.php:282 includes/class-helper.php:457
 msgid "Post Type"
 msgstr ""
 
-#: templates/page-settings.php:167
-msgid "Post types"
+#: includes/class-settings-admin.php:283 includes/class-helper.php:458
+msgid "Post Date"
 msgstr ""
 
-#: includes/class-settings-admin.php:264
-msgid "Post URL"
+#: includes/class-settings-admin.php:284 includes/class-helper.php:459
+msgid "Post Modified"
 msgstr ""
 
-#: includes/class-settings-admin.php:279 includes/class-helper.php:452
-msgid "Posts"
+#: includes/class-settings-admin.php:285
+msgid "Menu Order"
 msgstr ""
 
-#: includes/class-settings-admin.php:267 includes/facets/slider.php:156
-msgid "Prefix"
+#: includes/class-settings-admin.php:286 includes/class-helper.php:471
+msgid "Custom Fields"
 msgstr ""
 
-#: includes/facets/base.php:216
-msgid "Preserve ghost order"
+#: includes/class-settings-admin.php:287
+msgid "Narrow results by"
 msgstr ""
 
-#: includes/class-settings-admin.php:318
-msgid "Press CTRL+C to copy"
+#: includes/class-settings-admin.php:288
+msgid "Hit Enter"
 msgstr ""
 
-#: includes/facets/pager.php:211
-msgid "Prev button label"
+#: includes/class-settings-admin.php:289
+msgid "Add sort"
 msgstr ""
 
-#: includes/facets/proximity.php:14
-msgid "Proximity"
+#: includes/class-settings-admin.php:290
+msgid "Add filter"
 msgstr ""
 
-#: templates/page-settings.php:107
-msgid "Purge the index table"
+#: includes/class-settings-admin.php:291
+msgid "Clear"
 msgstr ""
 
-#: includes/class-settings-admin.php:316
-msgid "Purging"
+#: includes/class-settings-admin.php:292
+msgid "Enter term slugs"
 msgstr ""
 
-#: includes/class-settings-admin.php:308
-msgid "Query"
+#: includes/class-settings-admin.php:293
+msgid "Enter values"
 msgstr ""
 
-#: includes/class-settings-admin.php:311
-msgid "Query Arguments"
-msgstr ""
-
-#: includes/facets/radio.php:7
-msgid "Radio"
-msgstr ""
-
-#: includes/facets/proximity.php:228
-msgid "Radius options"
-msgstr ""
-
-#: includes/facets/proximity.php:216
-msgid "Radius UI"
-msgstr ""
-
-#: includes/facets/base.php:279
-msgid "Raw Value"
-msgstr ""
-
-#: includes/class-settings-admin.php:320 templates/page-settings.php:101
-msgid "Re-index"
-msgstr ""
-
-#: includes/facets/pager.php:183
-msgid "Result counts"
-msgstr ""
-
-#: includes/class-settings-admin.php:297
-msgid "Row"
-msgstr ""
-
-#: templates/page-settings.php:141
-msgid "Rows"
-msgstr ""
-
-#: templates/page-settings.php:112
-msgid "Save changes"
-msgstr ""
-
-#: includes/class-settings-admin.php:312
-msgid "Saving"
-msgstr ""
-
-#: includes/facets/search.php:7
-msgid "Search"
-msgstr ""
-
-#: includes/facets/search.php:64
-msgid "Search engine"
-msgstr ""
-
-#: includes/class-settings-admin.php:246
-msgid "Separator"
-msgstr ""
-
-#: includes/class-settings-admin.php:25
-msgid "Separators"
-msgstr ""
-
-#: includes/class-init.php:138 templates/page-settings.php:95
-msgid "Settings"
-msgstr ""
-
-#: includes/class-ajax.php:56
-msgid "Settings saved"
-msgstr ""
-
-#: includes/facets/base.php:168
-msgid "Should child terms be visible by default?"
-msgstr ""
-
-#: includes/facets/base.php:305
-msgid "Show a toggle link after this many choices"
-msgstr ""
-
-#: includes/facets/base.php:204
-msgid "Show choices that would return zero results?"
-msgstr ""
-
-#: includes/facets/base.php:165
-msgid "Show expanded"
-msgstr ""
-
-#: includes/class-settings-admin.php:53
-msgid "Show facet choices for out-of-stock products?"
-msgstr ""
-
-#: includes/facets/base.php:201
-msgid "Show ghosts"
-msgstr ""
-
-#: templates/page-settings.php:106
-msgid "Show indexable post types"
-msgstr ""
-
-#: templates/page-settings.php:105
-msgid "Show indexer stats"
-msgstr ""
-
-#: includes/facets/base.php:244
-msgid "Show only these values"
-msgstr ""
-
-#: includes/class-ajax.php:258
-msgid "Skipped"
-msgstr ""
-
-#: includes/facets/slider.php:7 includes/facets/proximity.php:221
-msgid "Slider"
-msgstr ""
-
-#: includes/facets/proximity.php:242
-msgid "Slider range"
-msgstr ""
-
-#: includes/facets/base.php:302
-msgid "Soft Limit"
-msgstr ""
-
-#: includes/class-settings-admin.php:237
-msgid "Solid"
-msgstr ""
-
-#: includes/class-settings-admin.php:278 includes/facets/base.php:274
-msgid "Sort by"
-msgstr ""
-
-#: templates/page-settings.php:140
-msgid "Source"
-msgstr ""
-
-#: includes/facets/rating.php:7
-msgid "Star Rating"
-msgstr ""
-
-#: includes/facets/date_range.php:161
-msgid "Start + End Dates"
-msgstr ""
-
-#: includes/facets/date_range.php:163
-msgid "Start Date"
-msgstr ""
-
-#: includes/class-settings-admin.php:299
-msgid "Start typing"
-msgstr ""
-
-#: includes/facets/slider.php:200
-msgid "Step"
-msgstr ""
-
-#: includes/class-settings-admin.php:321
-msgid "Stop indexer"
+#: includes/class-settings-admin.php:294
+msgid "Layout"
 msgstr ""
 
 #: includes/class-settings-admin.php:296
 msgid "Style"
 msgstr ""
 
-#: includes/class-settings-admin.php:268 includes/facets/slider.php:166
-msgid "Suffix"
+#: includes/class-settings-admin.php:297
+msgid "Row"
 msgstr ""
 
-#: templates/page-settings.php:96
-msgid "Support"
+#: includes/class-settings-admin.php:298
+msgid "Column"
 msgstr ""
 
-#: includes/class-settings-admin.php:47
-msgid "Support product variations?"
+#: includes/class-settings-admin.php:299
+msgid "Start typing"
+msgstr ""
+
+#: includes/class-settings-admin.php:300
+msgid "Label"
+msgstr ""
+
+#: includes/class-settings-admin.php:301
+msgid "Name"
+msgstr ""
+
+#: includes/class-settings-admin.php:302
+msgid "Facet type"
+msgstr ""
+
+#: includes/class-settings-admin.php:303
+msgid "Copy shortcode"
+msgstr ""
+
+#: includes/class-settings-admin.php:304
+msgid "Data source"
 msgstr ""
 
 #: includes/class-settings-admin.php:305
@@ -958,12 +427,160 @@ msgstr ""
 msgid "Switch to visual mode"
 msgstr ""
 
-#: includes/class-helper.php:463
+#: includes/class-settings-admin.php:307
+msgid "Display"
+msgstr ""
+
+#: includes/class-settings-admin.php:308
+msgid "Query"
+msgstr ""
+
+#: includes/class-settings-admin.php:309
+msgid "Help"
+msgstr ""
+
+#: includes/class-settings-admin.php:310
+msgid "Display Code"
+msgstr ""
+
+#: includes/class-settings-admin.php:311
+msgid "Query Arguments"
+msgstr ""
+
+#: includes/class-settings-admin.php:312
+msgid "Saving"
+msgstr ""
+
+#: includes/class-settings-admin.php:313
+msgid "Indexing"
+msgstr ""
+
+#: includes/class-settings-admin.php:314
+msgid "Indexing complete"
+msgstr ""
+
+#: includes/class-settings-admin.php:315
+msgid "Looking"
+msgstr ""
+
+#: includes/class-settings-admin.php:316
+msgid "Purging"
+msgstr ""
+
+#: includes/class-settings-admin.php:317
+msgid "Copied!"
+msgstr ""
+
+#: includes/class-settings-admin.php:318
+msgid "Press CTRL+C to copy"
+msgstr ""
+
+#: includes/class-settings-admin.php:319
+msgid "Activating"
+msgstr ""
+
+#: includes/class-settings-admin.php:320 templates/page-settings.php:101
+msgid "Re-index"
+msgstr ""
+
+#: includes/class-settings-admin.php:321
+msgid "Stop indexer"
+msgstr ""
+
+#: includes/class-settings-admin.php:322
+msgid "Loading"
+msgstr ""
+
+#: includes/class-settings-admin.php:323
+msgid "Importing"
+msgstr ""
+
+#: includes/class-settings-admin.php:324
+msgid "Convert to query args"
+msgstr ""
+
+#: includes/class-settings-admin.php:325
+msgid "Delete item?"
+msgstr ""
+
+#: includes/class-settings-admin.php:369
+msgid "full"
+msgstr ""
+
+#: includes/class-ajax.php:56
+msgid "Settings saved"
+msgstr ""
+
+#: includes/class-ajax.php:63
+msgid "Error: invalid JSON"
+msgstr ""
+
+#: includes/class-ajax.php:119
+msgid "Done, please re-index"
+msgstr ""
+
+#: includes/class-ajax.php:181
+msgid "Error"
+msgstr ""
+
+#: includes/class-ajax.php:219
+msgid "Nothing to import"
+msgstr ""
+
+#: includes/class-ajax.php:255
+msgid "Imported"
+msgstr ""
+
+#: includes/class-ajax.php:258
+msgid "Skipped"
+msgstr ""
+
+#: includes/class-builder.php:215
+msgid "In Stock"
+msgstr ""
+
+#: includes/class-builder.php:215
+msgid "Out of Stock"
+msgstr ""
+
+#: includes/class-builder.php:220
+msgid "On Sale"
+msgstr ""
+
+#: includes/class-helper.php:461
+msgid "Post Author"
+msgstr ""
+
+#: includes/class-helper.php:466
 msgid "Taxonomies"
 msgstr ""
 
-#: templates/page-settings.php:164
-msgid "Template"
+#: includes/class-display.php:146
+msgid "No results found"
+msgstr ""
+
+#: includes/class-request.php:322
+msgid "FacetWP was unable to auto-detect the post listing"
+msgstr ""
+
+#: includes/class-updater.php:163
+#, php-format
+msgid ""
+"Please <a href=\"%s\" target=\"_blank\">renew your license</a> for automatic "
+"updates."
+msgstr ""
+
+#: includes/class-updater.php:168
+msgid "Please activate your FacetWP license for automatic updates."
+msgstr ""
+
+#: templates/page-settings.php:26
+msgid "This facet type has no additional settings."
+msgstr ""
+
+#: templates/page-settings.php:93 templates/page-settings.php:126
+#: templates/page-settings.php:130
+msgid "Facets"
 msgstr ""
 
 #: templates/page-settings.php:94 templates/page-settings.php:153
@@ -971,92 +588,475 @@ msgstr ""
 msgid "Templates"
 msgstr ""
 
-#: includes/facets/base.php:280
-msgid "Term Order"
+#: templates/page-settings.php:96
+msgid "Support"
 msgstr ""
 
-#: includes/class-settings-admin.php:273
-msgid "Term URL"
+#: templates/page-settings.php:105
+msgid "Show indexer stats"
 msgstr ""
 
-#: includes/class-settings-admin.php:256
-msgid "Text"
+#: templates/page-settings.php:106
+msgid "Show indexable post types"
 msgstr ""
 
-#: includes/class-settings-admin.php:231
-msgid "Text color"
+#: templates/page-settings.php:107
+msgid "Purge the index table"
 msgstr ""
 
-#: includes/class-settings-admin.php:230
-msgid "Text style"
+#: templates/page-settings.php:112
+msgid "Save changes"
 msgstr ""
 
-#: includes/facets/slider.php:169
-msgid "Text that appears after each slider value"
+#: templates/page-settings.php:131 templates/page-settings.php:158
+msgid "Add new"
 msgstr ""
 
-#: includes/facets/slider.php:159
-msgid "Text that appears before each slider value"
-msgstr ""
-
-#: includes/facets/slider.php:203
-msgid "The amount of increase between intervals"
-msgstr ""
-
-#: includes/facets/pager.php:204
-msgid "The filler between the inner and outer pages"
-msgstr ""
-
-#: includes/facets/base.php:292
-msgid "The maximum number of choices to show (-1 for no limit)"
-msgstr ""
-
-#: includes/facets/slider.php:179
-msgid "The number format"
-msgstr ""
-
-#: templates/page-settings.php:26
-msgid "This facet type has no additional settings."
+#: templates/page-settings.php:137
+msgid "Facet"
 msgstr ""
 
 #: templates/page-settings.php:139
 msgid "Type"
 msgstr ""
 
-#: includes/facets/proximity.php:205
-msgid "Unit of measurement"
+#: templates/page-settings.php:140
+msgid "Source"
 msgstr ""
 
-#: includes/class-settings-admin.php:29
-msgid "URL prefix"
+#: templates/page-settings.php:141
+msgid "Rows"
 msgstr ""
 
-#: includes/facets/slider.php:133 includes/facets/number_range.php:114
-#: includes/facets/date_range.php:135
+#: templates/page-settings.php:164
+msgid "Template"
+msgstr ""
+
+#: templates/page-settings.php:166
+msgid "Display mode"
+msgstr ""
+
+#: templates/page-settings.php:167
+msgid "Post types"
+msgstr ""
+
+#: includes/facets/slider.php:7 includes/facets/proximity.php:220
+msgid "Slider"
+msgstr ""
+
+#: includes/facets/slider.php:131 includes/facets/number_range.php:112
+#: includes/facets/date_range.php:133
+msgid "Other data source"
+msgstr ""
+
+#: includes/facets/slider.php:132 includes/facets/number_range.php:113
+#: includes/facets/date_range.php:134
 msgid "Use a separate value for the upper limit?"
 msgstr ""
 
-#: includes/class-settings-admin.php:254
-msgid "User ID"
+#: includes/facets/slider.php:145 includes/facets/number_range.php:137
+#: includes/facets/date_range.php:147
+msgid "Compare type"
 msgstr ""
 
-#: includes/class-settings-admin.php:253
-msgid "User login"
+#: includes/facets/slider.php:148 includes/facets/number_range.php:140
+#: includes/facets/date_range.php:150
+msgid "Basic"
 msgstr ""
 
-#: includes/facets/base.php:234
-msgid "Value modifiers"
+#: includes/facets/slider.php:149 includes/facets/number_range.php:142
+#: includes/facets/date_range.php:152
+msgid "Intersect"
 msgstr ""
 
-#: includes/facets/base.php:266
-msgid "Widen the result set"
+#: includes/facets/slider.php:157
+msgid "Text that appears before each slider value"
 msgstr ""
 
-#: includes/class-settings-admin.php:44
-#: includes/integrations/woocommerce/woocommerce.php:60
-msgid "WooCommerce"
+#: includes/facets/slider.php:166
+msgid "Text that appears after each slider value"
+msgstr ""
+
+#: includes/facets/slider.php:174
+msgid "Format"
+msgstr ""
+
+#: includes/facets/slider.php:175
+msgid "The number format"
+msgstr ""
+
+#: includes/facets/slider.php:197
+msgid "Step"
+msgstr ""
+
+#: includes/facets/slider.php:198
+msgid "The amount of increase between intervals"
+msgstr ""
+
+#: includes/facets/radio.php:7
+msgid "Radio"
+msgstr ""
+
+#: includes/facets/checkboxes.php:7
+msgid "Checkboxes"
+msgstr ""
+
+#: includes/facets/fselect.php:7
+msgid "fSelect"
+msgstr ""
+
+#: includes/facets/number_range.php:7
+msgid "Number Range"
+msgstr ""
+
+#: includes/facets/number_range.php:126 includes/facets/date_range.php:157
+msgid "Fields to show"
+msgstr ""
+
+#: includes/facets/number_range.php:129
+msgid "Min + Max"
+msgstr ""
+
+#: includes/facets/number_range.php:130
+msgid "Exact"
+msgstr ""
+
+#: includes/facets/number_range.php:131
+msgid "Min"
+msgstr ""
+
+#: includes/facets/number_range.php:132
+msgid "Max"
+msgstr ""
+
+#: includes/facets/number_range.php:141 includes/facets/date_range.php:151
+msgid "Enclose"
+msgstr ""
+
+#: includes/facets/search.php:7
+msgid "Search"
+msgstr ""
+
+#: includes/facets/search.php:64
+msgid "Search engine"
 msgstr ""
 
 #: includes/facets/search.php:67
 msgid "WP Default"
+msgstr ""
+
+#: includes/facets/search.php:75 includes/facets/autocomplete.php:153
+msgid "Placeholder text"
+msgstr ""
+
+#: includes/facets/search.php:81
+msgid "Auto refresh"
+msgstr ""
+
+#: includes/facets/search.php:82
+msgid "Automatically refresh the results while typing?"
+msgstr ""
+
+#: includes/facets/date_range.php:7
+msgid "Date Range"
+msgstr ""
+
+#: includes/facets/date_range.php:160
+msgid "Start + End Dates"
+msgstr ""
+
+#: includes/facets/date_range.php:161
+msgid "Exact Date"
+msgstr ""
+
+#: includes/facets/date_range.php:162
+msgid "Start Date"
+msgstr ""
+
+#: includes/facets/date_range.php:163
+msgid "End Date"
+msgstr ""
+
+#: includes/facets/date_range.php:170
+msgid "Display format"
+msgstr ""
+
+#: includes/facets/proximity.php:14
+msgid "Proximity"
+msgstr ""
+
+#: includes/facets/proximity.php:189
+msgid "Longitude"
+msgstr ""
+
+#: includes/facets/proximity.php:190
+msgid "(Optional) use a separate longitude field"
+msgstr ""
+
+#: includes/facets/proximity.php:204
+msgid "Unit of measurement"
+msgstr ""
+
+#: includes/facets/proximity.php:208
+msgid "Miles"
+msgstr ""
+
+#: includes/facets/proximity.php:209
+msgid "Kilometers"
+msgstr ""
+
+#: includes/facets/proximity.php:215
+msgid "Radius UI"
+msgstr ""
+
+#: includes/facets/proximity.php:219 includes/facets/dropdown.php:7
+msgid "Dropdown"
+msgstr ""
+
+#: includes/facets/proximity.php:228
+msgid "Radius options"
+msgstr ""
+
+#: includes/facets/proximity.php:239
+msgid "Slider range"
+msgstr ""
+
+#: includes/facets/proximity.php:250
+msgid "Default radius"
+msgstr ""
+
+#: includes/facets/base.php:113 includes/facets/pager.php:251
+msgid "Default label"
+msgstr ""
+
+#: includes/facets/base.php:118
+msgid "Any"
+msgstr ""
+
+#: includes/facets/base.php:127
+msgid "Parent term"
+msgstr ""
+
+#: includes/facets/base.php:144
+msgid "Hierarchical"
+msgstr ""
+
+#: includes/facets/base.php:145
+msgid "Is this a hierarchical taxonomy?"
+msgstr ""
+
+#: includes/facets/base.php:161
+msgid "Show expanded"
+msgstr ""
+
+#: includes/facets/base.php:162
+msgid "Should child terms be visible by default?"
+msgstr ""
+
+#: includes/facets/base.php:178
+msgid "Multi-select"
+msgstr ""
+
+#: includes/facets/base.php:179
+msgid "Allow multiple selections?"
+msgstr ""
+
+#: includes/facets/base.php:195
+msgid "Show ghosts"
+msgstr ""
+
+#: includes/facets/base.php:196
+msgid "Show choices that would return zero results?"
+msgstr ""
+
+#: includes/facets/base.php:209
+msgid "Preserve ghost order"
+msgstr ""
+
+#: includes/facets/base.php:210
+msgid "Keep ghost choices in the same order?"
+msgstr ""
+
+#: includes/facets/base.php:226
+msgid "Value modifiers"
+msgstr ""
+
+#: includes/facets/base.php:227
+msgid "Include or exclude certain values?"
+msgstr ""
+
+#: includes/facets/base.php:232
+msgid "Off"
+msgstr ""
+
+#: includes/facets/base.php:233
+msgid "Exclude these values"
+msgstr ""
+
+#: includes/facets/base.php:234
+msgid "Show only these values"
+msgstr ""
+
+#: includes/facets/base.php:248
+msgid "Behavior"
+msgstr ""
+
+#: includes/facets/base.php:249
+msgid "How should multiple selections affect the results?"
+msgstr ""
+
+#: includes/facets/base.php:254
+msgid "Narrow the result set"
+msgstr ""
+
+#: includes/facets/base.php:255
+msgid "Widen the result set"
+msgstr ""
+
+#: includes/facets/base.php:266
+msgid "Highest Count"
+msgstr ""
+
+#: includes/facets/base.php:267
+msgid "Display Value"
+msgstr ""
+
+#: includes/facets/base.php:268
+msgid "Raw Value"
+msgstr ""
+
+#: includes/facets/base.php:269
+msgid "Term Order"
+msgstr ""
+
+#: includes/facets/base.php:279
+msgid "Count"
+msgstr ""
+
+#: includes/facets/base.php:280
+msgid "The maximum number of choices to show (-1 for no limit)"
+msgstr ""
+
+#: includes/facets/base.php:291
+msgid "Soft limit"
+msgstr ""
+
+#: includes/facets/base.php:292
+msgid "Show a toggle link after this many choices"
+msgstr ""
+
+#: includes/facets/hierarchy.php:7
+msgid "Hierarchy"
+msgstr ""
+
+#: includes/facets/autocomplete.php:10
+msgid "Autocomplete"
+msgstr ""
+
+#: includes/facets/rating.php:7
+msgid "Star Rating"
+msgstr ""
+
+#: includes/facets/pager.php:10
+msgid "Pager"
+msgstr ""
+
+#: includes/facets/pager.php:179
+msgid "Pager type"
+msgstr ""
+
+#: includes/facets/pager.php:182
+msgid "Page numbers"
+msgstr ""
+
+#: includes/facets/pager.php:183
+msgid "Result counts"
+msgstr ""
+
+#: includes/facets/pager.php:184
+msgid "Load more"
+msgstr ""
+
+#: includes/facets/pager.php:185
+msgid "Per page"
+msgstr ""
+
+#: includes/facets/pager.php:192
+msgid "Inner size"
+msgstr ""
+
+#: includes/facets/pager.php:193
+msgid "Number of pages to show on each side of the current page"
+msgstr ""
+
+#: includes/facets/pager.php:201
+msgid "Dots label"
+msgstr ""
+
+#: includes/facets/pager.php:202
+msgid "The filler between the inner and outer pages"
+msgstr ""
+
+#: includes/facets/pager.php:210
+msgid "Prev button label"
+msgstr ""
+
+#: includes/facets/pager.php:211 includes/facets/pager.php:220
+msgid "Leave blank to hide"
+msgstr ""
+
+#: includes/facets/pager.php:219
+msgid "Next button label"
+msgstr ""
+
+#: includes/facets/pager.php:228
+msgid "Count text (plural)"
+msgstr ""
+
+#: includes/facets/pager.php:229
+msgid "Available tags: [lower], [upper], and [total]"
+msgstr ""
+
+#: includes/facets/pager.php:235
+msgid "Count text (singular)"
+msgstr ""
+
+#: includes/facets/pager.php:239
+msgid "Count text (no results)"
+msgstr ""
+
+#: includes/facets/pager.php:243
+msgid "Load more text"
+msgstr ""
+
+#: includes/facets/pager.php:247
+msgid "Loading text"
+msgstr ""
+
+#: includes/facets/pager.php:257
+msgid "Per page options"
+msgstr ""
+
+#: includes/facets/pager.php:258
+msgid "A comma-separated list of choices"
+msgstr ""
+
+#: includes/integrations/searchwp/searchwp.php:119
+msgid "Default"
+msgstr ""
+
+#. Name of the plugin
+msgid "FacetWP"
+msgstr ""
+
+#. Description of the plugin
+msgid "Advanced Filtering for WordPress"
+msgstr ""
+
+#. Author of the plugin
+msgid "FacetWP, LLC"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://facetwp.com/"
 msgstr ""

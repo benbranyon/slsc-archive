@@ -185,9 +185,8 @@ class FacetWP_Facet_Proximity_Core extends FacetWP_Facet
 ?>
         <div class="facetwp-row">
             <div>
-                <?php _e('Longitude', 'fwp'); ?>:
                 <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
+                    <?php _e('Longitude', 'fwp'); ?>:
                     <div class="facetwp-tooltip-content"><?php _e( '(Optional) use a separate longitude field', 'fwp' ); ?></div>
                 </div>
             </div>
@@ -225,12 +224,9 @@ class FacetWP_Facet_Proximity_Core extends FacetWP_Facet
         </div>
         <div class="facetwp-row" v-show="facet.radius_ui == 'dropdown'">
             <div>
-                <?php _e( 'Radius options', 'fwp' ); ?>:
                 <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
-                    <div class="facetwp-tooltip-content">
-                        A comma-separated list of radius choices
-                    </div>
+                    <?php _e( 'Radius options', 'fwp' ); ?>:
+                    <div class="facetwp-tooltip-content">A comma-separated list of radius choices</div>
                 </div>
             </div>
             <div>
@@ -239,12 +235,9 @@ class FacetWP_Facet_Proximity_Core extends FacetWP_Facet
         </div>
         <div class="facetwp-row" v-show="facet.radius_ui == 'slider'">
             <div>
-                <?php _e( 'Slider range', 'fwp' ); ?>:
                 <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
-                    <div class="facetwp-tooltip-content">
-                        Set the lower and upper limits
-                    </div>
+                    <?php _e( 'Slider range', 'fwp' ); ?>:
+                    <div class="facetwp-tooltip-content">Set the lower and upper limits</div>
                 </div>
             </div>
             <div>

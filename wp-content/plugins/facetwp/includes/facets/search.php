@@ -77,9 +77,8 @@ class FacetWP_Facet_Search extends FacetWP_Facet
         </div>
         <div class="facetwp-row">
             <div>
-                <?php _e('Auto refresh', 'fwp'); ?>:
                 <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
+                    <?php _e('Auto refresh', 'fwp'); ?>:
                     <div class="facetwp-tooltip-content"><?php _e( 'Automatically refresh the results while typing?', 'fwp' ); ?></div>
                 </div>
             </div>

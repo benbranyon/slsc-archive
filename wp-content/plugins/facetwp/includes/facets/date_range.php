@@ -129,9 +129,8 @@ class FacetWP_Facet_Date_Range extends FacetWP_Facet
 ?>
         <div class="facetwp-row">
             <div>
-                <?php _e('Other data source', 'fwp'); ?>:
                 <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
+                    <?php _e('Other data source', 'fwp'); ?>:
                     <div class="facetwp-tooltip-content"><?php _e( 'Use a separate value for the upper limit?', 'fwp' ); ?></div>
                 </div>
             </div>
@@ -167,9 +166,8 @@ class FacetWP_Facet_Date_Range extends FacetWP_Facet
         </div>
         <div class="facetwp-row">
             <div>
-                <?php _e('Display format', 'fwp'); ?>:
                 <div class="facetwp-tooltip">
-                    <span class="icon-question">?</span>
+                    <?php _e('Display format', 'fwp'); ?>:
                     <div class="facetwp-tooltip-content">See available <a href="https://chmln.github.io/flatpickr/formatting/" target="_blank">formatting tokens</a></div>
                 </div>
             </div>

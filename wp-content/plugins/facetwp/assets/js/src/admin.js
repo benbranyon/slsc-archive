@@ -1273,8 +1273,8 @@
                     @click="$root.editItem('facet', facet)"
                 >
                     <div class="card-drag">&#9776;</div>
-                    <div class="card-label" :title="facet.name">
-                        {{ facet.label }}
+                    <div class="card-label">
+                        <span class="label-text" :title="facet.name">{{ facet.label }}</span>
                         <span v-if="facet._code">&nbsp; <i class="fas fa-lock"></i></span>
                     </div>
                     <div class="card-delete" @click.stop="$root.deleteItem('facet', index)"></div>
@@ -1307,8 +1307,8 @@
                     @click="$root.editItem('template', template)"
                 >
                     <div class="card-drag">&#9776;</div>
-                    <div class="card-label" :title="template.name">
-                        {{ template.label }}
+                    <div class="card-label">
+                        <span class="label-text" :title="template.name">{{ template.label }}</span>
                         <span v-if="template._code">&nbsp;<i class="fas fa-lock"></i></span>
                     </div>
                     <div class="card-delete" @click.stop="$root.deleteItem('template', index)"></div>
@@ -2012,6 +2012,15 @@
                 $(this).powerTip({
                     placement: 'e',
                     mouseOnToPopup: true
+                });
+                $.powerTip.show(this);
+            }
+        });
+
+        $(document).on('mouseover', '.card-label .label-text', function() {
+            if ('undefined' === typeof $(this).data('powertip')) {
+                $(this).powerTip({
+                    placement: 'e'
                 });
                 $.powerTip.show(this);
             }
