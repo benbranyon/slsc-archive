@@ -963,7 +963,7 @@ h1, h2, h3, h4, h5, h6 {
     height: 100%;
     position: absolute;
     width: 100%;
-    background-color: rgba(51, 0, 0, 0.5); }
+    background-color: rgba(51, 0, 0, 0.3); }
 
 .home-page .l-sidebar__main {
   background-color: #fff;
@@ -1082,6 +1082,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: bold;
   text-transform: uppercase;
   margin-bottom: 40px;
+  padding: 5px;
   position: absolute;
   top: 40px;
   left: 40px;
@@ -1097,7 +1098,7 @@ h1, h2, h3, h4, h5, h6 {
 .swiper-slide {
   background-size: cover;
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: 50% 75%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -1114,7 +1115,7 @@ h1, h2, h3, h4, h5, h6 {
     height: 100%;
     position: absolute;
     width: 100%;
-    background-color: rgba(51, 0, 0, 0.5); }
+    background-color: rgba(51, 0, 0, 0.3); }
   @media (min-width: 75em) {
     .swiper-slide {
       height: calc(100vh - 71px); } }
@@ -1142,7 +1143,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
   font-size: 48px;
   font-weight: bold;
-  padding-top: 400px;
+  padding-top: 450px;
   margin: 0 auto;
   max-width: 531px;
   margin-bottom: 30px;
