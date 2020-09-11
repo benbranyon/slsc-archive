@@ -41,6 +41,11 @@
         </div>
    	  <hr/>
    	  <h2>Related</h2>
+      <div class="hompage-related">
+        {% for item in related %}
+          <a href="/archive/?_{{ item.taxonomy }}={{ item.slug }}" class="button">{{ item.name }}</a>
+        {% endfor %}
+      </div>
     {% endblock %}
   {% endembed %}
 {% endblock %}

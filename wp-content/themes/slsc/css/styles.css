@@ -1254,11 +1254,9 @@ h1, h2, h3, h4, h5, h6 {
     color: #323a45;
     cursor: default;
     pointer-events: none; }
-  .button + .button {
-    margin-left: 0.5em; }
-    [dir='rtl'] .button + .button {
-      margin-left: 0;
-      margin-right: 0.5em; }
+  [dir='rtl'] .button + .button {
+    margin-left: 0;
+    margin-right: 0.5em; }
 
 .button--danger {
   background-color: #fff;

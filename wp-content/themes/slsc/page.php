@@ -53,6 +53,11 @@ if ( is_front_page() ) {
 	    )
 	);
 	$context['stories'] = Timber::get_posts($args);
+	$terms = get_terms( array(
+		'taxonomy' => array('topic', 'collection', 'file_type'),
+    	'hide_empty' => false,
+	) );
+	$context['related'] = $terms;
 	array_unshift( $templates, 'front-page.twig' );
 } 
 // Render twig template.
