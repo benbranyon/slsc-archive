@@ -1053,6 +1053,9 @@ h1, h2, h3, h4, h5, h6 {
 .single-archive-description {
   margin-bottom: 40px; }
 
+.single-archive__topics {
+  margin-bottom: 40px; }
+
 .single-archive__metadata span {
   font-weight: bold; }
 

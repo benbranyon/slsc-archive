@@ -11,7 +11,12 @@
           <label class="form-item__label">Description</label>
           <div class="single-archive-description">{{ post.preview.read_more(false) }}</div>
           <label class="form-item__label">Topics</label>
-          <div class="single-archive__topics"></div>
+          <div class="single-archive__topics">
+            {% set topics = post.terms('topic') %}
+            {% for topic in topics %}
+              <a href="/archive/?_topic={{ topic.slug }}">{{ topic }}</a>
+            {% endfor %}
+          </div>
           <label class="form-item__label">Additional Metadata</label>
           <div class="single-archive__metadata">
             <div class="single-archive__date"><span>Date:</span> {{ post.date|date("F Y") }}</div>
