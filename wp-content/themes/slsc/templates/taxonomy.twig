@@ -7,10 +7,14 @@
 	      <div class="taxonomy-info">
 	        <h1>{{ title }}</h1>
 	        <div class="story-link">
-
+	       		{% for item in story %}
+	        	<img src="{{ item.thumbnail.src }}" alt="{{ item.thumbnail.alt }}"/>
+	        	<a href="{{ item.link }}" class="button story-collection-link">View Story</a>
+	       		{% endfor %}
 	        </div>
 	        <div class="collection-summary">
-	        	<h3>Collection Overview</h3>
+	        	<label class="form-item__label">Collection Overview</label>
+	        	<p>{{ term.description }}</p>
 	        </div>
 	      </div>
 	  {% endblock %}

@@ -31,6 +31,25 @@ if ( is_day() ) {
 	array_unshift( $templates, 'archive-' . get_query_var( 'cat' ) . '.twig' );
 } else if ( is_tax() ) {
 	$context['title'] = single_term_title( null, false );
+	$term = get_queried_object();
+	$args = array(
+	    // Get post type project
+	    'post_type' => 'story',
+	    // Get all posts
+	    'posts_per_page' => 1,
+	    // Order by post date
+	    'orderby' => array(
+	        'date' => 'DESC'
+	    ),
+		'tax_query' => array(
+    		array(
+        		'taxonomy' => 'collection',
+        		'terms' => $term->term_id
+        	)
+    	)
+	);
+	$context['story'] = Timber::get_posts($args);
+	$context['term'] = $term;
 	array_unshift( $templates, 'taxonomy.twig' );
 } else if ( is_post_type_archive() ) {
 	$context['title'] = post_type_archive_title( '', false );
