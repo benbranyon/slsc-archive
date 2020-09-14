@@ -53,9 +53,13 @@ jQuery( document ).ready(function( $ ) {
       $('.cbp-vm-icon').toggleClass('cbp-vm-selected');
       if($(this).attr('data-view') == 'cbp-vm-view-grid') {
         $('#cbp-vm').removeClass('cbp-vm-view-list');
+        $('.cbp-vm-list img').attr('src', '/wp-content/themes/slsc/images/list-view-icon.svg');
+        $('.cbp-vm-grid img').attr('src', '/wp-content/themes/slsc/images/grid-view-icon-active.svg');
       }
       else {
         $('#cbp-vm').removeClass('cbp-vm-view-grid');
+        $('.cbp-vm-grid img').attr('src', '/wp-content/themes/slsc/images/grid-view-icon.svg');
+        $('.cbp-vm-list img').attr('src', '/wp-content/themes/slsc/images/list-view-icon-active.svg');
       }
       $('#cbp-vm').addClass($(this).attr( 'data-view' ));
     }
