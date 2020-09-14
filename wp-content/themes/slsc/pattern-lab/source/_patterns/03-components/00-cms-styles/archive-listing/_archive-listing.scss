@@ -1,16 +1,25 @@
 .cbp-vm-view-grid {
   display: flex;
+  flex-wrap: wrap;
   hr {
     display: none;
   }
   .image-teaser {
+    display: flex;
+    justify-content: center;
+    flex-basis: 25%;
     .l-media {
       display: flex;
       flex-direction: column;
     }
+    .l-media__object {
+      margin: 0 auto;
+      margin-bottom: 30px;
+    }
     .image-teaser__title {
       font-size: 18px;
       max-width: 188px;
+      text-align: center;
     }
     .image-teaser__summary {
       display: none;
