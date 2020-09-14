@@ -975,6 +975,9 @@ h1, h2, h3, h4, h5, h6 {
       .arhcive-filters h2 {
         font-size: 40px; } }
 
+.facetwp-sort {
+  margin-right: 40px; }
+
 .homepage .l-sidebar__main {
   background-color: #fff;
   position: relative;
@@ -1210,6 +1213,22 @@ h1, h2, h3, h4, h5, h6 {
       margin-left: 0px; } }
   .archive-toolbar .selection-title {
     font-weight: bold; }
+  .archive-toolbar .archive-toolbar__sort {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex; }
+  .archive-toolbar .cbp-vm-options a {
+    display: inline-block;
+    width: 25px;
+    height: 30px;
+    overflow: hidden;
+    white-space: nowrap; }
+  .archive-toolbar .cbp-vm-options {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex; }
+  .archive-toolbar .cbp-vm-grid {
+    margin-right: 30px; }
 
 .article footer {
   padding-bottom: 1rem; }
