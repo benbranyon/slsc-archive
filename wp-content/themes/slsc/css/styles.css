@@ -904,8 +904,12 @@ h1, h2, h3, h4, h5, h6 {
 /* generated with grunt-sass-globbing */
 .error404 {
   text-align: center; }
-  .error404 a {
-    color: #fff; }
+  .error404 .l-content {
+    min-height: 80vh; }
+    .error404 .l-content .page-title {
+      color: #330000; }
+    .error404 .l-content a {
+      color: #000; }
 
 .aligncenter {
   display: block;

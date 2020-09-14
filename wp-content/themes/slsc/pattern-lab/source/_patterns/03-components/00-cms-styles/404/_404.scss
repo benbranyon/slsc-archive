@@ -1,6 +1,12 @@
 .error404 {
   text-align: center;
-  a {
-    color: #fff;
+  .l-content {
+    min-height: 80vh;
+	.page-title {
+	  color: #330000;
+	}
+    a {
+      color: #000;
+    }
   }
 }
