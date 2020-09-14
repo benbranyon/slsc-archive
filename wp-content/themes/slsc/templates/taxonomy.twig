@@ -14,13 +14,16 @@
 	        </div>
 	        <div class="collection-summary">
 	        	<label class="form-item__label">Collection Overview</label>
-	        	<p>{{ term.description }}</p>
+	        	{% if term.description %}
+	        	  <p><span>Description: </span>{{ term.description }}</p>
+	        	{% endif %}
+	        	<p><span>Number of items: </span>{{ post_count }}</p>
 	        </div>
 	      </div>
 	  {% endblock %}
 	  {% block sidebar_main %}
 	  	<div class="archive-results">
-	        {% include '@components/archive-toolbar/archive-toolbar.twig' %}
+	        {% include '@components/taxonomy-toolbar/taxonomy-toolbar.twig' %}
 	        <div id="cbp-vm" class="facetwp-template cbp-vm-view-grid">
 				  {% include 'templates/components/archive-loop.twig' %}
 	        </div>
