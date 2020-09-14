@@ -43,7 +43,11 @@
    	  <h2>Related</h2>
       <div class="hompage-related">
         {% for item in related %}
-          <a href="/archive/?_{{ item.taxonomy }}={{ item.slug }}" class="button">{{ item.name }}</a>
+          {% if item.taxonomy == "collection" %}
+            <a href="/collection/{{ item.slug }}" class="button">{{ item.name }}</a>
+          {% else %}
+            <a href="/archive/?_{{ item.taxonomy }}={{ item.slug }}" class="button">{{ item.name }}</a>
+          {% endif %}
         {% endfor %}
       </div>
     {% endblock %}
