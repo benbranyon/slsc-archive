@@ -56,7 +56,7 @@ if ( is_front_page() ) {
 	$terms = get_terms( array(
 		'taxonomy' => array('topic', 'collection', 'file_type'),
     	'hide_empty' => false,
-    	'posts_per_page' => 10,
+    	'number' => 15,
 	) );
 	$context['related'] = $terms;
 	array_unshift( $templates, 'front-page.twig' );
