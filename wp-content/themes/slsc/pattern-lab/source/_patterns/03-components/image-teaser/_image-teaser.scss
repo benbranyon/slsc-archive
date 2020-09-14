@@ -1,7 +1,11 @@
 // @file
 // Styles for image teaser.
 
-.image-teaser {}
+.image-teaser {
+  img {
+    max-width: 100px;
+  }
+}
 
 .image-teaser__title {
   color: #330000;

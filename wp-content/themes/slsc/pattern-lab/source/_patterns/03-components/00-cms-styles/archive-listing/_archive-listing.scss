@@ -1,0 +1,19 @@
+.cbp-vm-view-grid {
+  display: flex;
+  hr {
+    display: none;
+  }
+  .image-teaser {
+    .l-media {
+      display: flex;
+      flex-direction: column;
+    }
+    .image-teaser__title {
+      font-size: 18px;
+      max-width: 188px;
+    }
+    .image-teaser__summary {
+      display: none;
+    }
+  }
+}

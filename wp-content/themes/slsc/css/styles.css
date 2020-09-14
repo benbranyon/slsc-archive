@@ -938,6 +938,26 @@ h1, h2, h3, h4, h5, h6 {
     float: right;
     margin: 0 0 1em 1em; } }
 
+.cbp-vm-view-grid {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex; }
+  .cbp-vm-view-grid hr {
+    display: none; }
+  .cbp-vm-view-grid .image-teaser .l-media {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column; }
+  .cbp-vm-view-grid .image-teaser .image-teaser__title {
+    font-size: 18px;
+    max-width: 188px; }
+  .cbp-vm-view-grid .image-teaser .image-teaser__summary {
+    display: none; }
+
 .facetwp-counts {
   display: inline-block; }
 
@@ -1870,6 +1890,9 @@ details.details {
   padding: 1em;
   position: absolute;
   right: 5%; }
+
+.image-teaser img {
+  max-width: 100px; }
 
 .image-teaser__title {
   color: #330000;
