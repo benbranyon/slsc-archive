@@ -958,7 +958,8 @@ h1, h2, h3, h4, h5, h6 {
         -ms-flex-pack: center;
             justify-content: center;
     -ms-flex-preferred-size: 25%;
-        flex-basis: 25%; }
+        flex-basis: 25%;
+    margin-bottom: 70px; }
     .cbp-vm-view-grid .image-teaser .l-media {
       display: -webkit-box;
       display: -ms-flexbox;
