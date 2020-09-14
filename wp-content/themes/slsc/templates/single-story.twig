@@ -2,16 +2,8 @@
 
 {% block content %}
   <!-- Provided by templates/single.twig -->
-  {% embed '@layouts/sidebar/sidebar.twig' %}
-    {% block sidebar_aside %}
-    	<h2>{{ post.title }}</h2>
-    {% endblock %}
-    {% block sidebar_main %}
-      {% if function( 'get_post_format' ) %}
-        {% include 'post-formats/content-' ~ function( 'get_post_format' ) ~ '.twig' %}
-      {% else %}
+  {% include '@components/story-toolbar/story-toolbar.twig' %}
+  <div class="story-content">
         {% include 'post-formats/content.twig' %}
-      {% endif %}
-    {% endblock %}
-  {% endembed %}
+  </div>
 {% endblock %}

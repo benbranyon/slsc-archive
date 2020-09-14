@@ -1,0 +1,16 @@
+.story-toolbar {
+  align-items: center;
+  background-color: #222222;
+  display: flex;
+  justify-content: space-between;
+  padding: 25px 40px;
+  h2 {
+    color: #fff;
+    margin-bottom: 0px;
+  }
+  .story-toolbar__button {
+    a {
+      margin-bottom: 0px;
+    }
+  }
+}

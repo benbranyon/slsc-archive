@@ -2435,6 +2435,24 @@ details.details {
     .site-name__text {
       font-size: 24px; } }
 
+.story-toolbar {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: #222222;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding: 25px 40px; }
+  .story-toolbar h2 {
+    color: #fff;
+    margin-bottom: 0px; }
+  .story-toolbar .story-toolbar__button a {
+    margin-bottom: 0px; }
+
 .tabs::after {
   clear: both;
   content: '';
