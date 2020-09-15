@@ -1014,7 +1014,8 @@ h1, h2, h3, h4, h5, h6 {
   .facetwp-selections .facetwp-selection-value {
     font-weight: bold; }
   .facetwp-selections ul {
-    padding-left: 0px; }
+    padding-left: 0px;
+    margin-bottom: 0px; }
 
 .facetwp-template {
   margin-left: 30px;
@@ -1274,6 +1275,10 @@ h1, h2, h3, h4, h5, h6 {
       margin-bottom: 30px;
       margin-right: 0px;
       margin-left: 0px; } }
+  .archive-toolbar .archive-toolbar__info {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex; }
   .archive-toolbar .selection-title {
     font-weight: bold; }
   .archive-toolbar .archive-toolbar__sort {
