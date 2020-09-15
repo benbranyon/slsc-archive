@@ -4,6 +4,10 @@
       <div class="l-media__object">
         <a href="{{ url }}">{{ image }}</a>
       </div>
+    {% else %}
+      <div class="l-media__object">
+        <a href="{{ url }}"><img src="/wp-includes/images/media/document.png" alt="{{ title }} Document Image"/></a>
+      </div>
     {% endif %}
     <div class="l-media__content">
       <h2 class="image-teaser__title"><a href="{{ url }}">{{ title }}</a></h2>
