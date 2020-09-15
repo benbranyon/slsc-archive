@@ -49,7 +49,7 @@ if ( is_day() ) {
     	)
 	);
 	$context['story'] = Timber::get_posts($args);
-	$context['post_count'] = $GLOBALS['wp_query']->post_count;
+	$context['post_count'] = $GLOBALS['wp_query']->found_posts;
 	$context['term'] = $term;
 	array_unshift( $templates, 'taxonomy.twig' );
 } else if ( is_post_type_archive() ) {
