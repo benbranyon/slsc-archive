@@ -3,10 +3,10 @@
   display: flex;
   justify-content: space-between;
   padding: 30px;
+  margin-bottom: 30px;
   margin-left: -20px;
   margin-right: -20px;
   @include breakpoint($bp-xlarge) {
-    margin-bottom: 30px;
     margin-right: 0px;
     margin-left: 0px;
   }
