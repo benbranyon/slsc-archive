@@ -1,7 +1,7 @@
 // @file
 // Styles for the Sidebar Layout.
 
-$l-sidebar-bp: 900px;
+$l-sidebar-bp: 1020px;
 $l-sidebar-width: 500px;
 $l-sidebar-minor-width: $l-sidebar-width;
 $l-sidebar-gutter: 1rem;
@@ -12,13 +12,16 @@ $l-sidebar-gutter: 1rem;
   }
   @include breakpoint($l-sidebar-bp) {
     display: flex;
-    flex-wrap: wrap;
     flex-direction: row-reverse;
 
     > * {
       flex-grow: 1;
       flex-shrink: 1;
       flex-basis: calc(100% - #{$l-sidebar-width} - #{$l-sidebar-gutter * 2});
+    }
+
+    .l-sidebar__main {
+      max-width: calc(100% - #{$l-sidebar-width} - #{$l-sidebar-gutter * 2});
     }
 
     .l-sidebar__full {
