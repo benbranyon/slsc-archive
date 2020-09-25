@@ -1,0 +1,13 @@
+.single-story {
+  .main {
+    background-color: #dcd2c7;
+  }
+  .cd-timeline-img {
+    box-shadow: none;
+    span {
+      &::before {
+        display: none;
+      }
+    }
+  }
+}

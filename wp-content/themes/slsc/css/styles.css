@@ -1166,6 +1166,15 @@ h1, h2, h3, h4, h5, h6 {
 .pdfemb-inner-div {
   height: auto !important; }
 
+.single-story .main {
+  background-color: #dcd2c7; }
+
+.single-story .cd-timeline-img {
+  -webkit-box-shadow: none;
+          box-shadow: none; }
+  .single-story .cd-timeline-img span::before {
+    display: none; }
+
 .sticky {
   display: block; }
 
