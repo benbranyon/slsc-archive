@@ -1232,12 +1232,15 @@ h1, h2, h3, h4, h5, h6 {
   text-align: center;
   width: 100%; }
 
+.swiper-slide__content {
+  bottom: 100px;
+  position: absolute; }
+
 .swiper-title {
   color: #fff;
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
   font-size: 48px;
   font-weight: bold;
-  padding-top: 450px;
   margin: 0 auto;
   max-width: 531px;
   margin-bottom: 30px;

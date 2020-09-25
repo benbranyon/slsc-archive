@@ -10,8 +10,10 @@
       		<div class="swiper-wrapper">
 		      	{% for story in stories %}
 		      	  <div class="swiper-slide" style="background-image: url( {{ story.thumbnail.src }} );">
-		      	  	<h3 class="swiper-title">{{ story.post_title }}</h3>
-		      	  	<a href="{{ story.link }}" class="button swiper-button">View Story</a>
+                <div class="swiper-slide__content">
+		      	  	  <h3 class="swiper-title">{{ story.post_title }}</h3>
+		      	  	  <a href="{{ story.link }}" class="button swiper-button">View Story</a>
+                </div>
 		      	  </div>
 		      	{% endfor %}
 		      </div>

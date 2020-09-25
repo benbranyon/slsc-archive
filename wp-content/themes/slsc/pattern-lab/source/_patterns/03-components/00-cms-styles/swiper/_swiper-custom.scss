@@ -65,12 +65,16 @@
   width: 100%;
 }
 
+.swiper-slide__content {
+  bottom: 100px;
+  position: absolute;
+}
+
 .swiper-title {
   color: #fff;
   font-family: $base-font-family;
   font-size: 48px;
   font-weight: bold;
-  padding-top: 450px;
   margin: 0 auto;
   max-width: 531px;
   margin-bottom: 30px;
