@@ -52,9 +52,7 @@ class Plugin {
         ) ' . 'ENGINE = InnoDB '.$charset_collate.';';
         require_once ABSPATH.'wp-admin/includes/upgrade.php';
         dbDelta($sql);
-
-        
-        $alter = $wpdb->query("ALTER TABLE `".$table."` ADD CONSTRAINT `".$table."_ibfk_1` FOREIGN KEY (`folder_id`) REFERENCES `".$table_fbv."` (`id`) ON DELETE CASCADE;");
+        //$wpdb->query("ALTER TABLE `".$table."` ADD CONSTRAINT `".$table."_ibfk_1` FOREIGN KEY (`folder_id`) REFERENCES `".$table_fbv."` (`id`) ON DELETE CASCADE;");
     }
   }
 

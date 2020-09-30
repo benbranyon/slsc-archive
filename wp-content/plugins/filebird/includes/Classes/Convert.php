@@ -215,7 +215,7 @@ class Convert {
         global $wpdb;
         $table_name = $wpdb->prefix . 'fbv';
         if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $table_name ) ) ) == $table_name ) {
-          $wpdb->query('DELETE FROM ' . $table_name);
+          FolderModel::deleteAll();
 
           update_option('njt_fb_updated_from_enhanced', '0');
           update_option('njt_fb_updated_from_wpmlf', '0');
@@ -303,14 +303,14 @@ class Convert {
       wp_send_json_success();
       exit();
     }
-    public function ajaxImportAfterInserting() {
+    public function ajaxImportAfterInserting($request) {
       global $wpdb;
-      $site = isset($_POST['site']) ? sanitize_text_field($_POST['site']) : '';
+      $site = isset($request) ? sanitize_text_field($request->get_params()['site']) : '';
       $count = isset($request) ? sanitize_text_field($request->get_params()['count']) : '';
       $this->afterInsertingNewFolders($site);
       $this->updateUpdated($site);
 
-      $mess = sprintf(__('Congratulations! We imported successfully %1$d folders into <strong>FileBird.</strong>', 'filebird'), $count);
+      $mess = sprintf(__('Congratulations! We imported successfully %d folders into <strong>FileBird.</strong>', 'filebird'), $count);
       wp_send_json_success(array(
           'mess' => $mess
       ));
@@ -366,12 +366,15 @@ class Convert {
     }
     public function insertFolderAndItsAtt($site, $folders) {
         global $wpdb;
-        foreach ($folders as $k => $folder) {            
+        foreach ($folders as $k => $folder) {  
+          if(\is_array($folder)) {
+            $folder = json_decode(json_encode($folder));
+          }
             //insert folder first
-            $inserted = FolderModel::newOrGet($folder['title'], $folder['parent']);
-            update_option('njt_new_term_id_' . $folder['id'], $inserted);
-            if($folder['parent'] > 0) {
-                $new_parent = get_option('njt_new_term_id_' . $folder['parent']);
+            $inserted = FolderModel::newOrGet($folder->title, $folder->parent);
+            update_option('njt_new_term_id_' . $folder->id, $inserted);
+            if($folder->parent > 0) {
+                $new_parent = get_option('njt_new_term_id_' . $folder->parent);
                 FolderModel::updateParent($inserted, $new_parent);
             }
             $atts = $this->getAttOfFolder($site, $folder);
@@ -381,8 +384,12 @@ class Convert {
     public function getAttOfFolder($site, $folder) {
         global $wpdb;
         $att = array();
+        if(is_array($folder)) {
+          $folder = json_decode(json_encode($folder));
+        }
+
         if($site == 'enhanced') {
-          $att = $wpdb->get_col($wpdb->prepare('SELECT object_id FROM %1$s WHERE term_taxonomy_id = %2$d', $wpdb->term_relationships, $folder['term_taxonomy_id']));
+          $att = $wpdb->get_col($wpdb->prepare('SELECT object_id FROM %1$s WHERE term_taxonomy_id = %2$d', $wpdb->term_relationships, $folder->term_taxonomy_id));
         } else if($site == 'wpmlf') {
           $folder_table = $wpdb->prefix . 'mgmlp_folders';
           $sql = "select ID from {$wpdb->prefix}posts 
@@ -394,10 +401,10 @@ class Convert {
           order by post_date desc";
           $att = $wpdb->get_col($sql);
         } else if($site == 'wpmf') {
-          $att = $wpdb->get_col($wpdb->prepare('SELECT object_id FROM %1$s WHERE term_taxonomy_id = %2$d', $wpdb->term_relationships, $folder['term_taxonomy_id']));
+          $att = $wpdb->get_col($wpdb->prepare('SELECT object_id FROM %1$s WHERE term_taxonomy_id = %2$d', $wpdb->term_relationships, $folder->term_taxonomy_id));
         } else if($site == 'realmedia') {
           $folder_table = $wpdb->prefix . 'realmedialibrary_posts';
-          $att = $wpdb->get_col($wpdb->prepare('SELECT attachment FROM %1$s WHERE fid = %2$d', $folder_table, $folder['id']));
+          $att = $wpdb->get_col($wpdb->prepare('SELECT attachment FROM %1$s WHERE fid = %2$d', $folder_table, $folder->id));
         }
         return $att;
     }

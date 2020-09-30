@@ -145,10 +145,13 @@ class Folder {
   public static function deleteAll() {
     global $wpdb;
     $wpdb->query("DELETE FROM " . self::getTable(self::$folder_table));
+    $wpdb->query("DELETE FROM " . self::getTable(self::$relation_table));
   }
   public static function deleteFolderAndItsChildren($id) {
     global $wpdb;
     $wpdb->delete(self::getTable(self::$folder_table), array('id' => $id), array('%d'));
+    $wpdb->delete(self::getTable(self::$relation_table), array('folder_id' => $id), array('%d'));
+
     //delete it's children
     $children = $wpdb->get_col("SELECT `id` FROM ".self::getTable(self::$folder_table)." WHERE `parent` = '".(int)$id."'");
     foreach($children as $k => $child) {
@@ -187,32 +190,29 @@ class Folder {
       'post__not_in' => array(),
       'post__in' => array()
     );
+
+    $select = apply_filters("fbv_in_not_in_select_query", "SELECT `attachment_id` FROM " . self::getTable(self::$relation_table), $fbv, self::getTable(self::$folder_table), self::getTable(self::$relation_table));
+    $where_arr = array('1 = 1');
     if($fbv !== -1) {//skip if fbv == -1 (load all)
       if($fbv === 0) {
         //load uncategorized folder
-        $where = "`folder_id` IN (SELECT `id` FROM ".self::getTable(self::$folder_table)." WHERE `created_by` = '0')";
-        $where = apply_filters('fbv_in_not_in_uncategorized_where', $where, self::getTable(self::$folder_table));
-
-        $results = $wpdb->get_results("SELECT `attachment_id` FROM " . self::getTable(self::$relation_table) . " WHERE " . $where);
-        $attachment_ids = array();
-        foreach ($results as $k => $v) {
-          $attachment_ids[] = $v->attachment_id;
-        }
-        $query['post__not_in'] = $attachment_ids;
+        $where_arr[] = apply_filters(
+          'fbv_in_not_in_uncategorized_where',
+          "`folder_id` IN (SELECT `id` FROM ".self::getTable(self::$folder_table)." WHERE `created_by` = '0')",
+          self::getTable(self::$folder_table)
+        );
+        $query['post__not_in'] = $wpdb->get_col($select. " WHERE " . implode(' AND ', apply_filters('fbv_in_not_in_where_query', $where_arr, $fbv)));
       } else {
         if(apply_filters('fbv_can_get_in_not_in', true, $fbv)) {
           if( ! is_array($fbv)) {
             $fbv = array($fbv);
           }
-          $results = $wpdb->get_results("SELECT `attachment_id` FROM " . self::getTable(self::$relation_table) . " WHERE `folder_id` IN (".implode(',', $fbv).")");
-          $attachment_ids = array();
-          foreach ($results as $k => $v) {
-            $attachment_ids[] = $v->attachment_id;
+          $where_arr[] = "`folder_id` IN (".implode(',', $fbv).")";
+          $query['post__in'] = $wpdb->get_col($select. " WHERE " . implode(' AND ', apply_filters('fbv_in_not_in_where_query', $where_arr, $fbv)));
+          
+          if(count($query['post__in']) == 0) {
+            $query['post__in'] = array(-1);
           }
-          if(count($attachment_ids) == 0) {
-            $attachment_ids = array(-1);
-          }
-          $query['post__in'] = $attachment_ids;
         }
       }
     }

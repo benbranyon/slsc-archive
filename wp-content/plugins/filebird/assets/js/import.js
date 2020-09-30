@@ -35,6 +35,7 @@ jQuery( document ).ready(function() {
 
     function get_folders(onDone, onFail) {
       jQuery.ajax({
+        dataType: 'json',
         url: fbv_data.json_url + '/fb-get-old-data',
         method: 'POST',
         beforeSend: function ( xhr ) {
@@ -85,6 +86,7 @@ jQuery( document ).ready(function() {
 
     $this.addClass('updating-message')
     jQuery.ajax({
+        dataType: 'json',
         url: fbv_data.json_url + '/fb-wipe-old-data',
         method: 'POST',
         beforeSend: function ( xhr ) {
@@ -111,6 +113,7 @@ jQuery( document ).ready(function() {
 
     $this.addClass('updating-message')
     jQuery.ajax({
+      dataType: 'json',
       url: fbv_data.json_url + '/fb-wipe-clear-all-data',
       method: 'POST',
       beforeSend: function ( xhr ) {
@@ -131,6 +134,7 @@ jQuery( document ).ready(function() {
     var $this = jQuery(this);
     $this.addClass('updating-message')
     jQuery.ajax({
+      dataType: 'json',
       type: "post",
       url: fbv_data.json_url + '/fb-no-thanks',
       beforeSend: function ( xhr ) {
@@ -210,6 +214,7 @@ jQuery( document ).ready(function() {
       })
     } else {
       jQuery.ajax({
+        dataType: 'json',
         url: fbv_data.json_url + '/fb-import-after-inserting',
         method: 'POST',
         beforeSend: function ( xhr ) {
@@ -233,6 +238,7 @@ jQuery( document ).ready(function() {
     var $this = jQuery(this);
     $this.addClass('updating-message')
     jQuery.ajax({
+      dataType: 'json',
       type: "post",
       url: fbv_data.json_url + '/fbv-api',
       beforeSend: function ( xhr ) {

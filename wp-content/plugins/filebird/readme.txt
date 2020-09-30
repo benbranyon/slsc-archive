@@ -1,6 +1,6 @@
 === FileBird - WordPress Media Library Folders & File Manager ===
 Contributors: ninjateam
-Tags: wordpress media library folders, media library folders, media library folder, filebird, wp media folder, wp media folders, wordpress media folder, wordpress media folders, wordpress media library, file manager, wordpress media manager, media files, file bird
+Tags: wordpress media library folders, media library folders, media library folder, filebird, wp media folder, wp media folders, media folder, wordpress media folders, wordpress media library, file manager, wordpress media manager, media manager, file bird, firebird
 Requires at least: 3.0
 Tested up to: 5.5
 Stable tag: trunk
@@ -11,27 +11,30 @@ Organize thousands of WordPress media files in folders / categories at ease.
 
 
 == Description ==
-FileBird is a media file manager plugin to help you organize WordPress media library folders wisely.
+FileBird is a media file manager plugin to help you organize WordPress media library folders by drag and drop.
 
 It allows you to create virtual folders to contain your WordPress media library. So when you move files and folders, that won’t break permalinks to your images in the content.
 
-With FileBird Pro you can manage all WP media files properly, search for any file & folder, sort them out, etc. That’s a great way to improve your admin workflow and productivity.
+With FileBird Pro you can save time on WP media management, search for any file & folder, sort them out, add folder gallery, etc. That’s a great way to improve your admin workflow and productivity.
 
 [TEST DRIVE](https://media-folder.ninjateam.org/create/) | [DOCUMENTATION](https://ninjateam.gitbook.io/filebird/)
 
 Video Demo:
 [youtube https://www.youtube.com/watch?v=NjeEbqmMVwU]
 
-== FEATURES ==
+###⚡️ FEATURES
 
 **Friendly User Interface**
-Drag and drop to upload or move files into folders. Drag and drop to arrange folders and subfolders.
+Drag and drop to upload or bulk move files into folders. Drag and drop to arrange folders and subfolders.
 
 **Smart Context Menu**
 Right-click to quickly create, rename or delete folders just the way you do on your computer.
 
 **Full Control In One Toolbar**
-FileBird's resizable sidebar provides you with the ultimate control over all uploaded files and created folders.
+FileBird’s resizable sidebar provides you with the ultimate control over all uploaded files and created folders.
+
+**Painless Migration**
+Import and seamlessly synchronize media structure from Enhanced Media Library, WP Media Folder by JoomUnited, WordPress Media Library Folders by Max Foundry, and Real Media Library.
 
 **Powerful Search Feature**
 You can search for file and folder name not only in Media library sidebar but also in FileBird file browser when editing page/post.
@@ -51,7 +54,7 @@ FileBird supports RTL languages including Hebrew, Arabic, etc.
 **Many Languages Supported**
 This plugin supports most popular languages such as English, Spanish, Italian, French, Germany, etc.
 
-== HOW IT WORKS ==
+###⛩️ HOW IT WORKS
 Are you a WordPress website administrator?
 
 Managing a WordPress site means that you’ll be adding tons of multi-media files such as images, videos, audios, documents, etc., into your WP media library.
@@ -64,7 +67,7 @@ The best thing about a folder-based structure is it makes it very easy to find t
 
 You won’t see WordPress media library not loading, as FileBird smart-loads one folder at a time.
 
-== Tips to manage WP media folders like a pro with FileBird ==
+###🚀 Tips to manage WP media folders like a pro with FileBird
 
 * Give files and folders logical, specific names
 * Nest folders within parent folders
@@ -75,7 +78,7 @@ You won’t see WordPress media library not loading, as FileBird smart-loads one
 * Use FileBird block gallery to insert multiple media files in a page, post, and custom post type
 * Keep your folders uncluttered by clearing out the old files using **Sort features**
 
-== COMPATIBILITY ==
+###🎉 COMPATIBILITY
 
 [FileBird WordPress Media Library Folders](https://ninjateam.org/wordpress-media-library-folders/) has been developed to be compatible with the most popular WordPress page builders, themes and plugins
 
@@ -169,6 +172,13 @@ If you have a large number of files and want to use more than 10 folders/categor
 8. FileBird gallery block settings
 
 == Changelog ==
+
+= Sep 16, 2020 - Version 4.0.7 =
+- Added: User can use API to create folders
+- Improved: Cut/Paste function
+- Fixed: Counter with Polylang
+- Fixed: Import function
+- Fixed: Counter in import message
 
 = Aug 26, 2020 - Version 4.0.6 =
 - Added: Compatible with Cornerstone Page Builder (From X Theme)

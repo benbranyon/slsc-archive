@@ -20,6 +20,7 @@ jQuery(document).ready(function () {
 
     jQuery
       .ajax({
+        dataType: 'json',
         url: window.ajaxurl,
         type: "post",
         data: {

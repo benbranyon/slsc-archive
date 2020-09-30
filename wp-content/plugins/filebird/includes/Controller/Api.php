@@ -38,6 +38,17 @@ class Api {
           )
         );
 
+        //POST http://yoursite/wp-json/njt-fbv/public/v1/folders
+        //parent_id=&name=
+        register_rest_route(NJFB_REST_PUBLIC_URL,
+          'folders',
+          array(
+            'methods' => 'POST',
+            'callback' => array($this, 'publicRestApiNewFolder'),
+            'permission_callback' => array($this, 'resPublicPermissionsCheck'),
+          )
+        );
+
         //POST http://yoursite/wp-json/njt-fbv/public/v1/folder/set-attachment
         //ids=&folder=
         register_rest_route(NJFB_REST_PUBLIC_URL,
@@ -48,6 +59,7 @@ class Api {
             'permission_callback' => array($this, 'resPublicPermissionsCheck'),
           )
         );
+        
     }
     public function restApi() {
         $act = isset($_POST['act']) ? sanitize_text_field($_POST['act']) : '';
@@ -67,6 +79,17 @@ class Api {
         $data['folders'] = Tree::getFolders($order_by);
 
         wp_send_json_success($data);
+    }
+    public function publicRestApiNewFolder() {
+        $parent_id = isset($_POST['parent_id']) ? (int)sanitize_text_field($_POST['parent_id']) : '';
+        $name = isset($_POST['name']) ? sanitize_text_field($_POST['name']) : '';
+        if($name != '') {
+            $id = FolderModel::newOrGet($name, $parent_id);
+            wp_send_json_success(array('id' => $id));
+        }
+        wp_send_json_error(array(
+            'mess' => __('Required fields are missing.', 'filebird')
+        ));
     }
     public function publicRestApiSetAttachment() {
         $ids = ((isset($_POST['ids'])) ? Helpers::sanitize_array($_POST['ids']) : '');
@@ -128,13 +151,17 @@ class Api {
         return $headers;
     }
     private function getBearerToken() {
+        $token = null;
         $headers = $this->getAuthorizationHeader();
         // HEADER: Get the access token from the header
         if (!empty($headers)) {
             if (preg_match('/Bearer\s(\S+)/', $headers, $matches)) {
-                return $matches[1];
+                $token =  $matches[1];
             }
         }
-        return null;
+        if(is_null($token) && isset($_REQUEST['token'])) {
+            $token = $_REQUEST['token'];
+        }
+        return $token;
     }
 }

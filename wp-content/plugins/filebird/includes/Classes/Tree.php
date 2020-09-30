@@ -15,21 +15,24 @@ class Tree {
         return $tree;
     }
     public static function getCount($folder_id) {
-        $accepted_status = array('inherit', 'private');
-        $args = array(
-          'post_type' => 'attachment',
-          'post_status' => $accepted_status,
-          'posts_per_page' => -1
-        );
+      global $wpdb;
+
+      $args = apply_filters('fbv_count_args', array(
+        'post_type' => 'attachment',
+        'posts_per_page' => -1,
+        'fields' => 'ids',
+      ));
+
+      if($folder_id == -1) {
+        return count( get_posts($args) );
+      } else {
         $in_not_in = FolderModel::getInAndNotInIds($folder_id);
+
         $args['post__not_in'] = $in_not_in['post__not_in'];
         $args['post__in'] = $in_not_in['post__in'];
         $args['fbv_count'] = true;
-        
-        $query = new \WP_Query($args);
-        $count = $query->found_posts;
-        wp_reset_postdata();
-        return $count;
+        return count( get_posts($args) );
+      }
     }
     private static function getTree($data, $parent = 0, $default = null,  $flat = false, $level = 0, $show_level = false) {
       $tree = is_null($default) ? array() : $default;
