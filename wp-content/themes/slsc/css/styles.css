@@ -1223,9 +1223,11 @@ h1, h2, h3, h4, h5, h6 {
     .swiper-slide {
       height: calc(100vh - 71px); } }
 
-@media (min-width: 75em) {
-  .admin-bar .swiper-slide {
-    height: calc(100vh - 71px - 32px); } }
+.admin-bar .swiper-slide {
+  height: 550px; }
+  @media (min-width: 75em) {
+    .admin-bar .swiper-slide {
+      height: calc(100vh - 71px - 32px); } }
 
 .swiper-button-next,
 .swiper-button-prev {
