@@ -248,6 +248,24 @@ function gesso_bem_gallery( $gallery, $attr ) {
 add_filter( 'post_gallery', 'gesso_bem_gallery', 10, 2 );
 
 /**
+ * Replace the default excerpt with our new custom excerpt
+ * @param string $excerpt The original announcement excerpt.
+ * @param integer $post_id The announcement post ID
+ * @return string Return the new excerpt to use.
+ */
+function replace_default_timeline_express_excerpt( $excerpt, $post_id ) {
+    if ( get_post($post_id) ) {
+      $content_post = get_post($post_id);
+      $content = $content_post->post_content;
+      $content = apply_filters('the_content', $content);
+      return $content;
+    } else {
+       return $excerpt;
+    }
+}
+add_filter( 'timeline_express_frontend_excerpt', 'replace_default_timeline_express_excerpt', 10, 2 );
+
+/**
  * Register Twig namespaces to Pattern Lab patterns. 
  * @param Twig_Loader_Filesystem $loader
  * @return Twig_Loader_Filesystem
