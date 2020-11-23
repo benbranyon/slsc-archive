@@ -2,8 +2,8 @@
 Contributors: jarednova
 Tags: template engine, templates, twig
 Requires at least: 4.9.8
-Tested up to: 5.4.2
-Stable tag: 1.18.0
+Tested up to: 5.5.1
+Stable tag: 1.18.2
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -38,6 +38,19 @@ _Twig is the template language powering Timber; if you need a little background 
 
 **Fixes and improvements**
 
+= 1.18.2 = 
+
+**Fixes and improvements**
+
+* Fixes an issue where images loaded from another domain/site weren't properly deleted from the tmp directory #2216 (thanks @oxyc)
+
+
+= 1.18.1 =
+
+**Fixes and improvements**
+
+* Corrects an issue where #2305 tested for arrays but not other Iterables (like `Timber\PostCollection`s) #2314 (thanks @nlemoine)
+
 = 1.18.0 =
 
 **Changes for Theme Developers**
@@ -46,7 +59,7 @@ _Twig is the template language powering Timber; if you need a little background 
 
 **Fixes and improvements**
 
-* Fixes an error with array_filter and later versions of Twig
+* Fixes an error with array_filter and later versions of Twig #2305
 
 = 1.17.0 =
 

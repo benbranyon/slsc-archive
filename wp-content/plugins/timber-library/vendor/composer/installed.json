@@ -111,7 +111,8 @@
             "cache",
             "extension",
             "twig"
-        ]
+        ],
+        "abandoned": "twig/cache-extension"
     },
     {
         "name": "composer/installers",
