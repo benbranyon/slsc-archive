@@ -42,6 +42,8 @@ if (defined('CLOUDFLARE_HTTP2_SERVER_PUSH_ACTIVE') && CLOUDFLARE_HTTP2_SERVER_PU
     add_action('init', array($cloudflareHooks, 'http2ServerPushInit'));
 }
 
+add_action('init', array($cloudflareHooks, 'initAutomaticPlatformOptimization'));
+
 if (is_admin()) {
     //Register proxy AJAX endpoint
     add_action('wp_ajax_cloudflare_proxy', array($cloudflareHooks, 'initProxy'));
@@ -95,6 +97,7 @@ $cloudflarePurgeURLActions = array(
     'edit_post',                        // Edit a post - includes leaving comments
     'delete_attachment',                // Delete an attachment - includes re-uploading
     'post_updated',                     // Update a post
+    'comment_post',                     // Post a comment
 );
 
 $cloudflarePurgeURLActions = apply_filters('cloudflare_purge_url_actions', $cloudflarePurgeURLActions);
