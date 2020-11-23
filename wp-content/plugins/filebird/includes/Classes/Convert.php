@@ -131,7 +131,7 @@ class Convert {
               <?php _e(sprintf(__('We found you have %1$s categories you created from <strong>%2$s</strong> plugin. Would you like to import it to <strong>FileBird</strong>?', 'filebird'), $c, $site['title'])); ?>
             </p>
             <p>
-              <a target="_blank" href="<?php echo esc_url(add_query_arg(array('page' => 'filebird-settings', 'tab' => 'update'), admin_url('options-general.php'))); ?>" class="button button-primary"><?php _e('Import Now', 'filebird'); ?></a> 
+              <a target="_blank" href="<?php echo esc_url(add_query_arg(array('page' => 'filebird-settings', 'tab' => 'import'), admin_url('options-general.php'))); ?>" class="button button-primary"><?php _e('Import Now', 'filebird'); ?></a> 
               <button class="button njt_fb_no_thanks_btn" data-site="<?php echo esc_attr($site['site']); ?>"><?php _e('No, thanks', 'filebird') ?></button> 
             </p>
           </div>
@@ -150,7 +150,7 @@ class Convert {
                 <?php _e(sprintf('Would you like to import old folders from old version to <strong>FileBird</strong>?', $c, $site['title'])); ?>
               </p>
               <p>
-                <a target="_blank" href="<?php echo esc_url(add_query_arg(array('page' => 'filebird-settings', 'tab' => 'update'), admin_url('options-general.php'))); ?>" class="button button-primary"><?php _e('Import Now'); ?></a> 
+                <a target="_blank" href="<?php echo esc_url(add_query_arg(array('page' => 'filebird-settings', 'tab' => 'update-db'), admin_url('options-general.php'))); ?>" class="button button-primary"><?php _e('Import Now'); ?></a> 
               </p>
             </div>
             <?php

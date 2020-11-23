@@ -84,7 +84,8 @@ class Settings {
   public function registerSettings()
   {
     $settings = array(
-        'njt_fbv_folder_per_user'
+        'njt_fbv_folder_per_user',
+        'njt_fbv_default_folder'
     );
     foreach ($settings as $k => $v) {
         register_setting('njt_fbv', $v);

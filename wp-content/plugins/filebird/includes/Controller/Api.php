@@ -38,6 +38,16 @@ class Api {
           )
         );
 
+        //GET http://yoursite/wp-json/njt-fbv/public/v1/attachment-id/?folder_id=
+        register_rest_route(NJFB_REST_PUBLIC_URL,
+          'attachment-id',
+          array(
+            'methods' => 'GET',
+            'callback' => array($this, 'publicRestApiGetAttachmentIds'),
+            'permission_callback' => array($this, 'resPublicPermissionsCheck'),
+          )
+        );
+
         //POST http://yoursite/wp-json/njt-fbv/public/v1/folders
         //parent_id=&name=
         register_rest_route(NJFB_REST_PUBLIC_URL,
@@ -79,6 +89,17 @@ class Api {
         $data['folders'] = Tree::getFolders($order_by);
 
         wp_send_json_success($data);
+    }
+    public function publicRestApiGetAttachmentIds() {
+        $folder_id = isset($_GET['folder_id']) ? (int)$_GET['folder_id'] : '';
+        if($folder_id != '') {
+            wp_send_json_success(array(
+                'attachment_ids' => Helpers::getAttachmentIdsByFolderId((int)$_GET['folder_id'])
+            ));
+        }
+        wp_send_json_error(array(
+            'mess' => __('folder_id is missing.', 'filebird')
+        ));
     }
     public function publicRestApiNewFolder() {
         $parent_id = isset($_POST['parent_id']) ? (int)sanitize_text_field($_POST['parent_id']) : '';

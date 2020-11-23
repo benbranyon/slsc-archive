@@ -173,6 +173,14 @@ If you have a large number of files and want to use more than 10 folders/categor
 
 == Changelog ==
 
+= Oct 27, 2020 - Version 4.1 =
+- Added: Set default folder to open
+- Added: New APIs
+- Added: Support ACF
+- Improved: Notice of creating the first folder
+- Removed: Folder selector when no item available in modal popup
+- Fixed: Some bugs in folder container
+
 = Sep 16, 2020 - Version 4.0.7 =
 - Added: User can use API to create folders
 - Improved: Cut/Paste function

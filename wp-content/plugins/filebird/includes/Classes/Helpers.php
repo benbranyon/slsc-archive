@@ -3,6 +3,8 @@ namespace FileBird\Classes;
 
 defined('ABSPATH') || exit;
 
+use FileBird\Model\Folder as FolderModel;
+
 class Helpers {
     protected static $instance = null;
     
@@ -109,5 +111,33 @@ class Helpers {
       } else {
           return is_scalar($var) ? sanitize_text_field($var) : $var;
       }
+  }
+  public static function getAttachmentIdsByFolderId($folder_id) {
+    global $wpdb;
+    return $wpdb->get_col("SELECT `attachment_id` FROM " . $wpdb->prefix . "fbv_attachment_folder WHERE `folder_id` = " . (int)$folder_id);
+  }
+  public static function view($path, $data = array()) {
+    extract($data);
+    ob_start();
+    include_once NJFB_PLUGIN_PATH . 'views/'.$path.'.php';
+    return ob_get_clean();
+  }
+  public static function getDefaultSelectedFolder() {
+    $folder_id = get_user_meta(get_current_user_id(), '_njt_fbv_default_folder', true);
+    $folder_id = (int)$folder_id;
+
+    if($folder_id == 0) {
+      $folder_id = -1;
+    } elseif($folder_id > 0) {
+      if(is_null(FolderModel::findById($folder_id))) {
+        $folder_id = -1;
+      }
+    }
+    return $folder_id;
+  }
+  public static function setDefaultSelectedFolder($value) {
+    $value = (int)$value;
+    if($value <= 0) $value = -1;
+    update_user_meta(get_current_user_id(), '_njt_fbv_default_folder', $value);
   }
 }

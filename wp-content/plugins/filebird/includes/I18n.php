@@ -115,7 +115,15 @@ class I18n {
       'update_noti_title' => __('FileBird 4 Update Required', 'filebird'),
       'update_noti_desc' => __('You\'re using the new FileBird 4. Please import database to view your folders correctly.', 'filebird'),
       'update_noti_btn' => __('Import now', 'filebird'),
-      'import_failed' => __('Import failed. Please try again or <a href="https://ninjateam.org/support" target="_blank">contact our support</a>.', 'filebird')
+      'import_failed' => __('Import failed. Please try again or <a href="https://ninjateam.org/support" target="_blank">contact our support</a>.', 'filebird'),
+      'purchase_code_missing' => __('Please enter your Purchase Code.', 'filebird'),
+      'envato_token_missing' => __('Please enter your Personal Access Token or get one.', 'filebird'),
+      'envato_invalid_license' => __('Can not active your License, please try again.', 'filebird'),
+      'settings' => __('Settings', 'filebird'),
+      'fb_settings' => __('FileBird Settings', 'filebird'),
+      'select_default_startup_folder' => __('Select a default startup folder:', 'filebird'),
+      'set_setting_success' => __('Settings saved', 'filebird'),
+      'set_setting_fail' => __('Failed to save settings. Please try again!', 'filebird'),
     );
     return $translation;
   }

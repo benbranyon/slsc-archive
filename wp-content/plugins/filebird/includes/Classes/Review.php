@@ -44,7 +44,6 @@ class Review
 
     public function fbv_save_review()
     {
-        global $wpdb;
         if (count($_REQUEST)) {
             $nonce = $this->hasField('nonce', $_REQUEST);
             $field = $this->hasField('field', $_REQUEST);

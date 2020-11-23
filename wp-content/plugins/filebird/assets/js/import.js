@@ -266,15 +266,39 @@ jQuery( document ).ready(function() {
   //submit form
   jQuery('input.njt-submittable').on('change', function(){
     var $this = jQuery(this)
-    var is_checked = $this.is(':checked')
-    var data = $this.closest('form').serialize()
-    
+    var data = $this.closest('form').serializeArray()
+    let slider = $this.closest('.njt-switch').find('span.slider')
+    if(slider.length) {
+      slider.addClass('njt_loading')
+    }
     jQuery.post('options.php', data)
     .success(function(res){
+      if(slider.length) {
+        slider.removeClass('njt_loading')
+      }
       toastr.success('Changes Saved', '', toastr_opt)
     })
     .error(function(res){
+      if(slider.length) {
+        slider.removeClass('njt_loading')
+      }
       toastr.error('Please try again later.', '', toastr_opt)
     })
+  })
+  //notice dismiss
+  jQuery('#filebird-empty-folder-notice').on('click', function(event){
+    if (jQuery(event.target).hasClass('notice-dismiss')){
+      jQuery.ajax({
+        dataType: 'json',
+        url: window.ajaxurl,
+        type: "post",
+        data: {
+          action: "fbv_first_folder_notice",
+          nonce: window.fbv_data.nonce,
+        },
+      })
+      .done(function (result) {})
+      .fail(function (res) {});
+    }
   })
 })
