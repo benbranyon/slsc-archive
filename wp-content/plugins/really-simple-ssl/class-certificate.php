@@ -45,12 +45,21 @@ if ( ! class_exists( 'rsssl_certificate' ) ) {
                 //get certificate info
                 $certinfo = $this->get_certinfo($domain);
 
-                if (!$certinfo) return false;
+                if (!$certinfo) {
+                	RSSSL()->really_simple_ssl->trace_log("- SSL certificate not valid");
+                	return false;
+                }
 
                 //Check if domain is valid
                 $domain_valid = $this->is_domain_valid($certinfo, $domain);
+                if (!$domain_valid) {
+	                RSSSL()->really_simple_ssl->trace_log("- Domain on certificate does not match website's domain");
+                }
                 //Check if date is valid
                 $date_valid = $this->is_date_valid($certinfo);
+	            if (!$date_valid) {
+		            RSSSL()->really_simple_ssl->trace_log("- Date on certificate expired or not valid");
+	            }
                 //Domain and date valid? Return true
                 if ($domain_valid && $date_valid) {
                     return true;
@@ -88,6 +97,15 @@ if ( ! class_exists( 'rsssl_certificate' ) ) {
 
             return false;
 
+        }
+
+        public function detection_failed(){
+	        $certinfo = get_transient('rsssl_certinfo');
+	        if ($certinfo && $certinfo === 'no-response' ) {
+	        	return true;
+	        }
+
+	        return false;
         }
 
        /**
@@ -166,21 +184,26 @@ if ( ! class_exists( 'rsssl_certificate' ) ) {
 
         public function get_certinfo($url)
         {
-
             $certinfo = get_transient('rsssl_certinfo');
-            if (!$certinfo || RSSSL()->really_simple_ssl->is_settings_page()) {
+
+            //if the last check resulted in a "no response", we skip this check for a day.
+	        if ($certinfo === 'no-response') return false;
+
+	        if (!$certinfo || RSSSL()->really_simple_ssl->is_settings_page()) {
                 $url = 'https://'.$url;
                 $original_parse = parse_url($url, PHP_URL_HOST);
                 if ($original_parse) {
-
                     $get = stream_context_create(array("ssl" => array("capture_peer_cert" => TRUE)));
                     if ($get) {
                         set_error_handler(array($this, 'custom_error_handling'));
-                        $read = stream_socket_client("ssl://" . $original_parse . ":443", $errno, $errstr, 30, STREAM_CLIENT_CONNECT, $get);
+                        $read = stream_socket_client("ssl://" . $original_parse . ":443", $errno, $errstr, 5, STREAM_CLIENT_CONNECT, $get);
                         restore_error_handler();
 
-                        if ($errno == 0 && $read) {
+	                    if (!$read){
+		                    $certinfo = 'no-response';
+	                    }
 
+                        if ($errno == 0 && $read) {
                             $cert = stream_context_get_params($read);
                             $certinfo = openssl_x509_parse($cert['options']['ssl']['peer_certificate']);
                         }

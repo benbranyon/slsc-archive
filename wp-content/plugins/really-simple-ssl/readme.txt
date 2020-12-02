@@ -1,12 +1,12 @@
 === Really Simple SSL ===
-Contributors: RogierLankhorst, markwolters
+Contributors: RogierLankhorst, markwolters, hesseldejong
 Donate link: https://www.paypal.me/reallysimplessl
 Tags: SSL, https, force SSL, mixed content, insecure content, secure website, website security, TLS, security, secure socket layers, HSTS
 Requires at least: 4.6
 License: GPL2
-Tested up to: 5.5
+Tested up to: 5.6
 Requires PHP: 5.4
-Stable tag: 3.3.5
+Stable tag: 4.0.3
 
 No setup required! You only need an SSL certificate, and this plugin will do the rest.
 
@@ -82,13 +82,29 @@ If you are experiencing redirect loops on your site, try these [instructions](ht
 Yes. There is a dedicated network settings page where you can switch between network activated SSL and per page SSL. In the dedicated pro for multisite plugin, you can override all site settings for SSL on the network level, and can activate and deactivate SSL in the network menu for each site.
 
 == Changelog ==
-= 3.3.5 =
-* Fix: changed multisite SSL activation hook to wp_initialize_site
+= 4.0.3 =
+* Fix: sitehealth dismiss not working correctly, props @doffine
+
+= 4.0.2 =
+* Fix: not translatable string, props @kebbet
+* Improvement: clear admin notices cache when SSL activated or reloaded over https
+* Fix: removed javascript regex not supported by Safari, causing the dismiss not to work on the progress block
+* Improvement: option to dismiss site health notices in the settings
+
+= 4.0.1 =
+* Fix: fixed a bug where switching between the WP/.htaccess redirect caused a percentage switch
+* No SSL detected notice is cached after enabling SSL. props @memery2020
+* Fix: deactivating before SSL was activated on a site which was already SSL would revert to http.
+
+= 4.0.0 =
+* New user interface
+* Fix: transient stored with 'WEEK_IN_SECONDS' as string instead of constant
+* Improvement: notices dashboard, with dismissable notices
+* Improvement: improved naming of settings, and instructions
+* Improvement: articles in tips & tricks section
 
 = 3.3.4 =
 * Fix: prefix review notice dismiss to prevent conflicts with other plugins
-* Updated multisite SSL activation hook for new blogs to wp_insert_site
-* Moved notices CSS inline
 
 = 3.3.3 =
 * Dismiss review notice now uses get variable to dismiss it
@@ -597,6 +613,5 @@ On settings page load, the .htaccess file is no rewritten. If you have made .hta
 Always back up before any upgrade. Especially .htaccess, wp-config.php and the plugin folder. This way you can easily roll back.
 
 == Screenshots ==
-1. After activation, if SSL was detected, you can enable SSL.
-2. View your configuration on the settings page.
-3. Mixed content scan.
+1. Easily migrate your website to SSL with one click
+2. Improve security with Really Simple SSL. Fully guided and documented.
