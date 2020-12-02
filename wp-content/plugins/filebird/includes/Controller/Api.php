@@ -28,7 +28,7 @@ class Api {
           )
         );
 
-        //GET http://yoursite/wp-json/njt-fbv/public/v1/folders
+        //GET http://yoursite/wp-json/filebird/public/v1/folders
         register_rest_route(NJFB_REST_PUBLIC_URL,
           'folders',
           array(
@@ -38,7 +38,18 @@ class Api {
           )
         );
 
-        //GET http://yoursite/wp-json/njt-fbv/public/v1/attachment-id/?folder_id=
+        //POST http://yoursite/wp-json/filebird/public/v1/folder/set-attachment
+        //ids=&folder=
+        register_rest_route(NJFB_REST_PUBLIC_URL,
+          'folder/set-attachment',
+          array(
+            'methods' => 'POST',
+            'callback' => array($this, 'publicRestApiSetAttachment'),
+            'permission_callback' => array($this, 'resPublicPermissionsCheck'),
+          )
+        );
+        
+        //GET http://yoursite/wp-json/filebird/public/v1/attachment-id/?folder_id=
         register_rest_route(NJFB_REST_PUBLIC_URL,
           'attachment-id',
           array(
@@ -48,24 +59,13 @@ class Api {
           )
         );
 
-        //POST http://yoursite/wp-json/njt-fbv/public/v1/folders
+        //POST http://yoursite/wp-json/filebird/public/v1/folders
         //parent_id=&name=
         register_rest_route(NJFB_REST_PUBLIC_URL,
           'folders',
           array(
             'methods' => 'POST',
             'callback' => array($this, 'publicRestApiNewFolder'),
-            'permission_callback' => array($this, 'resPublicPermissionsCheck'),
-          )
-        );
-
-        //POST http://yoursite/wp-json/njt-fbv/public/v1/folder/set-attachment
-        //ids=&folder=
-        register_rest_route(NJFB_REST_PUBLIC_URL,
-          'folder/set-attachment',
-          array(
-            'methods' => 'POST',
-            'callback' => array($this, 'publicRestApiSetAttachment'),
             'permission_callback' => array($this, 'resPublicPermissionsCheck'),
           )
         );

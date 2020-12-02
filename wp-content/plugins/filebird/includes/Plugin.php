@@ -54,6 +54,22 @@ class Plugin {
         dbDelta($sql);
         //$wpdb->query("ALTER TABLE `".$table."` ADD CONSTRAINT `".$table."_ibfk_1` FOREIGN KEY (`folder_id`) REFERENCES `".$table_fbv."` (`id`) ON DELETE CASCADE;");
     }
+    
+    $first_time_active = get_option('fbv_first_time_active');
+    $fbv_review = get_option('fbv_review');
+
+    if ($first_time_active === false) {
+      update_option('fbv_first_time_active', 1);
+      if ($fbv_review !== false) return;
+        update_option('fbv_review', time() + 3*60*60*24); //After 3 days show
+    }
+
+    $current_version = get_option('fbv_version');
+    if (NJFB_VERSION > $current_version) { 
+      update_option('fbv_version', NJFB_VERSION);
+      if ($fbv_review !== false) return;
+        update_option('fbv_review', time() + 3*60*60*24); //After 3 days show
+    }
   }
 
   /** Plugin deactivate hook */

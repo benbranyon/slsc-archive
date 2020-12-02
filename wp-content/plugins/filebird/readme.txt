@@ -173,6 +173,14 @@ If you have a large number of files and want to use more than 10 folders/categor
 
 == Changelog ==
 
+= Nov 25, 2020 - Version 4.2 =
+- Added: Set previous folder selected as default folder
+- Added: Compatible with Oxygen Builder
+- Fixed: ACF warning
+- Fixed: Conflict with WPML rest API
+- Fixed: CSS conflict with The Grid plugin
+- Improved: Prevent warning when upload folder containing desktop.ini or .DS_Store file
+
 = Oct 27, 2020 - Version 4.1 =
 - Added: Set default folder to open
 - Added: New APIs

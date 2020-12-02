@@ -20,7 +20,7 @@ class Review
         add_action('wp_ajax_fbv_save_review', array($this, 'fbv_save_review'));
         
         $option = get_option('fbv_review');
-        if ($option === false || (time() >= (int)$option && $option !== '0')){
+        if (time() >= (int)$option && $option !== '0'){
             add_action('admin_notices', array($this, 'give_review'));
         }
     }
