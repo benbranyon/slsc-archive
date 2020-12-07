@@ -20,6 +20,33 @@
             "maxlength": "",
             "rows": "",
             "new_lines": ""
+        },
+        {
+            "key": "field_5fce91c1e1774",
+            "label": "Starting Points",
+            "name": "starting_points",
+            "type": "relationship",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "get_involved"
+            ],
+            "taxonomy": "",
+            "filters": [
+                "search",
+                "post_type",
+                "taxonomy"
+            ],
+            "elements": "",
+            "min": "",
+            "max": "",
+            "return_format": "object"
         }
     ],
     "location": [
@@ -39,5 +66,5 @@
     "hide_on_screen": "",
     "active": true,
     "description": "",
-    "modified": 1599598616
+    "modified": 1607373320
 }
