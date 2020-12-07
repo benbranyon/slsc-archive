@@ -1084,6 +1084,10 @@ h1, h2, h3, h4, h5, h6 {
   color: #fff;
   position: relative; }
 
+.fontpage__intro {
+  font-size: 20px;
+  font-weight: bold; }
+
 .get-involved__item {
   display: -webkit-box;
   display: -ms-flexbox;
