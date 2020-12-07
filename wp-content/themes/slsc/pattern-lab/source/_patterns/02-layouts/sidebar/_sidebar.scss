@@ -45,12 +45,29 @@ $l-sidebar-gutter: 1rem;
   }
 }
 
+.home {
+  .l-sidebar__sidebar {
+    background-color: #fff;
+  }
+}
+
 .archive {
   .l-sidebar__main {
     background-color: #fff;
   }
 }
 
+.sidebar-title {
+  background-color: #330000;
+  color: #fff;
+  display: inline-block;
+  font-family: $header-font-family-secondary;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 40px;
+  padding: 5px; 
+}
 
 .l-sidebar--multi-2 {
   @include breakpoint($l-sidebar-bp) {

@@ -883,8 +883,22 @@ h1, h2, h3, h4, h5, h6 {
       padding: 30px;
       min-height: 100vh; } }
 
+.home .l-sidebar__sidebar {
+  background-color: #fff; }
+
 .archive .l-sidebar__main {
   background-color: #fff; }
+
+.sidebar-title {
+  background-color: #330000;
+  color: #fff;
+  display: inline-block;
+  font-family: "Courier New", "Courier", "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 40px;
+  padding: 5px; }
 
 @media (min-width: 63.75em) {
   .l-sidebar--multi-2 > * {
