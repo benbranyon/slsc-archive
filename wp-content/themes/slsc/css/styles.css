@@ -1333,10 +1333,10 @@ h1, h2, h3, h4, h5, h6 {
   text-decoration: none; }
 
 .button {
-  background-color: #fff;
-  border: 1px solid #fff;
+  background-color: #330000;
+  border: 1px solid #330000;
   border-radius: 4px;
-  color: #330000;
+  color: #fff;
   cursor: pointer;
   display: inline-block;
   font-size: 1rem;
@@ -1351,8 +1351,9 @@ h1, h2, h3, h4, h5, h6 {
   white-space: normal;
   margin: 0 0 0.5em; }
   .button:focus, .button:hover {
-    background-color: #330000;
-    color: #fff;
+    background-color: #fff;
+    border: 1px solid #330000;
+    color: #330000;
     outline: 0;
     text-decoration: none; }
   .button:active {
@@ -2529,7 +2530,7 @@ details.details {
 
 .tabs__link {
   background-color: #d6d7d9;
-  border: 1px solid #fff;
+  border: 1px solid #330000;
   border-radius: 0;
   color: #212121;
   cursor: pointer;
@@ -2552,6 +2553,7 @@ details.details {
   padding: 0.4rem 0.8rem; }
   .tabs__link:focus, .tabs__link:hover {
     background-color: #aeb0b5;
+    border: 1px solid #330000;
     color: #212121;
     outline: 0;
     text-decoration: none; }
