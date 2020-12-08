@@ -1181,16 +1181,18 @@ h1, h2, h3, h4, h5, h6 {
 
 .story-title {
   background-color: #330000;
+  display: inline-block;
   font-family: "Courier New", "Courier", "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
   font-size: 18px;
   font-weight: bold;
   text-transform: uppercase;
   margin-bottom: 40px;
-  padding: 5px;
-  position: absolute;
-  top: 40px;
-  left: 40px;
-  z-index: 2; }
+  margin-left: 40px;
+  margin-top: 40px;
+  padding: 5px; }
+
+.swiper-container {
+  padding: 40px; }
 
 .swiper-wrapper {
   margin-bottom: 40px; }
@@ -1231,15 +1233,14 @@ h1, h2, h3, h4, h5, h6 {
     background-color: rgba(51, 0, 0, 0.3); }
 
 .swiper-slide__content {
-  background-color: #fff; }
+  background-color: #fff;
+  padding: 20px; }
 
 .swiper-title {
   color: #330000;
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
   font-size: 48px;
   font-weight: bold;
-  margin: 0 auto;
-  max-width: 531px;
   margin-bottom: 30px;
   z-index: 2; }
 

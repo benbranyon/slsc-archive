@@ -1,15 +1,18 @@
 .story-title {
   background-color: #330000;
+  display: inline-block;
   font-family: $header-font-family-secondary;
   font-size: 18px;
   font-weight: bold;
   text-transform: uppercase;
   margin-bottom: 40px;
+  margin-left: 40px;
+  margin-top: 40px;
   padding: 5px;
-  position: absolute;
-  top: 40px;
-  left: 40px;
-  z-index: 2;
+}
+
+.swiper-container {
+  padding: 40px;
 }
 
 .swiper-wrapper {
@@ -51,6 +54,7 @@
 
 .swiper-slide__content {
   background-color: #fff;
+  padding: 20px;
 }
 
 .swiper-title {
@@ -58,8 +62,6 @@
   font-family: $base-font-family;
   font-size: 48px;
   font-weight: bold;
-  margin: 0 auto;
-  max-width: 531px;
   margin-bottom: 30px;
   z-index: 2;
 }
