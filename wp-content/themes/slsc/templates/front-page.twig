@@ -9,7 +9,10 @@
       	<div class="swiper-container">
       		<div class="swiper-wrapper">
 		      	{% for story in stories %}
-		      	  <div class="swiper-slide" style="background-image: url( {{ story.thumbnail.src }} );">
+		      	  <div class="swiper-slide">
+                <div class="swiper-slide__image">
+                  <img src="{{ story.thumbnail.src }}" alt="{{ story.thumbnail.alt }}"/>
+                </div>
                 <div class="swiper-slide__content">
 		      	  	  <h3 class="swiper-title">{{ story.post_title }}</h3>
 		      	  	  <a href="{{ story.link }}" class="button swiper-button">View Story</a>

@@ -883,9 +883,6 @@ h1, h2, h3, h4, h5, h6 {
       padding: 30px;
       min-height: 100vh; } }
 
-.home .l-sidebar__sidebar {
-  background-color: #fff; }
-
 .archive .l-sidebar__main {
   background-color: #fff; }
 
@@ -1056,31 +1053,17 @@ h1, h2, h3, h4, h5, h6 {
 .facetwp-sort {
   margin-right: 40px; }
 
-.homepage .l-sidebar__main {
-  background-color: #fff;
+.home .l-sidebar__main {
+  background-color: #dcd2c7;
   position: relative;
   padding-left: 0px;
   padding-right: 0px; }
-  .homepage .l-sidebar__main::before {
-    content: '';
-    height: 100%;
-    position: absolute;
-    width: 100%;
-    background-color: rgba(51, 0, 0, 0.3); }
 
-.home-page .l-sidebar__main {
-  background-color: #fff;
-  position: relative;
-  padding-left: 0px;
-  padding-right: 0px; }
-  .home-page .l-sidebar__main::before {
-    content: '';
-    height: 100%;
-    position: absolute;
-    width: 100%;
-    background-color: rgba(51, 0, 0, 0.3); }
+.home .l-sidebar__sidebar {
+  background-color: #fff; }
 
 .frontpage__content {
+  background-color: #dcd2c7;
   color: #fff;
   position: relative; }
 
@@ -1209,17 +1192,10 @@ h1, h2, h3, h4, h5, h6 {
   left: 40px;
   z-index: 2; }
 
-.swiper-container {
-  height: 100%;
-  width: 100%; }
-
 .swiper-wrapper {
   margin-bottom: 40px; }
 
 .swiper-slide {
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: 50% 75%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -1231,21 +1207,6 @@ h1, h2, h3, h4, h5, h6 {
       -ms-flex-align: center;
           align-items: center;
   width: 100% !important; }
-  .swiper-slide::before {
-    content: '';
-    height: 100%;
-    position: absolute;
-    width: 100%;
-    background-color: rgba(51, 0, 0, 0.3); }
-  @media (min-width: 75em) {
-    .swiper-slide {
-      height: calc(100vh - 71px); } }
-
-.admin-bar .swiper-slide {
-  height: 550px; }
-  @media (min-width: 75em) {
-    .admin-bar .swiper-slide {
-      height: calc(100vh - 71px - 32px); } }
 
 .swiper-button-next,
 .swiper-button-prev {
@@ -1258,15 +1219,22 @@ h1, h2, h3, h4, h5, h6 {
     color: #000; }
 
 .swiper-slide {
-  text-align: center;
   width: 100%; }
 
+.swiper-slide__image {
+  position: relative; }
+  .swiper-slide__image::before {
+    content: '';
+    height: 100%;
+    position: absolute;
+    width: 100%;
+    background-color: rgba(51, 0, 0, 0.3); }
+
 .swiper-slide__content {
-  bottom: 100px;
-  position: absolute; }
+  background-color: #fff; }
 
 .swiper-title {
-  color: #fff;
+  color: #330000;
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
   font-size: 48px;
   font-weight: bold;

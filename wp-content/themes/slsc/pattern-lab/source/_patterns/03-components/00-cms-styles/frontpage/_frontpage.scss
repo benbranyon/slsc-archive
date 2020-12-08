@@ -1,36 +1,17 @@
-.homepage {
+.home {
   .l-sidebar__main {
-    background-color: #fff;
+    background-color: #dcd2c7;
     position: relative;
     padding-left: 0px;
     padding-right: 0px;
-    &::before {
-      content: '';
-      height: 100%;
-      position: absolute;
-      width: 100%;
-      background-color: rgba(51, 0, 0, 0.3);
-    }
-  }
-}
-
-.home-page {
-  .l-sidebar__main {
+  } 
+  .l-sidebar__sidebar {
     background-color: #fff;
-    position: relative;
-    padding-left: 0px;
-    padding-right: 0px;
-    &::before {
-      content: '';
-      height: 100%;
-      position: absolute;
-      width: 100%;
-      background-color: rgba(51, 0, 0, 0.3);
-    }
-  }  
+  } 
 }
 
 .frontpage__content {
+  background-color: #dcd2c7;
   color: #fff;
   position: relative;
   @include breakpoint($bp-xlarge) {
