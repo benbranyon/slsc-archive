@@ -6,7 +6,7 @@
  * Text Domain: wp-modal-popup-with-cookie-integration
  * Domain Path: /languages/
  * Author: WP OnlineSupport 
- * Version: 2.0
+ * Version: 2.1
  * Author URI: https://www.wponlinesupport.com/
  *
  * @package WordPress
@@ -23,7 +23,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
  * @since 1.0.0
  */
 if( !defined( 'WMPCI_VERSION' ) ) {
-	define( 'WMPCI_VERSION', '2.0' );	// Version of plugin
+	define( 'WMPCI_VERSION', '2.1' );	// Version of plugin
 }
 if( !defined( 'WMPCI_DIR' ) ) {
 	define( 'WMPCI_DIR', dirname( __FILE__ ) );	// Plugin dir

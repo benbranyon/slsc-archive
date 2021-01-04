@@ -2,7 +2,7 @@
 Contributors: wponlinesupport, anoopranawat, pratik-jain
 Tags: advertise, lightbox, marketing, pop over, pop-up, popover, popup, subsription popup, shortcode popup, promotion, cookie popup, age restriction popup, automatic popup, exit popup, fly-in, full screen popup, html popup, layer popup, lead, lightbox popup, Mailing list pop-up, modal, modal window, notification bar, optin, optinmonster, pop over, pop-up, popover, popup, popup builder, popup contact form, popup form, popup lock, popup subscription, Responsive Popup, simple popup, social popup, video popup, wordpress popup, youtube popup
 Requires at least: 4.0
-Tested up to: 5.5
+Tested up to: 5.6
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -54,6 +54,9 @@ Create Popups for advertise, lightbox, marketing, promotion, Subscription Forms,
 3. Admin side setting-2
 
 == Changelog ==
+
+= 2.1 (14, Dec 2020) =
+* [*] Tested up to: 5.6
 
 = 2.0 (28, May 2019) =
 * [+] Updated Recommendations notice.
