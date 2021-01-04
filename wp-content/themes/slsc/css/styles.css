@@ -1192,7 +1192,8 @@ h1, h2, h3, h4, h5, h6 {
   padding: 5px; }
 
 .swiper-container {
-  padding: 40px; }
+  padding: 40px;
+  padding-top: 0px; }
 
 .swiper-wrapper {
   margin-bottom: 40px; }
