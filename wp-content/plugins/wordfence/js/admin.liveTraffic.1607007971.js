@@ -452,7 +452,7 @@
 							return 'blocked by firewall for ' + desc;
 						}
 						if (data.failedRules == 'blocked') {
-							return 'blocked by real-time IP blacklist';
+							return 'blocked by real-time IP blocklist';
 						}
 						return 'blocked by firewall';
 					}

@@ -599,7 +599,7 @@
 								.off('click.wfselect2-copy')
 								.on('click.wfselect2-copy', function(e) {
 									var opt = $(this).data('wfselect2-opt');
-									opt.attr('selected', false);
+									opt.prop('selected', false);
 									opt.parents('select').trigger('change');
 								}).data('wfselect2-opt', $(value));
 							list.append(li);
@@ -2008,7 +2008,7 @@
 				}
 				WFAD.colorboxModalHTML((WFAD.isSmallScreen ? '300px' : '400px'), "Download Backup File", 'Please make a backup of this file before proceeding. If you need to restore this backup file, you can copy it to the following path from your site\'s root:<p class="wf-padding-add-top-medium"><code>' + file + '</code></p>'
 					+ '<a href="' + WFAD.makeDownloadFileLink(file) + '" onclick="jQuery(\'#wfRepairFileNextBtn\').prop(\'disabled\', false); return true;">Click here to download a backup copy of this file now</a><p class="wf-flex-horizontal">' +
-					'<input type="button" class="wf-btn wf-btn-primary" name="but1" id="wfRepairFileNextBtn" value="Repair File" disabled="disabled" onclick="WFAD.promptToRepairFileDone(' + parseInt(issueID, 10) + ', jQuery(\'#forceRepairFileCheckbox\').attr(\'checked\'));this.disabled=true;" />' +
+					'<input type="button" class="wf-btn wf-btn-primary" name="but1" id="wfRepairFileNextBtn" value="Repair File" disabled="disabled" onclick="WFAD.promptToRepairFileDone(' + parseInt(issueID, 10) + ', jQuery(\'#forceRepairFileCheckbox\').prop(\'checked\'));this.disabled=true;" />' +
 					'<label class="wf-padding-add-left"><input type="checkbox" id="forceRepairFileCheckbox" onclick="jQuery(\'#wfRepairFileNextBtn\').prop(\'disabled\', !this.checked); return true;"> Don\'t ask again</label>' +
 					'</p>' +
 					'<div class="wordfenceHelpLink"><a href="' + WordfenceAdminVars.supportURLs['scan-result-repair-modified-files'] + '" target="_blank" rel="noopener noreferrer" class="wfhelp"></a><a href="' + WordfenceAdminVars.supportURLs['scan-result-repair-modified-files'] + '" target="_blank" rel="noopener noreferrer">Learn more about repairing modified files.</a></div>'
