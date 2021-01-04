@@ -41,7 +41,7 @@ class acf_field_filebird extends acf_field
 	?>
 		<div class="acf-taxonomy-field">
 			<div class="categorychecklist-holder">
-				<ul class="acf-checkbox-list acf-bl">
+				<ul class="acf-checkbox-list acf-bl acf-filebird">
 					<?php $this->render_folder_list($folders, $field); ?>
 				</ul>
 			</div>

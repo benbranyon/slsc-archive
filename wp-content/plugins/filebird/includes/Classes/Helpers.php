@@ -137,7 +137,7 @@ class Helpers {
   }
   public static function setDefaultSelectedFolder($value) {
     $value = (int)$value;
-    if($value <= 0) $value = -1;
+    // if($value <= 0) $value = -1;
     update_user_meta(get_current_user_id(), '_njt_fbv_default_folder', $value);
   }
 }

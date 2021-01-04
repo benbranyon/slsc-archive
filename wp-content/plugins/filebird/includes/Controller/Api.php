@@ -38,6 +38,16 @@ class Api {
           )
         );
 
+        //GET http://yoursite/wp-json/filebird/public/v1/folder/?folder_id=
+        register_rest_route(NJFB_REST_PUBLIC_URL,
+          'folder',
+          array(
+            'methods' => 'GET',
+            'callback' => array($this, 'publicRestApiGetFolderDetail'),
+            'permission_callback' => array($this, 'resPublicPermissionsCheck'),
+          )
+        );
+
         //POST http://yoursite/wp-json/filebird/public/v1/folder/set-attachment
         //ids=&folder=
         register_rest_route(NJFB_REST_PUBLIC_URL,
@@ -89,6 +99,12 @@ class Api {
         $data['folders'] = Tree::getFolders($order_by);
 
         wp_send_json_success($data);
+    }
+    public function publicRestApiGetFolderDetail() {
+        $folder_id = isset($_GET['folder_id']) ? (int)$_GET['folder_id'] : '';
+        wp_send_json_success(array(
+            'folder' => FolderModel::findById($folder_id, 'id, name, parent')
+        ));
     }
     public function publicRestApiGetAttachmentIds() {
         $folder_id = isset($_GET['folder_id']) ? (int)$_GET['folder_id'] : '';

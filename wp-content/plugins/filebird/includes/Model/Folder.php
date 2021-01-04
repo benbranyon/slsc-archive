@@ -106,7 +106,7 @@ class Folder {
   public static function detail($name, $parent, $select = 'id') {
     global $wpdb;
     
-    $query = "SELECT * FROM " . self::getTable(self::$folder_table) . " WHERE `name` = '".$name."' AND `parent` = '".(int)$parent."'";
+    $query = $wpdb->prepare('SELECT * FROM %1$s WHERE `name` = "%2$s" AND `parent` = %3$d', self::getTable(self::$folder_table), $name, $parent);
 
     $user_has_own_folder = get_option('njt_fbv_folder_per_user', '0') === '1';
     if($user_has_own_folder) {
@@ -116,14 +116,15 @@ class Folder {
     }
     return $wpdb->get_row($query);
   }
-  public static function findById($folder_id) {
+  public static function findById($folder_id, $select = 'id') {
     global $wpdb;
-    $query = "SELECT `id` FROM " . self::getTable(self::$folder_table) . " WHERE `id` = '".(int)$folder_id."'";
+    $query = "SELECT ".$select." FROM " . self::getTable(self::$folder_table) . " WHERE `id` = '".(int)$folder_id."'";
     return $wpdb->get_row($query);
   }
   public static function updateFolderName($new_name, $parent, $folder_id) {
     global $wpdb;
-    $check_name = $wpdb->get_row("SELECT * FROM " . self::getTable(self::$folder_table) . " WHERE `id` != '".$folder_id."' AND `name` = '".$new_name."' AND `parent` = '".(int)$parent."'");
+    $query = $wpdb->prepare('SELECT * FROM %1$s WHERE `id` != %2$d AND `name` = "%3$s" AND `parent` = %4$d', self::getTable(self::$folder_table), $folder_id, $new_name, $parent);
+    $check_name = $wpdb->get_row($query);
     
     if(\is_null($check_name)) {
       $wpdb->update(

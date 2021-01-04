@@ -65,7 +65,7 @@ class Plugin {
     }
 
     $current_version = get_option('fbv_version');
-    if (NJFB_VERSION > $current_version) { 
+    if ( version_compare(NJFB_VERSION, $current_version, '>') ) { 
       update_option('fbv_version', NJFB_VERSION);
       if ($fbv_review !== false) return;
         update_option('fbv_review', time() + 3*60*60*24); //After 3 days show

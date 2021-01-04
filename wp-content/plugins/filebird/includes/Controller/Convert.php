@@ -16,7 +16,7 @@ class Convert {
 
   public function __construct() {
   }
-
+  
   public static function insertToNewTable($folders = null) {
     global $wpdb;
     if(is_null($folders)) $folders = Convert::getOldFolers();
@@ -73,7 +73,7 @@ class Convert {
   private static function detail($name, $parent) {
     global $wpdb;
 
-    $query = "SELECT id FROM " . self::getTable(self::$folder_table) . " WHERE `name` = '".$name."' AND `parent` = '".$parent."'";
+    $query = $wpdb->prepare('SELECT id FROM %1$s WHERE `name` = %2$s AND `parent` = %3$d', self::getTable(self::$folder_table), $name, $parent);
 
     $user_has_own_folder = get_option('njt_fbv_folder_per_user', '0') === '1';
     if($user_has_own_folder) {
