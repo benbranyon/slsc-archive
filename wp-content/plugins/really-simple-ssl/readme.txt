@@ -5,8 +5,8 @@ Tags: SSL, https, force SSL, mixed content, insecure content, secure website, we
 Requires at least: 4.6
 License: GPL2
 Tested up to: 5.6
-Requires PHP: 5.4
-Stable tag: 4.0.5
+Requires PHP: 5.6
+Stable tag: 4.0.6
 
 No setup required! You only need an SSL certificate, and this plugin will do the rest.
 
@@ -42,7 +42,7 @@ some cool features.
 * The siteurl and homeurl are changed to https.
 * Your insecure content is fixed by replacing all http:// URL's with https://, except hyperlinks to other domains. Dynamically, so no database changes are made (except for the siteurl and homeurl).
 
-Check out other plugins developed by Really Simple Plugins as well: [Complianz](https://wordpress.org/plugins/complianz-gdpr/), [Zip Recipes](https://wordpress.org/plugins/zip-recipes/) and [WP Search Insights](https://wordpress.org/plugins/wp-search-insights/).
+Check out other plugins developed by Really Simple Plugins as well: [Complianz](https://wordpress.org/plugins/complianz-gdpr/) and [Zip Recipes](https://wordpress.org/plugins/zip-recipes/).
 
 [contact](https://www.really-simple-ssl.com/contact/) me if you have any questions, issues, or suggestions. Really Simple SSL is developed by [Really Simple Plugins](https://www.really-simple-plugins.com).
 
@@ -82,6 +82,13 @@ If you are experiencing redirect loops on your site, try these [instructions](ht
 Yes. There is a dedicated network settings page where you can switch between network activated SSL and per page SSL. In the dedicated pro for multisite plugin, you can override all site settings for SSL on the network level, and can activate and deactivate SSL in the network menu for each site.
 
 == Changelog ==
+= 4.0.6 =
+* Improvement: Improved responsive css for tabbed menu
+* Improvement: PHP 8 compatibility
+* Improvement: Added links to help article for not writable notices
+* Improvement: notice when plugin folder had been renamed
+* Improvement: increase php minimum required to 5.6
+
 = 4.0.5 =
 * Backward compatibility for <4.0 premium versions
 
