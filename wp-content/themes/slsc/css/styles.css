@@ -1167,6 +1167,15 @@ h1, h2, h3, h4, h5, h6 {
 .pdfemb-inner-div {
   height: auto !important; }
 
+.single-get_involved .l-sidebar__sidebar {
+  background-color: #fff;
+  padding: 0px; }
+
+.single-get_involved .l-sidebar__main {
+  background-color: #dcd2c7;
+  margin-left: 0px;
+  padding-left: 1rem; }
+
 .single-story .main {
   background-color: #dcd2c7; }
 

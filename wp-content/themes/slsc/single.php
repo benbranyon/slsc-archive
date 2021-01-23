@@ -18,7 +18,7 @@ $templates = array(
 	'single.twig'
 );
 
-if(get_post_type($post) == 'archive') {
+if(get_post_type($post) == 'archive' || get_post_type($post)  == 'get_involved') {
 	$referer = wp_get_referer();
 	if (strpos($referer, 'archive') == false) {
 		$referer = '/archive/';

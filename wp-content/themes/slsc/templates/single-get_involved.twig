@@ -2,21 +2,17 @@
 
 {% block content %}
   <!-- Provided by templates/single-get_involved.twig -->
-  {% embed '@layouts/regions/content/content.twig' %}
-    {% block content %}
-      {% embed '@components/article/article.twig' with {
-        'article_page_title': post.title
-      } %}
-        {% block footer %}
-          {% include '@components/author/author.twig' with {
-            'url': post.author.link,
-            'author': post.author.display_name
-          } %}
-        {% endblock %}
-        {% block main %}
-          {{ post.content }}
-        {% endblock %}
-      {% endembed %}
+  {% embed '@layouts/sidebar/sidebar.twig' %}
+    {% block sidebar_aside %}
+      <div class="back-button"><a href="{{ referer }}">< Go Back</a></div>
+      <div class="l-constrain">
+        <div class="single-archive-sidebar__content">
+          <h2 class="single-archive__title">{{ post.title }}</h2>
+        </div>
+      </div>
+    {% endblock %}
+    {% block sidebar_main %}
+      <iframe src="{{ post.featured_video }}"></iframe>
     {% endblock %}
   {% endembed %}
 {% endblock %}
