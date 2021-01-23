@@ -3,7 +3,7 @@ Contributors: seedprod, smub
 Donate link: http://www.seedprod.com
 Tags: maintenance mode, coming soon page, coming soon, under construction, landing page, launch, maintenance, construction, offline, unavailable, under construction page, launch page
 Requires at least: 5.0
-Tested up to: 5.5
+Tested up to: 5.6
 Requires PHP: 5.6
 Stable tag: 6.0.9.0
 Text Domain: coming-soon
@@ -55,7 +55,7 @@ Create a Coming Soon Page, Maintenance Mode Page, Landing Pages and Custom 404 p
 ### Pro Version Features:
 
 *	Works with any WordPress theme
-*	100+ Professionaly Designed Landing Page Templates, Layout Sections
+*	100+ Professionally Designed Landing Page Templates, Layout Sections
 *   Subscriber Management
 *   Premium Integrations - MailChimp, AWeber, ActiveCampaign GetResponse, ConvertKit, Zapier and more...
 *	Spam Protection - Recaptcha
@@ -65,7 +65,7 @@ Create a Coming Soon Page, Maintenance Mode Page, Landing Pages and Custom 404 p
 *	Countdown Block
 *	Social Profiles Block
 *	Social Sharing Block
-*	Progess Bar Block
+*	Progress Bar Block
 *	Icon Block
 *	Featured Image Block
 *	Featured Icon Block
@@ -116,7 +116,7 @@ You can create a variety of landing pages including but not limited to:
 
 = What's the difference between Coming Soon Page Mode and Maintenance Mode? =
 
-Coming Soon Page Mode returns a http status 200 and allows your site to be indexed by Google and other searching engine while under construction. You should always using Coming Soon Page mode when your site is under construction. 
+Coming Soon Page Mode returns a http status 200 and allows your site to be indexed by Google and other search engines while under construction. You should always be using Coming Soon Page mode when your site is under construction. 
 
 Maintenance Mode returns a http status code 503 and should be used when you are doing short term maintenance on an existing site. This will let search engines know your site is under going maintenance and should return in 1 day when maintenance mode is finished.
 
@@ -127,6 +127,10 @@ Only logged in visitors can see the website while you website is under construct
 
 This is always a caching issue. Go to the caching plugin's setting page and clear the cache.
 [More Info &raquo;](http://support.seedprod.com/article/83-how-to-clear-wp-super-caches-cache)
+
+= Can I build my entire site with this page builder? =
+
+This page builder is intended for landing pages only. If your website only had a small number of pages you could in theory only use SeedProd. However if you have a large website there are other page builders with the wordpress.org plugin repo that will let you build your entire site. 
 
 
 == Screenshots ==
@@ -142,6 +146,21 @@ This is always a caching issue. Go to the caching plugin's setting page and clea
 
 
 == Changelog ==
+
+= 6.0.10.1 =
+* Added - 10 New Templates
+* Added - Undo and Redo Functionality
+* Added = Permissions Filters
+* Added - Easier Upgrade Path
+* Fixed - WPRocket Compatability
+* Fixed - BGSlideshow timeout issue 
+* Fixed - Highlight left menu when page is selected
+* Fixed - Mobile Fonts Settings
+* Tweak - Animate Optin Button
+* Tweak - Moved Preview Button
+* Tweak - Made Sections Clickable In Free Verson
+* Tweak - Attribution Fix
+
 = 6.0.9.0 =
 * Added - Ability to link an image
 * Tweak - HTML 5 Email Validation

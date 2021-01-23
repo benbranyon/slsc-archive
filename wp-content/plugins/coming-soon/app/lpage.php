@@ -82,6 +82,11 @@ function seedprod_lite_new_lpage()
             $lpage_name = $slug;
             $settings->no_conflict_mode = true;
         }
+        if ($type == 'loginp') {
+            $slug= 'login';
+            $lpage_name = esc_html__('Login', 'coming-soon');
+            $settings->no_conflict_mode = true;
+        }
         $settings = wp_json_encode($settings);
 
         // Insert
@@ -112,6 +117,9 @@ function seedprod_lite_new_lpage()
         }
         if ($type == 'p404') {
             update_option('seedprod_404_page_id', $id);
+        }
+        if ($type == 'loginp') {
+            update_option('seedprod_login_page_id', $id);
         }
 
         if ($type == 'lp') {
@@ -219,8 +227,11 @@ function seedprod_lite_lpage_datatable()
 
         $results = $wpdb->get_results($sql);
 
+        $login_page_id = get_option('seedprod_login_page_id');
         $data = array();
         foreach ($results as $v) {
+            // Skip row to prevent current Login Page post from displaying here
+            if ( $v->ID === $login_page_id ) { continue; }
 
             // Format Date
             //$modified_at = date(get_option('date_format').' '.get_option('time_format'), strtotime($v->post_modified));
@@ -433,7 +444,7 @@ function seedprod_lite_duplicate_lpage()
 function seedprod_lite_archive_selected_lpages()
 {
     if (check_ajax_referer('seedprod_lite_archive_selected_lpages')) {
-        if (current_user_can('list_users')) {
+        if (current_user_can(apply_filters('seedprod_trash_pages_capability', 'list_users'))) {
             if (!empty($_GET['ids'])) {
                 $ids = array_map('intval', explode(",", $_GET['ids']));
                 foreach ($ids as $v) {
@@ -452,7 +463,7 @@ function seedprod_lite_archive_selected_lpages()
 function seedprod_lite_unarchive_selected_lpages($ids)
 {
     if (check_ajax_referer('seedprod_lite_unarchive_selected_lpages')) {
-        if (current_user_can('list_users')) {
+        if (current_user_can(apply_filters('seedprod_unarchive_pages_capability', 'list_users'))) {
             if (!empty($_GET['ids'])) {
                 $ids = array_map('intval', explode(",", $_GET['ids']));
                 foreach ($ids as $v) {
@@ -471,7 +482,7 @@ function seedprod_lite_unarchive_selected_lpages($ids)
 function seedprod_lite_delete_archived_lpages()
 {
     if (check_ajax_referer('seedprod_lite_delete_archived_lpages')) {
-        if (current_user_can('list_users')) {
+        if (current_user_can(apply_filters('seedprod_archive_pages_capability', 'list_users'))) {
             if (!empty($_GET['ids'])) {
                 $ids = array_map('intval', explode(",", $_GET['ids']));
                 foreach ($ids as $v) {
@@ -670,7 +681,11 @@ function seedprod_lite_get_utc_offset()
     }
 }
 
-
+function seedprod_lite_template_subscribe()
+{
+    update_option('seedprod_free_templates_subscribed', true);
+    exit();
+}
 
 /*
  * Save/Update lpages Template
