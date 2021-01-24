@@ -35,7 +35,7 @@
           {% set image = Image(item.thumbnail) %}
    	      <div class="get-involved__item">
             <div class="get-involved--image">
-              <img src="{{ image.src }}" alt=""/>
+              <a href="{{ item.link }}"><img src="{{ image.src }}" alt="{{ image.alt }}"/></a>
             </div>
    	        <h3><a href="{{ item.link }}">{{ item.post_title }}</a></h3>
    	      </div>
