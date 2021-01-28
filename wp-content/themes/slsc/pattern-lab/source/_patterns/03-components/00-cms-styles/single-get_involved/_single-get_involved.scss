@@ -4,8 +4,18 @@
     padding: 0px;
   }
   .l-sidebar__main {
+    align-items: center;
     background-color: #dcd2c7;
+    display: flex;
+    justify-content: center;
     margin-left: 0px;
     padding-left: 1rem;
+
+    iframe {
+      @include breakpoint($bp-large) {
+        height: 500px;
+        width: 800px;
+      }
+    }
   }
 }

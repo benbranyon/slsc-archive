@@ -40,7 +40,7 @@ $l-sidebar-gutter: 1rem;
       flex-shrink: 0;
       flex-basis: #{$l-sidebar-width};
       padding: 30px;
-      min-height: 100vh;
+      min-height: calc(100vh - 71px);
     }
   }
 }
