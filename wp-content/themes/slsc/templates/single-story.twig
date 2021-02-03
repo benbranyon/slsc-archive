@@ -4,6 +4,19 @@
   <!-- Provided by templates/single.twig -->
   {% include '@components/story-toolbar/story-toolbar.twig' %}
   <div class="story-content l-constrain">
-        {% include 'post-formats/content.twig' %}
+    <div class="timeline">
+      <div class="timeline__wrap">
+        <div class="timeline__items">
+		    {% for story in post.meta('story_content') %}
+		      <div class="timeline__item">
+		        <div class="timeline__content">
+		          <h3>{{ story.story_event_title }}</h3>
+		          <div>{{ story.story_event }}</div>
+		        </div>
+		      </div>
+		    {% endfor %}
+        </div>
+      </div>
+    </div>
   </div>
 {% endblock %}

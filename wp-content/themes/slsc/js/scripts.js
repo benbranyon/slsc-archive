@@ -77,4 +77,9 @@ jQuery( document ).ready(function( $ ) {
       classie.add( opt, 'cbp-vm-selected' );
     }
 
+  $('.timeline').timeline({
+    verticalStartPosition: 'right',
+    verticalTrigger: '150px'
+  });
+
 });
