@@ -27,6 +27,7 @@ $seedprod_basic_lpage = '
     "bypass_cookie": false,
     "access_by_ip":"",
     "access_by_role":[],
+    "redirect_login_page":false,
     "redirect_mode":false,
     "redirect_url":"",
     "domain_mapping_status":false,

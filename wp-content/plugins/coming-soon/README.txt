@@ -5,7 +5,7 @@ Tags: maintenance mode, coming soon page, coming soon, under construction, landi
 Requires at least: 5.0
 Tested up to: 5.6
 Requires PHP: 5.6
-Stable tag: 6.0.9.0
+Stable tag: 6.0.10.1
 Text Domain: coming-soon
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -32,6 +32,7 @@ Create a Coming Soon Page, Maintenance Mode Page, Landing Pages and Custom 404 p
 *	Create Webinar Pages
 *	Create Thank You Pages
 *	Create 404 Pages
+*	Create Login Pages
 *   Page Builder
 *	Headline Block
 *	Text Block
@@ -73,6 +74,7 @@ Create a Coming Soon Page, Maintenance Mode Page, Landing Pages and Custom 404 p
 *	Anchor Block
 *	Star Rating Block
 *	Shortcode Block
+*   Login Block
 *	Plus lots more...
 
 *   [Upgrade to the Pro Version Now!&raquo;](http://www.seedprod.com/?utm_source=wordpress.org&utm_medium=link&utm_campaign=coming-soon-from-wordpress.org)
@@ -112,6 +114,7 @@ You can create a variety of landing pages including but not limited to:
 *	Webinar Pages
 *	Thank You Pages
 *	404 Pages
+*   Login Pages
 
 
 = What's the difference between Coming Soon Page Mode and Maintenance Mode? =
@@ -146,6 +149,15 @@ This page builder is intended for landing pages only. If your website only had a
 
 
 == Changelog ==
+
+= 6.0.11.1 =
+* Fixed - Some SEO plugins not adding title tag to landing pages
+* Tweak - Made settings more accessible
+* Fixed - Background Slideshow Bug - PRO
+* Fixed - Tweet Share Bug - PRO
+
+= 6.0.11.0 =
+* Added - Login Block
 
 = 6.0.10.1 =
 * Added - 10 New Templates
@@ -331,6 +343,10 @@ This page builder is intended for landing pages only. If your website only had a
 * Initial Commit
 
 == Upgrade Notice ==
+= 6.0.11.1 =
+* Fixed - Some SEO plugins not adding title tag to landing pages
+* Tweak - Made settings more accessible
+
 = 6.0.9.0 =
 * Added - Ability to link an image
 * Tweak - HTML 5 Email Validation

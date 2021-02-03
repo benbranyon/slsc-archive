@@ -110,7 +110,9 @@ if (!empty($settings->no_conflict_mode)) {
 <?php
 } 
 ?>
-
+<?php if (empty($settings->no_conflict_mode)): ?>
+<title><?php wp_title(); ?></title>
+<?php endif; ?>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Default CSS -->

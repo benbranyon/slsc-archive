@@ -49,6 +49,11 @@ function seedprod_lite_new_lpage()
 
         $id = absint($_GET['id']) ;
 
+        $from = '&from=';
+        if(!empty($_GET['from'])){
+            $from = '&from=sidebar';
+        }
+
         $type = 'lp';
         if (!empty($_GET['type'])) {
             $type = sanitize_text_field($_GET['type']);
@@ -140,7 +145,7 @@ function seedprod_lite_new_lpage()
         );
 
 
-        wp_redirect('admin.php?page=seedprod_lite_template&id='.$id.'#/template/'.$id);
+        wp_redirect('admin.php?page=seedprod_lite_template&id='.$id. $from.'#/template/'.$id);
         exit();
     }
 }

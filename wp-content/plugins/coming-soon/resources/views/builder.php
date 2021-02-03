@@ -151,7 +151,13 @@ h1.mce-content-body,h2.mce-content-body,h3.mce-content-body,h4.mce-content-body,
 var seedprod_nonce = "<?php echo $seedprod_nonce; ?>";
 var seedprod_page = "<?php echo $_GET['page']; ?>";
 var seedprod_remote_api = "<?php echo SEEDPROD_API_URL; ?>";
-
+<?php
+$from = '';
+if(!empty($_GET['from'])){
+ $form = $_GET['from'];
+}
+?>
+var seedprod_from = "<?php echo $from; ?>";
 <?php 
 // see if we need below
 $ajax_url = html_entity_decode(wp_nonce_url('admin-ajax.php?action=seedprod_lite_save_template', 'seedprod_lite_save_template')); ?>

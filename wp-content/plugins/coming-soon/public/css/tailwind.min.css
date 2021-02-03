@@ -164,6 +164,7 @@ html{scroll-behavior:smooth}
 #sp-page{display:flex;flex-direction:column;position:relative;z-index:10;background-color:transparent !important;background-image:none !important}
 #sp-page h1,#sp-page h2,#sp-page h3,#sp-page h4,#sp-page h5,#sp-page h6{margin:0}
 .sp-form-input:focus{box-shadow:none}
+.sp-login-wrapper input[type="password"]{padding-top:.5rem !important;padding-bottom:.5rem !important}
 .sp-optin-submit:active{outline:0}
 .sp-content-1{align-items:center;justify-content:flex-start}
 .sp-content-2{align-items:flex-start;justify-content:flex-start}
