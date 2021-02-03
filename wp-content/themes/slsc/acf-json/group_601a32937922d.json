@@ -1,0 +1,72 @@
+{
+    "key": "group_601a32937922d",
+    "title": "Stories",
+    "fields": [
+        {
+            "key": "field_601a32985283a",
+            "label": "Story Content",
+            "name": "story_content",
+            "type": "flexible_content",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layouts": {
+                "layout_601a329e56f66": {
+                    "key": "layout_601a329e56f66",
+                    "name": "story",
+                    "label": "Story Event",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_601a32a85283b",
+                            "label": "Story Event",
+                            "name": "story_event",
+                            "type": "wysiwyg",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "tabs": "all",
+                            "toolbar": "full",
+                            "media_upload": 1,
+                            "delay": 0
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
+                }
+            },
+            "button_label": "Add Row",
+            "min": "",
+            "max": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "story"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "modified": 1612329936
+}
