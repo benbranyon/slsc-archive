@@ -11,3 +11,23 @@
     }
   }
 }
+
+.story-content {
+  padding-bottom: 100px;
+  padding-top: 100px;
+}
+
+.timeline__item {
+  iframe {
+    max-width: 100%;
+  }
+}
+
+.timeline:not(.timeline--horizontal):before {
+  background-color: #fff;
+}
+
+.timeline__item:after {
+  background-color: #000;
+  border: 4px solid #000;  
+}
