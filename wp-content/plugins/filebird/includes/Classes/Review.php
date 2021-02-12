@@ -10,6 +10,7 @@ class Review
     public static function getInstance() {
         if (null == self::$instance) {
           self::$instance = new self;
+          self::$instance->doHooks();
         }
         
         return self::$instance;
@@ -17,6 +18,9 @@ class Review
 
     public function __construct()
     {
+    }
+
+    private function doHooks(){
         add_action('wp_ajax_fbv_save_review', array($this, 'fbv_save_review'));
         
         $option = get_option('fbv_review');

@@ -38,8 +38,8 @@ jQuery( document ).ready(function() {
         dataType: 'json',
         url: fbv_data.json_url + '/fb-get-old-data',
         method: 'POST',
-        beforeSend: function ( xhr ) {
-          xhr.setRequestHeader( 'X-WP-Nonce', fbv_data.rest_nonce )
+        data: {
+          _wpnonce: fbv_data.rest_nonce,
         }
       })
       .done(function(res){
@@ -89,8 +89,8 @@ jQuery( document ).ready(function() {
         dataType: 'json',
         url: fbv_data.json_url + '/fb-wipe-old-data',
         method: 'POST',
-        beforeSend: function ( xhr ) {
-          xhr.setRequestHeader( 'X-WP-Nonce', fbv_data.rest_nonce )
+        data: {
+          _wpnonce: fbv_data.rest_nonce,
         }
     })
     .done(function(res){
@@ -116,8 +116,8 @@ jQuery( document ).ready(function() {
       dataType: 'json',
       url: fbv_data.json_url + '/fb-wipe-clear-all-data',
       method: 'POST',
-      beforeSend: function ( xhr ) {
-        xhr.setRequestHeader( 'X-WP-Nonce', fbv_data.rest_nonce )
+      data: {
+        _wpnonce: fbv_data.rest_nonce,
       }
     })
     .done(function(res){
@@ -137,12 +137,10 @@ jQuery( document ).ready(function() {
       dataType: 'json',
       type: "post",
       url: fbv_data.json_url + '/fb-no-thanks',
-      beforeSend: function ( xhr ) {
-        xhr.setRequestHeader( 'X-WP-Nonce', fbv_data.rest_nonce );
-      },
       data: {
         nonce: fbv_data.nonce,
-        site: $this.data('site')
+        site: $this.data('site'),
+        _wpnonce: fbv_data.rest_nonce,
       },
       success: function (res) {
         $this.removeClass('updating-message');
@@ -167,7 +165,7 @@ jQuery( document ).ready(function() {
         },
         data: JSON.stringify({
           site: $this.data('site'),
-          count: $this.data('count')
+          count: $this.data('count'),
         })
     })
     .done(function(res){
@@ -206,7 +204,7 @@ jQuery( document ).ready(function() {
         },
         data: JSON.stringify({
           site: site,
-          folders: folders[index]
+          folders: folders[index],
         })
       })
       .done(function(res){
@@ -217,12 +215,10 @@ jQuery( document ).ready(function() {
         dataType: 'json',
         url: fbv_data.json_url + '/fb-import-after-inserting',
         method: 'POST',
-        beforeSend: function ( xhr ) {
-          xhr.setRequestHeader( 'X-WP-Nonce', fbv_data.rest_nonce )
-        },
         data: {
-            site: site,
-            count: more_data_when_done.count
+          site: site,
+          count: more_data_when_done.count,
+          _wpnonce: fbv_data.rest_nonce,
         }
       })
       .done(function(res){
@@ -241,11 +237,9 @@ jQuery( document ).ready(function() {
       dataType: 'json',
       type: "post",
       url: fbv_data.json_url + '/fbv-api',
-      beforeSend: function ( xhr ) {
-        xhr.setRequestHeader( 'X-WP-Nonce', fbv_data.rest_nonce );
-      },
       data: {
-        act: 'generate-key'
+        act: 'generate-key',
+        _wpnonce: fbv_data.rest_nonce,
       },
       success: function (res) {
         $this.removeClass('updating-message');

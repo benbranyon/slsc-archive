@@ -13,13 +13,17 @@ class DocumentGallery
 	{
 		if (null == self::$instance) {
 			self::$instance = new self;
+			self::$instance->doHooks();
 		}
 		return self::$instance;
 	}
 
 	function __construct()
 	{
-        add_action('init', array($this, 'init'));
+	}
+	
+	private function doHooks(){
+		add_action('init', array($this, 'init'));
     }
     
     public function init(){

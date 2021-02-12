@@ -9,16 +9,21 @@ class CompatiblePolylang extends Controller {
   protected static $instance = null;
 
   private $active;
-  private $total;
-  private $table_filebird_polylang;
-  public $delete_process_id;
   private $lang;
 
-  public function __construct() {
-    global $wpdb, $polylang;
+  public static function getInstance() {
+    if (null == self::$instance) {
+      self::$instance = new self;
+      self::$instance->doHooks();
+    }
+    return self::$instance;
+  }
 
-    $this->total = 0;
-    $this->delete_process_id = null;
+  public function __construct() {
+  }
+
+  private function doHooks(){
+    global $polylang;
 
     $this->active = function_exists("pll_get_post_translations");
     if ($this->active) {
@@ -66,11 +71,5 @@ class CompatiblePolylang extends Controller {
     }
     
     return $args;
-  }
-  public static function getInstance() {
-    if (null == self::$instance) {
-      self::$instance = new self;
-    }
-    return self::$instance;
   }
 }

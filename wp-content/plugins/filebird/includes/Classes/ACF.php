@@ -12,12 +12,17 @@ class ACF
 	{
 		if (null == self::$instance) {
 			self::$instance = new self;
+			self::$instance->doHooks();
 		}
 		return self::$instance;
 	}
 
 	function __construct()
 	{
+		
+	}
+
+	private function doHooks(){
 		add_action('acf/include_field_types', 	array($this, 'include_field')); // v5
 		add_action('acf/register_fields', 		array($this, 'include_field')); // v4
 	}

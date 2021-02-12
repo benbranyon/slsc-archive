@@ -9,11 +9,22 @@ defined('ABSPATH') || exit;
 class Convert {
 
     protected static $instance = null;
-
-    public function __construct() {
-        add_action( 'admin_notices', array($this, 'adminNotice') );
-        add_action('rest_api_init', array($this, 'registerRestFields'));
+    public static function getInstance() {
+      if (null == self::$instance) {
+        self::$instance = new self;
+        self::$instance->doHooks();
+      }
+      return self::$instance;
     }
+    
+    public function __construct() {
+    }
+
+    private function doHooks(){
+      add_action('admin_notices', array($this, 'adminNotice') );
+      add_action('rest_api_init', array($this, 'registerRestFields'));
+    }
+    
     public function registerRestFields() {
       register_rest_route(NJFB_REST_URL,
           'fb-import',
@@ -89,26 +100,43 @@ class Convert {
     }
     public function adminNotice() {
         global $pagenow;
-        $oldEnhancedFolders = $this->getOldFolders('enhanced', true);
-        $oldWpmlfFolders = $this->getOldFolders('wpmlf', true);
-        $oldWpmfFolders = $this->getOldFolders('wpmf', true);
-        $oldRealMediaFolders = $this->getOldFolders('realmedia', true);
-        $newFolders = [];
         
         $sites = array();
-        if($pagenow !== 'upload.php' || count($newFolders) > 10) {
+
+        if($pagenow !== 'upload.php') {
           return;
         }
-        if(!$this->isUpdated('enhanced') && !$this->isNoThanks('enhanced') && count($oldEnhancedFolders) > 3) {
+
+        $oldEnhancedFolders = array();
+        if(!$this->isUpdated('enhanced') && !$this->isNoThanks('enhanced')) {
+          $oldEnhancedFolders = $this->getOldFolders('enhanced', true);
+        }
+        
+        $oldWpmlfFolders = array();
+        if(!$this->isUpdated('wpmlf') && !$this->isNoThanks('wpmlf')) {
+          $oldWpmlfFolders = $this->getOldFolders('wpmlf', true);
+        }
+        
+        $oldWpmfFolders = array();
+        if(!$this->isUpdated('wpmf') && !$this->isNoThanks('wpmf')) {
+          $oldWpmfFolders = $this->getOldFolders('wpmf', true);
+        }
+        
+        $oldRealMediaFolders = array();
+        if(!$this->isUpdated('realmedia') && !$this->isNoThanks('realmedia')) {
+          $oldRealMediaFolders = $this->getOldFolders('realmedia', true);
+        }
+
+        if(count($oldEnhancedFolders) > 3) {
           $sites[] = array('site' => 'enhanced', 'title' => 'Enhanced Media Library');
         }
-        if(!$this->isUpdated('wpmlf') && !$this->isNoThanks('wpmlf') && count($oldWpmlfFolders) > 3) {
+        if(count($oldWpmlfFolders) > 3) {
           $sites[] = array('site' => 'wpmlf', 'title' => 'Media Library Folders');
         }
-        if(!$this->isUpdated('wpmf') && !$this->isNoThanks('wpmf') && count($oldWpmfFolders) > 3) {
+        if(count($oldWpmfFolders) > 3) {
           $sites[] = array('site' => 'wpmf', 'title' => 'WP Media folder');
         }
-        if(!$this->isUpdated('realmedia') && !$this->isNoThanks('realmedia') && count($oldRealMediaFolders) > 3) {
+        if(count($oldRealMediaFolders) > 3) {
           $sites[] = array('site' => 'realmedia', 'title' => 'WP Real Media Library');
         }
         foreach($sites as $k => $site) :
@@ -423,12 +451,7 @@ class Convert {
             update_option('njt_fb_updated_from_realmedia', '1');
         }
     }
-    public static function getInstance() {
-        if (null == self::$instance) {
-          self::$instance = new self;
-        }
-        return self::$instance;
-    }
+  
     private function sanitize_arr($arr) {
       if(is_array($arr)) {
         return array_map(array($this, 'sanitize_arr'), $arr);

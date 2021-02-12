@@ -209,10 +209,14 @@ class Folder {
         );
         $query['post__not_in'] = $wpdb->get_col($select. " WHERE " . implode(' AND ', apply_filters('fbv_in_not_in_where_query', $where_arr, $fbv)));
       } else {
-        if(apply_filters('fbv_can_get_in_not_in', true, $fbv)) {
-          if( ! is_array($fbv)) {
-            $fbv = array($fbv);
-          }
+        if( ! is_array($fbv)) {
+          $fbv = array($fbv);
+        }
+        $i = 0;
+        foreach($fbv as $k => $v) {
+          if(apply_filters('fbv_can_get_in_not_in', true, $v)) $i++;
+        }
+        if($i == count($fbv)) {
           $where_arr[] = "`folder_id` IN (".implode(',', $fbv).")";
           $query['post__in'] = $wpdb->get_col($select. " WHERE " . implode(' AND ', apply_filters('fbv_in_not_in_where_query', $where_arr, $fbv)));
           
@@ -228,6 +232,27 @@ class Folder {
   public static function getAuthor($folder_id) {
     global $wpdb;
     return (int)$wpdb->get_var($wpdb->prepare('SELECT `created_by` FROM %1$s WHERE `id` = %2$d', self::getTable(self::$folder_table), $folder_id));
+  }
+  
+  public static function getChildrenOfFolder($folder_id, $index = 0) {
+    global $wpdb;
+    $detail = null;
+    if($index == 0) {
+      $detail = $wpdb->get_results("SELECT name, id FROM " . $wpdb->prefix . "fbv WHERE id = " . (int)$folder_id);
+    }
+    $children = $wpdb->get_results("SELECT name, id FROM " . $wpdb->prefix . "fbv WHERE parent = " . (int)$folder_id);
+    foreach ($children as $k => $v) {
+      $children[$k]->children = self::getChildrenOfFolder($v->id, $index + 1);
+    }
+    if($detail != null) {
+      $return = new \stdClass;
+      $return->id = $detail[0]->id;
+      $return->name = $detail[0]->name;
+      $return->children = $children;
+
+      return $return;
+    }
+    return $children;
   }
 
   private static function getTable($table) {

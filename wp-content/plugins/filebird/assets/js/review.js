@@ -6,14 +6,7 @@ jQuery(document).ready(function () {
     var freeLink = "https://wordpress.org/support/plugin/filebird/reviews/#new-post";
     var hidePopup = false;
     if (fieldValue == "rateNow") {
-      fieldValue = "rateFree";
-      if (fieldValue == "ratePro") {
-        window.open(proLink, "_blank");
-      }
-
-      if (fieldValue == "rateFree") {
-        window.open(freeLink, "_blank");
-      }
+      window.open(freeLink, "_blank");
     } else {
       hidePopup = true;
     }

@@ -35,11 +35,6 @@ $tabs = array(
     'name' => __('Uninstall', 'filebird'),
     'content' => Helpers::view('pages/settings/tab-uninstall')
   ),
-  // array(
-  //   'id' => 'active',
-  //   'name' => __('Active', 'filebird'),
-  //   'content' => TabActive::renderHtml(false)
-  // ),
 );
 $current_tab = (isset($_GET['tab']) ? $_GET['tab'] : $tabs[0]['id']);
 if(($countEnhancedFolder + $countWpmlfFolder + $countWpmfFolder + $countRealMediaFolder) > 0) {

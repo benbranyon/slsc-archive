@@ -10,8 +10,18 @@ class CompatibleWpml extends Controller {
 
   protected $post_translations;
   private $sitepress;
-
+  
+  public static function getInstance() {
+    if (null == self::$instance) {
+      self::$instance = new self;
+      self::$instance->doHooks();
+    }
+    return self::$instance;
+  }
   public function __construct() {
+  }
+
+  private function doHooks(){
     global $sitepress;
     if ( $sitepress === null || get_class($sitepress) !== "SitePress" ) {
       return;
@@ -23,13 +33,6 @@ class CompatibleWpml extends Controller {
     add_filter('fbv_in_not_in', array($this, 'filterInNotIn'));
     add_filter('wpml_pre_parse_query', array($this, 'preParseQuery'));
     add_filter('wpml_post_parse_query', array($this, 'postParseQuery'));
-  }
-
-  public static function getInstance() {
-    if (null == self::$instance) {
-      self::$instance = new self;
-    }
-    return self::$instance;
   }
 
   public function fbvAfterSetFolder($id, $folder) {

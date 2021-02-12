@@ -11,12 +11,16 @@ class I18n {
   public static function getInstance() {
     if (null == self::$instance) {
       self::$instance = new self;
+			self::$instance->doHooks();
     }
 
     return self::$instance;
   }
 
   private function __construct() {
+  }
+
+  private function doHooks(){
     add_action('plugins_loaded', array($this, 'loadPluginTextdomain'));
   }
 
@@ -41,7 +45,10 @@ class I18n {
       'cancel' => __('Cancel', 'filebird'),
       'cut' => __("Cut", 'filebird'),
       'paste' => __("Paste", 'filebird'),
+      'download' => __("Download", 'filebird'),
+      'download_pro_version' => __("Download (Pro version)", 'filebird'),
       'loading' => __("Loading", 'filebird'),
+      'generate_download' => __("Generating download link...", 'filebird'),
       'move_done' => __("Successfully moved", 'filebird'),
       'delete_done' => __("Successfully deleted!", 'filebird'),
       'delete_error' => __("Can't delete!", 'filebird'),
@@ -125,6 +132,13 @@ class I18n {
       'select_default_startup_folder' => __('Select a default startup folder:', 'filebird'),
       'set_setting_success' => __('Settings saved', 'filebird'),
       'set_setting_fail' => __('Failed to save settings. Please try again!', 'filebird'),
+      'unlock_new_features_title' => __('Unlock new features', 'filebird'),
+      'unlock_new_features_desc' => __('To use FileBird folders with your current page builder/plugin, please upgrade to PRO version.', 'filebird'),
+      'do_more_with_filebird_title' => __('Do more with FileBird PRO', 'filebird'),
+      'do_more_with_filebird_desc' => __('You\'re using a third party plugin, which is supported in FileBird PRO. Please upgrade to browse files faster and get more done.', 'filebird'),
+      'go_pro' => __('Go Pro', 'filebird'),
+      'view_details' => __('View details.', 'filebird'),
+      'turn_off_for_7_days' => __('Turn off for 7 days', 'filebird')
     );
     return $translation;
   }

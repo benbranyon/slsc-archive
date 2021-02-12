@@ -11,7 +11,8 @@ class PageBuilders {
 
     public static function getInstance() {
         if (null == self::$instance) {
-          self::$instance = new self;
+            self::$instance = new self;
+            self::$instance->doHooks();
         }
         
         return self::$instance;
@@ -19,6 +20,9 @@ class PageBuilders {
 
     public function __construct() {
         $this->folderController = Folder::getInstance();
+    }
+
+    private function doHooks() {
         add_action('init', array($this, 'prepareRegister'));
     }
 
@@ -43,6 +47,26 @@ class PageBuilders {
         if (class_exists('Cornerstone_Plugin')) {
             $this->registerCornerstone();
         }
+        
+        // Compatible for Divi
+        if (class_exists('ET_Builder_Element')) {
+            $this->registerForDivi();
+        }
+
+        // Compatible for Thrive
+        if (defined('TVE_IN_ARCHITECT') || class_exists('Thrive_Quiz_Builder')) {
+            $this->registerForThrive();
+        }
+
+        // Fusion Builder
+        if (class_exists('Fusion_Builder_Front')) {
+            $this->registerForFusion();
+        }
+
+        // Oxygen Builder
+        if (defined('CT_VERSION')){
+            $this->registerOxygenBuilder();
+        }
     }
 
     public function enqueueScripts(){
@@ -63,5 +87,26 @@ class PageBuilders {
     
     public function registerCornerstone(){
         add_action('cornerstone_before_wp_editor', array($this, 'enqueueScripts'));
+    }
+
+    public function registerForDivi(){
+        add_action('et_fb_enqueue_assets', function(){
+            wp_register_script('fbv-ajax', '', array(), '', true);
+            wp_enqueue_script('fbv-ajax');
+            wp_localize_script('fbv-ajax', 'ajaxurl', admin_url('admin-ajax.php'));
+            $this->enqueueScripts();
+        });
+    }
+
+    public function registerForThrive(){
+        add_action('tcb_main_frame_enqueue', array($this, 'enqueueScripts'));
+    }
+
+    public function registerForFusion(){
+        add_action('fusion_builder_enqueue_live_scripts', array($this, 'enqueueScripts'));
+    }
+
+    public function registerOxygenBuilder(){
+        add_action('oxygen_enqueue_ui_scripts', array($this, 'enqueueScripts'));
     }
 }

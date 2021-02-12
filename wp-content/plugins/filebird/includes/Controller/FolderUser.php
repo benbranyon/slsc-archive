@@ -11,7 +11,19 @@ class FolderUser extends Controller {
   private $is_enabled;
   private $current_user_id;
 
+  public static function getInstance() {
+    if (null == self::$instance) {
+      self::$instance = new self;
+      self::$instance->doHooks();
+    }
+    return self::$instance;
+  }
+
   public function __construct() {
+  
+  }
+
+  private function doHooks(){
     $this->is_enabled = $this->isEnabled();
     $this->current_user_id = get_current_user_id();
 
@@ -37,7 +49,6 @@ class FolderUser extends Controller {
       $author = FolderModel::getAuthor($folder);
       set_transient( 'fbv_transient_' . $folder, $author, (3600 * 365) );//1 year
     }
-    $author = FolderModel::getAuthor($folder);
     return (int)$author === $this->current_user_id;
   }
   public function filterUncategorizedWhere($where, $folder_table) {
@@ -56,10 +67,5 @@ class FolderUser extends Controller {
   private function isEnabled() {
     return get_option('njt_fbv_folder_per_user', '0') === '1';
   }
-  public static function getInstance() {
-    if (null == self::$instance) {
-      self::$instance = new self;
-    }
-    return self::$instance;
-  }
+  
 }

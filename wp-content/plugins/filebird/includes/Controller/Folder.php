@@ -18,8 +18,19 @@ defined('ABSPATH') || exit;
 class Folder extends Controller {
 
   protected static $instance = null;
+
+  public static function getInstance() {
+    if (null == self::$instance) {
+      self::$instance = new self;
+      self::$instance->doHooks();
+    }
+    return self::$instance;
+  }
   
   public function __construct() {
+  }
+
+  private function doHooks(){
     add_action('admin_enqueue_scripts', array($this, 'enqueueAdminScripts'));
 
     add_action('rest_api_init', array($this, 'registerRestFields'));
@@ -34,8 +45,10 @@ class Folder extends Controller {
     add_filter( 'posts_clauses', array($this, 'postsClauses'), 10, 2 );
     add_action( 'pre-upload-ui', array($this, 'actionPluploadUi') );
     add_action( 'wp_ajax_fbv_first_folder_notice', array($this, 'ajax_first_folder_notice'));
+    add_action( 'wp_ajax_fbv_close_buy_pro_dialog', array($this, 'ajaxCloseBuyProDialog'));
     add_action( 'admin_notices', array($this, 'adminNotices') );
   }
+
   public function adminNotices()
   {
     global $pagenow;
@@ -186,12 +199,6 @@ class Folder extends Controller {
   public function resPermissionsCheck() {
     return current_user_can('upload_files');
   }
-  public static function getInstance() {
-    if (null == self::$instance) {
-      self::$instance = new self;
-    }
-    return self::$instance;
-  }
 
   public function enqueueAdminScripts($screenId) {
     if (function_exists('get_current_screen')) {
@@ -203,7 +210,6 @@ class Folder extends Controller {
 
     if ( $screenId !== 'pagebuilders' ) {
       wp_enqueue_script('fbv-import', NJFB_PLUGIN_URL . 'assets/js/import.js', array('jquery'), NJFB_VERSION, false);
-      wp_enqueue_script('fbv-active', NJFB_PLUGIN_URL . 'assets/js/active.js', array('jquery'), NJFB_VERSION, false);
     } 
 
     if ( $screenId === 'settings_page_filebird-settings' ) {
@@ -233,7 +239,9 @@ class Folder extends Controller {
       'media_mode' => get_user_option('media_library_mode', get_current_user_id()),
       'json_url' => apply_filters('filebird_json_url', rtrim(rest_url(NJFB_REST_URL),"/")),
       'media_url' => admin_url('upload.php'),
-      'auto_import_url' => esc_url(add_query_arg(array('page' => 'filebird-settings', 'tab' => 'update-db', 'autorun' => 'true'), admin_url('/options-general.php')))
+      'auto_import_url' => esc_url(add_query_arg(array('page' => 'filebird-settings', 'tab' => 'update-db', 'autorun' => 'true'), admin_url('/options-general.php'))),
+      'is_new_user' => get_option('fbv_is_new_user', false),
+      'close_buy_pro_dialog' => time() < get_option('fbv_close_buy_pro_dialog', time())
     )));
   }
 
@@ -304,6 +312,11 @@ class Folder extends Controller {
   }
 
   public function ajaxQueryAttachmentsArgs($query) {
+    // Fix conflict with Picu plugin
+    if (function_exists('picu_exclude_collection_images_from_library')) {
+      remove_action('pre_get_posts', 'picu_exclude_collection_images_from_library', 999);
+    }
+
     if(isset($_REQUEST['query']['fbv'])) {
       $fbv = $_REQUEST['query']['fbv'];
       if(is_array($fbv)) {
@@ -493,6 +506,34 @@ class Folder extends Controller {
     $folder_id = ((isset($_POST['folder_id'])) ? intval($_POST['folder_id']) : -1);
     Helpers::setDefaultSelectedFolder($folder_id);
     wp_send_json_success();
+  }
+  public function ajaxCloseBuyProDialog() {
+    check_ajax_referer('fbv_nonce', 'nonce', true);
+    update_option('fbv_close_buy_pro_dialog', time() + 7*24*3600); //After 7 days show
+    wp_send_json_success();
+  }
+  private static function addFolderToZip(&$zip, $children, $parent_dir = '') {
+    foreach ($children as $k => $v) {
+      $folder_name = $v->name;
+      $folder_id = $v->id;
+
+      $folder_name = sanitize_title($folder_name);
+
+      $attachment_ids = Helpers::getAttachmentIdsByFolderId($folder_id);
+      $empty_dir = $parent_dir != '' ? $parent_dir . '/' . $folder_name : $folder_name;
+      $zip->addEmptyDir($empty_dir);
+
+      foreach ($attachment_ids as $k => $id) {
+        $file = get_attached_file($id);
+        if($file) {
+          $zip->addFile($file, $empty_dir . '/' . \basename($file));
+        }
+      }
+      if(\is_array($v->children)) {
+        self::addFolderToZip($zip, $v->children, $empty_dir);
+      }
+    }
+    
   }
   public function actionPluploadUi() {
     global $pagenow;

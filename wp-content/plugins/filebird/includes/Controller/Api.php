@@ -15,9 +15,21 @@ class Api {
 
     protected static $instance = null;
 
+    public static function getInstance() {
+        if (null == self::$instance) {
+          self::$instance = new self;
+          self::$instance->doHooks();
+        }
+        return self::$instance;
+    }
+
     public function __construct() {
+    }
+
+    private function doHooks(){
         add_action('rest_api_init', array($this, 'registerRestFields'));
     }
+
     public function registerRestFields() {
         register_rest_route(NJFB_REST_URL,
           'fbv-api',
@@ -151,13 +163,6 @@ class Api {
             return $key === $this->getBearerToken();
         }
         return false;
-    }
-
-    public static function getInstance() {
-        if (null == self::$instance) {
-          self::$instance = new self;
-        }
-        return self::$instance;
     }
 
     private function generateRandomString($length = 10) {

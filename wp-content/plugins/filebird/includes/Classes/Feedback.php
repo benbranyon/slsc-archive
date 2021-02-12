@@ -10,6 +10,7 @@ class Feedback
     public static function getInstance() {
         if (null == self::$instance) {
           self::$instance = new self;
+          self::$instance->doHooks();
         }
         
         return self::$instance;
@@ -17,6 +18,9 @@ class Feedback
 
     public function __construct()
     {
+    }
+
+    private function doHooks(){
         add_action('admin_enqueue_scripts', array($this, 'enqueue_filebird_feedback'));
     }
 

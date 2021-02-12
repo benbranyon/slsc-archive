@@ -1,8 +1,5 @@
 <?php
 namespace FileBird\Controller;
-
-use FileBird\Config\Fbv;
-
 defined('ABSPATH') || exit;
 
 /**
@@ -73,7 +70,7 @@ class Convert {
   private static function detail($name, $parent) {
     global $wpdb;
 
-    $query = $wpdb->prepare('SELECT id FROM %1$s WHERE `name` = %2$s AND `parent` = %3$d', self::getTable(self::$folder_table), $name, $parent);
+    $query = $wpdb->prepare('SELECT id FROM %1$s WHERE `name` = "%2$s" AND `parent` = %3$d', self::getTable(self::$folder_table), $name, $parent);
 
     $user_has_own_folder = get_option('njt_fbv_folder_per_user', '0') === '1';
     if($user_has_own_folder) {
