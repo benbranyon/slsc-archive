@@ -3,9 +3,9 @@ Contributors: Asif2BD, priyomukul, wpdevteam, re_enter_rupok, tusharimran, alimu
 Donate link: https://wpdeveloper.net/
 Tags: comments, delete comments, disable, disable comments, stop spam, remove comments, anti spam, disable xml-rpc, hide comment, XML-RPC, REST-API, WP-CLI
 Requires at least: 5.0
-Tested up to: 5.5
+Tested up to: 5.6
 Requires PHP: 5.6
-Stable tag: 2.0.2
+Stable tag: 2.1.0
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -137,7 +137,7 @@ Visit [WPDeveloper](https://wpdeveloper.net/) to learn more about how to do bett
 
 This is because your theme is not checking the comment status of posts in the correct way.
 
-You may like to point your theme's author to [this explanation](http://www.rayofsolaris.net/blog/2012/how-to-check-if-comments-are-allowed-in-wordpress/) of what they are doing wrong, and how to fix it.
+You may like to point your theme's author to [this explanation](https://wpdeveloper.net/wordpress-posts-have-comments-allowed/) of what they are doing wrong, and how to fix it.
 
 = How can I remove the text that says "comments are closed" at the bottom of articles where comments are disabled? =
 
@@ -168,6 +168,12 @@ Go to the tools page for the Disable Comments plugin and utlize the Delete Comme
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 This will be maiintained from August 19, 2020 - @asif2bd
+
+= [2.1.0] - 2021-02-08 =
+* New Feature: Site wise settings in Multisite Network
+* Added: Some strings localization
+* Fixed: Delete Comments in Multisite
+* Few minor bug fix and improvement
 
 = [2.0.2] - 2020-12-01 =
 * Removed: Quick Setup Wizard
@@ -327,4 +333,4 @@ This will be maiintained from August 19, 2020 - @asif2bd
 
 == Upgrade Notice ==
 
-Major Update: Complete new UI with WP-CLI featuures.
+Minor Update: Few minor bug fix and improvement
