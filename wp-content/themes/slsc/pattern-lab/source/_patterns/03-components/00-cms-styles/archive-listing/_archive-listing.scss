@@ -56,3 +56,19 @@
     }
   }
 }
+
+.post-type-archive-archive {
+  .l-sidebar {
+    display: flex;
+    flex-direction: column-reverse;
+    @include breakpoint($bp-small) {
+      flex-direction: row-reverse;
+    }
+    .l-sidebar__sidebar {
+      width: 100%;
+      @include breakpoint($bp-small) {
+        width: auto;
+      }
+    }
+  }
+}

@@ -1012,6 +1012,26 @@ h1, h2, h3, h4, h5, h6 {
 .taxonomy-info .collection-summary span {
   font-weight: bold; }
 
+.post-type-archive-archive .l-sidebar {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: reverse;
+      -ms-flex-direction: column-reverse;
+          flex-direction: column-reverse; }
+  @media (min-width: 37.5em) {
+    .post-type-archive-archive .l-sidebar {
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: reverse;
+          -ms-flex-direction: row-reverse;
+              flex-direction: row-reverse; } }
+  .post-type-archive-archive .l-sidebar .l-sidebar__sidebar {
+    width: 100%; }
+    @media (min-width: 37.5em) {
+      .post-type-archive-archive .l-sidebar .l-sidebar__sidebar {
+        width: auto; } }
+
 .facetwp-counts {
   display: inline-block; }
 
@@ -1052,6 +1072,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .facetwp-sort {
   margin-right: 40px; }
+
+.facetwp-sort-select {
+  background-color: transparent;
+  border: none; }
 
 .home .l-sidebar__main {
   background-color: #dcd2c7;
