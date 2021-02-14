@@ -7,6 +7,10 @@
   } 
   .l-sidebar__sidebar {
     background-color: #fff;
+    padding-top: 40px;
+    @include breakpoint($bp-small) {
+      padding-top: 30px;
+    }
   } 
 }
 
@@ -14,23 +18,31 @@
   background-color: #dcd2c7;
   color: #fff;
   position: relative;
-  @include breakpoint($bp-xlarge) {
-  }
 }
 
 .fontpage__intro {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: bold;
+  @include breakpoint($bp-small) {
+    font-size: 28px;
+  }
 }
 
 .get-involved__item {
   display: flex;
+  flex-direction: column;
   margin-bottom: 50px;
+  @include breakpoint($bp-small) {
+    flex-direction: row;
+  }
 }
 
 .get-involved--image {
-  margin-right: 16px; 
-  width: 230px;
+  width: 100%;
+  @include breakpoint($bp-small) {
+    margin-right: 16px; 
+    width: 230px;
+  }
 }
 
 .get-involved--link {

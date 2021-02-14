@@ -64,10 +64,13 @@
 .swiper-title {
   color: #330000;
   font-family: $base-font-family;
-  font-size: 48px;
+  font-size: 30px;
   font-weight: bold;
   margin-bottom: 30px;
   z-index: 2;
+  @include breakpoint($bp-small) {
+    font-size: 48px;
+  }
 }
 
 .swiper-button {
