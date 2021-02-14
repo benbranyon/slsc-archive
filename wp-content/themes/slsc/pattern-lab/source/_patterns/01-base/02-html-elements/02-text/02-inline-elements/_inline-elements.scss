@@ -6,7 +6,7 @@ a {
   color: $color-link;
   // Improves readability when focused.
   outline-offset: em(2px);
-  text-decoration: none;
+  text-decoration: underline;
   -webkit-text-decoration-skip: objects;
 
   &:active,
@@ -17,7 +17,7 @@ a {
   &:hover,
   &:focus {
     color: $color-link-hover;
-    text-decoration: underline;
+    text-decoration: none;
   }
 
   @media print {

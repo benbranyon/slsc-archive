@@ -20,10 +20,17 @@
           <label class="form-item__label">Additional Metadata</label>
           <div class="single-archive__metadata">
             <div class="single-archive__date"><span>Date:</span> {{ post.date|date("F Y") }}</div>
-            <div class="single-archive__author"><span>Author:</span> {{ post.archive_author }}</div>
             <div class="single-archive__type"><span>Type:</span> {{ post.terms('file_type')[0] }}</div>
           </div>
-        </div>
+          <label class="form-item__label">Provenace</label>
+          <div class="single-archive__provenance">
+            <div class="single-archive__collection"><span>Collection:</span> <a href="{{ collection_slug }}">{{ collection_title }}</a></div> 
+            {% if post.archive_author %}
+              <div class="single-archive__author"><span>Author:</span> {{ post.archive_author }}</div>
+            {% endif %}
+          </div>
+      </div>
+
       </div>
     {% endblock %}
     {% block sidebar_main %}

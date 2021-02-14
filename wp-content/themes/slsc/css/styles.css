@@ -241,13 +241,13 @@ a {
   background-color: transparent;
   color: #330000;
   outline-offset: 0.1em;
-  text-decoration: none;
+  text-decoration: underline;
   -webkit-text-decoration-skip: objects; }
   a:active, a:hover {
     outline: 0; }
   a:hover, a:focus {
     color: #330000;
-    text-decoration: underline; }
+    text-decoration: none; }
   @media print {
     a, a:visited {
       text-decoration: none; }
@@ -1117,6 +1117,21 @@ h1, h2, h3, h4, h5, h6 {
   width: auto;
   z-index: 100000; }
 
+.single-archive .l-sidebar {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: reverse;
+      -ms-flex-direction: column-reverse;
+          flex-direction: column-reverse; }
+  @media (min-width: 50em) {
+    .single-archive .l-sidebar {
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: reverse;
+          -ms-flex-direction: row-reverse;
+              flex-direction: row-reverse; } }
+
 .single-archive .l-sidebar__sidebar {
   background-color: #fff;
   padding: 0px; }
@@ -1126,6 +1141,23 @@ h1, h2, h3, h4, h5, h6 {
   margin-left: 0px;
   padding-left: 1rem; }
 
+.single-archive .pdfemb-the-canvas {
+  max-width: 625px;
+  width: auto !important;
+  height: auto !important; }
+
+.single-archive .pdfemb-viewer {
+  margin: 0 auto;
+  max-width: 625px;
+  height: auto !important;
+  margin-top: 40px; }
+
+.single-archive .pdfemb-pagescontainer {
+  height: auto !important; }
+
+.single-archive .pdfemb-inner-div {
+  height: auto !important; }
+
 .single-archive-sidebar__content {
   padding: 40px; }
 
@@ -1134,7 +1166,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: "Courier New", "Courier", "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
   font-size: 18px;
   font-weight: bold;
-  padding: 40px;
+  padding: 25px 40px;
   text-transform: uppercase; }
 
 .single-archive__title {
@@ -1148,24 +1180,16 @@ h1, h2, h3, h4, h5, h6 {
 .single-archive__topics {
   margin-bottom: 40px; }
 
-.single-archive__metadata span {
+.single-archive__metadata {
+  margin-bottom: 40px; }
+  .single-archive__metadata span {
+    font-weight: bold; }
+
+.single-archive__type {
+  text-transform: capitalize; }
+
+.single-archive__provenance span {
   font-weight: bold; }
-
-.pdfemb-the-canvas {
-  max-width: 750px;
-  width: auto !important;
-  height: auto !important; }
-
-.pdfemb-viewer {
-  margin: 0 auto !important;
-  max-width: 750px;
-  height: auto !important; }
-
-.pdfemb-pagescontainer {
-  height: auto !important; }
-
-.pdfemb-inner-div {
-  height: auto !important; }
 
 .single-get_involved .l-sidebar__sidebar {
   background-color: #fff;
@@ -1305,16 +1329,20 @@ h1, h2, h3, h4, h5, h6 {
 
 .archive-toolbar {
   background-color: #efefef;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  padding: 30px;
-  margin-bottom: 30px;
+  padding: 20px;
+  margin-bottom: 20px;
   margin-left: -20px;
   margin-right: -20px; }
+  @media (min-width: 50em) {
+    .archive-toolbar {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: justify;
+          -ms-flex-pack: justify;
+              justify-content: space-between;
+      padding: 30px;
+      margin-bottom: 30px; } }
   @media (min-width: 75em) {
     .archive-toolbar {
       margin-right: 0px;
@@ -1322,8 +1350,13 @@ h1, h2, h3, h4, h5, h6 {
   .archive-toolbar .archive-toolbar__info {
     display: -webkit-box;
     display: -ms-flexbox;
-    display: flex; }
+    display: flex;
+    margin-bottom: 20px; }
+    @media (min-width: 50em) {
+      .archive-toolbar .archive-toolbar__info {
+        margin-bottom: 0px; } }
   .archive-toolbar .selection-title {
+    font-family: "Courier New", "Courier", "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
     font-weight: bold; }
   .archive-toolbar .archive-toolbar__sort {
     display: -webkit-box;

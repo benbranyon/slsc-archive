@@ -1,4 +1,11 @@
 .single-archive {
+  .l-sidebar {
+    display: flex;
+    flex-direction: column-reverse;
+    @include breakpoint($bp-medium) {
+      flex-direction: row-reverse;
+    }
+  }
   .l-sidebar__sidebar {
     background-color: #fff;
     padding: 0px;
@@ -7,6 +14,26 @@
     background-color: #000;
     margin-left: 0px;
     padding-left: 1rem;
+  }
+  .pdfemb-the-canvas {
+    max-width: 625px;
+    width: auto !important;
+    height: auto !important;
+  }
+
+  .pdfemb-viewer {
+    margin: 0 auto;
+    max-width: 625px;
+    height: auto !important;
+    margin-top: 40px;
+  }
+
+  .pdfemb-pagescontainer {
+    height: auto !important;
+  }
+
+  .pdfemb-inner-div {
+    height: auto !important;
   }
 }
 
@@ -19,7 +46,7 @@
   font-family: $header-font-family-secondary;
   font-size: 18px;
   font-weight: bold;
-  padding: 40px;
+  padding: 25px 40px;
   text-transform: uppercase;
 }
 
@@ -38,27 +65,19 @@
 }
 
 .single-archive__metadata {
+  margin-bottom: 40px;
   span {
     font-weight: bold;
   }
 }
 
-.pdfemb-the-canvas {
-  max-width: 750px;
-  width: auto!important;
-  height: auto!important;
+.single-archive__type {
+  text-transform: capitalize;
 }
 
-.pdfemb-viewer {
-  margin: 0 auto!important;
-  max-width: 750px;
-  height: auto!important;
+.single-archive__provenance {
+  span {
+    font-weight: bold;
+  }
 }
 
-.pdfemb-pagescontainer {
-  height: auto!important;
-}
-
-.pdfemb-inner-div {
-  height: auto!important;
-}

@@ -1,19 +1,28 @@
 .archive-toolbar {
   background-color: #efefef;
-  display: flex;
-  justify-content: space-between;
-  padding: 30px;
-  margin-bottom: 30px;
+  padding: 20px;
+  margin-bottom: 20px;
   margin-left: -20px;
   margin-right: -20px;
+  @include breakpoint($bp-medium) {
+    display: flex;
+    justify-content: space-between;
+    padding: 30px;
+    margin-bottom: 30px;
+  }
   @include breakpoint($bp-xlarge) {
     margin-right: 0px;
     margin-left: 0px;
   }
   .archive-toolbar__info {
     display: flex;
+    margin-bottom: 20px;
+    @include breakpoint($bp-medium) {
+      margin-bottom: 0px;
+    }
   }
   .selection-title {
+    font-family: $header-font-family-secondary;
     font-weight: bold;
   }
   .archive-toolbar__sort {

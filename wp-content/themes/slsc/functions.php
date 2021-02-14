@@ -50,10 +50,6 @@ function has_visible_widgets( $sidebar_id ) {
 
 function gesso_scripts() {
 
-  wp_deregister_script('jquery');
-  wp_register_script('jquery', '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js', array() ); // Google CDN jQuery
-  wp_enqueue_script('jquery');
-
   wp_register_script('swiper-js', 'https://unpkg.com/swiper/swiper-bundle.min.js');
   wp_enqueue_script('swiper-js');
 

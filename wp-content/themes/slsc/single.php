@@ -34,6 +34,15 @@ if(get_post_type($post) == 'story') {
 	}
 }
 
+if(get_post_type($post) == 'archive') {
+	foreach($post->terms as $term) {
+		if($term->taxonomy == 'collection') {
+			$context['collection_slug'] = $term->slug;
+			$context['collection_title'] = $term->title;
+		}
+	}
+}
+
 if ( post_password_required( $post->ID ) ) {
 	Timber::render( 'components/password-form.twig', $context );
 } else {
