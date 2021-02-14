@@ -1138,25 +1138,14 @@ h1, h2, h3, h4, h5, h6 {
 
 .single-archive .l-sidebar__main {
   background-color: #000;
-  margin-left: 0px;
-  padding-left: 1rem; }
+  margin-left: 0px; }
 
-.single-archive .pdfemb-the-canvas {
-  max-width: 625px;
-  width: auto !important;
-  height: auto !important; }
-
-.single-archive .pdfemb-viewer {
-  margin: 0 auto;
-  max-width: 625px;
-  height: auto !important;
-  margin-top: 40px; }
-
-.single-archive .pdfemb-pagescontainer {
-  height: auto !important; }
-
-.single-archive .pdfemb-inner-div {
-  height: auto !important; }
+@media (min-width: 50em) {
+  .single-archive {
+    padding-left: 1rem; }
+    .single-archive .pdfemb-viewer {
+      margin: 0 auto;
+      margin-top: 40px; } }
 
 .single-archive-sidebar__content {
   padding: 40px; }
