@@ -42,6 +42,25 @@
                             "maxlength": ""
                         },
                         {
+                            "key": "field_60298bc127551",
+                            "label": "Story Event Subtitle",
+                            "name": "story_event_subtitle",
+                            "type": "textarea",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "maxlength": "",
+                            "rows": "",
+                            "new_lines": ""
+                        },
+                        {
                             "key": "field_601a32a85283b",
                             "label": "Story Event",
                             "name": "story_event",
@@ -59,6 +78,30 @@
                             "toolbar": "full",
                             "media_upload": 1,
                             "delay": 0
+                        },
+                        {
+                            "key": "field_60298a3d53279",
+                            "label": "Story Featured Image",
+                            "name": "story_featured_image",
+                            "type": "image",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "return_format": "array",
+                            "preview_size": "medium",
+                            "library": "all",
+                            "min_width": "",
+                            "min_height": "",
+                            "min_size": "",
+                            "max_width": "",
+                            "max_height": "",
+                            "max_size": "",
+                            "mime_types": ""
                         }
                     ],
                     "min": "",
@@ -87,5 +130,5 @@
     "hide_on_screen": "",
     "active": true,
     "description": "",
-    "modified": 1612330810
+    "modified": 1613335736
 }

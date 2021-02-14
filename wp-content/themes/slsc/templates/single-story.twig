@@ -10,7 +10,14 @@
 		    {% for story in post.meta('story_content') %}
 		      <div class="timeline__item">
 		        <div class="timeline__content">
+              {% set image = Image(story.story_featured_image) %}
+              {% if image.src %}
+                <div class="timeline_image"><img src="{{ image.src }}" alt="{{ image.src }}"/></div>
+              {% endif %}
 		          <h3>{{ story.story_event_title }}</h3>
+              {% if story.story_event_subtitle %}
+                <div class="story__subtitle">{{ story.story_event_subtitle }}</div>
+              {% endif %}
 		          <div>{{ story.story_event }}</div>
 		        </div>
 		      </div>
