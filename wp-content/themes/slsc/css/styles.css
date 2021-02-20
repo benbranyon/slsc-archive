@@ -1117,6 +1117,8 @@ h1, h2, h3, h4, h5, h6 {
       -webkit-box-direction: normal;
           -ms-flex-direction: row;
               flex-direction: row; } }
+  .get-involved__item h3 {
+    max-width: 275px; }
 
 .get-involved--image {
   width: 100%; }

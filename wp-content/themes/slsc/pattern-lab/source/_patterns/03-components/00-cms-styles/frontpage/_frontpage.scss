@@ -35,6 +35,9 @@
   @include breakpoint($bp-small) {
     flex-direction: row;
   }
+  h3 {
+    max-width: 275px;
+  }
 }
 
 .get-involved--image {
