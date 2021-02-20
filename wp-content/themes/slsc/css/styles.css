@@ -1231,9 +1231,6 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0px; }
 
 .single-get_involved .l-sidebar__main {
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
   background-color: #dcd2c7;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1242,7 +1239,8 @@ h1, h2, h3, h4, h5, h6 {
       -ms-flex-pack: center;
           justify-content: center;
   margin-left: 0px;
-  padding-left: 1rem; }
+  padding-left: 1rem;
+  padding-top: 40px; }
   @media (min-width: 56.25em) {
     .single-get_involved .l-sidebar__main iframe {
       height: 500px;
