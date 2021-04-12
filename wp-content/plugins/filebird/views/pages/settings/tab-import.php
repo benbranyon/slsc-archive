@@ -116,5 +116,33 @@
               <span class="fbv-breakline"></span>
             </td>
           </tr>
+          <tr class="<?php echo $countHappyFiles <= 3 ? 'hidden' : ''; ?>">
+              <th scope="row">
+                <label for="">
+                  <?php echo __('HappyFiles by Codeer', 'filebird') ?>
+                </label>
+                <p class="description" style="font-weight: 400">
+                  <?php
+                    $str = __('We found you have <strong>(%1$s)</strong> categories you created from <strong>HappyFiles</strong> plugin.', 'filebird');
+                    if($countHappyFiles > 0) {
+                      $str .= __(' Would you like to import to <strong>FileBird</strong>?', 'filebird');
+                    }
+                    echo (sprintf($str, $countHappyFiles));
+                  ?>
+                </p>
+              </th>
+              <td>
+                <div class="fbv-btn-wrapper-import">
+                  <?php if($countHappyFiles > 0) : ?>
+                    <button class="button button-primary button-large njt-fb-import" data-site="happyfiles" type="button" data-count="<?php echo $countHappyFiles; ?>"><?php _e('Import Now', 'filebird') ?></button>
+                    <?php endif; ?>
+                </div>
+              </td>
+          </tr>
+          <tr class="fbv-row-breakline <?php echo $countHappyFiles <= 3 ? 'hidden' : ''; ?>">
+            <td colspan="2">
+              <span class="fbv-breakline"></span>
+            </td>
+          </tr>
       </tbody>
   </table>

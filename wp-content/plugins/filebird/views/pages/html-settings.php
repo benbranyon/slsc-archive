@@ -9,7 +9,7 @@ $countEnhancedFolder = count($helpers::foldersFromEnhanced(0, true));
 $countWpmlfFolder = count($helpers::foldersFromWpmlf(0, true));
 $countWpmfFolder = count($helpers::foldersFromWpmf(0, true));
 $countRealMediaFolder = count($helpers::foldersFromRealMedia(-1, true));
-
+$countHappyFiles = count($helpers::foldersFromHappyFiles(0, true));
 $allFolders = Tree::getFolders(null, true, 0, true);
 
 $tabs = array(
@@ -37,7 +37,7 @@ $tabs = array(
   ),
 );
 $current_tab = (isset($_GET['tab']) ? $_GET['tab'] : $tabs[0]['id']);
-if(($countEnhancedFolder + $countWpmlfFolder + $countWpmfFolder + $countRealMediaFolder) > 0) {
+if(($countEnhancedFolder + $countWpmlfFolder + $countWpmfFolder + $countRealMediaFolder + $countHappyFiles) > 0) {
   $tabs[] = array(
     'id' => 'import',
     'name' => __('Import', 'filebird'),
@@ -45,10 +45,12 @@ if(($countEnhancedFolder + $countWpmlfFolder + $countWpmfFolder + $countRealMedi
       'countEnhancedFolder' =>  $countEnhancedFolder,
       'countWpmlfFolder' => $countWpmlfFolder,
       'countWpmfFolder' => $countWpmfFolder,
-      'countRealMediaFolder' => $countRealMediaFolder
+      'countRealMediaFolder' => $countRealMediaFolder,
+      'countHappyFiles' => $countHappyFiles
     ))
   );
 }
+$tabs = apply_filters('fbv_settings_tabs', $tabs);
 ?>
 <div class="wrap">
   <h1><?php _e('FileBird Settings'); ?></h1>

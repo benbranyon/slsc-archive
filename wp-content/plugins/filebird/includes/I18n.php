@@ -50,6 +50,7 @@ class I18n {
       'loading' => __("Loading", 'filebird'),
       'generate_download' => __("Generating download link...", 'filebird'),
       'move_done' => __("Successfully moved", 'filebird'),
+      'move_error' => __("Unsuccessfully moved", 'filebird'),
       'delete_done' => __("Successfully deleted!", 'filebird'),
       'delete_error' => __("Can't delete!", 'filebird'),
       'save' => __('Save', 'filebird'),
@@ -138,7 +139,9 @@ class I18n {
       'do_more_with_filebird_desc' => __('You\'re using a third party plugin, which is supported in FileBird PRO. Please upgrade to browse files faster and get more done.', 'filebird'),
       'go_pro' => __('Go Pro', 'filebird'),
       'view_details' => __('View details.', 'filebird'),
-      'turn_off_for_7_days' => __('Turn off for 7 days', 'filebird')
+      'turn_off_for_7_days' => __('Turn off for 7 days', 'filebird'),
+      'collapse' => __('Collapse', 'filebird'),
+      'expand' => __('Expand', 'filebird'),
     );
     return $translation;
   }

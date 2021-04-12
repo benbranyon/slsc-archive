@@ -34,7 +34,7 @@ class Settings {
   }
 
   public function settingsMenu() {
-    add_submenu_page(
+    $GLOBALS['fbv_settings_screen_id'] = add_submenu_page(
       'options-general.php',
       __('FileBird', 'filebird'),
       __('FileBird', 'filebird'),

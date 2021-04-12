@@ -45,7 +45,7 @@ class Folder extends Controller {
     add_filter( 'posts_clauses', array($this, 'postsClauses'), 10, 2 );
     add_action( 'pre-upload-ui', array($this, 'actionPluploadUi') );
     add_action( 'wp_ajax_fbv_first_folder_notice', array($this, 'ajax_first_folder_notice'));
-    add_action( 'wp_ajax_fbv_close_buy_pro_dialog', array($this, 'ajaxCloseBuyProDialog'));
+    // add_action( 'wp_ajax_fbv_close_buy_pro_dialog', array($this, 'ajaxCloseBuyProDialog'));
     add_action( 'admin_notices', array($this, 'adminNotices') );
   }
 
@@ -241,7 +241,7 @@ class Folder extends Controller {
       'media_url' => admin_url('upload.php'),
       'auto_import_url' => esc_url(add_query_arg(array('page' => 'filebird-settings', 'tab' => 'update-db', 'autorun' => 'true'), admin_url('/options-general.php'))),
       'is_new_user' => get_option('fbv_is_new_user', false),
-      'close_buy_pro_dialog' => time() < get_option('fbv_close_buy_pro_dialog', time())
+      // 'close_buy_pro_dialog' => time() < get_option('fbv_close_buy_pro_dialog', time())
     )));
   }
 
@@ -281,7 +281,7 @@ class Folder extends Controller {
     
     if( isset($_GET['fbv']) || !empty($query->get('fbv')) ) {
       $fbv = isset($_GET['fbv']) ? (int)sanitize_text_field($_GET['fbv']) : (int)$query->get('fbv');
-      $in_not_in = FolderModel::getInAndNotInIds($fbv, true);
+      $in_not_in = FolderModel::getInAndNotInIds($fbv);
       if(count($in_not_in['post__not_in']) > 0) {
         $clauses['where'] .= "AND ID NOT IN (".implode(',', $in_not_in['post__not_in']).")";
       } elseif(count($in_not_in['post__in']) > 0) {
@@ -372,8 +372,8 @@ class Folder extends Controller {
     wp_send_json_success(array(
       'tree' => $tree,
       'folder_count' => array(
-        '-1' => Tree::getCount(-1),
-        '0' => Tree::getCount(0)
+        'total' => Tree::getCount(-1),
+        'folders' => Tree::getAllFoldersAndCount()
       )
     ));
   }
@@ -507,11 +507,11 @@ class Folder extends Controller {
     Helpers::setDefaultSelectedFolder($folder_id);
     wp_send_json_success();
   }
-  public function ajaxCloseBuyProDialog() {
-    check_ajax_referer('fbv_nonce', 'nonce', true);
-    update_option('fbv_close_buy_pro_dialog', time() + 7*24*3600); //After 7 days show
-    wp_send_json_success();
-  }
+  // public function ajaxCloseBuyProDialog() {
+  //   check_ajax_referer('fbv_nonce', 'nonce', true);
+  //   update_option('fbv_close_buy_pro_dialog', time() + 7*24*3600); //After 7 days show
+  //   wp_send_json_success();
+  // }
   private static function addFolderToZip(&$zip, $children, $parent_dir = '') {
     foreach ($children as $k => $v) {
       $folder_name = $v->name;

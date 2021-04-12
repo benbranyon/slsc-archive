@@ -14,25 +14,47 @@ class Tree {
         $tree = self::getTree($folders_from_db, 0, $default_folders, $flat, $level, $show_level);
         return $tree;
     }
-    public static function getCount($folder_id) {
+    public static function getCount($folder_id, $from_data = null) {
       global $wpdb;
 
-      $args = apply_filters('fbv_count_args', array(
-        'post_type' => 'attachment',
-        'posts_per_page' => -1,
-        'fields' => 'ids',
-      ));
+      $select = "SELECT COUNT(*) FROM {$wpdb->posts} as posts WHERE ";
+      $where = array("post_type = 'attachment'");
 
-      if($folder_id == -1) {
-        return count( get_posts($args) );
-      } else {
-        $in_not_in = FolderModel::getInAndNotInIds($folder_id);
+      // With $folder_id == -1. We get all
+      $where[] = "(posts.post_status = 'inherit' OR posts.post_status = 'private')";
 
-        $args['post__not_in'] = $in_not_in['post__not_in'];
-        $args['post__in'] = $in_not_in['post__in'];
-        $args['fbv_count'] = true;
-        return count( get_posts($args) );
+      // with specific folder
+      if($folder_id > 0 && ! apply_filters('fbv_speedup_get_count_query', false)) {
+        $post__in = $wpdb->get_col("SELECT `attachment_id` FROM {$wpdb->prefix}fbv_attachment_folder WHERE `folder_id` = " . (int)$folder_id);
+        if(count($post__in) == 0) {
+          $post__in = array(0);
+        }
+        $where[] = "(ID IN (".implode(', ', $post__in)."))";
+      } elseif ($folder_id == 0) {
+        return 0;//return 0 if this is uncategorized folder
       }
+      $query = apply_filters('fbv_get_count_query', $select . implode(' AND ', $where), $folder_id);
+      return (int)$wpdb->get_var($query);
+    }
+    public static function getAllFoldersAndCount() {
+      global $wpdb;
+      $query = "SELECT fbva.folder_id, count(fbva.attachment_id) as count FROM {$wpdb->prefix}fbv_attachment_folder as fbva 
+      INNER JOIN {$wpdb->prefix}fbv as fbv ON fbv.id = fbva.folder_id 
+      INNER JOIN {$wpdb->posts} as posts ON fbva.attachment_id = posts.ID  
+      WHERE (posts.post_status = 'inherit' OR posts.post_status = 'private') 
+      AND (posts.post_type = 'attachment') 
+      AND fbv.created_by = ".apply_filters('fbv_in_not_in_created_by', '0')." 
+      GROUP BY fbva.folder_id";
+      $query = apply_filters('fbv_all_folders_and_count', $query);
+
+      $results = $wpdb->get_results($query);
+      $return = array();
+      if(is_array($results)) {
+        foreach ($results as $k => $v) {
+          $return[$v->folder_id] = $v->count;
+        }
+      }
+      return $return;
     }
     private static function getTree($data, $parent = 0, $default = null,  $flat = false, $level = 0, $show_level = false) {
       $tree = is_null($default) ? array() : $default;
@@ -42,8 +64,8 @@ class Tree {
           $f = array(
             'id' => (int)$v->id,
             'text' => $show_level ? str_repeat('-', $level) . $v->name : $v->name,
-            'li_attr' => array("data-count" => self::getCount((int)$v->id), "data-parent" => (int)$parent),
-            'count' => self::getCount((int)$v->id)
+            'li_attr' => array("data-count" => 0, "data-parent" => (int)$parent),
+            'count' => 0
           );
            
           if($flat === true) {

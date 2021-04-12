@@ -2,7 +2,7 @@
 Contributors: ninjateam
 Tags: wordpress media library folders, media library folders, media folder, file manager, folders, wp media folder, wp media folders, wordpress media folders, wordpress media library, wordpress media manager, media manager, firebird
 Requires at least: 3.0
-Tested up to: 5.6
+Tested up to: 5.7
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -11,27 +11,31 @@ Organize thousands of WordPress media files in folders / categories at ease.
 
 == Description ==
 
+**The most user-friendly media library plugin for all WordPress blogs and shops.**
 
-###⚡️ DESCRIPTION
+⚡️ Let's organize WordPress media library folders using a drag and drop organizer.
 
 [TEST DRIVE](https://media-folder.ninjateam.org/create/) | [GO PRO (LIFETIME DEAL)](https://1.envato.market/FileBird-Premium) 💪
 
-FileBird is a media file manager plugin to help you organize WordPress media library folders using a drag and drop organizer. 
+FileBird enhances your media library with clean UI, native icons, smooth drag & drop, advanced sort and organization. 
 
 It allows you to create **unlimited main folders** and **subfolders**.
 
-📌 Check out [IMPORTANT NOTICE](https://ninjateam.org/filebird-lite-important-notice/) and [COMPARE FREE & PRO](https://ninjateam.gitbook.io/filebird/compare-filebird-free-and-pro).
+📌 We’ve made some important updates to FileBird's free features. Please learn about these changes at [Important Update](https://ninjateam.org/filebird-lite-important-notice/) and [Compare Free & Pro](https://ninjateam.gitbook.io/filebird/compare-filebird-free-and-pro).
 
 [youtube https://www.youtube.com/watch?v=NjeEbqmMVwU]
 
 ###⚡️ FEATURES
 
-This media file manager allows you to create virtual folders to categorize your WordPress media uploads. So when you move files and folders, that won’t break permalinks to your images in the content.
+FileBird allows you to create virtual folders to categorize your WordPress media file uploads. So when you move files and folders, that won’t break permalinks to your images in the content.
 
 With FileBird Pro you can save time on WP media management, search for any file & folder, sort them out, add product image gallery, download/export media folders, etc. That’s a great way to boost your admin workflow and productivity.
 
+**Download Media Folder**
+Export an entire folder including its subfolders and files in a single ZIP file. Keep the same folder structure.
+
 **Startup Folder**
-**New** option to choose a specific folder or previous folder for startup. Quickly back to work. Save more time.
+Choose a specific folder or previous folder for startup. Quickly back to work. Save more time.
 
 **Friendly User Interface**
 Drag and drop to upload or bulk move files into folders. Drag and drop to arrange folders and subfolders.
@@ -40,7 +44,7 @@ Drag and drop to upload or bulk move files into folders. Drag and drop to arrang
 Right-click to quickly create, rename or delete folders just the way you do on your computer.
 
 **Full Control In One Toolbar**
-FileBird’s resizable sidebar provides you with the ultimate control over all uploaded files and created folders.
+FileBird’s resizable sidebar provides you with the ultimate control over all WordPress media library folders.
 
 **Painless Migration**
 Import and seamlessly synchronize media structure from Enhanced Media Library, WP Media Folder by JoomUnited, WordPress Media Library Folders by Max Foundry, and Real Media Library.
@@ -60,7 +64,7 @@ FileBird supports RTL languages including Hebrew, Arabic, etc.
 **Many Languages Supported**
 This plugin supports most popular languages such as English, Spanish, Italian, French, Germany, etc.
 
-###👍 HOW IT WORKS
+###👍 HOW DOES FILEBIRD WORK?
 Are you a WordPress website administrator?
 
 Managing a WordPress site means that you’ll be adding tons of multi-media files such as images, videos, audios, documents, etc., into your WP media library.
@@ -121,6 +125,8 @@ Setup is easy and takes fewer than one minute.
 You’re done. Enjoy.
 
 == Frequently Asked Questions ==
+= I learn from other WordPress blogs and review articles that FileBird is free for up to 10 folders, but... =
+Yes, 10-folder Free Tier was included in FileBird from its initial release until FileBird Lite version 4.4. In early 2021, we were requested by WordPress Review Team to change those terms of use. As a result, now you can [create unlimited folders](https://ninjateam.org/filebird-lite-important-notice/) in FileBird free version.
 
 = Do all of my previously uploaded files remain the same after I first install this plugin? =
 Yes, you can find all uploads in the **All Files** folder.
@@ -155,6 +161,31 @@ Happy Organizing! 😍
 8. FileBird gallery block settings
 
 == Changelog ==
+
+Apr 07, 2021 - Version 4.7.2
+- Improved: Tooltip
+- Improved: UI
+- Optimized: FileBird zip size
+- Fixed: Can't set folder Uncategorized as default in folder load
+- Fixed: Update database make folders duplicated when "Each user folder mode" enabled
+
+Apr 01, 2021 - Version 4.7.1
+- Added: Upload multiple images in multiple folders when upload processing
+- Fixed: Append wrong folders in right side
+
+Mar 30, 2021 - Version 4.7
+- Added: New Resize bar
+- Improved: Performance
+- Improved: Optimize code
+- Improved: UI
+- Improved: Text
+- Supported: PHP 8 and greater
+- Supported: Tatsu Builder
+- Fixed: Counter in WPML
+- Fixed: Tooltip bugs
+- Fixed: Can't set "Uncategorized" default folder load
+- Fixed: Reorder on Edit gallery
+- Fixed: Small bugs
 
 = Feb 5, 2021 - Version 4.5 =
 - New feature: Download folder (Pro)

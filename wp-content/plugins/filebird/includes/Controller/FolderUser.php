@@ -29,28 +29,19 @@ class FolderUser extends Controller {
 
     if($this->is_enabled) {
       add_filter('fbv_data_before_inserting_folder', array($this, 'filterDataBeforeInsertingFolder')); 
-      add_filter('fbv_getting_folders_where', array($this, 'filterGettingFoldersWhere'));
-      add_filter('fbv_can_get_in_not_in', array($this, 'filterCanGetInNotIn'), 10, 2);
       add_filter('fbv_in_not_in_uncategorized_where', array($this, 'filterUncategorizedWhere'), 10, 2);
+      add_filter('fbv_in_not_in_created_by', array($this, 'fbv_in_not_in_created_by'));
     }
     add_action('fbv_before_setting_folder', array($this, 'actionBeforeSettingFolder'), 10, 2);
   }
-  
+  public function fbv_in_not_in_created_by() {
+    return $this->current_user_id;
+  }
   public function filterDataBeforeInsertingFolder($data) {
     $data['created_by'] = $this->current_user_id;
     return $data;
   }
-  public function filterGettingFoldersWhere($where) {
-    $where['created_by'] = $this->current_user_id;
-    return $where;
-  }
-  public function filterCanGetInNotIn($can, $folder) {
-    if ( false === ( $author = get_transient( 'fbv_transient_' . $folder ) ) ) {
-      $author = FolderModel::getAuthor($folder);
-      set_transient( 'fbv_transient_' . $folder, $author, (3600 * 365) );//1 year
-    }
-    return (int)$author === $this->current_user_id;
-  }
+
   public function filterUncategorizedWhere($where, $folder_table) {
     return sprintf('`folder_id` IN (SELECT `id` FROM %1$s WHERE `created_by` = %2$d)', $folder_table, $this->current_user_id);
   }

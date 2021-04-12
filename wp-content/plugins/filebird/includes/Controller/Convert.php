@@ -26,13 +26,13 @@ class Convert {
       if($parent > 0) {
         $parent = get_term_meta($parent, 'new_fbv_id', true);
       }
-
-      $check = self::detail($folder->name, $parent);
+      $check = self::detail($folder->name, $parent, $folder->created_by);
       $insert_id = 0;
       if(is_null($check)) {
         $wpdb->insert(self::getTable(self::$folder_table), array(
           'name' => $folder->name,
           'parent' => $parent,
+          'created_by' => $folder->created_by,
           'type' => 0
         ));
         $insert_id = (int)$wpdb->insert_id;
@@ -67,18 +67,21 @@ class Convert {
       }
     }
   }
-  private static function detail($name, $parent) {
+  private static function detail($name, $parent, $created_by = null) {
     global $wpdb;
 
     $query = $wpdb->prepare('SELECT id FROM %1$s WHERE `name` = "%2$s" AND `parent` = %3$d', self::getTable(self::$folder_table), $name, $parent);
-
-    $user_has_own_folder = get_option('njt_fbv_folder_per_user', '0') === '1';
-    if($user_has_own_folder) {
-      $query .= " AND created_by = " . get_current_user_id();
+    
+    if(!is_null($created_by)) {
+      $query .= " AND created_by = " . (int)$created_by;
     } else {
-      $query .= " AND created_by = 0";
+      $user_has_own_folder = get_option('njt_fbv_folder_per_user', '0') === '1';
+      if($user_has_own_folder) {
+        $query .= " AND created_by = " . get_current_user_id();
+      } else {
+        $query .= " AND created_by = 0";
+      }
     }
-
     $check = $wpdb->get_results($query);
     
     if($check != null && count($check) > 0) {
@@ -104,6 +107,7 @@ class Convert {
     $folders = $wpdb->get_results($query);
     foreach($folders as $k => $v) {
       $folders[$k]->parent = $parent;
+      $folders[$k]->created_by = (int)$wpdb->get_var("SELECT meta_value FROM {$wpdb->termmeta} WHERE meta_key = 'fb_created_by' AND term_id = " . (int)$v->id);
       $folders[$k]->attachments = self::_getAttachments($v->id);
     }
     foreach($folders as $k => $v) {

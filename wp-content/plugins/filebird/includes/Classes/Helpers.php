@@ -103,7 +103,26 @@ class Helpers {
     }
     return $folders;
   }
-
+  public static function foldersFromHappyFiles($parent = 0, $flat = false) {
+    global $wpdb;
+    $folders = $wpdb->get_results($wpdb->prepare('SELECT t.term_id as id, t.name as title, tt.term_taxonomy_id FROM %1$s as t  INNER JOIN %2$s as tt ON (t.term_id = tt.term_id) WHERE tt.taxonomy = \'happyfiles_category\' AND tt.parent = %3$d', $wpdb->terms, $wpdb->term_taxonomy, $parent));
+    foreach ($folders as $k => $folder) {
+      $folders[$k]->parent = $parent;
+    }
+    if($flat) {
+      foreach ($folders as $k => $folder) {
+        $children = self::foldersFromHappyFiles($folder->id, $flat);
+        foreach($children as $k2 => $v2) {
+          $folders[] = $v2;
+        }
+      }
+    } else {
+      foreach ($folders as $k => $folder) {
+        $folders[$k]->children = self::foldersFromHappyFiles($folder->id, $flat);
+      }
+    }
+    return $folders;
+  }
   public static function sanitize_array($var)
   {
       if (is_array($var)) {
@@ -126,9 +145,10 @@ class Helpers {
     $folder_id = get_user_meta(get_current_user_id(), '_njt_fbv_default_folder', true);
     $folder_id = (int)$folder_id;
 
-    if($folder_id == 0) {
-      $folder_id = -1;
-    } elseif($folder_id > 0) {
+    // if($folder_id == 0) {
+    //   $folder_id = -1;
+    // } else
+    if($folder_id > 0) {
       if(is_null(FolderModel::findById($folder_id))) {
         $folder_id = -1;
       }

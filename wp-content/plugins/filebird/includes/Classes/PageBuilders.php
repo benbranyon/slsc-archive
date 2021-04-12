@@ -67,6 +67,11 @@ class PageBuilders {
         if (defined('CT_VERSION')){
             $this->registerOxygenBuilder();
         }
+        
+        // Tatsu Builder
+        if (defined('TATSU_VERSION')){
+            $this->registerTatsuBuilder();
+        }
     }
 
     public function enqueueScripts(){
@@ -108,5 +113,9 @@ class PageBuilders {
 
     public function registerOxygenBuilder(){
         add_action('oxygen_enqueue_ui_scripts', array($this, 'enqueueScripts'));
+    }
+    
+    public function registerTatsuBuilder(){
+        add_action('tatsu_builder_footer', array($this, 'enqueueScripts'));
     }
 }

@@ -12,7 +12,7 @@ class Folder {
     //TODO need to convert ord to number using +0
     global $wpdb;
     
-    $where = apply_filters('fbv_getting_folders_where', array('created_by' => '0'));
+    $where = array('created_by' => apply_filters('fbv_in_not_in_created_by', '0'));
     if(\is_null($order_by)) $order_by = 'ord+0, id, name';
     $order_by = apply_filters('fbv_order_by', $order_by);
 
@@ -190,44 +190,40 @@ class Folder {
       array('%d')
     );
   }
-  public static function getInAndNotInIds($fbv, $allow_filter = false) {
+  public static function getInAndNotInIds($fbv) {
     global $wpdb;
     $query = array(
       'post__not_in' => array(),
       'post__in' => array()
     );
 
-    $select = apply_filters("fbv_in_not_in_select_query", "SELECT `attachment_id` FROM " . self::getTable(self::$relation_table), $fbv, self::getTable(self::$folder_table), self::getTable(self::$relation_table));
+    $select = "SELECT `attachment_id` FROM " . self::getTable(self::$relation_table);
     $where_arr = array('1 = 1');
     if($fbv !== -1) {//skip if fbv == -1 (load all)
       if($fbv === 0) {
         //load uncategorized folder
-        $where_arr[] = apply_filters(
-          'fbv_in_not_in_uncategorized_where',
-          "`folder_id` IN (SELECT `id` FROM ".self::getTable(self::$folder_table)." WHERE `created_by` = '0')",
-          self::getTable(self::$folder_table)
-        );
-        $query['post__not_in'] = $wpdb->get_col($select. " WHERE " . implode(' AND ', apply_filters('fbv_in_not_in_where_query', $where_arr, $fbv)));
+        $created_by = apply_filters('fbv_in_not_in_created_by', '0');
+        $where_arr[] = "`folder_id` IN (SELECT `id` FROM ".self::getTable(self::$folder_table)." WHERE `created_by` = '{$created_by}')";
+        $q = $select. " WHERE " . implode(' AND ', $where_arr);
+        $q = apply_filters('fbv_in_not_in_query', $q, $fbv);
+        $query['post__not_in'] = $wpdb->get_col($q);
       } else {
         if( ! is_array($fbv)) {
           $fbv = array($fbv);
         }
-        $i = 0;
-        foreach($fbv as $k => $v) {
-          if(apply_filters('fbv_can_get_in_not_in', true, $v)) $i++;
-        }
-        if($i == count($fbv)) {
-          $where_arr[] = "`folder_id` IN (".implode(',', $fbv).")";
-          $query['post__in'] = $wpdb->get_col($select. " WHERE " . implode(' AND ', apply_filters('fbv_in_not_in_where_query', $where_arr, $fbv)));
-          
-          if(count($query['post__in']) == 0) {
-            $query['post__in'] = array(-1);
-          }
+        $fbv = array_map('intval', $fbv);
+        $where_arr[] = "`folder_id` IN (".implode(',', $fbv).")";
+
+        $q = $select. " WHERE " . implode(' AND ', $where_arr);
+        $q = apply_filters('fbv_in_not_in_query', $q, $fbv);
+        $query['post__in'] = $wpdb->get_col($q);
+
+        if(count($query['post__in']) == 0) {
+          $query['post__in'] = array(-1);
         }
       }
     }
-    //for performance reasons, we will have a check here
-    return $allow_filter ? apply_filters('fbv_in_not_in', $query) : $query;
+    return $query;
   }
   public static function getAuthor($folder_id) {
     global $wpdb;
