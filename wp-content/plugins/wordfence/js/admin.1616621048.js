@@ -1,4 +1,7 @@
 (function($) {
+	var sprintf,
+		__;
+
 	if (!window['wordfenceAdmin']) { //To compile for checking: java -jar /usr/local/bin/closure.jar --js=admin.js --js_output_file=test.js
 		window['wordfenceAdmin'] = {
 			isSmallScreen: false,
@@ -84,14 +87,14 @@
 				$('#doSendEmail').click(function() {
 					var ticket = $('#_ticketnumber').val();
 					if (ticket === null || typeof ticket === "undefined" || ticket.length == 0) {
-						self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), "Error", "Please include your support ticket number or forum username.");
+						self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), __("Error"), __("Please include your support ticket number or forum username."));
 						return;
 					}
 					WFAD.ajax('wordfence_sendDiagnostic', {email: $('#_email').val(), ticket: ticket}, function(res) {
 						if (res.result) {
-							self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), "Email Diagnostic Report", "Diagnostic report has been sent successfully.");
+							self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), __("Email Diagnostic Report"), __("Diagnostic report has been sent successfully."));
 						} else {
-							self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), "Error", "There was an error while sending the email.");
+							self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), __("Error"), __("There was an error while sending the email."));
 						}
 					});
 				});
@@ -761,8 +764,7 @@
 				var self = this;
 				this.ajax('wordfence_sendTestEmail', {email: email}, function(res) {
 					if (res.result) {
-						self.colorboxModalHTML((self.isSmallScreen ? '300px' : '400px'), "Test Email Sent", "Your test email was sent to the requested email address. The result we received from the WordPress wp_mail() function was: " +
-							res.result + "<br /><br />A 'True' result means WordPress thinks the mail was sent without errors. A 'False' result means that WordPress encountered an error sending your mail. Note that it's possible to get a 'True' response with an error elsewhere in your mail system that may cause emails to not be delivered.");
+						self.colorboxModalHTML((self.isSmallScreen ? '300px' : '400px'), __("Test Email Sent"), sprintf(__("Your test email was sent to the requested email address. The result we received from the WordPress wp_mail() function was: %s<br /><br />A 'True' result means WordPress thinks the mail was sent without errors. A 'False' result means that WordPress encountered an error sending your mail. Note that it's possible to get a 'True' response with an error elsewhere in your mail system that may cause emails to not be delivered."), res.result));
 					}
 				});
 			},
@@ -868,7 +870,7 @@
 			showLoading: function() {
 				this.loadingCount++;
 				if (this.loadingCount == 1) {
-					$('<div id="wordfenceWorking">Wordfence is working...</div>').appendTo('body');
+					$('<div id="wordfenceWorking">' + __('Wordfence is working...') + '</div>').appendTo('body');
 				}
 			},
 			removeLoading: function() {
@@ -1030,7 +1032,7 @@
 				}
 
 				var sigTimestampEl = $('#wf-scan-sigs-last-update');
-				var newText = 'Last Updated: ' + dateString;
+				var newText = sprintf(__('Last Updated: %s'), dateString);
 				if (sigTimestampEl.text() !== newText) {
 					sigTimestampEl.text(newText)
 						.css({
@@ -1146,21 +1148,21 @@
 					summaryUpdated = true;
 				} else if (item.msg.indexOf('SUM_DISABLED:') != -1) {
 					msg = item.msg.replace('SUM_DISABLED:', '');
-					jQuery('#consoleSummary').append('<div class="wfSummaryLine"><div class="wfSummaryDate">[' + item.date + ']</div><div class="wfSummaryMsg">' + msg + '</div><div class="wfSummaryResult">Disabled</div><div class="wfClear"></div>');
+					jQuery('#consoleSummary').append('<div class="wfSummaryLine"><div class="wfSummaryDate">[' + item.date + ']</div><div class="wfSummaryMsg">' + msg + '</div><div class="wfSummaryResult">' + __('Disabled') + '</div><div class="wfClear"></div>');
 					summaryUpdated = true;
 				} else if (item.msg.indexOf('SUM_PAIDONLY:') != -1) {
 					msg = item.msg.replace('SUM_PAIDONLY:', '');
-					jQuery('#consoleSummary').append('<div class="wfSummaryLine"><div class="wfSummaryDate">[' + item.date + ']</div><div class="wfSummaryMsg">' + msg + '</div><div class="wfSummaryResult"><a href="https://www.wordfence.com/wordfence-signup/" target="_blank"  rel="noopener noreferrer">Paid Members Only</a></div><div class="wfClear"></div>');
+					jQuery('#consoleSummary').append('<div class="wfSummaryLine"><div class="wfSummaryDate">[' + item.date + ']</div><div class="wfSummaryMsg">' + msg + '</div><div class="wfSummaryResult"><a href="https://www.wordfence.com/wordfence-signup/" target="_blank"  rel="noopener noreferrer">' + __('Paid Members Only') + '</a></div><div class="wfClear"></div>');
 					summaryUpdated = true;
 				} else if (item.msg.indexOf('SUM_FINAL:') != -1) {
 					msg = item.msg.replace('SUM_FINAL:', '');
-					jQuery('#consoleSummary').append('<div class="wfSummaryLine"><div class="wfSummaryDate">[' + item.date + ']</div><div class="wfSummaryMsg wfSummaryFinal">' + msg + '</div><div class="wfSummaryResult wfSummaryOK">Scan Complete.</div><div class="wfClear"></div>');
+					jQuery('#consoleSummary').append('<div class="wfSummaryLine"><div class="wfSummaryDate">[' + item.date + ']</div><div class="wfSummaryMsg wfSummaryFinal">' + msg + '</div><div class="wfSummaryResult wfSummaryOK">' + __('Scan Complete.') + '</div><div class="wfClear"></div>');
 				} else if (item.msg.indexOf('SUM_PREP:') != -1) {
 					msg = item.msg.replace('SUM_PREP:', '');
 					jQuery('#consoleSummary').empty().html('<div class="wfSummaryLine"><div class="wfSummaryDate">[' + item.date + ']</div><div class="wfSummaryMsg">' + msg + '</div><div class="wfSummaryResult" id="wfStartingScan"><div class="wfSummaryLoading"></div></div><div class="wfClear"></div>');
 				} else if (item.msg.indexOf('SUM_KILLED:') != -1) {
 					msg = item.msg.replace('SUM_KILLED:', '');
-					jQuery('#consoleSummary').empty().html('<div class="wfSummaryLine"><div class="wfSummaryDate">[' + item.date + ']</div><div class="wfSummaryMsg">' + msg + '</div><div class="wfSummaryResult wfSummaryOK">Scan Complete.</div><div class="wfClear"></div>');
+					jQuery('#consoleSummary').empty().html('<div class="wfSummaryLine"><div class="wfSummaryDate">[' + item.date + ']</div><div class="wfSummaryMsg">' + msg + '</div><div class="wfSummaryResult wfSummaryOK">' + __('Scan Complete.') + '</div><div class="wfClear"></div>');
 				}
 			},
 			processActQueueItem: function() {
@@ -1586,7 +1588,7 @@
 									WFAD.updateIssueCounts(res.issueCounts);
 									WFAD.repositionSiteCleaningCallout();
 									WFAD.updateBulkButtons();
-									WFAD.colorboxModal((WFAD.isSmallScreen ? '300px' : '400px'), "Success deleting file", "The file " + res.file + " was successfully deleted.");
+									WFAD.colorboxModal((WFAD.isSmallScreen ? '300px' : '400px'), __("Success deleting file"), sprintf(__("The file %s was successfully deleted."), res.file));
 								}
 								else if (res.errorMsg) {
 									WFAD.colorboxError(res.errorMsg, res.tokenInvalid);
@@ -1625,7 +1627,7 @@
 									WFAD.updateIssueCounts(res.issueCounts);
 									WFAD.repositionSiteCleaningCallout();
 									WFAD.updateBulkButtons();
-									WFAD.colorboxModal((WFAD.isSmallScreen ? '300px' : '400px'), "File hidden successfully", "The file " + res.file + " was successfully hidden from public view.");
+									WFAD.colorboxModal((WFAD.isSmallScreen ? '300px' : '400px'), __("File hidden successfully"), sprintf(__("The file %s was successfully hidden from public view."), res.file));
 								}
 								else if (res.errorMsg) {
 									WFAD.colorboxError(res.errorMsg, res.tokenInvalid);
@@ -1756,7 +1758,7 @@
 				if (newCount == 0) {
 					var existing = $('.wf-issue[data-issue-id="no-issues-new"]');
 					if (existing.length == 0) {
-						var issue = $('#issueTmpl_noneFound').tmpl({shortMsg: 'No new issues have been found.', id: 'no-issues-new'});
+						var issue = $('#issueTmpl_noneFound').tmpl({shortMsg: __('No new issues have been found.'), id: 'no-issues-new'});
 						$('#wf-scan-results-new').append(issue);
 					}
 				}
@@ -1767,7 +1769,7 @@
 				if (ignoredCount == 0) {
 					var existing = $('.wf-issue[data-issue-id="no-issues-ignored"]');
 					if (existing.length == 0) {
-						var issue = $('#issueTmpl_noneFound').tmpl({shortMsg: 'No issues have been ignored.', id: 'no-issues-ignored'});
+						var issue = $('#issueTmpl_noneFound').tmpl({shortMsg: __('No issues have been ignored.'), id: 'no-issues-ignored'});
 						$('#wf-scan-results-ignored').append(issue);
 					}
 				}
@@ -1916,7 +1918,7 @@
 					WFAD.tokenErrorShowing = true;
 				}
 
-				var prompt = $.tmpl(WordfenceAdminVars.tokenInvalidTemplate, {title: 'An error occurred', message: errorMsg});
+				var prompt = $.tmpl(WordfenceAdminVars.tokenInvalidTemplate, {title: __('An error occurred'), message: errorMsg});
 				var promptHTML = $("<div />").append(prompt).html();
 				var settings = {};
 				settings.overlayClose = false;
@@ -2006,12 +2008,12 @@
 						return;
 					}
 				}
-				WFAD.colorboxModalHTML((WFAD.isSmallScreen ? '300px' : '400px'), "Download Backup File", 'Please make a backup of this file before proceeding. If you need to restore this backup file, you can copy it to the following path from your site\'s root:<p class="wf-padding-add-top-medium"><code>' + file + '</code></p>'
-					+ '<a href="' + WFAD.makeDownloadFileLink(file) + '" onclick="jQuery(\'#wfRepairFileNextBtn\').prop(\'disabled\', false); return true;">Click here to download a backup copy of this file now</a><p class="wf-flex-horizontal">' +
+				WFAD.colorboxModalHTML((WFAD.isSmallScreen ? '300px' : '400px'), __("Download Backup File"), __('Please make a backup of this file before proceeding. If you need to restore this backup file, you can copy it to the following path from your site\'s root:') + '<p class="wf-padding-add-top-medium"><code>' + file + '</code></p>'
+					+ '<a href="' + WFAD.makeDownloadFileLink(file) + '" onclick="jQuery(\'#wfRepairFileNextBtn\').prop(\'disabled\', false); return true;">' + __('Click here to download a backup copy of this file now') + '</a><p class="wf-flex-horizontal">' +
 					'<input type="button" class="wf-btn wf-btn-primary" name="but1" id="wfRepairFileNextBtn" value="Repair File" disabled="disabled" onclick="WFAD.promptToRepairFileDone(' + parseInt(issueID, 10) + ', jQuery(\'#forceRepairFileCheckbox\').prop(\'checked\'));this.disabled=true;" />' +
-					'<label class="wf-padding-add-left"><input type="checkbox" id="forceRepairFileCheckbox" onclick="jQuery(\'#wfRepairFileNextBtn\').prop(\'disabled\', !this.checked); return true;"> Don\'t ask again</label>' +
+					'<label class="wf-padding-add-left"><input type="checkbox" id="forceRepairFileCheckbox" onclick="jQuery(\'#wfRepairFileNextBtn\').prop(\'disabled\', !this.checked); return true;"> ' + __('Don\'t ask again') + '</label>' +
 					'</p>' +
-					'<div class="wordfenceHelpLink"><a href="' + WordfenceAdminVars.supportURLs['scan-result-repair-modified-files'] + '" target="_blank" rel="noopener noreferrer" class="wfhelp"></a><a href="' + WordfenceAdminVars.supportURLs['scan-result-repair-modified-files'] + '" target="_blank" rel="noopener noreferrer">Learn more about repairing modified files.</a></div>'
+					'<div class="wordfenceHelpLink"><a href="' + WordfenceAdminVars.supportURLs['scan-result-repair-modified-files'] + '" target="_blank" rel="noopener noreferrer" class="wfhelp"></a><a href="' + WordfenceAdminVars.supportURLs['scan-result-repair-modified-files'] + '" target="_blank" rel="noopener noreferrer">' + __('Learn more about repairing modified files.') + '</a></div>'
 				);
 			},
 			promptToRepairFileDone: function(issueID, dontPromptAgain) {
@@ -2032,7 +2034,7 @@
 						self.updateIssueCounts(res.issueCounts);
 						self.repositionSiteCleaningCallout();
 						self.updateBulkButtons();
-						self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), "Success restoring file", "The file " + res.file + " was successfully restored.");
+						self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), __("Success restoring file"), sprintf(__("The file %s was successfully restored."), res.file));
 					}
 					else if (res.errorMsg) {
 						self.colorboxError(res.errorMsg, res.tokenInvalid);
@@ -2052,7 +2054,7 @@
 				var self = this;
 				if (res.ok) {
 					this.loadIssues(function() {
-						self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), "Success removing option", "The option " + res.option_name + " was successfully removed.");
+						self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), __("Success removing option"), sprintf(__("The option %s was successfully removed."), res.option_name));
 					});
 				} else if (res.cerrorMsg) {
 					this.loadIssues(function() {
@@ -2070,7 +2072,7 @@
 						jQuery('#wordfenceMisconfiguredHowGetIPsNotice').fadeOut();
 						
 						self.loadIssues(function() {
-							self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), "Success updating option", "The 'How does Wordfence get IPs' option was successfully updated to the recommended value.");
+							self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), __("Success updating option"), __("The 'How does Wordfence get IPs' option was successfully updated to the recommended value."));
 						});
 					} else if (res.cerrorMsg) {
 						self.loadIssues(function() {
@@ -2081,18 +2083,18 @@
 			},
 			fixFPD: function(issueID) {
 				var self = this;
-				var title = "Full Path Disclosure";
+				var title = __("Full Path Disclosure");
 				issueID = parseInt(issueID);
 
 				this.ajax('wordfence_checkHtaccess', {}, function(res) {
 					if (res.ok) {
-						self.colorboxModalHTML((self.isSmallScreen ? '300px' : '400px'), title, 'We are about to change your <em>.htaccess</em> file. Please make a backup of this file before proceeding.'
+						self.colorboxModalHTML((self.isSmallScreen ? '300px' : '400px'), title, __('We are about to change your <em>.htaccess</em> file. Please make a backup of this file before proceeding.')
 							+ '<br/>'
-							+ '<a href="' + WordfenceAdminVars.ajaxURL + '?action=wordfence_downloadHtaccess&nonce=' + self.nonce + '" onclick="jQuery(\'#wfFPDNextBut\').prop(\'disabled\', false); return true;">Click here to download a backup copy of your .htaccess file now</a><br /><br /><input type="button" class="wf-btn wf-btn-default" name="but1" id="wfFPDNextBut" value="Click to fix .htaccess" disabled="disabled" onclick="WFAD.fixFPD_WriteHtAccess(' + issueID + ');" />');
+							+ '<a href="' + WordfenceAdminVars.ajaxURL + '?action=wordfence_downloadHtaccess&nonce=' + self.nonce + '" onclick="jQuery(\'#wfFPDNextBut\').prop(\'disabled\', false); return true;">' + __('Click here to download a backup copy of your .htaccess file now') + '</a><br /><br /><input type="button" class="wf-btn wf-btn-default" name="but1" id="wfFPDNextBut" value="Click to fix .htaccess" disabled="disabled" onclick="WFAD.fixFPD_WriteHtAccess(' + issueID + ');" />');
 					} else if (res.nginx) {
-						self.colorboxModalHTML((self.isSmallScreen ? '300px' : '400px'), title, 'You are using an Nginx web server and using a FastCGI processor like PHP5-FPM. You will need to manually modify your php.ini to disable <em>display_error</em>');
+						self.colorboxModalHTML((self.isSmallScreen ? '300px' : '400px'), title, __('You are using an Nginx web server and using a FastCGI processor like PHP5-FPM. You will need to manually modify your php.ini to disable <em>display_error</em>'));
 					} else if (res.err) {
-						self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), "We encountered a problem", "We can't modify your .htaccess file for you because: " + res.err);
+						self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), __("We encountered a problem"), sprintf(__("We can't modify your .htaccess file for you because: %s"), res.err));
 					}
 				});
 			},
@@ -2104,7 +2106,7 @@
 				}, function(res) {
 					if (res.ok) {
 						self.loadIssues(function() {
-							self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), "File restored OK", "The Full Path disclosure issue has been fixed");
+							self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), __("File restored OK"), __("The Full Path disclosure issue has been fixed"));
 						});
 					} else {
 						self.loadIssues(function() {
@@ -2117,10 +2119,10 @@
 			hideFile: function(issueID, callback) {
 				WFAD.ajax('wordfence_checkHtaccess', {}, function(checkRes) {
 					if (checkRes.ok) {
-						WFAD.colorboxModalHTML((WFAD.isSmallScreen ? '300px' : '400px'), '.htaccess change', 'We are about to change your <em>.htaccess</em> file. Please make a backup of this file before proceeding.'
+						WFAD.colorboxModalHTML((WFAD.isSmallScreen ? '300px' : '400px'), __('.htaccess change'), __('We are about to change your <em>.htaccess</em> file. Please make a backup of this file before proceeding.')
 							+ '<br/>'
-							+ '<a id="dlButton" href="' + WordfenceAdminVars.ajaxURL + '?action=wordfence_downloadHtaccess&nonce=' + WFAD.nonce + '">Click here to download a backup copy of your .htaccess file now</a>'
-							+ '<br /><br /><input type="button" class="wf-btn wf-btn-default" name="but1" id="wfFPDNextBut" value="Click to fix .htaccess" disabled="disabled" />'
+							+ '<a id="dlButton" href="' + WordfenceAdminVars.ajaxURL + '?action=wordfence_downloadHtaccess&nonce=' + WFAD.nonce + '">' + __('Click here to download a backup copy of your .htaccess file now') + '</a>'
+							+ '<br /><br /><input type="button" class="wf-btn wf-btn-default" name="but1" id="wfFPDNextBut" value="' + __('Click to fix .htaccess') + '" disabled="disabled" />'
 						);
 						$('#dlButton').on('click', function(e) {
 							$('#wfFPDNextBut').prop('disabled', false);
@@ -2138,10 +2140,10 @@
 						});
 					}
 					else if (checkRes.nginx) {
-						WFAD.colorboxModal((WFAD.isSmallScreen ? '300px' : '400px'), 'Unable to automatically hide file', 'You are using an Nginx web server and using a FastCGI processor like PHP5-FPM. You will need to manually delete or hide those files.');
+						WFAD.colorboxModal((WFAD.isSmallScreen ? '300px' : '400px'), __('Unable to automatically hide file'), __('You are using an Nginx web server and using a FastCGI processor like PHP5-FPM. You will need to manually delete or hide those files.'));
 					}
 					else if (checkRes.err) {
-						WFAD.colorboxModal((WFAD.isSmallScreen ? '300px' : '400px'), "We encountered a problem", "We can't modify your .htaccess file for you because: " + res.err);
+						WFAD.colorboxModal((WFAD.isSmallScreen ? '300px' : '400px'), __("We encountered a problem"), sprintf(__("We can't modify your .htaccess file for you because: %s"), res.err));
 					}
 				});
 			},
@@ -2166,17 +2168,15 @@
 
 				this.ajax('wordfence_checkHtaccess', {}, function(res) {
 					if (res.ok) {
-						self.colorboxModalHTML((self.isSmallScreen ? '300px' : '400px'), title, 'We are about to change your <em>.htaccess</em> file. Please make a backup of this file before proceeding.'
+						self.colorboxModalHTML((self.isSmallScreen ? '300px' : '400px'), title, __('We are about to change your <em>.htaccess</em> file. Please make a backup of this file before proceeding.')
 							+ '<br/>'
-							+ '<a href="' + WordfenceAdminVars.ajaxURL + '?action=wordfence_downloadHtaccess&nonce=' + self.nonce + '" onclick="jQuery(\'#wf-htaccess-confirm\').prop(\'disabled\', false); return true;">Click here to download a backup copy of your .htaccess file now</a>' +
+							+ '<a href="' + WordfenceAdminVars.ajaxURL + '?action=wordfence_downloadHtaccess&nonce=' + self.nonce + '" onclick="jQuery(\'#wf-htaccess-confirm\').prop(\'disabled\', false); return true;">' + __('Click here to download a backup copy of your .htaccess file now') + '</a>' +
 							'<br /><br />' +
-							'<button class="wf-btn wf-btn-default" type="button" id="wf-htaccess-confirm" disabled="disabled" onclick="WFAD.confirmDisableDirectoryListing(' + issueID + ');">Add code to .htaccess</button>');
+							'<button class="wf-btn wf-btn-default" type="button" id="wf-htaccess-confirm" disabled="disabled" onclick="WFAD.confirmDisableDirectoryListing(' + issueID + ');">' + __('Add code to .htaccess') + '</button>');
 					} else if (res.nginx) {
-						self.colorboxModalHTML((self.isSmallScreen ? '300px' : '400px'), "You are using Nginx as your web server. " +
-							"You'll need to disable autoindexing in your nginx.conf. " +
-							"See the <a target='_blank'  rel='noopener noreferrer' href='http://nginx.org/en/docs/http/ngx_http_autoindex_module.html'>Nginx docs for more info</a> on how to do this.");
+						self.colorboxModalHTML((self.isSmallScreen ? '300px' : '400px'), __("You are using Nginx as your web server. You'll need to disable autoindexing in your nginx.conf. See the <a target='_blank'  rel='noopener noreferrer' href='http://nginx.org/en/docs/http/ngx_http_autoindex_module.html'>Nginx docs for more info</a> on how to do this."));
 					} else if (res.err) {
-						self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), "We encountered a problem", "We can't modify your .htaccess file for you because: " + res.err);
+						self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), __("We encountered a problem"), sprintf(__("We can't modify your .htaccess file for you because: %s"), res.err));
 					}
 				});
 			},
@@ -2188,7 +2188,7 @@
 				}, function(res) {
 					if (res.ok) {
 						self.loadIssues(function() {
-							self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), "Directory Listing Disabled", "Directory listing has been disabled on your server.");
+							self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), __("Directory Listing Disabled"), __("Directory listing has been disabled on your server."));
 						});
 					} else {
 						//self.loadIssues(function() {
@@ -2249,24 +2249,24 @@
 						}
 						jQuery('#wfActivity').html(html);
 					} else {
-						jQuery('#wfActivity').html("<p>&nbsp;&nbsp;No activity to report yet. Please complete your first scan.</p>");
+						jQuery('#wfActivity').html("<p>&nbsp;&nbsp;" + __('No activity to report yet. Please complete your first scan.') + "</p>");
 					}
 				});
 			},
 			emailActivityLog: function() {
-				this.colorboxModalHTML((this.isSmallScreen ? '300px' : '400px'), 'Email Wordfence Activity Log', "Enter the email address you would like to send the Wordfence activity log to. Note that the activity log may contain thousands of lines of data. This log is usually only sent to a member of the Wordfence support team. It also contains your PHP configuration from the phpinfo() function for diagnostic data.<br /><br /><input type='text' value='wftest@wordfence.com' size='20' id='wfALogRecip' /><input class='wf-btn wf-btn-default' type='button' value='Send' onclick=\"WFAD.completeEmailActivityLog();\" />");
+				this.colorboxModalHTML((this.isSmallScreen ? '300px' : '400px'), __('Email Wordfence Activity Log'), __("Enter the email address you would like to send the Wordfence activity log to. Note that the activity log may contain thousands of lines of data. This log is usually only sent to a member of the Wordfence support team. It also contains your PHP configuration from the phpinfo() function for diagnostic data.") + "<br /><br /><input type='text' value='wftest@wordfence.com' size='20' id='wfALogRecip' /><input class='wf-btn wf-btn-default' type='button' value='" + __('Send') + "' onclick=\"WFAD.completeEmailActivityLog();\" />");
 			},
 			completeEmailActivityLog: function() {
 				WFAD.colorboxClose();
 				var email = jQuery('#wfALogRecip').val();
 				if (!/^[^@]+@[^@]+$/.test(email)) {
-					alert("Please enter a valid email address.");
+					alert(__("Please enter a valid email address."));
 					return;
 				}
 				var self = this;
 				this.ajax('wordfence_sendActivityLog', {email: jQuery('#wfALogRecip').val()}, function(res) {
 					if (res.ok) {
-						self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), 'Activity Log Sent', "Your Wordfence activity log was sent to " + email);
+						self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), __('Activity Log Sent'), sprintf(__("Your Wordfence activity log was sent to %s"), email));
 					}
 				});
 			},
@@ -2581,17 +2581,17 @@
 			whois: function(val) {
 				val = val.replace(' ', '');
 				if (!/\w+/.test(val)) {
-					this.colorboxModal('300px', "Enter a valid IP or domain", "Please enter a valid IP address or domain name for your whois lookup.");
+					this.colorboxModal('300px', __("Enter a valid IP or domain"), __("Please enter a valid IP address or domain name for your whois lookup."));
 					return;
 				}
 				var self = this;
 				jQuery('#whoisbutton').attr('disabled', 'disabled');
-				jQuery('#whoisbutton').attr('value', 'Loading...');
+				jQuery('#whoisbutton').attr('value', __('Loading...'));
 				this.ajax('wordfence_whois', {
 					val: val
 				}, function(res) {
 					jQuery('#whoisbutton').removeAttr('disabled');
-					jQuery('#whoisbutton').attr('value', 'Look up IP or Domain');
+					jQuery('#whoisbutton').attr('value', __('Look up IP or Domain'));
 					if (res.ok) {
 						self.completeWhois(res);
 					}
@@ -2602,9 +2602,9 @@
 				var self = this;
 				var rawhtml = "";
 				var ipRangeTmpl = jQuery("<div><div class='wf-flex-row'>" +
-					"<a class=\"wf-btn wf-btn-default wf-flex-row-0\" href=\"${adminUrl}\">Block This Network</a>" +
+					"<a class=\"wf-btn wf-btn-default wf-flex-row-0\" href=\"${adminUrl}\">" + __('Block This Network') + "</a>" +
 					"<span class='wf-flex-row-1 wf-padding-add-left'>{{html totalStr}}{{if totalStr.indexOf(ipRange) == -1}} (${ipRange}){{/if}}" +
-					'{{if (totalIPs)}}<br>[${totalIPs} addresses in this network]{{/if}}' +
+					'{{if (totalIPs)}}<br>[' + __('${totalIPs} addresses in this network') + ']{{/if}}' +
 					"</span></div></div>");
 				if (res.ok && res.result && res.result.rawdata && res.result.rawdata.length > 0) {
 					for (var i = 0; i < res.result.rawdata.length; i++) {
@@ -2675,7 +2675,7 @@
 					}
 					jQuery('#wfrawhtml').html(rawhtml);
 				} else {
-					rawhtml = '<span style="color: #F00;">Sorry, but no data for that IP or domain was found.</span>';
+					rawhtml = '<span style="color: #F00;">' + __('Sorry, but no data for that IP or domain was found.') + '</span>';
 					if (ret) {
 						return rawhtml;
 					}
@@ -2684,7 +2684,7 @@
 			},
 			blockIPUARange: function(ipRange, hostname, uaRange, referer, reason) {
 				if (!/\w+/.test(reason)) {
-					this.colorboxModal('300px', "Please specify a reason", "You forgot to include a reason you're blocking this IP range. We ask you to include this for your own record keeping.");
+					this.colorboxModal('300px', __("Please specify a reason"), __("You forgot to include a reason you're blocking this IP range. We ask you to include this for your own record keeping."));
 					return;
 				}
 				ipRange = ipRange.replace(/ /g, '').toLowerCase();
@@ -2700,16 +2700,16 @@
 						validRange = this.inet_aton(range[0]) !== false && this.inet_aton(range[1]) !== false;
 					}
 					if (!validRange) {
-						this.colorboxModal('300px', 'Specify a valid IP range', "Please specify a valid IP address range in the form of \"1.2.3.4 - 1.2.3.5\" without quotes. Make sure the dash between the IP addresses in a normal dash (a minus sign on your keyboard) and not another character that looks like a dash.");
+						this.colorboxModal('300px', __('Specify a valid IP range'), __("Please specify a valid IP address range in the form of \"1.2.3.4 - 1.2.3.5\" without quotes. Make sure the dash between the IP addresses in a normal dash (a minus sign on your keyboard) and not another character that looks like a dash."));
 						return;
 					}
 				}
 				if (hostname && !/^[a-z0-9\.\*\-]+$/i.test(hostname)) {
-					this.colorboxModalHTML('300px', 'Specify a valid hostname', '<i>' + this.htmlEscape(hostname) + '</i> is not valid hostname');
+					this.colorboxModalHTML('300px', __('Specify a valid hostname'), sprintf(__('%s is not valid hostname'), '<i>' + this.htmlEscape(hostname) + '</i>'));
 					return;
 				}
 				if (!(/\w+/.test(ipRange) || /\w+/.test(uaRange) || /\w+/.test(referer) || /\w+/.test(hostname))) {
-					this.colorboxModal('300px', 'Specify an IP range, Hostname or Browser pattern', "Please specify either an IP address range, Hostname or a web browser pattern to match.");
+					this.colorboxModal('300px', __('Specify an IP range, Hostname or Browser pattern'), __("Please specify either an IP address range, Hostname or a web browser pattern to match."));
 					return;
 				}
 				var self = this;
@@ -2792,7 +2792,7 @@
 				});
 			},
 			twoFacStatus: function(msg) {
-				this.colorboxModal('300px', 'Two Factor Status', msg);
+				this.colorboxModal('300px', __('Two Factor Status'), msg);
 			},
 			addTwoFactor: function(username, phone, mode) {
 				var self = this;
@@ -2804,12 +2804,12 @@
 					if (res.ok) {
 						if (mode == 'authenticator') {
 							var totpURL = "otpauth://totp/" + encodeURI(res.homeurl) + encodeURI(" (" + res.username + ")") + "?" + res.uriQueryString + "&issuer=Wordfence"; 							
-							var message = "Scan the code below with your authenticator app to add this account. Some authenticator apps also allow you to type in the text version instead.<br><div id=\"wfTwoFactorQRCodeTable\"></div><br><strong>Key:</strong> <input type=\"text\"" + (self.isSmallScreen ? "" : " size=\"45\"") + " value=\"" + res.base32Secret + "\" onclick=\"this.select();\" readonly>";
+							var message = __('Scan the code below with your authenticator app to add this account. Some authenticator apps also allow you to type in the text version instead.') + "<br><div id=\"wfTwoFactorQRCodeTable\"></div><br><strong>" + __('Key:') + "</strong> <input type=\"text\"" + (self.isSmallScreen ? "" : " size=\"45\"") + " value=\"" + res.base32Secret + "\" onclick=\"this.select();\" readonly>";
 							if (res.recoveryCodes.length > 0) {
-								message = message + "<br><br><strong>Recovery Codes</strong><br><p>Use one of these " + res.recoveryCodes.length + " codes to log in if you lose access to your authenticator device. Codes are 16 characters long, plus optional spaces. Each one may be used only once.</p><ul id=\"wfTwoFactorRecoveryCodes\">";
+								message = message + "<br><br><strong>" + __('Recovery Codes') + "</strong><br><p>" + sprintf(__("Use one of these %s codes to log in if you lose access to your authenticator device. Codes are 16 characters long, plus optional spaces. Each one may be used only once."), res.recoveryCodes.length) + "</p><ul id=\"wfTwoFactorRecoveryCodes\">";
 
-								var recoveryCodeFileContents = "Cellphone Sign-In Recovery Codes - " + res.homeurl + " (" + res.username + ")\r\n";
-								recoveryCodeFileContents = recoveryCodeFileContents + "\r\nEach line of 16 letters and numbers is a single recovery code, with optional spaces for readability. When typing your password, enter \"wf\" followed by the entire code like \"mypassword wf1234 5678 90AB CDEF\". If your site shows a separate prompt for entering a code after entering only your username and password, enter only the code like \"1234 5678 90AB CDEF\". Your recovery codes are:\r\n\r\n";
+								var recoveryCodeFileContents = __('Cellphone Sign-In Recovery Codes') + " - " + res.homeurl + " (" + res.username + ")\r\n";
+								recoveryCodeFileContents = recoveryCodeFileContents + "\r\n" + __("Each line of 16 letters and numbers is a single recovery code, with optional spaces for readability. When typing your password, enter \"wf\" followed by the entire code like \"mypassword wf1234 5678 90AB CDEF\". If your site shows a separate prompt for entering a code after entering only your username and password, enter only the code like \"1234 5678 90AB CDEF\". Your recovery codes are:") + "\r\n\r\n";
 								var splitter = /.{4}/g;
 								for (var i = 0; i < res.recoveryCodes.length; i++) { 
 									var code = res.recoveryCodes[i];
@@ -2820,12 +2820,12 @@
 								
 								message = message + "</ul>";
 								
-								message = message + "<p class=\"wf-center\"><a href=\"#\" class=\"wf-btn wf-btn-default\" id=\"wfTwoFactorDownload\" target=\"_blank\" rel=\"noopener noreferrer\"><i class=\"dashicons dashicons-download\"></i> Download</a></p>";
+								message = message + "<p class=\"wf-center\"><a href=\"#\" class=\"wf-btn wf-btn-default\" id=\"wfTwoFactorDownload\" target=\"_blank\" rel=\"noopener noreferrer\"><i class=\"dashicons dashicons-download\"></i> " + __('Download') + "</a></p>";
 							}
 
-							message = message + "<p><em>This will be shown only once. Keep these codes somewhere safe.</em></p>";
+							message = message + "<p><em>" + __("This will be shown only once. Keep these codes somewhere safe.") + "</em></p>";
 							
-							self.colorboxModalHTML((self.isSmallScreen ? '300px' : '440px'), "Authentication Code", message, {onComplete: function() { 
+							self.colorboxModalHTML((self.isSmallScreen ? '300px' : '440px'), __("Authentication Code"), message, {onComplete: function() {
 								jQuery('#wfTwoFactorQRCodeTable').qrcode({text: totpURL, width: (self.isSmallScreen ? 175 : 256), height: (self.isSmallScreen ? 175 : 256)});
 								jQuery('#wfTwoFactorDownload').on('click', function(e) {
 									e.preventDefault();
@@ -2836,10 +2836,10 @@
 						}
 						else {
 							if (res.recoveryCodes.length > 0) {
-								var message = "<p>Use one of these " + res.recoveryCodes.length + " codes to log in if you are unable to access your phone. Codes are 16 characters long, plus optional spaces. Each one may be used only once.</p><ul id=\"wfTwoFactorRecoveryCodes\">";
+								var message = "<p>" + sprintf(__("Use one of these %s codes to log in if you are unable to access your phone. Codes are 16 characters long, plus optional spaces. Each one may be used only once."), res.recoveryCodes.length) + "</p><ul id=\"wfTwoFactorRecoveryCodes\">";
 
-								var recoveryCodeFileContents = "Cellphone Sign-In Recovery Codes - " + res.homeurl + " (" + res.username + ")\r\n";
-								recoveryCodeFileContents = recoveryCodeFileContents + "\r\nEach line of 16 letters and numbers is a single recovery code, with optional spaces for readability. When typing your password, enter \"wf\" followed by the entire code like \"mypassword wf1234 5678 90AB CDEF\". If your site shows a separate prompt for entering a code after entering only your username and password, enter only the code like \"1234 5678 90AB CDEF\". Your recovery codes are:\r\n\r\n";
+								var recoveryCodeFileContents = __('Cellphone Sign-In Recovery Codes') + " - " + res.homeurl + " (" + res.username + ")\r\n";
+								recoveryCodeFileContents = recoveryCodeFileContents + "\r\n" + __("Each line of 16 letters and numbers is a single recovery code, with optional spaces for readability. When typing your password, enter \"wf\" followed by the entire code like \"mypassword wf1234 5678 90AB CDEF\". If your site shows a separate prompt for entering a code after entering only your username and password, enter only the code like \"1234 5678 90AB CDEF\". Your recovery codes are:") + "\r\n\r\n";
 								var splitter = /.{4}/g;
 								for (var i = 0; i < res.recoveryCodes.length; i++) {
 									var code = res.recoveryCodes[i];
@@ -2848,11 +2848,11 @@
 									recoveryCodeFileContents = recoveryCodeFileContents + chunks[0] + " " + chunks[1] + " " + chunks[2] + " " + chunks[3] + "\r\n";
 								}
 
-								message = message + "<p class=\"wf-center\"><a href=\"#\" class=\"wf-btn wf-btn-default\" id=\"wfTwoFactorDownload\" target=\"_blank\" rel=\"noopener noreferrer\"><i class=\"dashicons dashicons-download\"></i> Download</a></p>";
+								message = message + "<p class=\"wf-center\"><a href=\"#\" class=\"wf-btn wf-btn-default\" id=\"wfTwoFactorDownload\" target=\"_blank\" rel=\"noopener noreferrer\"><i class=\"dashicons dashicons-download\"></i> " + __('Download') + "</a></p>";
 
-								message = message + "</ul><p><em>This will be shown only once. Keep these codes somewhere safe.</em></p>";
+								message = message + "</ul><p><em>" + __("This will be shown only once. Keep these codes somewhere safe.") + "</em></p>";
 
-								self.colorboxModalHTML((self.isSmallScreen ? '300px' : '400px'), "Recovery Codes", message, {onComplete: function() {
+								self.colorboxModalHTML((self.isSmallScreen ? '300px' : '400px'), __("Recovery Codes"), message, {onComplete: function() {
 									jQuery('#wfTwoFactorDownload').on('click', function(e) {
 										e.preventDefault();
 										e.stopPropagation();
@@ -2879,7 +2879,7 @@
 						updatedTwoFac.find('tbody > tr').each(function(index, element) {
 							jQuery('#' + jQuery(element).attr('id')).replaceWith(element);
 						});
-						self.twoFacStatus('Cellphone Sign-in activated for user.');
+						self.twoFacStatus(__('Cellphone Sign-in activated for user.'));
 					}
 				});
 			},
@@ -3020,7 +3020,7 @@
 				}, function(res) {
 					if (res.ok) {
 						self.loadIssues(function() {
-							self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), "Successfully deleted admin", "The admin user " + res.user_login + " was successfully deleted.");
+							self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), __("Successfully deleted admin"), sprintf(__("The admin user %s was successfully deleted."), res.user_login));
 						});
 					} else if (res.errorMsg) {
 						self.loadIssues(function() {
@@ -3037,7 +3037,7 @@
 				}, function(res) {
 					if (res.ok) {
 						self.loadIssues(function() {
-							self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), "Successfully revoked admin", "All capabilties of admin user " + res.user_login + " were successfully revoked.");
+							self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), __("Successfully revoked admin"), sprintf(__("All capabilties of admin user %s were successfully revoked."), res.user_login));
 						});
 					} else if (res.errorMsg) {
 						self.loadIssues(function() {
@@ -3222,7 +3222,7 @@
 				if (date.toLocaleString) {
 					dateString = date.toLocaleString();
 				}
-				$('#waf-rules-last-updated').text('Last Updated: ' + dateString)
+				$('#waf-rules-last-updated').text(sprintf(__('Last Updated: %s'), dateString))
 					.css({
 						'opacity': 0
 					})
@@ -3236,7 +3236,7 @@
 				if (date.toLocaleString) {
 					dateString = date.toLocaleString();
 				}
-				$('#waf-rules-next-update').text('Next Update Check: ' + dateString)
+				$('#waf-rules-next-update').text(sprintf(__('Next Update Check: %s'), dateString))
 					.css({
 						'opacity': 0
 					})
@@ -3254,24 +3254,20 @@
 					self.wafConfigPageRender();
 					if (self.wafData['updated']) {
 						if (!self.wafData['isPaid']) {
-							self.colorboxModalHTML((self.isSmallScreen ? '300px' : '400px'), 'Rules Updated', 'Your rules have been updated successfully. You are ' +
-								'currently using the free version of Wordfence. ' +
-								'Upgrade to Wordfence premium to have your rules updated automatically as new threats emerge. ' +
-								'<a href="https://www.wordfence.com/wafUpdateRules1/wordfence-signup/">Click here to purchase a premium license</a>. ' +
-								'<em>Note: Your rules will still update every 30 days as a free user.</em>');
+							self.colorboxModalHTML((self.isSmallScreen ? '300px' : '400px'), __('Rules Updated'), __('Your rules have been updated successfully. You are currently using the free version of Wordfence. Upgrade to Wordfence premium to have your rules updated automatically as new threats emerge. <a href="https://www.wordfence.com/wafUpdateRules1/wordfence-signup/">Click here to purchase a premium license</a>. <em>Note: Your rules will still update every 30 days as a free user.</em>'));
 						} else {
-							self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), 'Rules Updated', 'Your rules have been updated successfully.');
+							self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), __('Rules Updated'), __('Your rules have been updated successfully.'));
 						}
 					}
 					else {
 						if (self.wafData['failure'] == 'ratelimit') {
-							self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), 'Rule Update Failed', 'No rules were updated. Your website has reached the maximum number of rule update requests. Please try again later.');
+							self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), __('Rule Update Failed'), __('No rules were updated. Your website has reached the maximum number of rule update requests. Please try again later.'));
 						}
 						else if (self.wafData['failure'] == 'unreachable') {
-							self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), 'Rule Update Failed', 'No rules were updated. Please verify your website can reach the Wordfence servers.');
+							self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), __('Rule Update Failed'), __('No rules were updated. Please verify your website can reach the Wordfence servers.'));
 						}
 						else {
-							self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), 'Rule Update Failed', 'No rules were updated. Please verify you have permissions to write to the /wp-content/wflogs directory.');
+							self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), __('Rule Update Failed'), __('No rules were updated. Please verify you have permissions to write to the /wp-content/wflogs directory.'));
 						}
 					}
 					if (typeof onSuccess === 'function') {
@@ -3293,8 +3289,7 @@
 			confirmWAFConfigureAutoPrepend: function() {
 				var self = this;
 				this.ajax('wordfence_wafConfigureAutoPrepend', {}, function(res) {
-					self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), '.htaccess Updated', "Your .htaccess has been updated successfully. Please " +
-						"verify your site is functioning normally.");
+					self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), __('.htaccess Updated'), __("Your .htaccess has been updated successfully. Please verify your site is functioning normally."));
 				});
 			},
 			
@@ -3312,7 +3307,7 @@
 			},
 			
 			_unsavedOptionsHandler: function(e) {
-				var message = "You have unsaved changes to your options. If you leave this page, those changes will be lost."; //Only shows on older browsers, newer browsers don't allow message customization 
+				var message = __("You have unsaved changes to your options. If you leave this page, those changes will be lost."); //Only shows on older browsers, newer browsers don't allow message customization
 				e = e || window.event;
 				if (e) {
 					e.returnValue = message; //IE and Firefox
@@ -3328,7 +3323,7 @@
 						typeof successCallback == 'function' && successCallback(res);
 					}
 					else {
-						WFAD.colorboxModal((self.isSmallScreen ? '300px' : '400px'), 'Error Saving Option', res.error);
+						WFAD.colorboxModal((self.isSmallScreen ? '300px' : '400px'), __('Error Saving Option'), res.error);
 						typeof failureCallback == 'function' && failureCallback(res);
 					} 
 				});
@@ -3345,7 +3340,7 @@
 						typeof successCallback == 'function' && successCallback(res); 
 					}
 					else {
-						WFAD.colorboxModal((self.isSmallScreen ? '300px' : '400px'), 'Error Saving Options', res.error);
+						WFAD.colorboxModal((self.isSmallScreen ? '300px' : '400px'), __('Error Saving Options'), res.error);
 						typeof failureCallback == 'function' && failureCallback
 					}
 				});
@@ -3357,7 +3352,7 @@
 						window.location.href = res.redirect;
 					}
 					else {
-						WFAD.colorboxModal((self.isSmallScreen ? '300px' : '400px'), 'Error Enabling All Options Page', res.error);
+						WFAD.colorboxModal((self.isSmallScreen ? '300px' : '400px'), __('Error Enabling All Options Page'), res.error);
 					}
 				});
 			},
@@ -3424,6 +3419,10 @@
 			WFAD.updateTimeAgo();
 		}, 1000);
 	}
+
+	__ = window.wfi18n.__;
+	sprintf = window.wfi18n.sprintf;
+
 	jQuery(function() {
 		wordfenceAdmin.init();
 		jQuery(window).on('focus', function() {
@@ -3440,9 +3439,9 @@
 
 			$.wfMobileMenu({
 				menuItems: [
-					{title: 'Save Changes', primary: true, disabled: $('#wf-save-changes').hasClass('wf-disabled'), action: function() { $('#wf-save-changes').trigger('click'); }},
-					{title: 'Cancel Changes', primary: false, disabled: $('#wf-cancel-changes').hasClass('wf-disabled'), action: function() { $('#wf-cancel-changes').trigger('click'); }},
-					{title: 'Restore Defaults', primary: false, disabled: $('#wf-restore-defaults').hasClass('wf-disabled'), action: function() { $('#wf-restore-defaults').trigger('click'); }}
+					{title: __('Save Changes'), primary: true, disabled: $('#wf-save-changes').hasClass('wf-disabled'), action: function() { $('#wf-save-changes').trigger('click'); }},
+					{title: __('Cancel Changes'), primary: false, disabled: $('#wf-cancel-changes').hasClass('wf-disabled'), action: function() { $('#wf-cancel-changes').trigger('click'); }},
+					{title: __('Restore Defaults'), primary: false, disabled: $('#wf-restore-defaults').hasClass('wf-disabled'), action: function() { $('#wf-restore-defaults').trigger('click'); }}
 				]
 			});
 		});
@@ -3472,7 +3471,7 @@
 						}
 						else {
 							WFAD.colorboxClose();
-							WFAD.colorboxModal((WFAD.isSmallScreen ? '300px' : '400px'), 'Error Restoring Defaults', res.error);
+							WFAD.colorboxModal((WFAD.isSmallScreen ? '300px' : '400px'), __('Error Restoring Defaults'), res.error);
 						}
 					});
 				});
@@ -3683,6 +3682,9 @@
 
 //wfCircularProgress
 jQuery.fn.wfCircularProgress = function(options) {
+	var __ = window.wfi18n.__;
+	var sprintf = window.wfi18n.sprintf;
+
 	jQuery(this).each(function() {
 		var creationOptions;
 		try {
@@ -3781,19 +3783,27 @@ jQuery.fn.wfCircularProgress = function(options) {
 	});
 };
 
-jQuery.fn.wfCircularProgress.defaults = {
-	startPercent: 0,
-	endPercent: 1,
-	color: '#16bc9b',
-	inactiveColor: '#ececec',
-	strokeWidth: 3,
-	diameter: 100,
-	pendingOverlay: false,
-	pendingMessage: 'Note: Status will update when changes are saved',
-};
+(function() {
+	var __ = window.wfi18n.__;
+	var sprintf = window.wfi18n.sprintf;
+
+	jQuery.fn.wfCircularProgress.defaults = {
+		startPercent: 0,
+		endPercent: 1,
+		color: '#16bc9b',
+		inactiveColor: '#ececec',
+		strokeWidth: 3,
+		diameter: 100,
+		pendingOverlay: false,
+		pendingMessage: __('Note: Status will update when changes are saved'),
+	};
+})();
 
 //wfDrawer
 (function ($, document, window) {
+	var __ = window.wfi18n.__;
+	var sprintf = window.wfi18n.sprintf;
+
 	var defaults = {
 		width: '600px',
 		clickOverlayDismiss: false,
@@ -3859,6 +3869,9 @@ jQuery.fn.wfCircularProgress.defaults = {
 
 //wfMobileMenu
 (function ($, document, window) {
+	var __ = window.wfi18n.__;
+	var sprintf = window.wfi18n.sprintf;
+
 	var defaults = {
 		width: '280px',
 		clickOverlayDismiss: true,
@@ -3908,7 +3921,7 @@ jQuery.fn.wfCircularProgress.defaults = {
 			itemsWrapper.append(button);
 		}
 
-		var button = $('<li class="wf-padding-add-top-small"><a href="#" class="wf-btn wf-btn-callout-subtle wf-btn-default">Close</a></li>');
+		var button = $('<li class="wf-padding-add-top-small"><a href="#" class="wf-btn wf-btn-callout-subtle wf-btn-default">' + __('Close') + '</a></li>');
 		button.find('a').css('width', opts.width).on('click', function(e) {
 			e.preventDefault();
 			e.stopPropagation();
