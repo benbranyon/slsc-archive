@@ -163,10 +163,9 @@ function sp_send_request(token, id) {
     //     errorString +=  value ;
     // });
     // alert(errorString);
+    // console.log(j1);
+    // console.log(j2);
 
-
-    console.log(j1);
-    console.log(j2);
   });
   return;
 } // countdown
@@ -220,7 +219,8 @@ function countdown(type, ts, id, action, redirect) {
       } // redirect
 
 
-      if (action === "2") {
+      if (action == "2") {
+        jQuery("#sp-countdown-" + id + " .sp-countdown-group").hide();
         window.location.href = redirect;
       }
     }
@@ -298,3 +298,106 @@ function seedprod_bg_slideshow(selector, slides) {
     preloadImages[i].src = val;
   });
 }
+
+jQuery('.sp-testimonial-nav button').click(function () {
+  var currentId = '#' + jQuery(this).parents('.sp-testimonials-wrapper').attr('id');
+  var currentButtonIndex = jQuery(currentId + ' .sp-testimonial-nav button').index(this);
+  var currentIndex = 0;
+  var testimonials = jQuery('.sp-testimonial-wrapper', jQuery(this).parents(currentId));
+  jQuery(testimonials).each(function (index) {
+    var o = jQuery(this).css('opacity');
+
+    if (o == 1) {
+      currentIndex = index;
+    }
+  });
+  var buttonsLength = jQuery(currentId + ' .sp-testimonial-nav button').length - 1;
+  var currentButtonIndexData = jQuery(currentId + ' .sp-testimonial-nav button').eq(currentButtonIndex).attr('data-index'); // check for previous button click
+
+  if (currentButtonIndex == 0) {
+    if (0 == currentIndex) {
+      currentIndex = testimonials.length - 1;
+    } else {
+      currentIndex--;
+    }
+  } // check for next button click
+
+
+  if (currentButtonIndex == buttonsLength) {
+    if (testimonials.length - 1 == currentIndex) {
+      currentIndex = 0;
+    } else {
+      currentIndex++;
+    }
+  } // reset states
+
+
+  testimonials.css({
+    'opacity': 0,
+    'height': '0',
+    'position': 'absolute'
+  });
+  jQuery(currentId + ' .sp-testimonial-nav button[data-index]').css({
+    'opacity': 0.25
+  }); // select testimonial and button
+
+  if (currentButtonIndexData !== undefined) {
+    currentIndex = currentButtonIndexData;
+    jQuery(testimonials).eq(currentIndex).css({
+      'opacity': 1,
+      'height': 'auto',
+      'position': 'initial'
+    });
+    jQuery(currentId + ' .sp-testimonial-nav button').eq(currentButtonIndex).css({
+      'opacity': 1
+    });
+  } else {
+    jQuery(testimonials).eq(currentIndex).css({
+      'opacity': 1,
+      'height': 'auto',
+      'position': 'initial'
+    });
+    jQuery(currentId + ' .sp-testimonial-nav button').eq(currentIndex + 1).css({
+      'opacity': 1
+    });
+  }
+});
+var testimonial_timers = {};
+jQuery(".sp-testimonials-wrapper").each(function (index) {
+  var currentId = '#' + jQuery(this).attr('id');
+  var autoPlay = jQuery(this).attr('data-autoplay');
+  var speed = jQuery(this).attr('data-speed');
+
+  if (speed === '') {
+    speed = 5000;
+  } else {
+    speed = parseInt(speed) * 1000;
+  }
+
+  if (autoPlay !== undefined) {
+    testimonial_timers[currentId] = setInterval(function () {
+      jQuery(currentId + ' .sp-testimonial-nav button:last-child').trigger('click');
+    }, speed);
+  }
+});
+jQuery(".sp-testimonials-wrapper").hover(function () {
+  var id = '#' + jQuery(this).attr('id');
+  clearInterval(testimonial_timers[id]);
+});
+jQuery(".sp-testimonials-wrapper").mouseleave(function () {
+  var currentId = '#' + jQuery(this).attr('id');
+  var autoPlay = jQuery(this).attr('data-autoplay');
+  var speed = jQuery(this).attr('data-speed');
+
+  if (speed === '') {
+    speed = 5000;
+  } else {
+    speed = parseInt(speed) * 1000;
+  }
+
+  if (autoPlay !== undefined) {
+    testimonial_timers[currentId] = setInterval(function () {
+      jQuery(currentId + ' .sp-testimonial-nav button:last-child').trigger('click');
+    }, speed);
+  }
+});

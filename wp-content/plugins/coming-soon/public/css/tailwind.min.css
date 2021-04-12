@@ -6,6 +6,7 @@ pre{font-family:monospace,monospace;font-size:1em}
 a{background-color:transparent}
 b,strong{font-weight:bolder}
 code{font-family:monospace,monospace;font-size:1em}
+small{font-size:80%}
 img{border-style:none}
 button,input,select{font-family:inherit;font-size:100%;line-height:1.15;margin:0}
 button,input{overflow:visible}
@@ -56,10 +57,12 @@ img,video{max-width:100%;height:auto}
 .sp-form-checkbox:checked{background-image:url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e");border-color:transparent;background-color:currentColor;background-size:100% 100%;background-position:center;background-repeat:no-repeat}
 @media not print{.sp-form-checkbox::-ms-check{border-width:1px;color:transparent;background:inherit;border-color:inherit;border-radius:inherit}
 }.sp-form-checkbox:focus{outline:0;box-shadow:0 0 0 3px rgba(66,153,225,0.5);border-color:#63b3ed}
+.sp-bg-black{background-color:#000}
 .sp-bg-white{background-color:#fff}
 .sp-bg-blue-500{background-color:#4299e1}
 .hover\:sp-bg-blue-700:hover{background-color:#2b6cb0}
 .sp-rounded{border-radius:.25rem}
+.sp-rounded-md{border-radius:.375rem}
 .sp-rounded-full{border-radius:9999px}
 .sp-rounded-bl{border-bottom-left-radius:.25rem}
 .sp-border-dotted{border-style:dotted}
@@ -87,6 +90,7 @@ img,video{max-width:100%;height:auto}
 .sp-font-sans{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"}
 .sp-font-semibold{font-weight:600}
 .sp-font-bold{font-weight:700}
+.sp-h-3{height:.75rem}
 .sp-h-4{height:1rem}
 .sp-h-6{height:1.5rem}
 .sp-h-8{height:2rem}
@@ -94,6 +98,8 @@ img,video{max-width:100%;height:auto}
 .sp-leading-none{line-height:1}
 .sp-m-2{margin:.5rem}
 .sp-m-auto{margin:auto}
+.sp-mx-1{margin-left:.25rem;margin-right:.25rem}
+.sp-mx-4{margin-left:1rem;margin-right:1rem}
 .sp-my-8{margin-top:2rem;margin-bottom:2rem}
 .sp-mt-1{margin-top:.25rem}
 .sp-mr-1{margin-right:.25rem}
@@ -111,7 +117,12 @@ img,video{max-width:100%;height:auto}
 .sp-mb-6{margin-bottom:1.5rem}
 .sp-ml-6{margin-left:1.5rem}
 .sp-mt-8{margin-top:2rem}
+.sp-object-cover{-o-object-fit:cover;object-fit:cover}
+.sp-opacity-25{opacity:.25}
+.sp-opacity-50{opacity:.5}
 .sp-opacity-75{opacity:.75}
+.sp-outline-none{outline:0}
+.focus\:sp-outline-none:focus{outline:0}
 .sp-p-1{padding:.25rem}
 .sp-p-3{padding:.75rem}
 .sp-p-4{padding:1rem}
@@ -141,7 +152,10 @@ img,video{max-width:100%;height:auto}
 .sp-left-0{left:0}
 .sp-shadow-inner{box-shadow:inset 0 2px 4px 0 rgba(0,0,0,0.06)}
 .sp-fill-current{fill:currentColor}
+.sp-text-left{text-align:left}
 .sp-text-center{text-align:center}
+.sp-text-right{text-align:right}
+.sp-text-black{color:#000}
 .sp-text-white{color:#fff}
 .sp-text-xs{font-size:.8125rem}
 .sp-text-sm{font-size:.875rem}
@@ -152,12 +166,14 @@ img,video{max-width:100%;height:auto}
 .sp-antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 .sp-whitespace-no-wrap{white-space:nowrap}
 .sp-truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sp-w-3{width:.75rem}
 .sp-w-4{width:1rem}
 .sp-w-5{width:1.25rem}
 .sp-w-6{width:1.5rem}
 .sp-w-8{width:2rem}
 .sp-w-24{width:6rem}
 .sp-w-full{width:100%}
+.sp-z-0{z-index:0}
 .sp-z-40{z-index:40}
 .sp-z-50{z-index:50}
 html{scroll-behavior:smooth}
@@ -184,7 +200,7 @@ html{scroll-behavior:smooth}
 .sp-header-tag-h1,h1,.sp-header-tag-h2,h2,.sp-header-tag-h3,h3,.sp-header-tag-h4,h4,.sp-header-tag-h5,h5,.sp-header-tag-h6,h6{line-height:1.1}
 img{display:inline-block}
 .fab{font-weight:normal}
-.spBgcover{background-size:cover;background-repeat:no-repeat;background-position:center top;background-attachment:fixed;min-height:100%}
+.spBgcover{background-size:cover;background-repeat:no-repeat;background-position:center top;background-attachment:scroll;min-height:100%}
 .spBgfull{background-size:100% auto;background-repeat:no-repeat;background-position:center top;background-attachment:scroll;min-height:100%}
 .spBgfullbottom{background-size:100% auto;background-repeat:no-repeat;background-position:center bottom;background-attachment:scroll;min-height:100%}
 .spBgrepeat{background-repeat:repeat;background-position:center top;background-attachment:scroll;min-height:100%}
@@ -204,8 +220,23 @@ img{display:inline-block}
 .sp-ss-md{padding:4px 10px;font-size:16px}
 .sp-ss-lg{padding:8px 14px;font-size:20px}
 .sp-starrating i:last-of-type{padding-right:0 !important}
+summary::-webkit-details-marker{display:none}
+details>summary:first-of-type{list-style-type:none}
+details{display:block;width:100%}
+details .sp-acc-open{display:none}
+details[open] .sp-acc-closed{display:none}
+details[open] .sp-acc-open{display:block}
+summary{outline:0;cursor:pointer}
+.woocommerce input,.woocommerce select,.woocommerce textarea{border-color:#ddd;border-style:solid;border-width:1px;background-color:#fff;padding:8px;border-radius:3px}
+.select2-container--default .select2-selection--single{border-color:#ddd !important;padding-top:2px;height:36px !important}
+.select2-selection__rendered{border-color:transparent !important}
+.woocommerce #place_order{width:100%;margin-top:10px}
+.woocommerce-additional-fields h3{margin-top:10px}
+.wc-proceed-to-checkout .checkout-button{width:100%;text-align:center}
+.woocommerce .onsale{min-width:50px !important;min-height:50px !important;font-size:13px}
 #cspio-bypass{border:1px solid #ccc !important}
 #cspio-bypass-btn{color:#fff}
+.sp-testimonials-wrapper{position:relative}
 .sp-progressbar-block-template-2>div{border-bottom:3px solid rgba(0,0,0,0.25)}
 .sp-progressbar-block-template-3>div{background-image:linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);background-size:16px 16px}
 .sp-progressbar-block-template-4>div{background-image:linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);background-size:16px 16px;-webkit-animation:progress-bar-stripes 1s linear infinite;animation:progress-bar-stripes 1s linear infinite}
@@ -213,8 +244,11 @@ img{display:inline-block}
 to{background-position:0 0}
 }@keyframes progress-bar-stripes{from{background-position:0 16px}
 to{background-position:0 0}
-}.sp-socialprofiles-style-1 .sp-sp-twitter{color:#1b95e0 !important}
+}.sp-testimonial-img{width:60px;height:60px}
+.sp-testimonial-nav button:first-child,.sp-testimonial-nav button:last-child{background:transparent}
+.sp-socialprofiles-style-1 .sp-sp-twitter{color:#1b95e0 !important}
 .sp-socialprofiles-style-1 .sp-sp-facebook{color:#1877f2 !important}
+.sp-socialprofiles-style-1 .sp-sp-imdb{color:#f5c517 !important}
 .sp-socialprofiles-style-1 .sp-sp-linkedin{color:#0073b1 !important}
 .sp-socialprofiles-style-1 .sp-sp-pinterest{color:#e60023 !important}
 .sp-socialprofiles-style-1 .sp-sp-youtube{color:#f00 !important}
@@ -268,10 +302,10 @@ to{background-position:0 0}
 .sp-countdown-group{flex-wrap:wrap}
 .sp-cd-group{margin-bottom:1vh !important}
 .sp-socialsharing-wrapper,.sp-nav,.sp-button-wrapper,.sp-image-wrapper,.sp-text-wrapper{text-align:center !important;justify-content:center !important}
-.sp-el-section,.sp-el-row,.sp-el-col,.sp-el-block,.sp-optin-wrapper{padding:5px !important}
+.sp-el-section,.sp-el-row,.sp-el-col,.sp-el-block,.sp-optin-wrapper,.sp-testimonials-wrapper,.sp-testimonial-wrapper{padding:5px !important}
 .sp-w-full{width:100% !important}
 .sp-optinform-field,.sp-optinform-btn{display:block !important;width:100% !important}
-img{height:auto !important}
+img:not('.sp-testimonial-img'){height:auto !important}
 }#cspio-bypass-btn{font-size:15px;height:27px;padding:0 14px;border-radius:4px}
 input[type="password"]{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-color:#fff;border-color:#e2e8f0;border-width:1px;border-radius:.25rem;padding-top:.25rem;padding-right:.5rem;padding-bottom:.25rem;padding-left:.5rem;font-size:.8125rem;line-height:1.5}
 .sp-credit{background-color:rgba(0,0,0,0.8);position:fixed;bottom:0;right:20px;font-size:10px;padding:7px;border-radius:2px;line-height:1;color:#fff;z-index:10;font-family:sans-serif;border-top-right-radius:4px;border-top-left-radius:4px}
