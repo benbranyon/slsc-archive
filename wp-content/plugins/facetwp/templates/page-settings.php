@@ -18,6 +18,12 @@ $data_sources = FWP()->helper->get_data_sources();
 $layout_data = FWP()->builder->get_layout_data();
 $query_data = FWP()->builder->get_query_data();
 
+// Get SVG icons
+$svg_icons = $settings_admin->get_svg();
+foreach ( $svg_icons as $name => $atts ) {
+    $svg_icons[ $name ] = $settings_admin->get_svg( $name );
+}
+
 // Clone facet settings HTML
 $facet_clone = [];
 $admin_scripts = [];
@@ -45,8 +51,6 @@ foreach ( $facet_types as $name => $class ) {
 <script src="<?php echo FACETWP_URL; ?>/assets/vendor/vue/vuedraggable.min.js"></script>
 <script src="<?php echo FACETWP_URL; ?>/assets/vendor/vue/vue-clickaway.min.js"></script>
 <script src="<?php echo FACETWP_URL; ?>/assets/vendor/vue/vue-select/vue-select.js"></script>
-<script src="<?php echo FACETWP_URL; ?>/assets/vendor/font-awesome/solid.js?ver=<?php echo FACETWP_VERSION; ?>"></script>
-<script src="<?php echo FACETWP_URL; ?>/assets/vendor/font-awesome/fontawesome.min.js?ver=<?php echo FACETWP_VERSION; ?>"></script>
 <script src="<?php echo FACETWP_URL; ?>/assets/js/src/event-manager.js?ver=<?php echo FACETWP_VERSION; ?>"></script>
 <script src="<?php echo FACETWP_URL; ?>/assets/vendor/fSelect/fSelect.js?ver=<?php echo FACETWP_VERSION; ?>"></script>
 <script src="<?php echo FACETWP_URL; ?>/assets/vendor/vanilla-picker-mini/vanilla-picker-mini.min.js?ver=<?php echo FACETWP_VERSION; ?>"></script>
@@ -65,6 +69,7 @@ window.FWP = {
     },
     data: <?php echo json_encode( $data ); ?>,
     i18n: <?php echo json_encode( $i18n ); ?>,
+    svg: <?php echo json_encode( $svg_icons ); ?>,
     image_sizes: <?php echo json_encode( $image_sizes ); ?>,
     clone: <?php echo json_encode( $facet_clone ); ?>,
     facet_types: <?php echo json_encode( $facet_types ); ?>,
@@ -99,7 +104,7 @@ FWP.data.settings = FWP.hooks.applyFilters('facetwp/load_settings', FWP.data.set
         <span class="facetwp-actions">
             <div class="btn-split facetwp-rebuild">
                 <div class="btn-label" @click="rebuildAction" v-html="indexButtonLabel"><?php _e( 'Re-index', 'fwp' ); ?></div>
-                <div class="btn-caret" @click="is_rebuild_open = !is_rebuild_open"><i class="fas fa-caret-down"></i></div>
+                <div class="btn-caret" @click="is_rebuild_open = !is_rebuild_open"><?php echo $svg_icons['caret-down']; ?></div>
                 <div class="btn-dropdown" v-cloak v-show="is_rebuild_open">
                     <div class="dropdown-inner">
                         <div @click="showIndexerStats"><?php _e( 'Show indexer stats', 'fwp' ); ?></div>
@@ -186,12 +191,13 @@ FWP.data.settings = FWP.hooks.applyFilters('facetwp/load_settings', FWP.data.set
                 <?php foreach ( $tab['fields'] as $field_data ) : ?>
                 <div class="facetwp-row">
                     <div>
-                        <?php echo $field_data['label']; ?>
                         <?php if ( isset( $field_data['notes'] ) ) : ?>
                         <div class="facetwp-tooltip">
-                            <span class="icon-question">?</span>
+                            <?php echo $field_data['label']; ?>
                             <div class="facetwp-tooltip-content"><?php echo $field_data['notes']; ?></div>
                         </div>
+                        <?php else : ?>
+                        <?php echo $field_data['label']; ?>
                         <?php endif; ?>
                     </div>
                     <div><?php echo $field_data['html']; ?></div>
@@ -204,7 +210,7 @@ FWP.data.settings = FWP.hooks.applyFilters('facetwp/load_settings', FWP.data.set
         <!-- Support tab -->
 
         <div class="facetwp-region facetwp-region-support" :class="{ active: active_tab == 'support' }">
-            <div v-if="is_support_loaded" v-html="support_html"></div>
+            <div v-if="is_support_loaded" v-html="FWP.support_html"></div>
         </div>
 
         <!-- Copy to clipboard -->

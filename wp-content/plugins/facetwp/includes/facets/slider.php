@@ -114,7 +114,7 @@ class FacetWP_Facet_Slider extends FacetWP_Facet
     function front_scripts() {
         FWP()->display->assets['nouislider.css'] = FACETWP_URL . '/assets/vendor/noUiSlider/nouislider.css';
         FWP()->display->assets['nouislider.js'] = FACETWP_URL . '/assets/vendor/noUiSlider/nouislider.min.js';
-        FWP()->display->assets['nummy.js'] = FACETWP_URL . '/assets/js/src/nummy.js';
+        FWP()->display->assets['nummy.js'] = FACETWP_URL . '/assets/vendor/nummy/nummy.min.js';
     }
 
 
@@ -135,8 +135,6 @@ class FacetWP_Facet_Slider extends FacetWP_Facet
             <div>
                 <data-sources
                     :facet="facet"
-                    :selected="facet.source_other"
-                    :sources="$root.data_sources"
                     settingName="source_other">
                 </data-sources>
             </div>

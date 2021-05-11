@@ -41,12 +41,9 @@ class FacetWP_Integration_EDD
      * @since 2.4
      */
     function exclude_data_sources( $sources ) {
-        $prefixes = [ '_edd_discount', '_edd_log', '_edd_payment' ];
         foreach ( $sources['custom_fields']['choices'] as $key => $val ) {
-            foreach ( $prefixes as $prefix ) {
-                if ( 0 === strpos( $val, $prefix ) ) {
-                    unset( $sources['custom_fields']['choices'][ $key ] );
-                }
+            if ( 0 === strpos( $val, '_edd_' ) ) {
+                unset( $sources['custom_fields']['choices'][ $key ] );
             }
         }
 

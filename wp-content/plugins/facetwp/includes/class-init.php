@@ -59,6 +59,7 @@ class FacetWP_Init
         include( FACETWP_DIR . '/includes/integrations/woocommerce/woocommerce.php' );
         include( FACETWP_DIR . '/includes/integrations/edd/edd.php' );
         include( FACETWP_DIR . '/includes/integrations/acf/acf.php' );
+        include( FACETWP_DIR . '/includes/integrations/wp-cli/wp-cli.php' );
 
         // update checks
         include( FACETWP_DIR . '/includes/class-updater.php' );

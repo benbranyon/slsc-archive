@@ -71,7 +71,15 @@ class FacetWP_Overrides
      * Ignore certain post types
      */
     function ignore_post_types( $is_main_query, $query ) {
-        $blacklist = [ 'carts', 'advanced_ads', 'ms_relationship', 'wc_user_membership', 'edd_wish_list' ];
+        $blacklist = [
+            'carts',
+            'advanced_ads',
+            'ms_relationship',
+            'wc_user_membership',
+            'edd_wish_list',
+            'acf-field-group',
+            'acf-field'
+        ];
         $post_type = $query->get( 'post_type' );
 
         if ( is_string( $post_type ) && in_array( $post_type, $blacklist ) ) {

@@ -350,6 +350,10 @@
         else if (40 == e.which) { // down
             e.preventDefault();
 
+            if ($wrap.hasClass('fs-wrap')) {
+                $wrap.find('.fs-search input').focus();
+            }
+
             var $current = $wrap.find('.fs-option[data-index=' + window.fSelect.idx + ']');
             if ($current.length < 1) {
                 var $next = $wrap.find('.fs-option:not(.hidden, .disabled):first');
@@ -421,12 +425,7 @@
             $wrap = window.fSelect.active_el;
         }
         if ('undefined' !== typeof $wrap) {
-            // only trigger if the values have changed
-            var initial_values = window.fSelect.initial_values;
-            var current_values = $wrap.find('select').val();
-            if (JSON.stringify(initial_values) != JSON.stringify(current_values)) {
-                $(document).trigger('fs:closed', $wrap);
-            }
+            $(document).trigger('fs:closed', $wrap);
         }
 
         $('.fs-wrap').removeClass('fs-open');
@@ -435,5 +434,8 @@
         window.fSelect.active_id = null;
         window.fSelect.last_choice = null;
     }
+
+    window.fSelect.openDropdown = openDropdown;
+    window.fSelect.closeDropdown = closeDropdown;
 
 })(jQuery);

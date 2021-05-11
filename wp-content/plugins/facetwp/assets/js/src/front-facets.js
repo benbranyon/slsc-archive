@@ -9,6 +9,22 @@
         return val === $(this).attr('placeholder') ? '' : val;
     }
 
+    /* ======== Support duplicate facets ======== */
+
+    $('.facetwp-facet').each(function() {
+
+        // jQuery doesn't support useCapture, so add the event listeners manually
+        // useCapture handles outer elements first (unlike event bubbling)
+        this.addEventListener('click', function() {
+            var $items = $('.facetwp-facet-' + $(this).data('name'));
+            if (1 < $items.length) {
+                $items.addClass('facetwp-ignore');
+                $(this).removeClass('facetwp-ignore');
+            }
+            FWP.active_facet = $(this);
+        }, true);
+    });
+
     /* ======== Autocomplete ======== */
 
     FWP.hooks.addAction('facetwp/refresh/autocomplete', function($this, facet_name) {
@@ -74,13 +90,16 @@
     FWP.hooks.addFilter('facetwp/selections/checkboxes', function(output, params) {
         var choices = [];
         $.each(params.selected_values, function(idx, val) {
-            var choice = params.el.find('.facetwp-checkbox[data-value="' + val + '"]').clone();
-            choice.find('.facetwp-counter').remove();
-            choice.find('.facetwp-expand').remove();
-            choices.push({
-                value: val,
-                label: choice.text()
-            });
+            var $item = params.el.find('.facetwp-checkbox[data-value="' + val + '"]');
+            if (0 < $item.length) {
+                var choice = $item.clone();
+                choice.find('.facetwp-counter').remove();
+                choice.find('.facetwp-expand').remove();
+                choices.push({
+                    value: val,
+                    label: choice.text()
+                });
+            }
         });
         return choices;
     });
@@ -216,42 +235,48 @@
     });
 
     $(document).on('facetwp-loaded', function() {
-        var $dates = $('.facetwp-type-date_range .facetwp-date:not(".ready, .flatpickr-alt")');
+        var $dates = $('.facetwp-type-date_range .facetwp-date:not(.ready)');
 
         if (0 === $dates.length) {
             return;
         }
 
-        var flatpickr_opts = {
-            altInput: true,
-            altInputClass: 'flatpickr-alt',
-            altFormat: 'Y-m-d',
-            disableMobile: true,
-            locale: FWP_JSON.datepicker.locale,
-            onChange: function() {
-                FWP.autoload();
-            },
-            onReady: function(dateObj, dateStr, instance) {
-                var clearBtn = '<div class="flatpickr-clear">' + FWP_JSON.datepicker.clearText + '</div>';
-                $(clearBtn).on('click', function() {
-                        instance.clear();
-                        instance.close();
-                })
-                .appendTo($(instance.calendarContainer));
-            }
-        };
-
         $dates.each(function() {
             var $this = $(this);
             var facet_name = $this.closest('.facetwp-facet').attr('data-name');
-            flatpickr_opts.altFormat = FWP.settings[facet_name].format;
+            var settings = FWP.settings[facet_name];
+            var opts = {
+                onChange: function(obj) {
+                    FWP.autoload();
+                }
+            };
 
-            var opts = FWP.hooks.applyFilters('facetwp/set_options/date_range', flatpickr_opts, {
+            if ('' !== settings.locale) {
+                opts.i18n = settings.locale;
+            }
+
+            if ('' !== settings.format) {
+                opts.altFormat = settings.format;
+            }
+
+            if ('both' == settings.fields) {
+                var which = $this.hasClass('facetwp-date-min') ? 'min' : 'max';
+                opts.minDate = settings.range[which].minDate;
+                opts.maxDate = settings.range[which].maxDate;
+            }
+            else {
+                opts.minDate = settings.range.minDate;
+                opts.maxDate = settings.range.maxDate;
+            }      
+
+            opts = FWP.hooks.applyFilters('facetwp/set_options/date_range', opts, {
                 'facet_name': facet_name,
                 'element': $this
             });
-            new flatpickr(this, opts);
-            $this.addClass('ready');
+
+            $this.addClass('ready'); // add class before fDate()
+
+            new fDate(this, opts);
         });
     });
 
@@ -302,6 +327,18 @@
         return choices;
     });
 
+    FWP.hooks.addAction('facetwp/loaded', function() {
+        if (null !== FWP.active_facet) {
+            var $facet = FWP.active_facet;
+            if ('fselect' == $facet.attr('data-type')) {
+                var $fs = $facet.find('.fs-wrap');
+                if ($fs.hasClass('multiple')) {
+                    window.fSelect.openDropdown($fs);
+                }
+            }
+        }
+    });
+
     $(document).on('facetwp-loaded', function() {
         $('.facetwp-type-fselect select:not(.ready)').each(function() {
             var facet_name = $(this).closest('.facetwp-facet').attr('data-name');
@@ -325,31 +362,12 @@
         $('.fs-wrap.fs-disabled').removeClass('fs-disabled');
     });
 
-    $(document).on('fs:changed', function(e, wrap) {
-        var is_facet = $(wrap).closest('.facetwp-facet').length > 0;
-
-        if (is_facet && wrap.classList.contains('multiple')) {
-            var facet_name = $(wrap).closest('.facetwp-facet').attr('data-name');
-
-            if ('or' === FWP.settings[facet_name]['operator']) {
-                FWP.frozen_facets[facet_name] = 'soft';
-
-                // freeze choices
-                if (FWP.auto_refresh) {
-                    $(wrap).addClass('fs-disabled');
-                }
-            }
-
-            FWP.autoload();
-        }
+    $(document).on('fs:changed', function() {
+        FWP.autoload();
     });
 
-    $(document).on('fs:closed', function(e, wrap) {
-        var is_facet = $(wrap).closest('.facetwp-facet').length > 0;
-
-        if (is_facet && ! wrap.classList.contains('multiple')) {
-            FWP.autoload();
-        }
+    $(document).on('fs:closed', function() {
+        FWP.active_facet = null;
     });
 
     /* ======== Hierarchy ======== */

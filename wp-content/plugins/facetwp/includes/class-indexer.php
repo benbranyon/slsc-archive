@@ -173,6 +173,11 @@ class FacetWP_Indexer
             // Store the pre-index settings (see FacetWP_Diff)
             update_option( 'facetwp_settings_last_index', get_option( 'facetwp_settings' ), 'no' );
 
+            // PHP sessions are blocking, so close if active
+            if ( PHP_SESSION_ACTIVE === session_status() ) {
+                session_write_close();
+            }
+
             // Bypass the PHP timeout
             ini_set( 'max_execution_time', 0 );
 
@@ -189,26 +194,9 @@ class FacetWP_Indexer
                 // Create temp table
                 $this->manage_temp_table( 'create' );
             }
-
-            $args = [
-                'post_type'         => 'any',
-                'post_status'       => 'publish',
-                'posts_per_page'    => -1,
-                'fields'            => 'ids',
-                'orderby'           => 'ID',
-                'cache_results'     => false,
-                'no_found_rows'     => true,
-            ];
         }
         // Index a single post
         elseif ( is_int( $post_id ) ) {
-            $args = [
-                'p'                 => $post_id,
-                'post_type'         => 'any',
-                'post_status'       => 'publish',
-                'posts_per_page'    => 1,
-                'fields'            => 'ids',
-            ];
 
             // Clear table values
             $wpdb->query( "DELETE FROM {$this->table} WHERE post_id = $post_id" );
@@ -218,9 +206,6 @@ class FacetWP_Indexer
             return;
         }
 
-        // Control which posts to index
-        $args = apply_filters( 'facetwp_indexer_query_args', $args );
-
         // Resume indexing?
         $offset = isset( $_POST['offset'] ) ? (int) $_POST['offset'] : 0;
         $attempt = isset( $_POST['retries'] ) ? (int) $_POST['retries'] : 0;
@@ -229,9 +214,7 @@ class FacetWP_Indexer
             $post_ids = json_decode( get_option( 'facetwp_indexing' ), true );
         }
         else {
-            // Loop through all posts
-            $query = new WP_Query( $args );
-            $post_ids = (array) $query->posts;
+            $post_ids = $this->get_post_ids_to_index( $post_id );
 
             // Store post IDs
             if ( $this->index_all ) {
@@ -247,7 +230,7 @@ class FacetWP_Indexer
         $facets = FWP()->helper->get_facets();
 
         // Populate an array of facet value modifiers
-        $this->modifiers = $this->get_value_modifiers( $facets );
+        $this->load_value_modifiers( $facets );
 
         foreach ( $post_ids as $counter => $post_id ) {
 
@@ -291,59 +274,7 @@ class FacetWP_Indexer
                 $wpdb->query( "DELETE FROM {$this->table} WHERE post_id = $post_id" );
             }
 
-            // Force WPML to change the language
-            do_action( 'facetwp_indexer_post', [ 'post_id' => $post_id ] );
-
-            // Loop through all facets
-            foreach ( $facets as $facet ) {
-
-                // Do not index search facets
-                if ( 'search' == $facet['type'] ) {
-                    continue;
-                }
-
-                $this->facet = $facet;
-                $source = isset( $facet['source'] ) ? $facet['source'] : '';
-
-                // Set default index_row() params
-                $defaults = [
-                    'post_id'               => $post_id,
-                    'facet_name'            => $facet['name'],
-                    'facet_source'          => $source,
-                    'facet_value'           => '',
-                    'facet_display_value'   => '',
-                    'term_id'               => 0,
-                    'parent_id'             => 0,
-                    'depth'                 => 0,
-                    'variation_id'          => 0,
-                ];
-
-                $defaults = apply_filters( 'facetwp_indexer_post_facet_defaults', $defaults, [
-                    'facet' => $facet
-                ] );
-
-                // Set flag for custom handling
-                $this->is_overridden = true;
-
-                // Bypass default indexing
-                $bypass = apply_filters( 'facetwp_indexer_post_facet', false, [
-                    'defaults'  => $defaults,
-                    'facet'     => $facet
-                ] );
-
-                if ( $bypass ) {
-                    continue;
-                }
-
-                $this->is_overridden = false;
-
-                // Get rows to insert
-                $rows = $this->get_row_data( $defaults );
-
-                foreach ( $rows as $row ) {
-                    $this->index_row( $row );
-                }
-            }
+            $this->index_post( $post_id, $facets );
         }
 
         // Indexing complete
@@ -358,6 +289,95 @@ class FacetWP_Indexer
         }
 
         do_action( 'facetwp_indexer_complete' );
+    }
+
+
+    /**
+     * Get an array of post IDs to index
+     * @since 3.6.8
+     */
+    function get_post_ids_to_index( $post_id = false ) {
+        $args = [
+            'post_type'         => 'any',
+            'post_status'       => 'publish',
+            'posts_per_page'    => -1,
+            'fields'            => 'ids',
+            'orderby'           => 'ID',
+            'cache_results'     => false,
+            'no_found_rows'     => true,
+        ];
+
+        if ( is_int( $post_id ) ) {
+            $args['p'] = $post_id;
+            $args['posts_per_page'] = 1;
+        }
+
+        $args = apply_filters( 'facetwp_indexer_query_args', $args );
+
+        $query = new WP_Query( $args );
+        return (array) $query->posts;
+    }
+
+
+    /**
+     * Index an individual post
+     * @since 3.6.8
+     */
+    function index_post( $post_id, $facets ) {
+
+        // Force WPML to change the language
+        do_action( 'facetwp_indexer_post', [ 'post_id' => $post_id ] );
+
+        // Loop through all facets
+        foreach ( $facets as $facet ) {
+
+            // Do not index search facets
+            if ( 'search' == $facet['type'] ) {
+                continue;
+            }
+
+            $this->facet = $facet;
+            $source = isset( $facet['source'] ) ? $facet['source'] : '';
+
+            // Set default index_row() params
+            $defaults = [
+                'post_id'               => $post_id,
+                'facet_name'            => $facet['name'],
+                'facet_source'          => $source,
+                'facet_value'           => '',
+                'facet_display_value'   => '',
+                'term_id'               => 0,
+                'parent_id'             => 0,
+                'depth'                 => 0,
+                'variation_id'          => 0,
+            ];
+
+            $defaults = apply_filters( 'facetwp_indexer_post_facet_defaults', $defaults, [
+                'facet' => $facet
+            ] );
+
+            // Set flag for custom handling
+            $this->is_overridden = true;
+
+            // Bypass default indexing
+            $bypass = apply_filters( 'facetwp_indexer_post_facet', false, [
+                'defaults'  => $defaults,
+                'facet'     => $facet
+            ] );
+
+            if ( $bypass ) {
+                continue;
+            }
+
+            $this->is_overridden = false;
+
+            // Get rows to insert
+            $rows = $this->get_row_data( $defaults );
+
+            foreach ( $rows as $row ) {
+                $this->index_row( $row );
+            }
+        }
     }
 
 
@@ -636,7 +656,7 @@ class FacetWP_Indexer
      * Populate an array of facet value modifiers (defined in the admin UI)
      * @since 3.5.6
      */
-    function get_value_modifiers( $facets ) {
+    function load_value_modifiers( $facets ) {
         $output = [];
 
         foreach ( $facets as $facet ) {
@@ -650,6 +670,6 @@ class FacetWP_Indexer
             }
         }
 
-        return $output;
+        $this->modifiers = $output;
     }
 }

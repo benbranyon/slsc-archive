@@ -80,6 +80,11 @@ class FacetWP_Renderer
             $facet = FWP()->helper->get_facet_by_name( $name );
             if ( $facet ) {
 
+                // Default to "OR" mode
+                if ( ! isset( $facet['operator'] ) ) {
+                    $facet['operator'] = 'or';
+                }
+
                 // Support the "facetwp_preload_url_vars" hook
                 if ( $first_load && empty( $f['selected_values'] ) && ! empty( $this->http_params['url_vars'][ $name ] ) ) {
                     $f['selected_values'] = $this->http_params['url_vars'][ $name ];
@@ -132,8 +137,11 @@ class FacetWP_Renderer
 
             // Update the SQL query
             if ( ! empty( $post_ids ) ) {
-                $this->query_args['post__in'] = $post_ids;
-                $this->where_clause = " AND post_id IN (" . implode( ',', $post_ids ) . ")";
+                if ( FWP()->is_filtered ) {
+                    $this->query_args['post__in'] = $post_ids;
+                }
+
+                $this->where_clause = ' AND post_id IN (' . implode( ',', $post_ids ) . ')';
             }
 
             // Sort handler
@@ -149,7 +157,8 @@ class FacetWP_Renderer
 
             // Sort the results by relevancy
             $use_relevancy = apply_filters( 'facetwp_use_search_relevancy', true, $this );
-            if ( $this->is_search && $use_relevancy && 'default' == $sort_value && empty( $this->http_params['get']['orderby'] ) ) {
+            $is_default_sort = ( 'default' == $sort_value && empty( $this->http_params['get']['orderby'] ) );
+            if ( $this->is_search && $use_relevancy && $is_default_sort && FWP()->is_filtered ) {
                 $this->query_args['orderby'] = 'post__in';
             }
 
@@ -388,6 +397,7 @@ class FacetWP_Renderer
             'cache_results' => false,
             'no_found_rows' => true,
             'nopaging' => true, // prevent "offset" issues
+            'facetwp' => false,
             'fields' => 'ids',
         ] );
 
@@ -462,10 +472,16 @@ class FacetWP_Renderer
             $post_ids = $intersected_ids;
         }
 
-        // Return a zero array if no matches
-        $post_ids = empty( $post_ids ) ? [ 0 ] : array_values( $post_ids );
+        $post_ids = apply_filters( 'facetwp_filtered_post_ids', array_values( $post_ids ), $this );
 
-        return apply_filters( 'facetwp_filtered_post_ids', $post_ids, $this );
+        // Store the filtered post IDs
+        FWP()->filtered_post_ids = $post_ids;
+
+        // Set a flag for whether filtering is applied
+        FWP()->is_filtered = ( FWP()->filtered_post_ids !== FWP()->unfiltered_post_ids );
+
+        // Return a zero array if no matches
+        return empty( $post_ids ) ? [ 0 ] : $post_ids;
     }
 
 
@@ -638,6 +654,7 @@ class FacetWP_Renderer
      */
     function get_per_page_box() {
         $pager_class = FWP()->helper->facet_types['pager'];
+        $pager_class->pager_args = $this->pager_args;
 
         $options = apply_filters( 'facetwp_per_page_options', [ 10, 25, 50, 100 ] );
 

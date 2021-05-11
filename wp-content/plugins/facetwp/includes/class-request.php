@@ -41,6 +41,11 @@ class FacetWP_Request
         $prefix = FWP()->helper->get_setting( 'prefix' );
         $is_css_tpl = isset( $_POST['data']['template'] ) && 'wp' == $_POST['data']['template'];
 
+        // Disable the admin bar to prevent JSON issues
+        if ( $this->is_refresh ) {
+            add_filter( 'show_admin_bar', '__return_false' );
+        }
+
         // Pageload
         if ( $this->is_preload ) {
             $features = [ 'paged', 'per_page', 'sort' ];
@@ -72,7 +77,7 @@ class FacetWP_Request
         }
 
         if ( $this->is_preload || $is_css_tpl ) {
-            add_filter( 'posts_pre_query', [ $this, 'abort_query' ], 10, 2 );
+            add_filter( 'posts_pre_query', [ $this, 'maybe_abort_query' ], 10, 2 );
             add_action( 'pre_get_posts', [ $this, 'sacrificial_lamb' ], 998 );
             add_action( 'pre_get_posts', [ $this, 'update_query_vars' ], 999 );
         }
@@ -89,15 +94,26 @@ class FacetWP_Request
      * This hook prevents the query from running twice, by letting us inject the
      * first query's posts (and counts) into the "main" query.
      */
-    function abort_query( $posts, $query ) {
+    function maybe_abort_query( $posts, $query ) {
         $do_abort = apply_filters( 'facetwp_archive_abort_query', true, $query );
-        $is_main_query = ( true === $query->get( 'facetwp', false ) );
         $has_query_run = ( ! empty( FWP()->facet->query ) );
 
-        if ( $do_abort && $is_main_query && $has_query_run ) {
-            $posts = FWP()->facet->query->posts;
-            $query->found_posts = FWP()->facet->query->found_posts;
-            $query->max_num_pages = FWP()->facet->query->max_num_pages;
+        if ( $do_abort && $has_query_run && isset( $this->query_vars ) ) {
+
+            // New var; any changes to $query will cause is_main_query() to return false
+            $query_vars = $query->query_vars;
+
+            // If paged = 0, set to 1 or the compare will fail
+            if ( empty( $query_vars['paged'] ) ) {
+                $query_vars['paged'] = 1;
+            }
+
+            // Only intercept the identical query
+            if ( $query_vars === $this->query_vars ) {
+                $posts = FWP()->facet->query->posts;
+                $query->found_posts = FWP()->facet->query->found_posts;
+                $query->max_num_pages = FWP()->facet->query->max_num_pages;
+            }
         }
 
         return $posts;
@@ -116,54 +132,61 @@ class FacetWP_Request
      */
     function update_query_vars( $query ) {
 
-        // Only run once
-        if ( isset( $this->query_vars ) ) {
+        if ( isset( $this->query_vars )                     // Ran already
+            || $this->is_shortcode                          // Skip shortcode template
+            || ( is_admin() && ! wp_doing_ajax() )          // Skip admin
+            || ( wp_doing_ajax() && ! $this->is_refresh )   // Skip other ajax
+            || ! $this->is_main_query( $query )             // Not the main query
+        ) {
             return;
         }
 
-        // Skip shortcode template
-        if ( $this->is_shortcode ) {
-            return;
+        // Set the flag
+        $query->set( 'facetwp', true );
+
+        // If "s" is an empty string and no post_type is set, WP sets
+        // post_type = "any". We want to prevent this except on the search page.
+        if ( '' == $query->get( 's' ) && ! isset( $_GET['s'] ) ) {
+            $query->set( 's', null );
         }
 
-        // Skip admin
-        if ( is_admin() && ! wp_doing_ajax() ) {
-            return;
+        // Set the initial query vars, needed for render()
+        $this->query_vars = $query->query_vars;
+
+        // Notify
+        do_action( 'facetwp_found_main_query' );
+
+        // Generate the FWP output
+        $data = ( $this->is_preload ) ? $this->process_preload_data() : $this->process_post_data();
+        $this->output = FWP()->facet->render( $data );
+
+        // Set the updated query vars, needed for maybe_abort_query()
+        $this->query_vars = FWP()->facet->query->query_vars;
+
+        // Set the updated query vars
+        $force_query = apply_filters( 'facetwp_preload_force_query', false, $query );
+
+        if ( ! $this->is_preload || ! empty( $this->url_vars ) || $force_query ) {
+            $query->query_vars = FWP()->facet->query_args;
         }
 
-        $is_main_query = ( $query->is_archive || $query->is_search || ( $query->is_main_query() && ! $query->is_singular ) );
-        $is_main_query = ( true === $query->get( 'suppress_filters', false ) ) ? false : $is_main_query; // skip get_posts()
-        $is_main_query = ( wp_doing_ajax() && ! $this->is_refresh ) ? false : $is_main_query; // skip other ajax
-        $is_main_query = ( $query->is_feed ) ? false : $is_main_query; // skip feeds
+        if ( 'product_query' == $query->get( 'wc_query' ) ) {
+            wc_set_loop_prop( 'total', FWP()->facet->pager_args['total_rows'] );
+            wc_set_loop_prop( 'total_pages', FWP()->facet->pager_args['total_pages'] );
+            wc_set_loop_prop( 'current_page', FWP()->facet->pager_args['page'] );
+        }
+    }
+
+
+    /**
+     * Is this the main query?
+     */
+    function is_main_query( $query ) {
+        $is_main_query = ( $query->is_main_query() || $query->is_archive );
+        $is_main_query = ( $query->is_singular || $query->is_feed ) ? false : $is_main_query;
+        $is_main_query = ( $query->get( 'suppress_filters', false ) ) ? false : $is_main_query; // skip get_posts()
         $is_main_query = ( '' !== $query->get( 'facetwp' ) ) ? (bool) $query->get( 'facetwp' ) : $is_main_query; // flag
-        $is_main_query = apply_filters( 'facetwp_is_main_query', $is_main_query, $query );
-
-        if ( $is_main_query ) {
-
-            // Set the flag
-            $query->set( 'facetwp', true );
-
-            // Store the default WP query vars
-            $this->query_vars = $query->query_vars;
-
-            // Notify
-            do_action( 'facetwp_found_main_query' );
-
-            // Generate the FWP output
-            $data = ( $this->is_preload ) ? $this->process_preload_data() : $this->process_post_data();
-            $this->output = FWP()->facet->render( $data );
-
-            // Set the updated query vars
-            if ( ! $this->is_preload || ! empty( $this->url_vars ) ) {
-                $query->query_vars = FWP()->facet->query_args;
-            }
-
-            if ( 'product_query' == $query->get( 'wc_query' ) ) {
-                wc_set_loop_prop( 'total', FWP()->facet->pager_args['total_rows'] );
-                wc_set_loop_prop( 'total_pages', FWP()->facet->pager_args['total_pages'] );
-                wc_set_loop_prop( 'current_page', FWP()->facet->pager_args['page'] );
-            }
-        }
+        return apply_filters( 'facetwp_is_main_query', $is_main_query, $query );
     }
 
 

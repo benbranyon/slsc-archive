@@ -143,7 +143,7 @@ class FacetWP_Display
 
             // Populate the FWP_JSON object
             $this->json['prefix'] = FWP()->helper->get_setting( 'prefix' );
-            $this->json['no_results_text'] = __( 'No results found', 'fwp' );
+            $this->json['no_results_text'] = __( 'No results found', 'fwp-front' );
             $this->json['ajaxurl'] = get_rest_url() . 'facetwp/v1/refresh';
             $this->json['nonce'] = wp_create_nonce( 'wp_rest' );
 

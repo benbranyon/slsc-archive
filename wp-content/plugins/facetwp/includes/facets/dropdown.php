@@ -12,33 +12,7 @@ class FacetWP_Facet_Dropdown extends FacetWP_Facet
      * Load the available choices
      */
     function load_values( $params ) {
-        global $wpdb;
-
-        $facet = $params['facet'];
-        $from_clause = $wpdb->prefix . 'facetwp_index f';
-
-        // Facet in "OR" mode
-        $where_clause = $this->get_where_clause( $facet );
-
-        // Orderby
-        $orderby = $this->get_orderby( $facet );
-
-        $orderby = apply_filters( 'facetwp_facet_orderby', $orderby, $facet );
-        $from_clause = apply_filters( 'facetwp_facet_from', $from_clause, $facet );
-        $where_clause = apply_filters( 'facetwp_facet_where', $where_clause, $facet );
-
-        // Limit
-        $limit = $this->get_limit( $facet, 20 );
-
-        $sql = "
-        SELECT f.facet_value, f.facet_display_value, f.term_id, f.parent_id, f.depth, COUNT(DISTINCT f.post_id) AS counter
-        FROM $from_clause
-        WHERE f.facet_name = '{$facet['name']}' $where_clause
-        GROUP BY f.facet_value
-        ORDER BY $orderby
-        LIMIT $limit";
-
-        return $wpdb->get_results( $sql, ARRAY_A );
+        return FWP()->helper->facet_types['checkboxes']->load_values( $params );
     }
 
 
@@ -90,16 +64,7 @@ class FacetWP_Facet_Dropdown extends FacetWP_Facet
      * Filter the query based on selected values
      */
     function filter_posts( $params ) {
-        global $wpdb;
-
-        $facet = $params['facet'];
-        $selected_values = $params['selected_values'];
-        $selected_values = is_array( $selected_values ) ? $selected_values[0] : $selected_values;
-
-        $sql = "
-        SELECT DISTINCT post_id FROM {$wpdb->prefix}facetwp_index
-        WHERE facet_name = '{$facet['name']}' AND facet_value IN ('$selected_values')";
-        return facetwp_sql( $sql, $facet );
+        return FWP()->helper->facet_types['checkboxes']->filter_posts( $params );
     }
 
 

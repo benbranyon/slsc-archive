@@ -168,16 +168,7 @@ class FacetWP_Facet_Hierarchy extends FacetWP_Facet
      * Filter the query based on selected values
      */
     function filter_posts( $params ) {
-        global $wpdb;
-
-        $facet = $params['facet'];
-        $selected_values = $params['selected_values'];
-        $selected_values = implode( "','", $selected_values );
-
-        $sql = "
-        SELECT DISTINCT post_id FROM {$wpdb->prefix}facetwp_index
-        WHERE facet_name = '{$facet['name']}' AND facet_value IN ('$selected_values')";
-        return facetwp_sql( $sql, $facet );
+        return FWP()->helper->facet_types['checkboxes']->filter_posts( $params );
     }
 
 

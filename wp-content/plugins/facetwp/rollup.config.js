@@ -12,9 +12,6 @@ export default [{
         file: 'assets/js/dist/front.min.js',
         format: 'iife'
     },
-    watch: {
-        include: 'assets/js/src/**'
-    },
     plugins: [
         multiEntry(),
         terser()
@@ -26,10 +23,29 @@ export default [{
         file: 'assets/js/dist/admin.min.js',
         format: 'iife'
     },
-    watch: {
-        include: 'assets/js/src/admin.js'
-    },
     plugins: [
         buble()
+    ]
+},
+{
+    input: 'assets/vendor/fDate/fDate.js',
+    output: {
+        file: 'assets/vendor/fDate/fDate.min.js',
+        format: 'iife'
+    },
+    plugins: [
+        buble(),
+        terser()
+    ]
+},
+{
+    input: 'assets/vendor/nummy/nummy.js',
+    output: {
+        file: 'assets/vendor/nummy/nummy.min.js',
+        format: 'iife'
+    },
+    plugins: [
+        buble(),
+        terser()
     ]
 }]

@@ -24,8 +24,12 @@ class FacetWP_Facet_Checkboxes extends FacetWP_Facet
         // Limit
         $limit = $this->get_limit( $facet );
 
+        // Use "OR" mode when necessary
+        $is_single = FWP()->helper->facet_is( $facet, 'multiple', 'no' );
+        $using_or = FWP()->helper->facet_is( $facet, 'operator', 'or' );
+
         // Facet in "OR" mode
-        if ( 'or' == $facet['operator'] ) {
+        if ( $is_single || $using_or ) {
             $where_clause = $this->get_where_clause( $facet );
         }
 
@@ -46,9 +50,8 @@ class FacetWP_Facet_Checkboxes extends FacetWP_Facet
         // Show "ghost" facet choices
         // For performance gains, only run if facets are in use
         $show_ghosts = FWP()->helper->facet_is( $facet, 'ghosts', 'yes' );
-        $is_filtered = FWP()->unfiltered_post_ids !== FWP()->facet->query_args['post__in'];
 
-        if ( $show_ghosts && $is_filtered && ! empty( FWP()->unfiltered_post_ids ) ) {
+        if ( $show_ghosts && FWP()->is_filtered ) {
             $raw_post_ids = implode( ',', FWP()->unfiltered_post_ids );
 
             $sql = "

@@ -24,21 +24,23 @@ class FacetWP_Updater
         $active_plugins = get_option( 'active_plugins', [] );
 
         foreach ( $active_plugins as $plugin_path ) {
-            $info = $plugins[ $plugin_path ];
-            $github = isset( $info['GitHub URI'] ) ? $info['GitHub URI'] : '';
-            $slug = trim( dirname( $plugin_path ), '/' );
+            if ( isset( $plugins[ $plugin_path ] ) ) {
+                $info = $plugins[ $plugin_path ];
+                $github = isset( $info['GitHub URI'] ) ? $info['GitHub URI'] : '';
+                $slug = trim( dirname( $plugin_path ), '/' );
 
-            // only intercept FacetWP and its add-ons
-            $is_valid = in_array( $slug, [ 'facetwp', 'user-post-type' ] );
-            $is_valid = ( 0 === strpos( $github, 'facetwp/' ) ) ? true : $is_valid;
+                // only intercept FacetWP and its add-ons
+                $is_valid = in_array( $slug, [ 'facetwp', 'user-post-type' ] );
+                $is_valid = ( 0 === strpos( $github, 'facetwp/' ) ) ? true : $is_valid;
 
-            if ( $is_valid ) {
-                $output[ $slug ] = [
-                    'name' => $info['Name'],
-                    'version' => $info['Version'],
-                    'description' => $info['Description'],
-                    'plugin_path' => $plugin_path,
-                ];
+                if ( $is_valid ) {
+                    $output[ $slug ] = [
+                        'name' => $info['Name'],
+                        'version' => $info['Version'],
+                        'description' => $info['Description'],
+                        'plugin_path' => $plugin_path,
+                    ];
+                }
             }
         }
 

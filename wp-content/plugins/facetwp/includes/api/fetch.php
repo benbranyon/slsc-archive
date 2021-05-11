@@ -82,15 +82,14 @@ class FacetWP_API_Fetch
         $post_ids = FWP()->facet->get_filtered_post_ids();
 
         // SQL WHERE used by facets
-        $where_clause = empty( $post_ids ) ? '' : "AND post_id IN (" . implode( ',', $post_ids ) . ")";
+        $where_clause = ' AND post_id IN (' . implode( ',', $post_ids ) . ')';
 
         // Check if empty
         if ( 0 === $post_ids[0] && 1 === count( $post_ids ) ) {
             $post_ids = [];
         }
 
-        // Set necessary vars (keep this BELOW the empty check)
-        FWP()->facet->query_args['post__in'] = $post_ids;
+        // get_where_clause() needs "found_posts" (keep this BELOW the empty check)
         FWP()->facet->query = (object) [ 'found_posts' => count( $post_ids ) ];
 
         // Get valid facets and their values

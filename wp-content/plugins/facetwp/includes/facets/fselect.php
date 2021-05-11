@@ -12,92 +12,7 @@ class FacetWP_Facet_fSelect extends FacetWP_Facet
      * Load the available choices
      */
     function load_values( $params ) {
-        global $wpdb;
-
-        $facet = $params['facet'];
-        $from_clause = $wpdb->prefix . 'facetwp_index f';
-        $where_clause = $params['where_clause'];
-
-        // Preserve options for single-select or when in "OR" mode
-        $is_single = FWP()->helper->facet_is( $facet, 'multiple', 'no' );
-        $using_or = FWP()->helper->facet_is( $facet, 'operator', 'or' );
-
-        if ( $is_single || $using_or ) {
-            $where_clause = $this->get_where_clause( $facet );
-        }
-
-        // Orderby
-        $orderby = $this->get_orderby( $facet );
-
-        // Limit
-        $limit = $this->get_limit( $facet );
-
-        $orderby = apply_filters( 'facetwp_facet_orderby', $orderby, $facet );
-        $from_clause = apply_filters( 'facetwp_facet_from', $from_clause, $facet );
-        $where_clause = apply_filters( 'facetwp_facet_where', $where_clause, $facet );
-
-        $sql = "
-        SELECT f.facet_value, f.facet_display_value, f.term_id, f.parent_id, f.depth, COUNT(DISTINCT f.post_id) AS counter
-        FROM $from_clause
-        WHERE f.facet_name = '{$facet['name']}' $where_clause
-        GROUP BY f.facet_value
-        ORDER BY $orderby
-        LIMIT $limit";
-
-        $output = $wpdb->get_results( $sql, ARRAY_A );
-
-        // Show "ghost" facet choices
-        // For performance gains, only run if facets are in use
-        $show_ghosts = FWP()->helper->facet_is( $facet, 'ghosts', 'yes' );
-        $is_filtered = FWP()->unfiltered_post_ids !== FWP()->facet->query_args['post__in'];
-
-        if ( $show_ghosts && $is_filtered && ! empty( FWP()->unfiltered_post_ids ) ) {
-            $raw_post_ids = implode( ',', FWP()->unfiltered_post_ids );
-
-            $sql = "
-            SELECT f.facet_value, f.facet_display_value, f.term_id, f.parent_id, f.depth, 0 AS counter
-            FROM $from_clause
-            WHERE f.facet_name = '{$facet['name']}' AND post_id IN ($raw_post_ids)
-            GROUP BY f.facet_value
-            ORDER BY $orderby
-            LIMIT $limit";
-
-            $ghost_output = $wpdb->get_results( $sql, ARRAY_A );
-
-            // Keep the facet placement intact
-            if ( FWP()->helper->facet_is( $facet, 'preserve_ghosts', 'yes' ) ) {
-                $tmp = [];
-                foreach ( $ghost_output as $row ) {
-                    $tmp[ $row['facet_value'] . ' ' ] = $row;
-                }
-
-                foreach ( $output as $row ) {
-                    $tmp[ $row['facet_value'] . ' ' ] = $row;
-                }
-
-                $output = $tmp;
-            }
-            else {
-                // Make the array key equal to the facet_value (for easy lookup)
-                $tmp = [];
-                foreach ( $output as $row ) {
-                    $tmp[ $row['facet_value'] . ' ' ] = $row; // Force a string array key
-                }
-                $output = $tmp;
-
-                foreach ( $ghost_output as $row ) {
-                    $facet_value = $row['facet_value'];
-                    if ( ! isset( $output[ "$facet_value " ] ) ) {
-                        $output[ "$facet_value " ] = $row;
-                    }
-                }
-            }
-
-            $output = array_splice( $output, 0, $limit );
-            $output = array_values( $output );
-        }
-
-        return $output;
+        return FWP()->helper->facet_types['checkboxes']->load_values( $params );
     }
 
 
@@ -123,7 +38,7 @@ class FacetWP_Facet_fSelect extends FacetWP_Facet
         $output .= '<option value="">' . esc_html( $label_any ) . '</option>';
 
         foreach ( $values as $result ) {
-            $selected = in_array( $result['facet_value'], $selected_values ) ? ' selected' : '';
+            $selected = in_array( $result['facet_value'], $selected_values, true ) ? ' selected' : '';
             $selected .= ( 0 == $result['counter'] && '' == $selected ) ? ' disabled' : '';
 
             // Determine whether to show counts
@@ -146,36 +61,7 @@ class FacetWP_Facet_fSelect extends FacetWP_Facet
      * Filter the query based on selected values
      */
     function filter_posts( $params ) {
-        global $wpdb;
-
-        $output = [];
-        $facet = $params['facet'];
-        $selected_values = $params['selected_values'];
-
-        $sql = $wpdb->prepare( "SELECT DISTINCT post_id
-            FROM {$wpdb->prefix}facetwp_index
-            WHERE facet_name = %s",
-            $facet['name']
-        );
-
-        // Match ALL values
-        if ( 'and' == $facet['operator'] ) {
-            foreach ( $selected_values as $key => $value ) {
-                $results = facetwp_sql( $sql . " AND facet_value IN ('$value')", $facet );
-                $output = ( $key > 0 ) ? array_intersect( $output, $results ) : $results;
-
-                if ( empty( $output ) ) {
-                    break;
-                }
-            }
-        }
-        // Match ANY value
-        else {
-            $selected_values = implode( "','", $selected_values );
-            $output = facetwp_sql( $sql . " AND facet_value IN ('$selected_values')", $facet );
-        }
-
-        return $output;
+        return FWP()->helper->facet_types['checkboxes']->filter_posts( $params );
     }
 
 
