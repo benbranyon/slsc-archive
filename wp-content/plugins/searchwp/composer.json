@@ -1,0 +1,7 @@
+{
+    "require": {
+        "monolog/monolog": "^1.24",
+        "smalot/pdfparser": "^0.14.0",
+        "wamania/php-stemmer": "^1.2"
+    }
+}

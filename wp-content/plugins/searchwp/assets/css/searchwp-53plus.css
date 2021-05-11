@@ -1,0 +1,13 @@
+body .searchwp-settings-advanced__stopwords-synonyms.postbox .inside.searchwp-settings-tab-actions,
+body .searchwp-settings-advanced__transfer.postbox .inside.searchwp-settings-tab-actions {
+	border-bottom-color: #eaeaea;
+}
+
+body .searchwp-engine-post-type {
+	border-color: #ccd0d4;
+}
+
+body .searchwp-input-text input {
+	padding-top: 2px;
+	padding-bottom: 3px;
+}
