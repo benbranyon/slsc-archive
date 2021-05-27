@@ -167,62 +167,71 @@ function seedprod_lite_lpage_datatable() {
 			$filter = null;
 		}
 
+		if ( ! empty( $filter ) ) {
+			$post_status_compare = "=";
+			if ( $filter == 'published' ) {
+				$post_status ="publish";
+			}
+			if ( $filter == 'drafts' ) {
+				$post_status ="draft" ;
+			}
+			if ( $filter == 'scheduled' ) {
+				$post_status ="future";
+			}
+			if ( $filter == 'archived' ) {
+				$post_status ="trash" ;
+			}
+		} else {
+			$post_status_compare = "!=";
+			$post_status = "trash";
+		}
+		$post_status_statement = ' post_status ' .  $post_status_compare . ' %s ';
+
+		if ( ! empty( $_GET['s'] ) ) {
+			$search_term = '%'.trim( sanitize_text_field( $_GET['s'] ) ).'%';
+		}
+
+		$order_by = 'id';
+		$order_by_direction = 'DESC';
+		if ( ! empty( $_GET['orderby'] ) ) {
+			$orderby = sanitize_text_field($_GET['orderby']);
+			if ( $orderby == 'date' ) {
+				$order_by = 'post_modified';
+			}
+
+			if ( $orderby == 'name' ) {
+				$order_by = 'post_title';
+			}
+
+			$direction = sanitize_text_field( $_GET['order']);
+			if ( $direction === 'desc' ) {
+				$order_by_direction = 'DESC';
+			} else {
+				$order_by_direction = 'ASC';
+			}
+		} 
+		$order_by_statement = 'ORDER BY '.$order_by.' '.$order_by_direction;
+
+		$offset = 0;
+		if ( empty( $_POST['s'] ) ) {
+			$offset = ( $current_page - 1 ) * $per_page;
+		}
+
 		// Get records
 		global $wpdb;
 		$tablename      = $wpdb->prefix . 'posts';
 		$meta_tablename = $wpdb->prefix . 'postmeta';
 
-		$sql = "SELECT * FROM $tablename p LEFT JOIN $meta_tablename pm ON (pm.post_id = p.ID)";
-
-		$sql .= ' WHERE 1 = 1 AND post_type = "page" AND meta_key = "_seedprod_page"';
-
-		if ( ! empty( $filter ) ) {
-			if ( esc_sql( $filter ) == 'published' ) {
-				$sql .= ' AND  post_status = "publish" ';
-			}
-			if ( esc_sql( $filter ) == 'drafts' ) {
-				$sql .= ' AND  post_status = "draft" ';
-			}
-			if ( esc_sql( $filter ) == 'scheduled' ) {
-				$sql .= ' AND  post_status = "future" ';
-			}
-			if ( esc_sql( $filter ) == 'archived' ) {
-				$sql .= ' AND  post_status = "trash" ';
-			}
-		} else {
-			$sql .= 'AND post_status != "trash"';
+		if(empty( $_GET['s'] )){
+            $sql = 'SELECT * FROM '.$tablename.' p LEFT JOIN '.$meta_tablename.' pm ON (pm.post_id = p.ID) WHERE post_type = "page" AND meta_key = "_seedprod_page" AND ' .$post_status_statement.' '.$order_by_statement.' LIMIT %d OFFSET %d';
+			$safe_sql = $wpdb->prepare( $sql, $post_status, $per_page, $offset);
+        }else{
+			$sql = 'SELECT * FROM '.$tablename.' p LEFT JOIN '.$meta_tablename.' pm ON (pm.post_id = p.ID) WHERE post_type = "page" AND meta_key = "_seedprod_page" AND ' .$post_status_statement.' AND post_title LIKE %s '.$order_by_statement.' LIMIT %d OFFSET %d';
+			$safe_sql = $wpdb->prepare( $sql, $post_status, $search_term, $per_page, $offset);
 		}
 
-		if ( ! empty( $_GET['s'] ) ) {
-			$sql .= ' AND post_title LIKE "%' . esc_sql( trim( sanitize_text_field( $_GET['s'] ) ) ) . '%"';
-		}
-
-		if ( ! empty( $_GET['orderby'] ) ) {
-			$orderby = $_GET['orderby'];
-			if ( $orderby == 'date' ) {
-				$orderby = 'post_modified';
-			}
-			if ( $orderby == 'name' ) {
-				$orderby = 'post_title';
-			}
-			$sql .= ' ORDER BY ' . esc_sql( $orderby );
-
-			if ( sanitize_text_field( $_GET['order'] ) === 'desc' ) {
-				$order = 'DESC';
-			} else {
-				$order = 'ASC';
-			}
-			$sql .= ' ' . $order;
-		} else {
-			$sql .= ' ORDER BY id DESC';
-		}
-
-		$sql .= " LIMIT $per_page";
-		if ( empty( $_POST['s'] ) ) {
-			$sql .= ' OFFSET ' . ( $current_page - 1 ) * $per_page;
-		}
-
-		$results = $wpdb->get_results( $sql );
+	
+		$results = $wpdb->get_results( $safe_sql );
 
 		$login_page_id = get_option( 'seedprod_login_page_id' );
 		$data          = array();
@@ -283,37 +292,45 @@ function seedprod_lite_lpage_datatable() {
 
 
 function seedprod_lite_lpage_get_data_total( $filter = null ) {
+
+	if ( ! empty( $filter ) ) {
+		$post_status_compare = "=";
+		if ( $filter == 'published' ) {
+			$post_status ="publish";
+		}
+		if ( $filter == 'drafts' ) {
+			$post_status ="draft" ;
+		}
+		if ( $filter == 'scheduled' ) {
+			$post_status ="future";
+		}
+		if ( $filter == 'archived' ) {
+			$post_status ="trash" ;
+		}
+	} else {
+		$post_status_compare = "!=";
+		$post_status = "trash";
+	}
+	$post_status_statement = ' post_status ' .  $post_status_compare . ' %s ';
+
+	if ( ! empty( $_GET['s'] ) ) {
+		$search_term = '%'.trim( sanitize_text_field( $_GET['s'] ) ).'%';
+	}
+
 	global $wpdb;
 
 	$tablename      = $wpdb->prefix . 'posts';
 	$meta_tablename = $wpdb->prefix . 'postmeta';
 
-	$sql = "SELECT count(*) FROM $tablename p LEFT JOIN $meta_tablename pm ON (pm.post_id = p.ID)";
-
-	$sql .= ' WHERE 1 = 1 AND post_type = "page"  AND meta_key = "_seedprod_page"';
-
-	if ( ! empty( $filter ) ) {
-		if ( esc_sql( $filter ) == 'published' ) {
-			$sql .= ' AND  post_status = "publish" ';
-		}
-		if ( esc_sql( $filter ) == 'drafts' ) {
-			$sql .= ' AND  post_status = "draft" ';
-		}
-		if ( esc_sql( $filter ) == 'scheduled' ) {
-			$sql .= ' AND  post_status = "future" ';
-		}
-		if ( esc_sql( $filter ) == 'archived' ) {
-			$sql .= ' AND  post_status = "trash" ';
-		}
-	} else {
-		$sql .= ' AND post_status != "trash"';
+	if(empty( $_GET['s'] )){
+		$sql = 'SELECT count(*) FROM '.$tablename.' p LEFT JOIN '.$meta_tablename.' pm ON (pm.post_id = p.ID) WHERE post_type = "page" AND meta_key = "_seedprod_page" AND ' .$post_status_statement;
+		$safe_sql = $wpdb->prepare( $sql, $post_status);
+	}else{
+		$sql = 'SELECT * FROM '.$tablename.' p LEFT JOIN '.$meta_tablename.' pm ON (pm.post_id = p.ID) WHERE post_type = "page" AND meta_key = "_seedprod_page" AND ' .$post_status_statement.' AND post_title LIKE %s ';
+		$safe_sql = $wpdb->prepare( $sql, $post_status, $search_term);
 	}
-
-	if ( ! empty( $_GET['s'] ) ) {
-		$sql .= ' AND post_name LIKE "%' . esc_sql( sanitize_text_field( $_GET['s'] ) ) . '%"';
-	}
-
-	$results = $wpdb->get_var( $sql );
+	
+	$results = $wpdb->get_var( $safe_sql );
 	return $results;
 }
 

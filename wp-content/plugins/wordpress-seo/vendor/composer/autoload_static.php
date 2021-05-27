@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit5e0b0d75242db2980db07ef62faa199c
+class ComposerStaticInite3294cf0c0e339a6d5bfb9a5043caa93
 {
     public static $prefixLengthsPsr4 = array (
         'C' => 
@@ -612,6 +612,7 @@ class ComposerStaticInit5e0b0d75242db2980db07ef62faa199c
         'Yoast\\WP\\SEO\\Conditionals\\XMLRPC_Conditional' => __DIR__ . '/../..' . '/src/conditionals/xmlrpc-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Yoast_Admin_And_Dashboard_Conditional' => __DIR__ . '/../..' . '/src/conditionals/yoast-admin-and-dashboard-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Yoast_Tools_Page_Conditional' => __DIR__ . '/../..' . '/src/conditionals/yoast-tools-page-conditional.php',
+        'Yoast\\WP\\SEO\\Config\\Badge_Group_Names' => __DIR__ . '/../..' . '/src/config/badge-group-names.php',
         'Yoast\\WP\\SEO\\Config\\Indexing_Reasons' => __DIR__ . '/../..' . '/src/config/indexing-reasons.php',
         'Yoast\\WP\\SEO\\Config\\Migration_Status' => __DIR__ . '/../..' . '/src/config/migration-status.php',
         'Yoast\\WP\\SEO\\Config\\Migrations\\AddCollationToTables' => __DIR__ . '/../..' . '/src/config/migrations/20200408101900_AddCollationToTables.php',
@@ -740,6 +741,7 @@ class ComposerStaticInit5e0b0d75242db2980db07ef62faa199c
         'Yoast\\WP\\SEO\\Integrations\\Front_End\\Open_Graph_OEmbed' => __DIR__ . '/../..' . '/src/integrations/front-end/open-graph-oembed.php',
         'Yoast\\WP\\SEO\\Integrations\\Front_End\\RSS_Footer_Embed' => __DIR__ . '/../..' . '/src/integrations/front-end/rss-footer-embed.php',
         'Yoast\\WP\\SEO\\Integrations\\Front_End\\Redirects' => __DIR__ . '/../..' . '/src/integrations/front-end/redirects.php',
+        'Yoast\\WP\\SEO\\Integrations\\Front_End\\Schema_Accessibility_Feature' => __DIR__ . '/../..' . '/src/integrations/front-end/schema-accessibility-feature.php',
         'Yoast\\WP\\SEO\\Integrations\\Front_End\\Theme_Titles' => __DIR__ . '/../..' . '/src/integrations/front-end/theme-titles.php',
         'Yoast\\WP\\SEO\\Integrations\\Front_End\\WP_Robots_Integration' => __DIR__ . '/../..' . '/src/integrations/front-end/wp-robots-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Front_End_Integration' => __DIR__ . '/../..' . '/src/integrations/front-end-integration.php',
@@ -910,9 +912,9 @@ class ComposerStaticInit5e0b0d75242db2980db07ef62faa199c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit5e0b0d75242db2980db07ef62faa199c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit5e0b0d75242db2980db07ef62faa199c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit5e0b0d75242db2980db07ef62faa199c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite3294cf0c0e339a6d5bfb9a5043caa93::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite3294cf0c0e339a6d5bfb9a5043caa93::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInite3294cf0c0e339a6d5bfb9a5043caa93::$classMap;
 
         }, null, ClassLoader::class);
     }
