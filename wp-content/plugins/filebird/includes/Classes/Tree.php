@@ -14,7 +14,7 @@ class Tree {
         $tree = self::getTree($folders_from_db, 0, $default_folders, $flat, $level, $show_level);
         return $tree;
     }
-    public static function getCount($folder_id, $from_data = null) {
+    public static function getCount($folder_id, $lang = null) {
       global $wpdb;
 
       $select = "SELECT COUNT(*) FROM {$wpdb->posts} as posts WHERE ";
@@ -33,10 +33,13 @@ class Tree {
       } elseif ($folder_id == 0) {
         return 0;//return 0 if this is uncategorized folder
       }
-      $query = apply_filters('fbv_get_count_query', $select . implode(' AND ', $where), $folder_id);
+      // Fix elementor
+      $where[] = "posts.ID NOT IN (SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_elementor_is_screenshot')";
+      
+      $query = apply_filters('fbv_get_count_query', $select . implode(' AND ', $where), $folder_id, $lang);
       return (int)$wpdb->get_var($query);
     }
-    public static function getAllFoldersAndCount() {
+    public static function getAllFoldersAndCount($lang = null) {
       global $wpdb;
       $query = "SELECT fbva.folder_id, count(fbva.attachment_id) as count FROM {$wpdb->prefix}fbv_attachment_folder as fbva 
       INNER JOIN {$wpdb->prefix}fbv as fbv ON fbv.id = fbva.folder_id 
@@ -45,7 +48,7 @@ class Tree {
       AND (posts.post_type = 'attachment') 
       AND fbv.created_by = ".apply_filters('fbv_in_not_in_created_by', '0')." 
       GROUP BY fbva.folder_id";
-      $query = apply_filters('fbv_all_folders_and_count', $query);
+      $query = apply_filters('fbv_all_folders_and_count', $query, $lang);
 
       $results = $wpdb->get_results($query);
       $return = array();

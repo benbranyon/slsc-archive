@@ -195,8 +195,10 @@ class Convert {
           }
           */
       }
-      public function ajaxNoThanks() {
-        $site = isset($_POST['site'])? sanitize_text_field($_POST['site']) : '';
+      public function ajaxNoThanks($request) {
+        $site = $request->get_param('site');
+
+        $site = isset($site)? sanitize_text_field($site) : '';
         // if ( ! wp_verify_nonce( $nonce, 'fbv_nonce' ) ){
         //   wp_send_json_error(array('mess' => __('Nonce error')));
         //   exit();
@@ -322,7 +324,9 @@ class Convert {
     // }
     public function ajaxImport($request) {
       global $wpdb;
-      $site = isset($request) ? sanitize_text_field($request->get_params()['site']) : '';
+      $site = $request->get_param('site');
+
+      $site = isset($site) ? sanitize_text_field($site) : '';
       //$count = isset($request) ? sanitize_text_field($request->get_params()['count']) : '';
 
       $this->beforeGettingNewFolders($site);
@@ -340,8 +344,11 @@ class Convert {
     public function ajaxImportInsertFolder($request) {
       global $wpdb;
 
-      $site = isset($request) ? sanitize_text_field($request->get_params()['site']) : '';
-      $folders = isset($request) ? $this->sanitize_arr($request->get_params()['folders']) : '';
+      $site = $request->get_param('site');
+      $folders = $request->get_param('folders');
+
+      $site = isset($site) ? sanitize_text_field($site) : '';
+      $folders = isset($folders) ? $this->sanitize_arr($folders) : '';
 
       $this->insertFolderAndItsAtt($site, $folders);
 
@@ -350,8 +357,11 @@ class Convert {
     }
     public function ajaxImportAfterInserting($request) {
       global $wpdb;
-      $site = isset($request) ? sanitize_text_field($request->get_params()['site']) : '';
-      $count = isset($request) ? sanitize_text_field($request->get_params()['count']) : '';
+      $site = $request->get_param('site');
+      $count = $request->get_param('count');
+
+      $site = isset($site) ? sanitize_text_field($site) : '';
+      $count = isset($count) ? sanitize_text_field($count) : '';
       $this->afterInsertingNewFolders($site);
       $this->updateUpdated($site);
 

@@ -37,14 +37,19 @@ class CompatiblePolylang extends Controller {
         if($this->lang_id != null) {
           add_filter('fbv_speedup_get_count_query', '__return_true');
         }
-        add_filter('fbv_get_count_query', array($this, 'fbv_get_count_query'), 10, 2);
-        add_filter('fbv_all_folders_and_count', array($this, 'all_folders_and_count_query'));
+        add_filter('fbv_get_count_query', array($this, 'fbv_get_count_query'), 10, 3);
+        add_filter('fbv_all_folders_and_count', array($this, 'all_folders_and_count_query'), 10, 2);
       }
     }
   }
-  public function all_folders_and_count_query($query) {
+  public function all_folders_and_count_query($query, $lang) {
     global $wpdb;
-    $query = "SELECT fbva.folder_id as id, count(fbva.attachment_id) as count FROM {$wpdb->prefix}fbv_attachment_folder AS fbva 
+    if ($this->lang == null) {
+      $query = "SELECT fbva.folder_id as folder_id, count(DISTINCT(fbva.attachment_id)) as count "; 
+    } else {
+      $query = "SELECT fbva.folder_id as folder_id, count(fbva.attachment_id) as count "; 
+    }
+    $query .= "FROM {$wpdb->prefix}fbv_attachment_folder AS fbva 
     INNER JOIN {$wpdb->prefix}fbv as fbv ON fbv.id = fbva.folder_id 
     INNER JOIN {$wpdb->term_relationships} AS trs ON fbva.attachment_id = trs.object_id
     INNER JOIN {$wpdb->posts} as posts ON posts.ID = fbva.attachment_id 
@@ -60,7 +65,7 @@ class CompatiblePolylang extends Controller {
     $folders_of_source = FolderModel::getFoldersOfPost($post_id);
     FolderModel::setFoldersForPosts($tr_id, $folders_of_source);
   }
-  public function fbv_get_count_query($q, $folder_id) {
+  public function fbv_get_count_query($q, $folder_id, $lang) {
     global $wpdb;
     if(is_null($this->lang_id)) {
       return $q;
@@ -72,7 +77,8 @@ class CompatiblePolylang extends Controller {
             FROM $wpdb->posts AS posts
             LEFT JOIN $wpdb->term_relationships AS trs 
             ON posts.ID = trs.object_id
-            WHERE posts.post_type = 'attachment'";
+            WHERE posts.post_type = 'attachment' 
+            AND posts.ID NOT IN (SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_elementor_is_screenshot') ";
             $q .= "AND trs.term_taxonomy_id IN ({$this->lang_id})";
             $q .= "AND (posts.post_status = 'inherit' OR posts.post_status = 'private')
             GROUP BY posts.ID
@@ -85,7 +91,9 @@ class CompatiblePolylang extends Controller {
               FROM $wpdb->posts AS posts
               LEFT JOIN $wpdb->term_relationships AS trs ON posts.ID = trs.object_id
               RIGHT JOIN {$wpdb->prefix}fbv_attachment_folder as fbv ON (posts.ID = fbv.attachment_id)
-              WHERE posts.post_type = 'attachment' AND fbv.folder_id = " . (int)$folder_id . " ";
+              WHERE posts.post_type = 'attachment' 
+              AND posts.ID NOT IN (SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_elementor_is_screenshot') 
+              AND fbv.folder_id = " . (int)$folder_id . " ";
               $q .= "AND trs.term_taxonomy_id IN ({$this->lang_id}) ";
               $q .= "AND (posts.post_status = 'inherit' OR posts.post_status = 'private')
               GROUP BY posts.ID

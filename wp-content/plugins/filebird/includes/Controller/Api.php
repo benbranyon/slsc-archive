@@ -93,8 +93,9 @@ class Api {
         );
         
     }
-    public function restApi() {
-        $act = isset($_POST['act']) ? sanitize_text_field($_POST['act']) : '';
+    public function restApi($request) {
+        $act = $request->get_param('act');
+        $act = isset($act) ? sanitize_text_field($act) : '';
         if($act == 'generate-key') {
             $key = $this->generateRandomString(40);
             update_option('fbv_rest_api_key', $key);

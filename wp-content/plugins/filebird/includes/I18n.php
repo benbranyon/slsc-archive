@@ -142,6 +142,9 @@ class I18n {
       'turn_off_for_7_days' => __('Turn off for 7 days', 'filebird'),
       'collapse' => __('Collapse', 'filebird'),
       'expand' => __('Expand', 'filebird'),
+      'uploaded' => __('Uploaded', 'filebird'),
+      'lessThanAMin' => __('Less than a min', 'filebird'),
+      'totalSize' => __("Total size", 'filebird')
     );
     return $translation;
   }
