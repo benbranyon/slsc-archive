@@ -9,7 +9,7 @@ class FacetWP_Integration_EDD
     function __construct() {
         add_filter( 'facetwp_facet_sources', [ $this, 'exclude_data_sources' ] );
         add_filter( 'edd_downloads_query', [ $this, 'edd_downloads_query' ] );
-        add_action( 'wp_enqueue_scripts', [ $this, 'front_scripts' ] );
+        add_action( 'facetwp_assets', [ $this, 'assets' ] );
     }
 
 
@@ -17,8 +17,9 @@ class FacetWP_Integration_EDD
      * Trigger some EDD code on facetwp-loaded
      * @since 2.0.4
      */
-    function front_scripts() {
-        FWP()->display->assets['edd.js'] = FACETWP_URL . '/includes/integrations/edd/edd.js';
+    function assets( $assets ) {
+        $assets['edd.js'] = FACETWP_URL . '/includes/integrations/edd/edd.js';
+        return $assets;
     }
 
 

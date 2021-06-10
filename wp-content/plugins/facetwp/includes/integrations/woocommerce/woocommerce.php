@@ -11,7 +11,7 @@ class FacetWP_Integration_WooCommerce
 
 
     function __construct() {
-        add_action( 'wp_enqueue_scripts', [ $this, 'front_scripts' ] );
+        add_action( 'facetwp_assets', [ $this, 'assets' ] );
         add_filter( 'facetwp_facet_sources', [ $this, 'facet_sources' ] );
         add_filter( 'facetwp_indexer_post_facet', [ $this, 'index_woo_values' ], 10, 2 );
 
@@ -48,9 +48,9 @@ class FacetWP_Integration_WooCommerce
      * Run WooCommerce handlers on facetwp-refresh
      * @since 2.0.9
      */
-    function front_scripts() {
-        FWP()->display->assets['query-string.js'] = FACETWP_URL . '/assets/js/src/query-string.js';
-        FWP()->display->assets['woocommerce.js'] = FACETWP_URL . '/includes/integrations/woocommerce/woocommerce.js';
+    function assets( $assets ) {
+        $assets['woocommerce.js'] = FACETWP_URL . '/includes/integrations/woocommerce/woocommerce.js';
+        return $assets;
     }
 
 

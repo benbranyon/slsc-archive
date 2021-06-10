@@ -4,6 +4,7 @@ import buble from '@rollup/plugin-buble';
 
 export default [{
     input: [
+        'assets/vendor/fUtil/fUtil.js',
         'assets/js/src/event-manager.js',
         'assets/js/src/front.js',
         'assets/js/src/front-facets.js'

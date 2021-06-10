@@ -5,10 +5,6 @@ body.settings_page_facetwp {
     background: #fff;
 }
 
-body.settings_page_facetwp .wrap {
-    margin: 20px 20px 0 0;
-}
-
 a {
     color: #50b7ff;
 }
@@ -25,8 +21,7 @@ a:hover {
 .facetwp-header {
     margin: 0 0 20px -20px;
     padding: 8px 20px;
-    border-bottom: 1px solid #ddd;
-    box-shadow: 1px 2px 3px #f2f2f2;
+    border-bottom: 1px solid #aaa;
     background-color: #fff;
 }
 
@@ -61,16 +56,61 @@ a:hover {
     float: right;
 }
 
+.facetwp-response-wrap {
+    position: absolute;
+    right: 20px;
+    margin-top: 8px;
+    padding: 2px 8px;
+    line-height: 1;
+
+    background-color: #fff;
+    border: 1px solid #aaa;
+    border-top: none;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    cursor: pointer;
+}
+
 .facetwp-response {
     display: none;
-    position: absolute;
-    top: 44px;
-    right: 20px;
-    margin-top: 10px;
-    text-align: right;
-    max-width: 360px;
-    white-space: nowrap;
-    overflow: auto;
+}
+
+.facetwp-response.visible {
+    display: inline-block;
+    padding-right: 8px;
+}
+
+.facetwp-response-icon {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.facetwp-response-icon span {
+    display: inline-block;
+}
+
+.facetwp-response-icon span::before {
+    display: block;
+    font-family: dashicons;
+    font-size: 1.5em;
+}
+
+.facetwp-response-icon[data-status="ok"] span::before {
+    content: "\f12a";
+    color: #54b054;
+}
+
+.facetwp-response-icon[data-status="load"] span::before {
+    content: "\f463";
+}
+
+.facetwp-response-icon[data-status="error"] span::before {
+    content: "\f534";
+    color: #dc3545;
+}
+
+.facetwp-response-icon[data-status="load"] span {
+    animation: spin 1.1s infinite linear;
 }
 
 [v-cloak] {
@@ -141,48 +181,11 @@ a:hover {
     background-color: #f8f8f8;
 }
 
-.facetwp-rebuild.flux {
-    animation: glowing 2s infinite;
-    opacity: 1;
-}
-
-@keyframes glowing {
-    0% { box-shadow: 0; }
-    25% { box-shadow: 0 0 15px #c82333; }
-    50% { box-shadow: 0; }
-}
-
 /* Loading animation */
 
 .facetwp-loading {
-    margin: 30px auto;
-    position: relative;
-    text-indent: -9999em;
-    border: 4px solid #fff;
-    border-left: 4px solid #222;
-    -webkit-transform: translateZ(0);
-    -ms-transform: translateZ(0);
-    transform: translateZ(0);
-    -webkit-animation: spin 1.1s infinite linear;
-    animation: spin 1.1s infinite linear;
-}
-
-.facetwp-loading,
-.facetwp-loading::after {
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-}
-
-@-webkit-keyframes spin {
-    0% {
-        -webkit-transform: rotate(0deg);
-        transform: rotate(0deg);
-    }
-    100% {
-        -webkit-transform: rotate(360deg);
-        transform: rotate(360deg);
-    }
+    margin-top: 40px;
+    text-align: center;
 }
 
 @keyframes spin {
@@ -296,10 +299,6 @@ a:hover {
 
 .hidden {
     display: none;
-}
-
-.visible {
-    display: initial;
 }
 
 .facetwp-region .side-link {
@@ -444,7 +443,7 @@ a:hover {
 /* Settings page */
 
 .facetwp-region .import-code {
-    height: 60px;
+    height: 160px;
 }
 
 .field-notes {
@@ -494,23 +493,6 @@ a:hover {
 
 .facetwp-tooltip-content {
     display: none;
-}
-
-#powerTip a {
-    color: #ddd;
-}
-
-#powerTip {
-    cursor: default;
-    background-color: #333;
-    background-color: rgba(0, 0, 0, 0.8);
-    border-radius: 6px;
-    color: #fff;
-    display: none;
-    padding: 10px;
-    position: absolute;
-    z-index: 1000;
-    max-width: 400px;
 }
 
 /* Edit screens */
@@ -640,7 +622,7 @@ a:hover {
 }
 
 .facetwp-switch input:checked + .facetwp-slider {
-    background-color: #906DBE;
+    background-color: #673ab7;
 }
 
 .facetwp-switch input:checked + .facetwp-slider:before {
@@ -696,26 +678,11 @@ a:hover {
 .builder-canvas {
     position: relative;
     outline: 1px solid #000;
+    background-color: #f8f8f8;
 }
 
 .builder-settings-wrap h3:first-child {
     margin-top: 0;
-}
-
-.builder-edge {
-    position: absolute;
-    outline: 2px solid #fff;
-    top: 0;
-    right: 10px;
-    bottom: 0;
-    left: 10px;
-}
-
-.builder-edge.vertical {
-    top: 10px;
-    right: 0;
-    bottom: 10px;
-    left: 0;
 }
 
 .builder-buttons div {
@@ -977,6 +944,15 @@ a:hover {
 
 .color-wrap input.color-input {
     padding-left: 36px;
+}
+
+.color-wrap .color-clear {
+    display: inline-block;
+    position: relative;
+    right: 30px;
+    width: 20px;
+    text-align: center;
+    cursor: pointer;
 }
 
 @media (min-width: 783px) {

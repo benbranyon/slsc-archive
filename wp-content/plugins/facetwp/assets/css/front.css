@@ -77,14 +77,6 @@
     background-image: url('../images/radio-on.png');
 }
 
-/* Date range */
-
-.flatpickr-clear {
-    text-align: center;
-    padding: 5px 0;
-    cursor: pointer;
-}
-
 /* fSelect */
 
 .facetwp-type-fselect.is-loading {
@@ -142,7 +134,6 @@
     cursor: pointer;
 }
 
-.facetwp-seo,
 .facetwp-hidden {
     display: none;
 }

@@ -70,13 +70,8 @@ class FacetWP_Facet
      */
     function get_where_clause( $facet ) {
 
-        // If no results, empty the facet
-        if ( 0 === FWP()->facet->query->found_posts ) {
-            $post_ids = [];
-        }
-
         // Ignore the current facet's selections
-        elseif ( isset( FWP()->or_values ) && ( 1 < count( FWP()->or_values ) || ! isset( FWP()->or_values[ $facet['name'] ] ) ) ) {
+        if ( isset( FWP()->or_values ) && ( 1 < count( FWP()->or_values ) || ! isset( FWP()->or_values[ $facet['name'] ] ) ) ) {
             $post_ids = [];
             $or_values = FWP()->or_values; // Preserve original
             unset( $or_values[ $facet['name'] ] );
@@ -89,8 +84,6 @@ class FacetWP_Facet
 
             $post_ids = array_intersect( $post_ids, FWP()->unfiltered_post_ids );
         }
-
-        // Default
         else {
             $post_ids = FWP()->unfiltered_post_ids;
         }
@@ -251,8 +244,8 @@ class FacetWP_Facet
             </div>
             <div>
                 <select class="facet-operator">
-                    <option value="and"><?php _e( 'Narrow the result set', 'fwp' ); ?></option>
-                    <option value="or"><?php _e( 'Widen the result set', 'fwp' ); ?></option>
+                    <option value="and"><?php _e( 'Match all', 'fwp' ); ?></option>
+                    <option value="or"><?php _e( 'Match any', 'fwp' ); ?></option>
                 </select>
             </div>
         </div>
@@ -263,10 +256,10 @@ class FacetWP_Facet
             <div><?php _e( 'Sort by', 'fwp' ); ?>:</div>
             <div>
                 <select class="facet-orderby">
-                    <option value="count"><?php _e( 'Highest Count', 'fwp' ); ?></option>
-                    <option value="display_value"><?php _e( 'Display Value', 'fwp' ); ?></option>
-                    <option value="raw_value"><?php _e( 'Raw Value', 'fwp' ); ?></option>
-                    <option value="term_order"><?php _e( 'Term Order', 'fwp' ); ?></option>
+                    <option value="count"><?php _e( 'Highest count', 'fwp' ); ?></option>
+                    <option value="display_value"><?php _e( 'Display value', 'fwp' ); ?></option>
+                    <option value="raw_value"><?php _e( 'Raw value', 'fwp' ); ?></option>
+                    <option value="term_order"><?php _e( 'Term order', 'fwp' ); ?></option>
                 </select>
             </div>
         </div>

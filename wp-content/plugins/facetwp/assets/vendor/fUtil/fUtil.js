@@ -1,22 +1,40 @@
-/* fUtil - 2021-01-16 */
-
 window.fUtil = (() => {
 
     class fUtil {
 
         constructor(selector) {
-            if (typeof selector === 'string' || selector instanceof String) {
-                this.nodes = Array.from(document.querySelectorAll(selector));
+            if (typeof selector === 'string' || selector instanceof String) { // string
+                var selector = selector.replace(':selected', ':checked');
+
+                if (this.isValidSelector(selector)) {
+                    this.nodes = Array.from(document.querySelectorAll(selector));
+                }
+                else {
+                    var tpl = document.createElement('template');
+                    tpl.innerHTML = selector;
+                    this.nodes = [tpl.content];
+                }
             }
-            else if (typeof selector === 'object' && selector.nodeName) {
+            else if (Array.isArray(selector)) { // array of nodes
+                this.nodes = selector;
+            }
+            else if (typeof selector === 'object' && selector.nodeName) { // node
                 this.nodes = [selector];
             }
-            else if (typeof selector === 'function') {
+            else if (typeof selector === 'function') { // function
                 this.ready(selector);
             }
-            else {
+            else if (selector === window) { // window
+                this.nodes = [window];
+            }
+            else { // document
                 this.nodes = [document];
             }
+
+            // custom plugins
+            $.each($.fn, (handler, method) => {
+                this[method] = handler;
+            });
         }
 
         static isset(input) {
@@ -25,35 +43,101 @@ window.fUtil = (() => {
 
         static post(url, data, settings) {
             var settings = Object.assign({}, {
+                dataType: 'json',
+                contentType: 'application/json',
+                headers: {},
                 done: () => {},
                 fail: () => {}
             }, settings);
 
-            return fetch(url, {
+            settings.headers['Content-Type'] = settings.contentType;
+
+            data = ('application/json' === settings.contentType) ? JSON.stringify(data) : $.toEncoded(data);
+
+            fetch(url, {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(data)
+                headers: settings.headers,
+                body: data
             })
-            .then(response => response.json())
+            .then(response => response[settings.dataType]())
             .then(json => settings.done(json))
             .catch(err => settings.fail(err));
         }
 
-        static each(items, callback) {
-            if (typeof items === 'object' && items !== null) {
-                if (Array.isArray(items)) {
-                    items.forEach((item, index) => callback(item, index));
+        static toEncoded(obj, prefix, out) {
+            var out = out || [];
+            var prefix = prefix || '';
+
+            if (Array.isArray(obj)) {
+                if (obj.length) {
+                    obj.forEach((val) => {
+                        $.toEncoded(val, prefix + '[]', out);
+                    });
                 }
                 else {
-                    Object.keys(items).forEach(item => callback(items[item], item));
+                    $.toEncoded('', prefix, out);
                 }
             }
+            else if (typeof obj === 'object' && obj !== null) {
+                Object.keys(obj).forEach((key) => {
+                    var new_prefix = prefix ? prefix + '[' + key + ']' : key;
+                    $.toEncoded(obj[key], new_prefix, out);
+                });
+            }
+            else {
+                out.push(encodeURIComponent(prefix) + '=' + encodeURIComponent(obj));
+            }
+
+            return out.join('&');
+        }
+
+        static forEach(items, callback) {
+            if (typeof items === 'object' && items !== null) {
+                if (Array.isArray(items)) {
+                    items.forEach((val, key) => callback.bind(val)(val, key));
+                }
+                else {
+                    Object.keys(items).forEach(key => {
+                        var val = items[key];
+                        callback.bind(val)(val, key);
+                    });
+                }
+            }
+
+            return items;
+        }
+
+        isValidSelector(string) {
+            try {
+                document.createDocumentFragment().querySelector(string);
+            }
+            catch {
+                return false;
+            }
+            return true;
+        }
+
+        clone() {
+            return $(this.nodes);
+        }
+
+        len() {
+            return this.nodes.length;
+        }
+
+        each(callback) {
+            this.nodes.forEach((node, key) => {
+                let func = callback.bind(node); // set "this"
+                func(node, key);
+            });
+
+            return this;
         }
 
         ready(callback) {
             if (typeof callback !== 'function') return;
 
-            if (document.readyState === 'interactive' || document.readyState === 'complete') {
+            if (document.readyState === 'complete') {
                 return callback();
             }
 
@@ -61,12 +145,12 @@ window.fUtil = (() => {
         }
 
         addClass(className) {
-            this.nodes.forEach(node => node.classList.add(className));
+            this.each(node => node.classList.add(className));
             return this;
         }
 
         removeClass(className) {
-            this.nodes.forEach(node => node.classList.remove(className));
+            this.each(node => node.classList.remove(className));
             return this;
         }
 
@@ -75,14 +159,47 @@ window.fUtil = (() => {
         }
 
         toggleClass(className) {
-            this.nodes.forEach(node => node.classList.toggle(className));
+            this.each(node => node.classList.toggle(className));
             return this;
         }
 
-        prev(selector) {
-            if (!this.nodes.length) return;
+        is(selector) {
+            for (let i = 0; i < this.len(); i++) { // forEach prevents loop exiting
+                if (this.nodes[i].matches(selector)) {
+                    return true;
+                }
+            }
+            return false;
+        }
 
-            var sibling = this.nodes[0].previousElementSibling;
+        find(selector) {
+            var selector = selector.replace(':selected', ':checked');
+            let clone = this.clone();
+            if (clone.len()) {
+                clone.nodes = Array.from(clone.nodes[0].querySelectorAll(selector));
+            }
+            return clone;
+        }
+
+        first() {
+            let clone = this.clone();
+            if (clone.len()) {
+                clone.nodes = this.nodes.slice(0, 1);
+            }
+            return clone;
+        }
+
+        last() {
+            let clone = this.clone();
+            if (clone.len()) {
+                clone.nodes = this.nodes.slice(-1);
+            }
+            return clone;
+        }
+
+        prev(selector) {
+            let clone = this.clone();
+            var sibling = (clone.len()) ? clone.nodes[0].previousElementSibling : null;
 
             if (selector) {
                 while (sibling) {
@@ -91,15 +208,13 @@ window.fUtil = (() => {
                 }
             }
 
-            this.nodes = (null !== sibling) ? [sibling] : [];
-
-            return this;
+            clone.nodes = (null !== sibling) ? [sibling] : [];
+            return clone;
         }
 
         next(selector) {
-            if (!this.nodes.length) return;
-
-            var sibling = this.nodes[0].nextElementSibling;
+            let clone = this.clone();
+            let sibling = (clone.len()) ? clone.nodes[0].nextElementSibling : null;
 
             if (selector) {
                 while (sibling) {
@@ -108,18 +223,40 @@ window.fUtil = (() => {
                 }
             }
 
-            this.nodes = (null !== sibling) ? [sibling] : [];
+            clone.nodes = (null !== sibling) ? [sibling] : [];
+            return clone;
+        }
 
+        append(html) {
+            this.each(node => node.insertAdjacentHTML('beforeend', html));
             return this;
         }
 
+        parents(selector) {
+            let parents = [];
+            let clone = this.clone();
+
+            clone.each(node => {
+                let parent = node.parentNode;
+                while (parent && parent !== document) {
+                    if (parent.matches(selector)) parents.push(parent);
+                    parent = parent.parentNode;
+                }
+            });
+
+            clone.nodes = [...new Set(parents)]; // remove dupes
+            return clone;
+        }
+
         closest(selector) {
-            if (!this.nodes.length) return;
+            let clone = this.clone();
+            let nodes = (clone.len()) ? clone.nodes[0].closest(selector) : null;
+            clone.nodes = (null !== nodes) ? [nodes] : [];
+            return clone;
+        }
 
-            var nodes = this.nodes[0].closest(selector);
-
-            this.nodes = (null !== nodes) ? [nodes] : [];
-
+        remove() {
+            this.each(node => node.remove());
             return this;
         }
 
@@ -132,12 +269,16 @@ window.fUtil = (() => {
 
             // Reusable callback
             var checkForMatch = (e) => {
-                if (null === selector || e.target.matches(selector) || null !== e.target.closest(selector)) {
-                    callback(e);
+                if (null === selector || e.target.matches(selector)) {
+                    callback.bind(e.target)(e);
+                }
+                else if (e.target.closest(selector)) {
+                    var $this = e.target.closest(selector);
+                    callback.bind($this)(e);
                 }
             };
 
-            this.nodes.forEach(node => {
+            this.each(node => {
 
                 // Attach a unique ID to each node
                 if (!$.isset(node._id)) {
@@ -178,7 +319,7 @@ window.fUtil = (() => {
                 var selector = null;
             }
 
-            this.nodes.forEach(node => {
+            this.each(node => {
                 var id = node._id;
 
                 $.each($.event.map[id], (selectors, theEventName) => {
@@ -201,85 +342,77 @@ window.fUtil = (() => {
         }
 
         trigger(eventName, extraData) {
-            this.nodes.forEach(node => node.dispatchEvent(new CustomEvent(eventName, extraData)));
-            return this;
-        }
-
-        find(selector) {
-            if (!this.nodes.length) return;
-
-            this.nodes = Array.from(this.nodes[0].querySelectorAll(selector));
+            this.each(node => node.dispatchEvent(new CustomEvent(eventName, {
+                detail: extraData,
+                bubbles: true
+            })));
             return this;
         }
 
         attr(attributeName, value) {
-            if (!this.nodes.length) return;
-
             if (!$.isset(value)) {
-                return this.nodes[0].getAttribute(attributeName);
+                return (this.len()) ? this.nodes[0].getAttribute(attributeName) : null;
             }
 
-            this.nodes.forEach(node => node.setAttribute(attributeName, value));
+            this.each(node => node.setAttribute(attributeName, value));
             return this;
 
         }
 
         data(key, value) {
-            if (!this.nodes.length) return;
-
             if (!$.isset(value)) {
-                return this.nodes[0].dataset[key];
+                return (this.len()) ? this.nodes[0]._fdata[key] : null;
             }
 
-            this.nodes.forEach(node => node.dataset[key] = value);
+            this.each(node => node._fdata[key] = value);
             return this;
         }
 
         html(htmlString) {
-            if (!this.nodes.length) return;
-
             if (!$.isset(htmlString)) {
-                return this.nodes[0].innerHTML;
+                return (this.len()) ? this.nodes[0].innerHTML : null;
             }
 
-            this.nodes.forEach(node => node.innerHTML = htmlString);
+            this.each(node => node.innerHTML = htmlString);
             return this;
         }
 
         text(textString) {
-            if (!this.nodes.length) return;
-
             if (!$.isset(textString)) {
-                return this.nodes[0].textContent;
+                return (this.len()) ? this.nodes[0].textContent : null;
             }
-
-            this.nodes.forEach(node => node.textContent = textString);
-            return this;
+            else {
+                this.each(node => node.textContent = textString);
+                return this;
+            }
         }
 
         val(value) {
-            if (!this.nodes.length) return;
-
             if (!$.isset(value)) {
-                return this.nodes[0].value;
+                if (this.len()) {
+                    var field = this.nodes[0];
+                    if (field.nodeName.toLowerCase() === 'select' && field.multiple) {
+                        return [...field.options].filter((x) => x.selected).map((x) => x.value);
+                    }
+                    return field.value;
+                }
+                return null;
             }
-
-            this.nodes.forEach(node => node.value = value);
-            return this;
+            else {
+                this.each(node => node.value = value);
+                return this;
+            }
         }
     }
 
-    // This needs to be a function (not a class)
     var $ = selector => new fUtil(selector);
 
     // Set object methods
+    $.fn = {};
     $.post = fUtil.post;
     $.isset = fUtil.isset;
-    $.each = fUtil.each;
-    $.event = {
-        map: {},
-        store: [],
-        count: 0
-    };
+    $.each = fUtil.forEach;
+    $.toEncoded = fUtil.toEncoded;
+    $.event = {map: {}, store: [], count: 0};
     return $;
 })();

@@ -13,7 +13,7 @@ class FacetWP_Facet_Autocomplete extends FacetWP_Facet
         add_action( 'facetwp_autocomplete_load', [ $this, 'ajax_load' ] );
 
         // css-based template
-        $this->maybe_buffer_output();
+        add_action( 'facetwp_init', [ $this, 'maybe_buffer_output' ] );
         add_action( 'facetwp_found_main_query', [ $this, 'template_handler' ] );
     }
 
@@ -56,7 +56,7 @@ class FacetWP_Facet_Autocomplete extends FacetWP_Facet
         $value = empty( $value ) ? '' : stripslashes( $value[0] );
         $placeholder = isset( $params['facet']['placeholder'] ) ? $params['facet']['placeholder'] : __( 'Start typing', 'fwp-front' ) + '...';
         $placeholder = facetwp_i18n( $placeholder );
-        $output .= '<input type="text" class="facetwp-autocomplete" value="' . esc_attr( $value ) . '" placeholder="' . esc_attr( $placeholder ) . '" />';
+        $output .= '<input type="text" class="facetwp-autocomplete" value="' . esc_attr( $value ) . '" placeholder="' . esc_attr( $placeholder ) . '" autocomplete="off" />';
         $output .= '<input type="button" class="facetwp-autocomplete-update" value="' . __( 'Go', 'fwp-front' ) . '" />';
         return $output;
     }
@@ -91,8 +91,8 @@ class FacetWP_Facet_Autocomplete extends FacetWP_Facet
      */
     function front_scripts() {
         FWP()->display->json['no_results'] = __( 'No results', 'fwp-front' );
-        FWP()->display->assets['jquery.autocomplete.js'] = FACETWP_URL . '/assets/vendor/jquery-autocomplete/jquery.autocomplete.min.js';
-        FWP()->display->assets['jquery.autocomplete.css'] = FACETWP_URL . '/assets/vendor/jquery-autocomplete/jquery.autocomplete.css';
+        FWP()->display->assets['fComplete.js'] = FACETWP_URL . '/assets/vendor/fComplete/fComplete.js';
+        FWP()->display->assets['fComplete.css'] = FACETWP_URL . '/assets/vendor/fComplete/fComplete.css';
     }
 
 
@@ -135,12 +135,12 @@ class FacetWP_Facet_Autocomplete extends FacetWP_Facet
             foreach ( $results as $result ) {
                 $output[] = [
                     'value' => $result->facet_display_value,
-                    'data' => $result->facet_display_value,
+                    'label' => $result->facet_display_value,
                 ];
             }
         }
 
-        wp_send_json( [ 'suggestions' => $output ] );
+        wp_send_json( $output );
     }
 
 
@@ -154,5 +154,17 @@ class FacetWP_Facet_Autocomplete extends FacetWP_Facet
             <div><input type="text" class="facet-placeholder" /></div>
         </div>
 <?php
+    }
+
+
+    /**
+     * (Front-end) Attach settings to the AJAX response
+     */
+    function settings_js( $params ) {
+        return [
+            'loadingText' => __( 'Loading', 'fwp-front' ) . '...',
+            'minCharsText' => __( 'Enter {n} or more characters', 'fwp-front' ),
+            'noResultsText' => __( 'No results', 'fwp-front' )
+        ];
     }
 }

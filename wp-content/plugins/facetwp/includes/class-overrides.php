@@ -76,6 +76,7 @@ class FacetWP_Overrides
             'advanced_ads',
             'ms_relationship',
             'wc_user_membership',
+            'wp_template',
             'edd_wish_list',
             'acf-field-group',
             'acf-field'

@@ -298,7 +298,7 @@ class FacetWP_Integration_ACF
             if ( isset( $value['lat'] ) && isset( $value['lng'] ) ) {
                 $params['facet_value'] = $value['lat'];
                 $params['facet_display_value'] = $value['lng'];
-                $params['place_address'] = $value['address'];
+                $params['place_details'] = $value;
                 $output[] = $params;
             }
         }

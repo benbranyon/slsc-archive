@@ -7,7 +7,6 @@ class FacetWP_Updater
         add_filter( 'plugins_api', [ $this, 'plugins_api' ], 10, 3 );
         add_filter( 'pre_set_site_transient_update_plugins', [ $this, 'check_update' ] );
         add_action( 'in_plugin_update_message-' . FACETWP_BASENAME, [ $this, 'in_plugin_update_message' ], 10, 2 );
-        add_filter( 'extra_plugin_headers', [ $this, 'extra_plugin_headers' ] );
     }
 
 
@@ -16,22 +15,17 @@ class FacetWP_Updater
      */
     function get_plugins_to_check() {
         $output = [];
-
-        // bust the cache to make sure the "GitHub URI" header is included
-        wp_cache_delete( 'plugins', 'plugins' );
-
         $plugins = get_plugins();
         $active_plugins = get_option( 'active_plugins', [] );
 
         foreach ( $active_plugins as $plugin_path ) {
             if ( isset( $plugins[ $plugin_path ] ) ) {
                 $info = $plugins[ $plugin_path ];
-                $github = isset( $info['GitHub URI'] ) ? $info['GitHub URI'] : '';
                 $slug = trim( dirname( $plugin_path ), '/' );
 
                 // only intercept FacetWP and its add-ons
                 $is_valid = in_array( $slug, [ 'facetwp', 'user-post-type' ] );
-                $is_valid = ( 0 === strpos( $github, 'facetwp/' ) ) ? true : $is_valid;
+                $is_valid = ( 0 === strpos( $slug, 'facetwp-' ) ) ? true : $is_valid;
 
                 if ( $is_valid ) {
                     $output[ $slug ] = [
@@ -54,7 +48,7 @@ class FacetWP_Updater
      * $args->slug = "facetwp-flyout"
      * plugin_path = "facetwp-flyout/facetwp-flyout.php"
      */
-    function plugins_api( $result = false, $action, $args ) {
+    function plugins_api( $result, $action, $args ) {
         if ( 'plugin_information' == $action ) {
             $slug = $args->slug;
             $to_check = $this->get_plugins_to_check();
@@ -102,7 +96,7 @@ class FacetWP_Updater
 
         if ( empty( $response ) || $ts + 14400 < $now ) {
 
-            $request = wp_remote_post( 'http://api.facetwp.com', [
+            $request = wp_remote_post( 'https://api.facetwp.com', [
                 'body' => [
                     'action'    => 'check_plugins',
                     'slugs'     => array_keys( $plugins ),
@@ -170,12 +164,6 @@ class FacetWP_Updater
                 echo '<br />' . __( 'Please activate your FacetWP license for automatic updates.', 'fwp' );
             }
         }
-    }
-
-
-    function extra_plugin_headers( $headers ) {
-        $headers[] = 'GitHub URI';
-        return $headers;
     }
 }
 

@@ -35,14 +35,13 @@ class FacetWP_Facet_Slider extends FacetWP_Facet
         $start = ( '' == $values[0] ) ? false : $values[0];
         $end = ( '' == $values[1] ) ? false : $values[1];
 
-        $is_dual = ! empty( $facet['source_other'] );
         $is_intersect = FWP()->helper->facet_is( $facet, 'compare_type', 'intersect' );
 
         /**
          * Intersect compare
          * @link http://stackoverflow.com/a/325964
          */
-        if ( $is_dual && $is_intersect ) {
+        if ( $is_intersect ) {
             $start = ( false !== $start ) ? $start : '-999999999999';
             $end = ( false !== $end ) ? $end : '999999999999';
 
@@ -139,7 +138,7 @@ class FacetWP_Facet_Slider extends FacetWP_Facet
                 </data-sources>
             </div>
         </div>
-        <div class="facetwp-row" v-show="facet.source_other">
+        <div class="facetwp-row">
             <div><?php _e('Compare type', 'fwp'); ?>:</div>
             <div>
                 <select class="facet-compare-type">
@@ -170,7 +169,7 @@ class FacetWP_Facet_Slider extends FacetWP_Facet
             <div>
                 <div class="facetwp-tooltip">
                     <?php _e('Format', 'fwp'); ?>:
-                    <div class="facetwp-tooltip-content"><?php _e( 'The number format', 'fwp' ); ?></div>
+                    <div class="facetwp-tooltip-content"><?php _e( 'The number format; to edit the separators, use the "Separators" option in the Settings tab ', 'fwp' ); ?></div>
                 </div>
             </div>
             <div>

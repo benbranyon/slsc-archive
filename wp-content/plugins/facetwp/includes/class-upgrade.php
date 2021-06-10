@@ -54,20 +54,6 @@ class FacetWP_Upgrade
 
         $table = sanitize_key( $wpdb->prefix . 'facetwp_index' );
 
-        if ( version_compare( $this->last_version, '1.9', '<' ) ) {
-            $wpdb->query( "ALTER TABLE $table ADD COLUMN term_id INT unsigned default '0' AFTER facet_display_value" );
-            $wpdb->query( "UPDATE $table SET term_id = facet_value WHERE LEFT(facet_source, 4) = 'tax/'" );
-        }
-
-        if ( version_compare( $this->last_version, '2.2.3', '<' ) ) {
-            deactivate_plugins( 'facetwp-proximity/facetwp-proximity.php' );
-            deactivate_plugins( 'facetwp-proximity-master/facetwp-proximity.php' );
-        }
-
-        if ( version_compare( $this->last_version, '2.7', '<' ) ) {
-            $wpdb->query( "ALTER TABLE $table ADD COLUMN variation_id INT unsigned default '0' AFTER depth" );
-        }
-
         if ( version_compare( $this->last_version, '3.1.0', '<' ) ) {
             $wpdb->query( "ALTER TABLE $table MODIFY facet_name VARCHAR(50)" );
             $wpdb->query( "ALTER TABLE $table MODIFY facet_value VARCHAR(50)" );

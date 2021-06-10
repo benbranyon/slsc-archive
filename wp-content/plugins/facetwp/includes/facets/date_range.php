@@ -103,13 +103,6 @@ class FacetWP_Facet_Date_Range extends FacetWP_Facet
      * Output any front-end scripts
      */
     function front_scripts() {
-
-        FWP()->display->json['datepicker'] = [
-            'clearText' => __( 'Clear', 'fwp-front' ),
-            'fromText'  => __( 'from', 'fwp-front' ),
-            'toText'    => __( 'to', 'fwp-front' )
-        ];
-
         FWP()->display->assets['fDate.css'] = FACETWP_URL . '/assets/vendor/fDate/fDate.css';
         FWP()->display->assets['fDate.js'] = FACETWP_URL . '/assets/vendor/fDate/fDate.min.js';
     }

@@ -3,16 +3,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FacetWP (front)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-20 20:59+0000\n"
+"POT-Creation-Date: 2021-05-13 17:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Matt Gibbs <hello@facetwp.com>\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Loco https://localise.biz/\n"
-"X-Loco-Version: 2.2.0; wp-5.1-alpha-43678\n"
+"X-Loco-Version: 2.5.2; wp-5.7.2\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "Language: "
 
@@ -20,16 +19,16 @@ msgstr ""
 msgid "& up"
 msgstr ""
 
-#: includes/facets/fselect.php:118 includes/facets/fselect.php:187
-#: includes/facets/dropdown.php:59 includes/facets/hierarchy.php:25
+#: includes/facets/fselect.php:34 includes/facets/fselect.php:71
+#: includes/facets/dropdown.php:33 includes/facets/hierarchy.php:25
 msgid "Any"
 msgstr ""
 
-#: includes/facets/date_range.php:112
+#: includes/facets/date_range.php:303
 msgid "Clear"
 msgstr ""
 
-#: includes/facets/proximity.php:175
+#: includes/facets/proximity.php:180
 msgid "Clear location"
 msgstr ""
 
@@ -37,15 +36,15 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: includes/class-renderer.php:584
+#: includes/class-renderer.php:588
 msgid "Date (Newest)"
 msgstr ""
 
-#: includes/class-renderer.php:591
+#: includes/class-renderer.php:595
 msgid "Date (Oldest)"
 msgstr ""
 
-#: includes/facets/proximity.php:304
+#: includes/facets/proximity.php:309
 msgid "Distance"
 msgstr ""
 
@@ -57,16 +56,16 @@ msgstr ""
 msgid "Enter keywords"
 msgstr ""
 
-#: includes/facets/proximity.php:63
+#: includes/facets/proximity.php:66
 msgid "Enter location"
+msgstr ""
+
+#: includes/facets/autocomplete.php:169
+msgid "Enter {n} or more characters"
 msgstr ""
 
 #: includes/integrations/woocommerce/woocommerce.php:466
 msgid "Featured"
-msgstr ""
-
-#: includes/facets/date_range.php:113
-msgid "from"
 msgstr ""
 
 #: includes/facets/number_range.php:31 includes/facets/autocomplete.php:60
@@ -75,6 +74,10 @@ msgstr ""
 
 #: includes/integrations/woocommerce/woocommerce.php:449
 msgid "In Stock"
+msgstr ""
+
+#: includes/facets/autocomplete.php:168
+msgid "Loading"
 msgstr ""
 
 #: includes/facets/number_range.php:28
@@ -89,11 +92,11 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: includes/facets/autocomplete.php:93
+#: includes/facets/autocomplete.php:93 includes/facets/autocomplete.php:170
 msgid "No results"
 msgstr ""
 
-#: includes/class-display.php:146 includes/facets/fselect.php:194
+#: includes/class-display.php:151 includes/facets/fselect.php:78
 msgid "No results found"
 msgstr ""
 
@@ -101,7 +104,7 @@ msgstr ""
 msgid "Number"
 msgstr ""
 
-#: includes/class-renderer.php:532
+#: includes/class-renderer.php:536
 msgid "of"
 msgstr ""
 
@@ -113,7 +116,7 @@ msgstr ""
 msgid "Out of Stock"
 msgstr ""
 
-#: includes/class-renderer.php:657
+#: includes/class-renderer.php:661
 msgid "Per page"
 msgstr ""
 
@@ -121,23 +124,23 @@ msgstr ""
 msgid "Reset"
 msgstr ""
 
-#: includes/facets/fselect.php:193
+#: includes/facets/fselect.php:77
 msgid "Search"
 msgstr ""
 
-#: includes/facets/checkboxes.php:131 includes/facets/hierarchy.php:155
+#: includes/facets/checkboxes.php:130 includes/facets/hierarchy.php:160
 msgid "See less"
 msgstr ""
 
-#: includes/facets/hierarchy.php:154
+#: includes/facets/hierarchy.php:159
 msgid "See more"
 msgstr ""
 
-#: includes/facets/checkboxes.php:130
+#: includes/facets/checkboxes.php:129
 msgid "See {num} more"
 msgstr ""
 
-#: includes/class-renderer.php:566
+#: includes/class-renderer.php:570
 msgid "Sort by"
 msgstr ""
 
@@ -149,16 +152,12 @@ msgstr ""
 msgid "Start typing"
 msgstr ""
 
-#: includes/class-renderer.php:570
+#: includes/class-renderer.php:574
 msgid "Title (A-Z)"
 msgstr ""
 
-#: includes/class-renderer.php:577
+#: includes/class-renderer.php:581
 msgid "Title (Z-A)"
-msgstr ""
-
-#: includes/facets/date_range.php:114
-msgid "to"
 msgstr ""
 
 #: includes/facets/rating.php:111
@@ -169,6 +168,6 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#: includes/facets/fselect.php:192
+#: includes/facets/fselect.php:76
 msgid "{n} selected"
 msgstr ""

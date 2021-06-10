@@ -1,6 +1,6 @@
 (function($) {
 
-    $(document).on('facetwp-refresh', function() {
+    $().on('facetwp-refresh', function() {
         if (! FWP.loaded) {
             setup_woocommerce();
         }
@@ -9,7 +9,7 @@
     function setup_woocommerce() {
 
         // Intercept WooCommerce pagination
-        $(document).on('click', '.woocommerce-pagination a', function(e) {
+        $().on('click', '.woocommerce-pagination a', function(e) {
             e.preventDefault();
             var matches = $(this).attr('href').match(/\/page\/(\d+)/);
             if (null !== matches) {
@@ -20,15 +20,15 @@
         });
 
         // Disable sort handler
-        $('.woocommerce-ordering').off('change', 'select.orderby');
+        $('.woocommerce-ordering').attr('onsubmit', 'event.preventDefault()');
 
         // Intercept WooCommerce sorting
-        $(document).on('change', '.woocommerce-ordering .orderby', function(e) {
-            var url_obj = queryString.parse(window.location.search);
-            url_obj.orderby = $(this).val();
-            history.pushState(null, null, window.location.pathname + '?' + queryString.stringify(url_obj));
+        $().on('change', '.woocommerce-ordering .orderby', function(e) {
+            var qs = new URLSearchParams(window.location.search);
+            qs.set('orderby', $(this).val());
+            history.pushState(null, null, window.location.pathname + '?' + qs.toString());
             FWP.soft_refresh = true;
             FWP.refresh();
         });
     }
-})(jQuery);
+})(fUtil);

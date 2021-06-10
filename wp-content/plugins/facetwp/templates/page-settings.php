@@ -52,6 +52,8 @@ foreach ( $facet_types as $name => $class ) {
 <script src="<?php echo FACETWP_URL; ?>/assets/vendor/vue/vue-clickaway.min.js"></script>
 <script src="<?php echo FACETWP_URL; ?>/assets/vendor/vue/vue-select/vue-select.js"></script>
 <script src="<?php echo FACETWP_URL; ?>/assets/js/src/event-manager.js?ver=<?php echo FACETWP_VERSION; ?>"></script>
+<script src="<?php echo FACETWP_URL; ?>/assets/vendor/fUtil/fUtil.js?ver=<?php echo FACETWP_VERSION; ?>"></script>
+<script src="<?php echo FACETWP_URL; ?>/assets/vendor/fTip/fTip.js?ver=<?php echo FACETWP_VERSION; ?>"></script>
 <script src="<?php echo FACETWP_URL; ?>/assets/vendor/fSelect/fSelect.js?ver=<?php echo FACETWP_VERSION; ?>"></script>
 <script src="<?php echo FACETWP_URL; ?>/assets/vendor/vanilla-picker-mini/vanilla-picker-mini.min.js?ver=<?php echo FACETWP_VERSION; ?>"></script>
 <?php
@@ -86,6 +88,7 @@ FWP.data.settings = FWP.hooks.applyFilters('facetwp/load_settings', FWP.data.set
 
 </script>
 <link href="<?php echo FACETWP_URL; ?>/assets/css/admin.css?ver=<?php echo FACETWP_VERSION; ?>" rel="stylesheet">
+<link href="<?php echo FACETWP_URL; ?>/assets/vendor/fTip/fTip.css?ver=<?php echo FACETWP_VERSION; ?>" rel="stylesheet">
 <link href="<?php echo FACETWP_URL; ?>/assets/vendor/fSelect/fSelect.css?ver=<?php echo FACETWP_VERSION; ?>" rel="stylesheet">
 <link href="<?php echo FACETWP_URL; ?>/assets/vendor/vue/vue-select/vue-select.css" rel="stylesheet">
 
@@ -118,11 +121,18 @@ FWP.data.settings = FWP.hooks.applyFilters('facetwp/load_settings', FWP.data.set
             </div>
         </span>
 
-        <span class="facetwp-response"></span>
+        <div class="facetwp-response-wrap">
+            <div class="facetwp-response"></div>
+            <div class="facetwp-response-icon" data-status="load">
+                <span></span>
+            </div>
+        </div>
     </div>
 
     <div class="wrap">
-        <div class="facetwp-loading" :class="{ hidden: true }"></div>
+        <div class="facetwp-loading" :class="{ hidden: true }">
+            Check your browser console if this text doesn't disappear
+        </div>
 
         <!-- Facets tab -->
 

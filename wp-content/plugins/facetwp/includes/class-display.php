@@ -124,6 +124,11 @@ class FacetWP_Display
             // Load required JS
             $this->assets['front.js'] = FACETWP_URL . '/assets/js/dist/front.min.js';
 
+            // Backwards compat?
+            if ( apply_filters( 'facetwp_load_deprecated', true ) ) {
+                $this->assets['front-deprecated.js'] = FACETWP_URL . '/assets/js/src/deprecated.js';
+            }
+
             // Load a11y?
             if ( apply_filters( 'facetwp_load_a11y', false ) ) {
                 $this->assets['accessibility.js'] = FACETWP_URL . '/assets/js/src/accessibility.js';
@@ -168,19 +173,19 @@ class FacetWP_Display
             $inline_scripts = ob_get_clean();
             $assets = apply_filters( 'facetwp_assets', $this->assets );
 
-            foreach ( $assets as $slug => $url ) {
-                $html = '<script src="{url}"></script>';
-
-                if ( 'css' == substr( $slug, -3 ) ) {
-                    $html = '<link href="{url}" rel="stylesheet">';
-                }
+            foreach ( $assets as $slug => $data ) {
+                $data = (array) $data;
+                $is_css = ( 'css' == substr( $slug, -3 ) );
+                $version = empty( $data[1] ) ? FACETWP_VERSION : $data[1];
+                $url = $data[0];
 
                 if ( false !== strpos( $url, 'facetwp' ) ) {
-                    $url .= '?ver=' . FACETWP_VERSION;
+                    $prefix = ( false !== strpos( $url, '?' ) ) ? '&' : '?';
+                    $url .= $prefix . 'ver=' . $version;
                 }
 
+                $html = $is_css ? '<link href="{url}" rel="stylesheet">' : '<script src="{url}"></script>';
                 $html = apply_filters( 'facetwp_asset_html', $html, $url );
-
                 echo str_replace( '{url}', $url, $html ) . "\n";
             }
 

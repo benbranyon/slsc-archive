@@ -9,7 +9,8 @@ add_action( 'rest_api_init', function() {
 });
 
 function facetwp_api_refresh( $request ) {
-    $action = isset( $_POST['action'] ) ? $_POST['action'] : '';
+    $params = $request->get_params();
+    $action = isset( $params['action'] ) ? $params['action'] : '';
 
     $valid_actions = [
         'facetwp_refresh',

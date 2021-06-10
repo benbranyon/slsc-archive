@@ -21,8 +21,12 @@ class FacetWP_API_Fetch
     // PHP < 5.3
     function callback( $request ) {
         $data = $request->get_param( 'data' );
-        $params = empty( $data ) ? [] : json_decode( $data, true );
-        return $this->process_request( $params );
+
+        if ( ! $request->is_json_content_type()) {
+            $data = empty( $data ) ? [] : json_decode( $data, true );
+        }
+
+        return $this->process_request( $data );
     }
 
 

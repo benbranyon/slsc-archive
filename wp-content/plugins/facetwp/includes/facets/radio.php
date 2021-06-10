@@ -32,12 +32,17 @@ class FacetWP_Facet_Radio_Core extends FacetWP_Facet
             $output .= '<div class="facetwp-radio' . $selected . '" data-value="">' . esc_attr( $label_any ) . '</div>';
         }
 
-        $key = 0;
-        foreach ( $values as $key => $result ) {
-            $selected = in_array( $result['facet_value'], $selected_values ) ? ' checked' : '';
-            $selected .= ( 0 == $result['counter'] && '' == $selected ) ? ' disabled' : '';
-            $output .= '<div class="facetwp-radio' . $selected . '" data-value="' . esc_attr( $result['facet_value'] ) . '">';
-            $output .= esc_html( $result['facet_display_value'] ) . ' <span class="facetwp-counter">(' . $result['counter'] . ')</span>';
+        foreach ( $values as $row ) {
+            $label = esc_html( $row['facet_display_value'] );
+            $selected = in_array( $row['facet_value'], $selected_values ) ? ' checked' : '';
+            $selected .= ( 0 == $row['counter'] && '' == $selected ) ? ' disabled' : '';
+            $output .= '<div class="facetwp-radio' . $selected . '" data-value="' . esc_attr( $row['facet_value'] ) . '">';
+            $output .= apply_filters( 'facetwp_facet_display_value', $label, [
+                'selected' => ( '' !== $selected ),
+                'facet' => $facet,
+                'row' => $row
+            ]);
+            $output .= ' <span class="facetwp-counter">(' . $row['counter'] . ')</span>';
             $output .= '</div>';
         }
 

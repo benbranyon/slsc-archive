@@ -20,7 +20,22 @@ class FacetWP_Request
 
 
     function __construct() {
+        $this->process_json();
         $this->intercept_request();
+    }
+
+
+    /**
+     * application/json requires processing the raw PHP input stream
+     */
+    function process_json() {
+        $json = file_get_contents( 'php://input' );
+        if ( 0 === strpos( $json, '{' ) ) {
+            $post_data = json_decode( $json, true );
+            if ( isset( $post_data['action'] ) && 0 === strpos( $post_data['action'], 'facetwp' ) ) {
+                $_POST = $post_data;
+            }
+        }
     }
 
 
@@ -172,6 +187,7 @@ class FacetWP_Request
 
         if ( 'product_query' == $query->get( 'wc_query' ) ) {
             wc_set_loop_prop( 'total', FWP()->facet->pager_args['total_rows'] );
+            wc_set_loop_prop( 'per_page', FWP()->facet->pager_args['per_page'] );
             wc_set_loop_prop( 'total_pages', FWP()->facet->pager_args['total_pages'] );
             wc_set_loop_prop( 'current_page', FWP()->facet->pager_args['page'] );
         }
@@ -196,7 +212,7 @@ class FacetWP_Request
      */
     function process_post_data() {
         $data = stripslashes_deep( $_POST['data'] );
-        $facets = json_decode( $data['facets'], true );
+        $facets = $data['facets'];
         $extras = isset( $data['extras'] ) ? $data['extras'] : [];
         $frozen_facets = isset( $data['frozen_facets'] ) ? $data['frozen_facets'] : [];
 

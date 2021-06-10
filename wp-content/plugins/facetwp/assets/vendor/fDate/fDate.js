@@ -5,7 +5,7 @@ window.fDate = (() => {
     var ymd = (...args) => {
         var d = new Date(...args);
         var zeroed = (num) => (num > 9) ? num : '0' + num;
-        // using .toJSON() produced unexpected results due to timezones
+        // toJSON() produces unexpected results due to timezones
         return d.getFullYear() + '-' + zeroed(d.getMonth() + 1) + '-' + zeroed(d.getDate());
     };
 

@@ -60,7 +60,12 @@ class FacetWP_Facet_Proximity_Core extends FacetWP_Facet
 
         ob_start();
 ?>
-        <input type="text" class="facetwp-location" value="<?php echo esc_attr( $location_name ); ?>" placeholder="<?php _e( 'Enter location', 'fwp-front' ); ?>" autocomplete="off" />
+
+        <span class="facetwp-input-wrap">
+            <i class="facetwp-icon locate-me"></i>
+            <input type="text" class="facetwp-location" value="<?php echo esc_attr( $location_name ); ?>" placeholder="<?php _e( 'Enter location', 'fwp-front' ); ?>" autocomplete="off" />
+            <div class="location-results facetwp-hidden"></div>
+        </span>
 
         <?php if ( 'dropdown' == $radius_ui ) : ?>
 

@@ -44,12 +44,9 @@ class FacetWP_Facet_fSelect extends FacetWP_Facet
             // Determine whether to show counts
             $display_value = esc_html( $result['facet_display_value'] );
             $show_counts = apply_filters( 'facetwp_facet_dropdown_show_counts', true, [ 'facet' => $facet ] );
+            $counter = ( $show_counts ) ? $result['counter'] : '';
 
-            if ( $show_counts ) {
-                $display_value .= ' {{(' . $result['counter'] . ')}}';
-            }
-
-            $output .= '<option value="' . esc_attr( $result['facet_value'] ) . '" class="d' . $result['depth'] . '"' . $selected . '>' . $display_value . '</option>';
+            $output .= '<option value="' . esc_attr( $result['facet_value'] ) . '" data-counter="' . $counter . '" class="d' . $result['depth'] . '"' . $selected . '>' . $display_value . '</option>';
         }
 
         $output .= '</select>';
