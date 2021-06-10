@@ -19,6 +19,7 @@ function seedprod_lite_create_menus() {
 	$notification        = '';
 	$n                   = new SeedProd_Notifications();
 	$notifications_count = $n->get_count();
+
 	if ( ! empty( $notifications_count ) ) {
 		$notification = '<div class="seedprod-menu-notification-counter"><span>' . $notifications_count . '</span></div>';
 	}
@@ -339,7 +340,7 @@ function seedprod_lite_get_wpform() {
 		$form_description = filter_input( INPUT_GET, 'form_description', FILTER_VALIDATE_BOOLEAN );
 		ob_start();
 		?>
-	  <link rel='stylesheet' id='wpforms-full-css'  href='<?php echo content_url(); ?>/plugins/wpforms-lite/assets/css/wpforms-full.css' media='all' />
+	  <link rel='stylesheet' id='wpforms-full-css'  href='<?php echo WPFORMS_PLUGIN_URL; ?>assets/css/wpforms-full.css' media='all' />
 		<?php
 		wpforms_display( $form_id, $form_title, $form_description );
 		return wp_send_json( ob_get_clean() );
@@ -368,12 +369,15 @@ function seedprod_lite_get_rafflepress_code() {
 
 	if ( check_ajax_referer( 'seedprod_nonce' ) ) {
 		$id = filter_input( INPUT_GET, 'form_id', FILTER_SANITIZE_NUMBER_INT );
+		if(empty($id)){
+			return '';
+		}
 		ob_start();
 		?>
 	  <div class="sp-relative">
 	  <div class="rafflepress-giveaway-iframe-wrapper rpoverlay">
 	  <iframe id="rafflepress-<?php echo $id; ?>"
-		  src="<?php echo home_url() . '?rpid=' . $id . '?iframe=1&giframe=' . $a['giframe'] . '&rpr=' . $ref . '&parent_url=' . urlencode( $parent_url ); ?>&<?php echo mt_rand( 1, 99999 ); ?>"
+		  src="<?php echo home_url() . '?rpid=' . $id . '?iframe=1' ?>"
 		  frameborder="0" scrolling="no" allowtransparency="true" style="width:100%; height:400px" ></iframe>
   </div>
 	</div>
@@ -383,144 +387,4 @@ function seedprod_lite_get_rafflepress_code() {
 	}
 }
 
-
-/**
- * Get WooCommerce Products.
- *
- * @return JSON object.
- */
-function seedprod_lite_get_woocommerce_products() {
-	$products = array();
-
-	if ( check_ajax_referer( 'seedprod_nonce' ) ) {
-		// Check if Woocommmerce is installed and active.
-		if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
-			// Fetch Products.
-			$args = array(
-				'status' => 'publish',
-			);
-
-			$p = wc_get_products( $args );
-
-			foreach ( $p as $product ) {
-				$products[] = $product->get_data();
-			}
-		}
-	}
-
-	wp_send_json( $products );
-}
-
-/**
- * Get product taxonomy.
- *
- * @return JSON object.
- */
-function seedprod_lite_get_woocommerce_product_taxonomy() {
-	$taxonomy = array();
-
-	if ( check_ajax_referer( 'seedprod_nonce' ) ) {
-		// Check if Woocommmerce is installed and active.
-		if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
-			// Fetch taxonomy.
-			$args = array(
-				'taxonomy'   => $_GET['taxonomy'],
-				'hide_empty' => false,
-			);
-
-			$taxonomy = get_terms( $args );
-		}
-	}
-
-	wp_send_json( $taxonomy );
-}
-
-/**
- * Get list of product attributes
- *
- * @return JSON object.
- */
-function seedprod_lite_get_woocommerce_product_attributes() {
-	$attributes = array();
-
-	if ( check_ajax_referer( 'seedprod_nonce' ) ) {
-		// Check if Woocommmerce is installed and active.
-		if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
-			$attributes = wc_get_attribute_taxonomies();
-		}
-	}
-
-	wp_send_json( $attributes );
-}
-
-/**
- * Get list of product attribute terms.
- *
- * @return JSON object.
- */
-function seedprod_lite_get_woocommerce_product_attribute_terms() {
-	$attribute_terms = array();
-
-	if ( check_ajax_referer( 'seedprod_nonce' ) ) {
-		// Check if Woocommmerce is installed and active.
-		if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
-			$attribute = $_GET['attribute'];
-
-			// Get attribute terms
-			if ( $attribute ) {
-				$attribute_terms = get_terms(
-					array(
-						'taxonomy'   => 'pa_' . $attribute,
-						'hide_empty' => false,
-					)
-				);
-			}
-		}
-	}
-
-	wp_send_json( $attribute_terms );
-}
-
-// login redirect
-function seedprod_lite_redirect_login_page() {
-	$post = $_POST;
-	if ( empty( $post ) ) {
-		$query = $_GET;
-
-		if ( empty( $query ) || strpos( http_build_query( $query ), 'redirect_to' ) !== false || strpos( http_build_query( $query ), 'loggedout' ) !== false ) {
-			// Top Level Settings
-			$ts                = get_option( 'seedprod_settings' );
-			$seedprod_settings = json_decode( $ts );
-
-			// Page Info
-			$page_id = 0;
-
-			//Get 404 Page Id
-			if ( ! empty( $seedprod_settings->enable_login_mode ) ) {
-				$page_id = get_option( 'seedprod_login_page_id' );
-			} else {
-				return false;
-			}
-
-			// Get Page
-			global $wpdb;
-			$tablename = $wpdb->prefix . 'posts';
-			$sql       = "SELECT * FROM $tablename WHERE id= %d";
-			$safe_sql  = $wpdb->prepare( $sql, absint( $page_id ) );
-			$page      = $wpdb->get_row( $safe_sql );
-
-			$settings = json_decode( $page->post_content_filtered );
-
-			if ( empty( $page ) ) {
-				return false;
-			}
-
-			if ( ! empty( $settings->redirect_login_page ) && ! empty( $seedprod_settings->enable_login_mode ) ) {
-				wp_redirect( '/?page_id=' . $page_id );
-			}
-		}
-	}
-}
-add_action( 'login_head', 'seedprod_lite_redirect_login_page' );
-/* end-remove-for-free */
 

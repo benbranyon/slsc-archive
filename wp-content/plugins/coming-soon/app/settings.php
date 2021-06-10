@@ -9,6 +9,12 @@ function seedprod_lite_save_settings() {
 			$settings = stripslashes_deep( $_POST['settings'] );
 
 			$s = json_decode( $settings );
+			$s->api_key = sanitize_text_field($s->api_key);
+			$s->enable_coming_soon_mode = sanitize_text_field($s->enable_coming_soon_mode);
+			$s->enable_maintenance_mode = sanitize_text_field($s->enable_maintenance_mode);
+			$s->enable_login_mode = sanitize_text_field($s->enable_login_mode);
+			$s->enable_404_mode = sanitize_text_field($s->enable_404_mode);
+
 
 			// Get old settings to check if there has been a change
 			$settings_old = get_option( 'seedprod_settings' );
@@ -76,13 +82,14 @@ function seedprod_lite_save_app_settings() {
 
 		if ( ! empty( $_POST['app_settings'] ) ) {
 
-			$app_settings        = stripslashes_deep( $_POST['app_settings'] );
-			if(isset($app_settings["disable_seedprod_button"]) && $app_settings["disable_seedprod_button"] == "true"){
-				$app_settings["disable_seedprod_button"] = true;
-			}else{
-				$app_settings["disable_seedprod_button"] = false;
+			$app_settings = stripslashes_deep( $_POST['app_settings'] );
+			if ( isset( $app_settings['disable_seedprod_button'] ) && $app_settings['disable_seedprod_button'] == 'true' ) {
+				$app_settings['disable_seedprod_button'] = true;
+			} else {
+				$app_settings['disable_seedprod_button'] = false;
 			}
-			$app_settings_encode = json_encode( $app_settings );
+			$app_settings['facebook_g_app_id'] = sanitize_text_field($app_settings['facebook_g_app_id']);
+			$app_settings_encode = wp_json_encode( $app_settings );
 
 			update_option( 'seedprod_app_settings', $app_settings_encode );
 			$response = array(

@@ -14,6 +14,7 @@ $timezones = seedprod_lite_get_timezones();
 
 // Pers
 $per               = array();
+$active_license    = false;
 $template_dev_mode = false;
 
 
@@ -79,6 +80,7 @@ $lmsg = get_option( 'seedprod_api_message' );
 if ( empty( $lmsg ) ) {
 	$lmsg = '';
 }
+
 $lclass = 'alert-danger';
 if ( seedprod_lite_cu() ) {
 	$lclass = 'alert-success';
@@ -218,7 +220,7 @@ if ( ! empty( $seedprod_unsupported_feature ) ) {
 
 var seedprod_data_admin =
 	<?php
-	echo json_encode(
+	echo wp_json_encode(
 		array(
 			'show_inline_cta'              => $show_inline_cta,
 			'show_topbar_cta'              => $show_topbar_cta,
@@ -246,6 +248,7 @@ var seedprod_data_admin =
 			'license_key'                  => $license_key,
 			'license_name'                 => $license_name,
 			'per'                          => $per,
+			'active_license'               => $active_license,
 			'page_path'                    => 'seedprod_lite',
 			'plugin_path'                  => SEEDPROD_PLUGIN_URL,
 			'home_url'                     => home_url(),

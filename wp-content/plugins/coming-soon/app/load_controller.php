@@ -55,7 +55,7 @@ function seedprod_lite_admin_js() {
     ";
 
 	if ( ! empty( $_GET['post'] ) ) {
-		$id          = $_GET['post'];
+		$id          = absint($_GET['post']);
 		$is_seedprod = 0;
 		if ( ! empty( get_post_meta( $id, '_seedprod_page', true ) ) ) {
 			$is_seedprod = get_post_meta( $id, '_seedprod_page', true );

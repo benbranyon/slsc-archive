@@ -22,7 +22,7 @@ function seedprod_lite_get_lpage_list() {
 
 function seedprod_lite_slug_exists() {
 	if ( check_ajax_referer( 'seedprod_lite_slug_exists' ) ) {
-		$post_name = $_POST['post_name'];
+		$post_name = sanitize_text_field($_POST['post_name']);
 		global $wpdb;
 		$tablename = $wpdb->prefix . 'posts';
 		$sql       = "SELECT post_name FROM $tablename";
@@ -518,7 +518,7 @@ function seedprod_lite_save_lpage() {
 		if ( ! empty( $errors ) ) {
 			header( 'Content-Type: application/json' );
 			header( 'Status: 400 Bad Request' );
-			echo json_encode( $errors );
+			echo wp_json_encode( $errors );
 			exit();
 		}
 
@@ -749,7 +749,7 @@ function seedprod_lite_save_template() {
 				$tablename,
 				array(
 					'post_title'            => sanitize_text_field( $_POST['lpage_name'] ),
-					'post_content_filtered' => json_encode( $settings ),
+					'post_content_filtered' => wp_json_encode( $settings ),
 					'post_name'             => sanitize_title( $_POST['lpage_slug'] ),
 				),
 				array( 'ID' => $lpage_id ),

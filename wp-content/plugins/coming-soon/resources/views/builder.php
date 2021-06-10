@@ -107,6 +107,7 @@ $template_preview_path = 'https://assets.seedprod.com/preview-';
 
 // Pers
 $per                        = array();
+$active_license             = false;
 $template_dev_mode          = false;
 $template_dev_mode_url      = false;
 $template_dev_mode_password = false;
@@ -178,12 +179,12 @@ foreach ( $fontawesome_json as $v ) {
 
 <script>
 var seedprod_nonce = "<?php echo $seedprod_nonce; ?>";
-var seedprod_page = "<?php echo $_GET['page']; ?>";
+var seedprod_page = "<?php echo sanitize_text_field($_GET['page']); ?>";
 var seedprod_remote_api = "<?php echo SEEDPROD_API_URL; ?>";
 <?php
 $from = '';
 if ( ! empty( $_GET['from'] ) ) {
-	$form = $_GET['from'];
+	$form = sanitize_text_field($_GET['from']);
 }
 ?>
 var seedprod_from = "<?php echo $from; ?>";
@@ -263,9 +264,17 @@ var seedprod_plugin_nonce_url = "<?php echo $ajax_url; ?>";
 <?php $ajax_url = html_entity_decode( wp_nonce_url( 'admin-ajax.php?action=seedprod_lite_dismiss_upsell', 'seedprod_lite_dismiss_upsell' ) ); ?>
 var seedprod_dismiss_upsell = "<?php echo $ajax_url; ?>";
 
+<?php
+$unfiltered_html= false;
+if(current_user_can( 'unfiltered_html' )){
+	$unfiltered_html = true;
+}
+?>
+
 var seedprod_data = 
 <?php
 $seedprod_data = array(
+	'unfiltered_html'			  => $unfiltered_html,
 	'show_bottombar_cta'          => $show_bottombar_cta,
 	'template_preview_path'       => $template_preview_path,
 	'page_uuid'                   => $lpage_uuid,
@@ -308,6 +317,7 @@ $seedprod_data = array(
 	'template_dev_mode_password'  => $template_dev_mode_password,
 	'email_integration_url'       => $email_integration_url,
 	'per'                         => $per,
+	'active_license'              => $active_license,
 );
 
 //if (function_exists('wpforms')) {
@@ -336,7 +346,7 @@ $seedprod_data = array(
 		$seedprod_data['wc_active'] = false;
 	}
 
-	echo json_encode( $seedprod_data );
+	echo wp_json_encode( $seedprod_data );
 	?>
 	;
 

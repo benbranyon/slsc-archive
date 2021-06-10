@@ -119,7 +119,7 @@ class seedprod_lite_Render {
 		if ( ! empty( $seedprod_api_key ) ) {
 			if ( isset( $_REQUEST['seedprod_token'] ) && $_REQUEST['seedprod_token'] == $seedprod_api_key ) {
 				if ( isset( $_REQUEST['seedprod_mode'] ) ) {
-					$mode              = $_REQUEST['seedprod_mode'];
+					$mode              = absint($_REQUEST['seedprod_mode']);
 					$ts                = get_option( 'seedprod_settings' );
 					$seedprod_settings = json_decode( $ts, true );
 

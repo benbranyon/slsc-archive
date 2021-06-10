@@ -1,5 +1,5 @@
 <h1 class="sp-text-xl sp-mt-4 sp-mb-1"><?php esc_html_e( 'System Information', 'coming-soon' ); ?></h1>
-<textarea readonly="readonly" style="width: 100%; height: 500px"><?php echo seedprod_lite_get_system_info(); ?></textarea>
+<textarea readonly="readonly" style="width: 100%; height: 500px"><?php echo esc_textarea(seedprod_lite_get_system_info()); ?></textarea>
 
 
 <?php

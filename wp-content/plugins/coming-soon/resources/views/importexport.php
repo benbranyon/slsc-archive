@@ -48,6 +48,6 @@ if ( json_last_error() === JSON_ERROR_NONE ) {
 ?>
 <form method="post">
 <h1>Post JSON</h1>
-<textarea name="sp_post_json" style="width:100%; height: 500px;"><?php echo $result->post_content_filtered; ?></textarea>
+<textarea name="sp_post_json" style="width:100%; height: 500px;"><?php echo esc_textarea($result->post_content_filtered); ?></textarea>
 <input type="submit">
 </form>

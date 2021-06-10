@@ -37,7 +37,7 @@ function seedprod_lite_welcome_screen_do_activation_redirect() {
 function seedprod_lite_save_api_key( $api_key = null ) {
 	if ( check_ajax_referer( 'seedprod_nonce', '_wpnonce', false ) || ! empty( $api_key ) ) {
 		if ( empty( $api_key ) ) {
-			$api_key = $_POST['api_key'];
+			$api_key = sanitize_text_field($_POST['api_key']);
 		}
 
 		if ( defined( 'SEEDPROD_LOCAL_JS' ) ) {

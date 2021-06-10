@@ -15,7 +15,7 @@ function seedprod_lite_install_addon() {
 
 	// Install the addon.
 	if ( isset( $_POST['plugin'] ) ) {
-		$download_url = $_POST['plugin'];
+		$download_url = sanitize_text_field($_POST['plugin']);
 
 		global $hook_suffix;
 
@@ -36,7 +36,7 @@ function seedprod_lite_install_addon() {
 		ob_start();
 		if ( false === ( $creds = request_filesystem_credentials( $url, $method, false, false, null ) ) ) {
 			$form = ob_get_clean();
-			echo json_encode( array( 'form' => $form ) );
+			echo wp_json_encode( array( 'form' => $form ) );
 			wp_die();
 		}
 
@@ -45,7 +45,7 @@ function seedprod_lite_install_addon() {
 			ob_start();
 			request_filesystem_credentials( $url, $method, true, false, null );
 			$form = ob_get_clean();
-			echo json_encode( array( 'form' => $form ) );
+			echo wp_json_encode( array( 'form' => $form ) );
 			wp_die();
 		}
 
@@ -66,13 +66,13 @@ function seedprod_lite_install_addon() {
 		wp_cache_flush();
 		if ( $installer->plugin_info() ) {
 			$plugin_basename = $installer->plugin_info();
-			echo json_encode( array( 'plugin' => $plugin_basename ) );
+			echo wp_json_encode( array( 'plugin' => $plugin_basename ) );
 			wp_die();
 		}
 	}
 
 	// Send back a response.
-	echo json_encode( true );
+	echo wp_json_encode( true );
 	wp_die();
 }
 
