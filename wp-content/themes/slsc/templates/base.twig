@@ -1,20 +1,21 @@
-{% block html_head_container %}
-  {% include 'html-header.twig' %}
-{% endblock %}
+{{ function('get_header') }}
 
-{% block page_header %}
-  {# This is where you would stick another header, if different than #}
-  {{ function('get_header') }}
-{% endblock %}
+{% block page %}
+  {% block html_head_container %}
+    {% include 'html-header.twig' %}
+  {% endblock %}
 
-<!-- Provided by templates/base.twig -->
-<body {{ function('body_class')}}>
+  {% set body_id = 'body_top' %}
+
+  <!-- Provided by templates/base.twig -->
+  <body {{ function('body_class')}} id="{{ body_id }}">
 
   {% block skiplinks %}
     <div class="skiplinks">
       <a href="#main" class="skiplinks__link visually-hidden focusable">Skip to main content</a>
     </div>
   {% endblock %}
+
 
   {% embed '@layouts/regions/header/header.twig' %}
     {% block content %}
@@ -30,10 +31,6 @@
   {% endembed %}
 
   <main id="main" class="main" role="main" tabindex="-1">
-    {% embed '@layouts/regions/preface/preface.twig' %}
-      {% block content %}
-      {% endblock %}
-    {% endembed %}
 
     {% block content %}
       {% embed '@layouts/regions/content/content.twig' %}
@@ -48,12 +45,11 @@
     {% endembed %}
   </main>
 
-  {% block footer %}
+
+    {% block javascripts %}
+    {% endblock %}
     {{ function('wp_footer') }}
-  {% endblock %}
-
-  {% block javascripts %}
-  {% endblock %}
-
-</body>
-</html>
+  </body>
+  </html>
+{% endblock %}
+{{ function('get_footer') }}
