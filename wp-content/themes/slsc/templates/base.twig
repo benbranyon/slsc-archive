@@ -19,9 +19,9 @@
 
   {% embed '@layouts/regions/header/header.twig' %}
     {% block content %}
-      {% include '@components/site-name/site-name.twig' with {
+      {% include '@components/site-logo/site-logo.twig' with {
         'url': site.url,
-        'site_name': site.title
+        'site_logo': '/wp-content/themes/slsc/images/slsc-archive-mark.png'
       } %}
       {% include '@components/menu/menu.twig' with {
         'items': primary_menu.items,

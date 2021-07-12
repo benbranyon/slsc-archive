@@ -2575,6 +2575,11 @@ details.details {
   [dir='rtl'] .progress__percentage {
     float: left; }
 
+.site-logo {
+  max-width: 400px;
+  padding-bottom: 20px;
+  padding-top: 20px; }
+
 .site-name {
   color: #ccc;
   padding: 20px 0px;
