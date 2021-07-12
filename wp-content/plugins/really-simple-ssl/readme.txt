@@ -1,12 +1,12 @@
 === Really Simple SSL ===
-Contributors: RogierLankhorst, markwolters, hesseldejong
+Contributors: RogierLankhorst, markwolters, hesseldejong, vicocotea
 Donate link: https://www.paypal.me/reallysimplessl
 Tags: SSL, https, force SSL, mixed content, insecure content, secure website, website security, TLS, security, secure socket layers, HSTS
 Requires at least: 4.9
 License: GPL2
 Tested up to: 5.7
 Requires PHP: 5.6
-Stable tag: 4.0.15
+Stable tag: 5.0.2
 
 No setup required! You only need an SSL certificate, and this plugin will do the rest.
 
@@ -15,8 +15,8 @@ Really Simple SSL automatically detects your settings and configures your websit
 To keep it lightweight, the options are kept to a minimum. The entire site will move to SSL.
 
 = Three simple steps for setup: =
-* Get an SSL certificate (can't do that for you, sorry.) [See our recommendations for a free SSL certificate](https://really-simple-ssl.com/knowledge-base/how-to-install-a-free-ssl-certificate-on-your-wordpress-cpanel-hosting/).
 * Activate this plugin
+* Activate SSL in your hosting environment, or generate a free Let's Encrypt certificate in [Really Simple SSL](https://really-simple-ssl.com/knowledge-base/how-to-install-a-free-ssl-certificate-on-your-wordpress-cpanel-hosting/).
 * Enable SSL with one click
 
 https://www.youtube.com/watch?v=BVx3ZrSsPrU
@@ -39,6 +39,7 @@ some cool features.
 * Premium support
 
 = What does the plugin actually do =
+* It will first check for an existing SSL certificate. If you don't have one, you can generate one in the plugin. Depending on your hosting company, we can also install it for you, or help you with instructions
 * The plugin handles most issues that WordPress has with SSL, like when you're behind a reverse proxy/loadbalancer, or when no headers are passed which WordPress can use to detect SSL.
 * All incoming requests are redirected to https. Default with an internal WordPress redirect, but you can also enable a .htaccess redirect.
 * The siteurl and homeurl are changed to https.
@@ -48,6 +49,8 @@ some cool features.
 Check out other plugins developed by Really Simple Plugins as well: [Complianz](https://wordpress.org/plugins/complianz-gdpr/) and [Zip Recipes](https://wordpress.org/plugins/zip-recipes/).
 
 [contact](https://www.really-simple-ssl.com/contact/) me if you have any questions, issues, or suggestions. Really Simple SSL is developed by [Really Simple Plugins](https://www.really-simple-plugins.com).
+
+For free SSL certificate generation, Really Simple SSL uses the [le acme2 PHP](https://github.com/fbett/le-acme2-php/) Let's Encrypt client library, thanks to fbett for providing it.
 
 = Like to have this plugin in your language? =
 Translations can be added very easily [here](https://translate.wordpress.org/projects/wp-plugins/really-simple-ssl). If you do, I can get you added as translation editor to approve the translations.
@@ -86,6 +89,16 @@ If you are experiencing redirect loops on your site, try these [instructions](ht
 Yes. There is a dedicated network settings page where you can switch between network activated SSL and per page SSL. In the dedicated pro for multisite plugin, you can override all site settings for SSL on the network level, and can activate and deactivate SSL in the network menu for each site.
 
 == Changelog ==
+= 5.0.2 =
+* Improvement: remove some files to prevent false positive warnings from windows defender
+* Improvement: move variable in cpanel integration to prevent php warnings.
+
+= 5.0.1 =
+* Fix: obsolete variable in function causing php errors on some configurations.
+
+= 5.0.0 =
+* New: Let's Encrypt SSL certificate generation
+
 = 4.0.15 =
 * Fix: non hierarchical structured form elements in the template could cause settings not to get saved in some configurations.
 
