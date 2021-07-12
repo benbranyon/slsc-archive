@@ -41,13 +41,13 @@ class Tree {
     }
     public static function getAllFoldersAndCount($lang = null) {
       global $wpdb;
-      $query = "SELECT fbva.folder_id, count(fbva.attachment_id) as count FROM {$wpdb->prefix}fbv_attachment_folder as fbva 
+      $query = $wpdb->prepare("SELECT fbva.folder_id, count(fbva.attachment_id) as count FROM {$wpdb->prefix}fbv_attachment_folder as fbva 
       INNER JOIN {$wpdb->prefix}fbv as fbv ON fbv.id = fbva.folder_id 
       INNER JOIN {$wpdb->posts} as posts ON fbva.attachment_id = posts.ID  
       WHERE (posts.post_status = 'inherit' OR posts.post_status = 'private') 
       AND (posts.post_type = 'attachment') 
-      AND fbv.created_by = ".apply_filters('fbv_in_not_in_created_by', '0')." 
-      GROUP BY fbva.folder_id";
+      AND fbv.created_by = %d 
+      GROUP BY fbva.folder_id", apply_filters('fbv_in_not_in_created_by', '0'));
       $query = apply_filters('fbv_all_folders_and_count', $query, $lang);
 
       $results = $wpdb->get_results($query);

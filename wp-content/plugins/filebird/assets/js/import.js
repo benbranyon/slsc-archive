@@ -19,7 +19,7 @@ jQuery( document ).ready(function() {
           setTimeout(() => {
             var mess = '<p>' + fbv_data.i18n.filebird_db_updated + '</p>';
             mess += '<a href="' + fbv_data.media_url + '" class="button button-primary">'+ fbv_data.i18n.go_to_media + '</a>';
-            toastr.success(mess, '', {...toastr_opt, timeOut: 0, extendedTimeOut: 0})
+            toastr.success(mess, '',  Object.assign(toastr_opt, {timeOut: 0, extendedTimeOut: 0}))
           }, 100);
           if(typeof njt_auto_run_import != 'undefined' && njt_auto_run_import == true) {
             location.replace(njt_fb_settings_page)
@@ -30,7 +30,7 @@ jQuery( document ).ready(function() {
       }
     }, function(){
       $this.removeClass('updating-message')
-      toastr.error(fbv_data.i18n.import_failed, '', {...toastr_opt, timeOut: 0, extendedTimeOut: 0})
+      toastr.error(fbv_data.i18n.import_failed, '',  Object.assign(toastr_opt, {timeOut: 0, extendedTimeOut: 0}))
     })
 
     function get_folders(onDone, onFail) {
@@ -72,7 +72,7 @@ jQuery( document ).ready(function() {
         })
         .fail(function(res){
           onFail();
-          toastr.error('Please try again.', '', {...toastr_opt, timeOut: 0, extendedTimeOut: 0})
+          toastr.error('Please try again.', '',  Object.assign(toastr_opt, {timeOut: 0, extendedTimeOut: 0}))
         })
       } else {
         onDone()

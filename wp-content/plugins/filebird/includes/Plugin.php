@@ -75,7 +75,8 @@ class Plugin {
         update_option('fbv_review', time() + 3*60*60*24); //After 3 days show
     }
 
-    FilebirdSchedule::registerShedule();
+    // FilebirdSchedule::registerShedule();
+    FilebirdSchedule::clearSchedule();
   }
 
   /** Plugin deactivate hook */

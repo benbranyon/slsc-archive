@@ -162,6 +162,26 @@ Happy Organizing! 😍
 
 == Changelog ==
 
+Jun 2, 2021 - Version 4.7.7
+- Added: Notice when a license was used
+- Supported: Enhanced Media Library
+- Supported: Media Library Assistant
+- Improved: Load large files
+- Improved: Translation (Added missing strings)
+- Fixed: Loading Uncategorized folder
+- Fixed: Context menu position
+- Fixed: Security
+- Fixed: Small bugs
+
+Jun 11, 2021 - Version 4.7.4
+- Updated: Languages
+- Fixed: JS conflict with Divi builder
+- Fixed: WPML non translated mode make folder counter and files in folders get wrong
+- Fixed: Conflict with Debug Bar plugin
+- Fixed: PolyLang get missing files in folder
+- Fixed: Folder always loading
+- Fixed: Important security updates.
+
 May 26, 2021 - Version 4.7.3
 - Improved: FileBird UI in Mobile
 - Improved: Library

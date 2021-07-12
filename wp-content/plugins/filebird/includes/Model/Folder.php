@@ -190,41 +190,41 @@ class Folder {
       array('%d')
     );
   }
-  public static function getInAndNotInIds($fbv) {
-    global $wpdb;
-    $query = array(
-      'post__not_in' => array(),
-      'post__in' => array()
-    );
+  // public static function getInAndNotInIds($fbv) {
+  //   global $wpdb;
+  //   $query = array(
+  //     'post__not_in' => array(),
+  //     'post__in' => array()
+  //   );
 
-    $select = "SELECT `attachment_id` FROM " . self::getTable(self::$relation_table);
-    $where_arr = array('1 = 1');
-    if($fbv !== -1) {//skip if fbv == -1 (load all)
-      if($fbv === 0) {
-        //load uncategorized folder
-        $created_by = apply_filters('fbv_in_not_in_created_by', '0');
-        $where_arr[] = "`folder_id` IN (SELECT `id` FROM ".self::getTable(self::$folder_table)." WHERE `created_by` = '{$created_by}')";
-        $q = $select. " WHERE " . implode(' AND ', $where_arr);
-        $q = apply_filters('fbv_in_not_in_query', $q, $fbv);
-        $query['post__not_in'] = $wpdb->get_col($q);
-      } else {
-        if( ! is_array($fbv)) {
-          $fbv = array($fbv);
-        }
-        $fbv = array_map('intval', $fbv);
-        $where_arr[] = "`folder_id` IN (".implode(',', $fbv).")";
+  //   $select = "SELECT `attachment_id` FROM " . self::getTable(self::$relation_table);
+  //   $where_arr = array('1 = 1');
+  //   if($fbv !== -1) {//skip if fbv == -1 (load all)
+  //     if($fbv === 0) {
+  //       //load uncategorized folder
+  //       $created_by = apply_filters('fbv_in_not_in_created_by', '0');
+  //       $where_arr[] = "`folder_id` IN (SELECT `id` FROM ".self::getTable(self::$folder_table)." WHERE `created_by` = '{$created_by}')";
+  //       $q = $select. " WHERE " . implode(' AND ', $where_arr);
+  //       $q = apply_filters('fbv_in_not_in_query', $q, $fbv);
+  //       $query['post__not_in'] = $wpdb->get_col($q);
+  //     } else {
+  //       if( ! is_array($fbv)) {
+  //         $fbv = array($fbv);
+  //       }
+  //       $fbv = array_map('intval', $fbv);
+  //       $where_arr[] = "`folder_id` IN (".implode(',', $fbv).")";
 
-        $q = $select. " WHERE " . implode(' AND ', $where_arr);
-        $q = apply_filters('fbv_in_not_in_query', $q, $fbv);
-        $query['post__in'] = $wpdb->get_col($q);
+  //       $q = $select. " WHERE " . implode(' AND ', $where_arr);
+  //       $q = apply_filters('fbv_in_not_in_query', $q, $fbv);
+  //       $query['post__in'] = $wpdb->get_col($q);
 
-        if(count($query['post__in']) == 0) {
-          $query['post__in'] = array(-1);
-        }
-      }
-    }
-    return $query;
-  }
+  //       if(count($query['post__in']) == 0) {
+  //         $query['post__in'] = array(-1);
+  //       }
+  //     }
+  //   }
+  //   return $query;
+  // }
   public static function getAuthor($folder_id) {
     global $wpdb;
     return (int)$wpdb->get_var($wpdb->prepare('SELECT `created_by` FROM %1$s WHERE `id` = %2$d', self::getTable(self::$folder_table), $folder_id));
@@ -255,4 +255,18 @@ class Folder {
     global $wpdb;
     return $wpdb->prefix . $table;
   }
+
+  public static function getRelationsWithFolderUser($clauses){
+    global $wpdb;
+
+    $attachment_in_folder = $wpdb->prepare("SELECT attachment_id 
+                            FROM {$wpdb->prefix}fbv_attachment_folder AS fbva
+                            JOIN {$wpdb->prefix}fbv AS fbv ON fbva.folder_id = fbv.id
+                            GROUP BY attachment_id
+                            HAVING FIND_IN_SET(%d, GROUP_CONCAT(created_by))", apply_filters('fbv_in_not_in_created_by', 0));
+
+    $clauses['where'] .= " AND {$wpdb->posts}.ID NOT IN ($attachment_in_folder) ";
+
+    return $clauses;
+  } 
 }

@@ -103,7 +103,7 @@ class Convert {
   private static function _getOldFolers($parent) {
     global $wpdb;
     $folders = array();
-    $query = "SELECT t.term_id as id, t.name FROM $wpdb->terms as t LEFT JOIN $wpdb->term_taxonomy as tt ON (t.term_id = tt.term_id) WHERE parent = $parent and taxonomy = 'nt_wmc_folder'";
+    $query = $wpdb->prepare("SELECT t.term_id as id, t.name FROM $wpdb->terms as t LEFT JOIN $wpdb->term_taxonomy as tt ON (t.term_id = tt.term_id) WHERE parent = %d and taxonomy = 'nt_wmc_folder'", $parent);
     $folders = $wpdb->get_results($query);
     foreach($folders as $k => $v) {
       $folders[$k]->parent = $parent;
@@ -120,8 +120,8 @@ class Convert {
   }
   private static function _getAttachments($term_id) {
     global $wpdb;
-    $term_taxonomy_id = $wpdb->get_var("SELECT term_taxonomy_id FROM $wpdb->term_taxonomy WHERE term_id = $term_id");
-    $query = "SELECT object_id FROM $wpdb->term_relationships WHERE term_taxonomy_id = " . $term_taxonomy_id;
+    $term_taxonomy_id = $wpdb->get_var($wpdb->prepare("SELECT term_taxonomy_id FROM $wpdb->term_taxonomy WHERE term_id = %d", $term_id));
+    $query = $wpdb->prepare("SELECT object_id FROM $wpdb->term_relationships WHERE term_taxonomy_id = %d", $term_taxonomy_id);
     
     $_data = $wpdb->get_results($query);
     $ids = array();

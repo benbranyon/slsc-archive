@@ -70,14 +70,21 @@ function filebird_gallery_fb_block_assets() {
 	);
 }
 
+function filebird_gallery_prepare_ids($ids) {
+    return array_map(function($item){
+        return (int)$item;
+    }, $ids);
+}
+
 function filebird_gallery_render( $attributes ){
 	global $wpdb;
 
 	if (empty($attributes['selectedFolder'])) return '';
 	
     $where_arr = array('1 = 1');
-	$where_arr[] = "`folder_id` IN (".implode(',', $attributes['selectedFolder']).")";
-	$in_not_in = $wpdb->get_col("SELECT `attachment_id` FROM {$wpdb->prefix}fbv_attachment_folder". " WHERE " . implode(' AND ', apply_filters('fbv_in_not_in_where_query', $where_arr, $attributes['selectedFolder'])));
+	$ids = filebird_gallery_prepare_ids($attributes['selectedFolder']);
+    $where_arr[] = "`folder_id` IN (".implode(',', $ids).")";
+    $in_not_in = $wpdb->get_col("SELECT `attachment_id` FROM {$wpdb->prefix}fbv_attachment_folder". " WHERE " . implode(' AND ', apply_filters('fbv_in_not_in_where_query', $where_arr, $ids)));
 
 	if (empty($in_not_in)) return '';
 
@@ -85,19 +92,19 @@ function filebird_gallery_render( $attributes ){
         'post_type' => 'attachment',
 		'posts_per_page' => -1,
 		'post__in' => $in_not_in,
-		'orderby' => $attributes['sortBy'],
-		'order' => $attributes['sortType'],
+		'orderby' => sanitize_text_field($attributes['sortBy']),
+        'order' => sanitize_text_field($attributes['sortType']),
 		'post_status' => 'inherit'
 	));
 	$posts = $query->get_posts();
 	$ulClass = 'wp-block-filebird-block-filebird-gallery wp-block-gallery blocks-gallery-grid';
-	$ulClass .= ' columns-' . $attributes['columns'];
+	$ulClass .= ' columns-' . esc_attr($attributes['columns']);
 	$ulClass .= $attributes['isCropped'] ? ' is-cropped' : '';
 
 	if (count($posts) < 1) return '';
 
 	$html = '';
-	$html .= '<ul class="' . $ulClass . '">';
+	$html .= '<ul class="' . esc_attr($ulClass) . '">';
 
 	foreach ($posts as $post) {
 		if (!wp_attachment_is_image($post)) {
@@ -117,16 +124,16 @@ function filebird_gallery_render( $attributes ){
 				break;
 		}
 
-		$img = '<img src="' . $imageSrc . '"' . ' alt="' . 'img' . '"';   
+		$img = '<img src="' . esc_attr($imageSrc) . '"' . ' alt="' . 'img' . '"';    
 		$img .= 'class="' . "wp-image-{$post->ID}" . '"/>';
 
 		$li = '<li class="blocks-gallery-item">';
 		$li .= '<figure>';
 		
-		$li .= empty($href) ? $img : '<a href="' . $href . '">' . $img . '</a>';
+		$li .= empty($href) ? $img : '<a href="' . esc_attr($href) . '">' . $img . '</a>';
 
 		if ($attributes['hasCaption']) {
-			$li .= empty($post->post_excerpt) ? '' : '<figcaption class="blocks-gallery-item__caption">' . $post->post_excerpt . '</figcaption>';
+			$li .= empty($post->post_excerpt) ? '' : '<figcaption class="blocks-gallery-item__caption">' . esc_html($post->post_excerpt) . '</figcaption>';
 		}
 
 		$li .= '</figure>';

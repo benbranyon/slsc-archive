@@ -455,13 +455,13 @@ class Convert {
           $att = $wpdb->get_col($wpdb->prepare('SELECT object_id FROM %1$s WHERE term_taxonomy_id = %2$d', $wpdb->term_relationships, $folder->term_taxonomy_id));
         } else if($site == 'wpmlf') {
           $folder_table = $wpdb->prefix . 'mgmlp_folders';
-          $sql = "select ID from {$wpdb->prefix}posts 
+          $sql = $wpdb->prepare("select ID from {$wpdb->prefix}posts 
           LEFT JOIN $folder_table ON({$wpdb->prefix}posts.ID = $folder_table.post_id)
           LEFT JOIN {$wpdb->prefix}postmeta AS pm ON (pm.post_id = {$wpdb->prefix}posts.ID) 
           where post_type = 'attachment' 
-          and folder_id = '$folder->id'
+          and folder_id = %s
           AND pm.meta_key = '_wp_attached_file' 
-          order by post_date desc";
+          order by post_date desc", $folder->id);
           $att = $wpdb->get_col($sql);
         } else if($site == 'wpmf') {
           $att = $wpdb->get_col($wpdb->prepare('SELECT object_id FROM %1$s WHERE term_taxonomy_id = %2$d', $wpdb->term_relationships, $folder->term_taxonomy_id));
