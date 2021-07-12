@@ -396,7 +396,10 @@ function seedprod_lite_add_admin_edit_seedprod() {
 		$edit_seedprod_label  = '<img src="' . SEEDPROD_PLUGIN_URL . 'public/svg/admin-bar-icon.svg" style="margin-right:7px; margin-top:5px">' . __( 'Edit with SeedProd', 'coming-soon' );
 		$back_wordpress_label = __( 'Back to WordPress Editor', 'coming-soon' );
 
-		$localizations = array( 'ajax_url' => admin_url( 'admin-ajax.php' ) );
+		$localizations = array( 
+			'ajax_url' => admin_url( 'admin-ajax.php' ),
+			'nonce' =>  wp_create_nonce( 'seedprod_back_to_editor_'.$id ),
+		);
 
 		printf(
 			'
@@ -479,6 +482,7 @@ function seedprod_lite_add_admin_edit_seedprod() {
     
                 var formData = new FormData();
                 formData.append("action", "' . $remove_post_callback . '");
+				formData.append("nonce", "' . $localizations['nonce'] . '");
                 formData.append("post_id", post_id);
                 //console.log(formData);
     
@@ -599,15 +603,15 @@ add_action( 'admin_bar_menu', 'seedprod_lite_add_menu_item', 80 );
 add_action( 'wp_ajax_seedprod_lite_remove_post', 'seedprod_lite_remove_post' );
 
 function seedprod_lite_remove_post() {
-	$post_id = absint($_POST['post_id']);
-	$data    = array(
-		'ID'           => $post_id,
-		'post_content' => '',
-	);
+    if (check_ajax_referer('seedprod_back_to_editor_'.absint($_POST['post_id']), 'nonce') && current_user_can('delete_posts')) {
+        $post_id = absint($_POST['post_id']);
+        $data    = array(
+        'ID'           => $post_id,
+    );
 
-	delete_post_meta( $post_id, '_seedprod_page' );
-	wp_update_post( $data );
-	wp_die();
+        delete_post_meta($post_id, '_seedprod_page');
+        wp_die();
+    }
 }
 
 

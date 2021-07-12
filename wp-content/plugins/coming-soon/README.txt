@@ -5,7 +5,7 @@ Tags: maintenance mode, coming soon page, coming soon, under construction, landi
 Requires at least: 5.0
 Tested up to: 5.7
 Requires PHP: 5.6
-Stable tag: 6.2.3
+Stable tag: 6.2.4
 Text Domain: coming-soon
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -156,6 +156,10 @@ Yes, you cam build custom Product, Checkout and Cart pages with our WooCommerce 
 
 
 == Changelog ==
+= 6.2.5 =
+
+* Updated - Improved editor switching
+
 = 6.2.4 =
 
 * Fixed - PHP warning when php shorttags are enabled
