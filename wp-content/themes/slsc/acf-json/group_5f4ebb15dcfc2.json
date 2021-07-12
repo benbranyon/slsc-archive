@@ -22,6 +22,25 @@
             "new_lines": ""
         },
         {
+            "key": "field_60eca6833ca6b",
+            "label": "Homepage Blurb",
+            "name": "homepage_blurb",
+            "type": "wysiwyg",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "tabs": "all",
+            "toolbar": "basic",
+            "media_upload": 1,
+            "delay": 0
+        },
+        {
             "key": "field_5fce91c1e1774",
             "label": "Starting Points",
             "name": "starting_points",
@@ -66,5 +85,5 @@
     "hide_on_screen": "",
     "active": true,
     "description": "",
-    "modified": 1607373320
+    "modified": 1626121882
 }
