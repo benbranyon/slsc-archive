@@ -1,4 +1,6 @@
-jQuery(document).ready(function () {
+jQuery(document).ready(function ($) {
+	var saveBtn   = jQuery("#disableCommentSaveSettings button.button.button__success");
+	var deleteBtn = jQuery("#deleteCommentSettings button.button.button__delete");
 	/**
 	 * Settings Scripts
 	 */
@@ -28,9 +30,31 @@ jQuery(document).ready(function () {
 	}
 	disbale_comments_tabs();
 	// UI Helper
+	function enable_site_wise_uihelper() {
+		var indiv_bits = jQuery(
+			".disabled__sites .remove__checklist__item"
+		);
+		if (jQuery("#sitewide_settings").is(":checked")) {
+			indiv_bits
+				.css("opacity", ".3")
+				.find(":input")
+				.attr("disabled", true);
+		} else {
+			indiv_bits
+				.css("opacity", "1")
+				.find(":input")
+				.attr("disabled", false);
+		}
+	}
+
+	jQuery("#sitewide_settings").on('change', function () {
+		enable_site_wise_uihelper();
+	});
+	enable_site_wise_uihelper();
+
 	function disable_comments_uihelper() {
 		var indiv_bits = jQuery(
-			".remove__checklist .remove__checklist__item, #extratypes"
+			"#disable__post__types .remove__checklist__item, #extratypes"
 		);
 		if (jQuery("#remove_everywhere").is(":checked")) {
 			indiv_bits
@@ -53,7 +77,7 @@ jQuery(document).ready(function () {
 
 	function delete_comments_uihelper() {
 		var toggle_pt_bits = jQuery(
-			".delete__checklist .delete__checklist__item, #extradeletetypes"
+			"#delete__post__types .delete__checklist__item, #extradeletetypes"
 		);
 		var toggle_ct_bits = jQuery("#listofdeletecommenttypes");
 		if (jQuery("#delete_everywhere").is(":checked")) {
@@ -105,47 +129,95 @@ jQuery(document).ready(function () {
 			nonce: disableCommentsObj._nonce,
 			data: jQuery(this).serializeArray(),
 		};
-		jQuery.post(ajaxurl, data, function (response) {
-			if (response.success) {
+
+		jQuery.ajax({
+			url: ajaxurl,
+			type: "post",
+			data: data,
+			beforeSend: function () {
+				saveBtn.html(
+					'<svg id="eael-spinner" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 48 48"><circle cx="24" cy="4" r="4" fill="#fff"/><circle cx="12.19" cy="7.86" r="3.7" fill="#fffbf2"/><circle cx="5.02" cy="17.68" r="3.4" fill="#fef7e4"/><circle cx="5.02" cy="30.32" r="3.1" fill="#fef3d7"/><circle cx="12.19" cy="40.14" r="2.8" fill="#feefc9"/><circle cx="24" cy="44" r="2.5" fill="#feebbc"/><circle cx="35.81" cy="40.14" r="2.2" fill="#fde7af"/><circle cx="42.98" cy="30.32" r="1.9" fill="#fde3a1"/><circle cx="42.98" cy="17.68" r="1.6" fill="#fddf94"/><circle cx="35.81" cy="7.86" r="1.3" fill="#fcdb86"/></svg><span>Saving Settings..</span>'
+				);
+			},
+			success: function (response) {
+				if (response.success) {
+					saveBtn.html("Save Settings");
+					Swal.fire({
+						icon: "success",
+						title: response.data.message,
+						timer: 3000,
+						showConfirmButton: false,
+					});
+					saveBtn.removeClass('form-dirty');
+				}
+			},
+			error: function () {
+				saveBtn.html("Save Settings");
 				Swal.fire({
-					icon: "success",
-					title: response.data.message,
-					timer: 3000,
-					showConfirmButton: false,
+					type: "error",
+					title: "Oops...",
+					text: "Something went wrong!",
 				});
-			}
+			},
 		});
 	});
 	jQuery("#deleteCommentSettings").on("submit", function (e) {
 		e.preventDefault();
+		var $form = jQuery(this);
 		Swal.fire({
-			icon: "info",
-			title: "Request Sending...",
-			text: "Please wait.",
-			showConfirmButton: false,
-		});
-		var data = {
-			action: disableCommentsObj.delete_action,
-			nonce: disableCommentsObj._nonce,
-			data: jQuery(this).serializeArray(),
-		};
-		jQuery.post(ajaxurl, data, function (response) {
-			if (response.success) {
-				Swal.fire({
-					icon: "success",
-					title: "Deleted",
-					html: response.data.message,
-					timer: 3000,
-					showConfirmButton: false,
-				});
-			} else {
-				Swal.fire({
-					icon: "error",
-					title: "Oops...",
-					html: response.data.message,
-					showConfirmButton: true,
+			icon: "error",
+			title: "Are you sure?",
+			text: "You won't be able to revert this!",
+			showConfirmButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Delete It',
+            cancelButtonText: 'No, Cancel',
+			customClass: {
+				confirmButton: 'confirmButton',
+				cancelButton: 'cancelButton'
+			  },
+            reverseButtons: true,
+		}).then(function(result){
+            if (result.isConfirmed) {
+				// Swal.fire({
+				// 	icon: "info",
+				// 	title: "Deleting comments...",
+				// 	text: "Please wait.",
+				// 	showConfirmButton: false,
+				// });
+				var data = {
+					action: disableCommentsObj.delete_action,
+					nonce: disableCommentsObj._nonce,
+					data: $form.serializeArray(),
+				};
+				deleteBtn.html(
+					'<svg id="eael-spinner" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 48 48"><circle cx="24" cy="4" r="4" fill="#fff"/><circle cx="12.19" cy="7.86" r="3.7" fill="#fffbf2"/><circle cx="5.02" cy="17.68" r="3.4" fill="#fef7e4"/><circle cx="5.02" cy="30.32" r="3.1" fill="#fef3d7"/><circle cx="12.19" cy="40.14" r="2.8" fill="#feefc9"/><circle cx="24" cy="44" r="2.5" fill="#feebbc"/><circle cx="35.81" cy="40.14" r="2.2" fill="#fde7af"/><circle cx="42.98" cy="30.32" r="1.9" fill="#fde3a1"/><circle cx="42.98" cy="17.68" r="1.6" fill="#fddf94"/><circle cx="35.81" cy="7.86" r="1.3" fill="#fcdb86"/></svg><span>Deleting Comments..</span>'
+				);
+				jQuery.post(ajaxurl, data, function (response) {
+					deleteBtn.html("Delete Comments");
+					if (response.success) {
+						Swal.fire({
+							icon: "success",
+							title: "Deleted",
+							html: response.data.message,
+							timer: 3000,
+							showConfirmButton: false,
+						});
+					} else {
+						Swal.fire({
+							icon: "error",
+							title: "Oops...",
+							html: response.data.message,
+							showConfirmButton: true,
+						});
+					}
 				});
 			}
 		});
+	});
+
+	jQuery("#disableCommentSaveSettings").on('change keydown', 'input', function (e) {
+		// jQuery(this).off(e);
+		saveBtn.addClass('form-dirty');
 	});
 });

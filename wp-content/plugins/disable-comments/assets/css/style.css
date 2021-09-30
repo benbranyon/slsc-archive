@@ -1250,6 +1250,10 @@ a.color__instagram:hover, a.color__instagram:focus {
     max-width: 75%;
   }
 }
+.form__control {
+  border: 1px solid rgba(0, 0, 0, 0.15) !important;
+}
+
 .button__primary:not(.hover__highlight) {
   background: #623cea;
   color: white;
@@ -1847,6 +1851,12 @@ button.button__instagram.hover__highlight:hover .icon {
   color: #ffffff;
   background: #05cb6b;
 }
+.disablecommentswrap .button.button__fade {
+  display: flex;
+  align-items: center;
+  min-width: 190px;
+  justify-content: center;
+}
 @media (max-width: 991.98px) {
   .disablecommentswrap .button {
     height: 50px;
@@ -1865,10 +1875,14 @@ button.button__instagram.hover__highlight:hover .icon {
 .disablecommentswrap .button__success {
   color: #ffffff;
   background: #05cb6b;
+  opacity: 0.6;
 }
 .disablecommentswrap .button__success:hover, .disablecommentswrap .button__success:focus {
   background: rgba(5, 203, 107, 0.9);
   color: #ffffff;
+}
+.disablecommentswrap .button__success.form-dirty {
+  opacity: 1;
 }
 .disablecommentswrap .button--sm {
   height: 40px;
@@ -1878,6 +1892,65 @@ button.button__instagram.hover__highlight:hover .icon {
   margin-right: 15px;
 }
 
+.cancelButton {
+  padding: 0;
+  border-radius: 5px;
+  color: #808da1 !important;
+  font-size: 15px;
+  border: 0;
+  font-weight: 700;
+  padding: 0 20px;
+  box-shadow: none;
+  outline: none;
+  background: #f4f6fc !important;
+}
+
+.confirmButton {
+  padding: 0;
+  border-radius: 5px;
+  color: #fff !important;
+  font-size: 15px;
+  border: 0;
+  font-weight: 700;
+  padding: 0 20px;
+  box-shadow: none;
+  outline: none;
+  background: #e0061a !important;
+}
+.confirmButton:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+#eael-spinner {
+  width: 18px;
+  display: inline-block;
+  float: left;
+  margin: 0 5px 0 0;
+  -webkit-transition-property: -webkit-transform;
+  -webkit-transition-duration: 1.2s;
+  -webkit-animation-name: rotate;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+  -moz-transition-property: -moz-transform;
+  -moz-animation-name: rotate;
+  -moz-animation-duration: 1.2s;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-timing-function: linear;
+  transition-property: transform;
+  animation-name: rotate;
+  animation-duration: 1.2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 .disable__comment__alert {
   display: flex;
   align-items: center;
@@ -2079,6 +2152,16 @@ button.button__instagram.hover__highlight:hover .icon {
 .disable__comment__option .disable_option {
   border-radius: 5px;
 }
+.disable__comment__option .disable_option h3 {
+  font-size: 18px;
+  font-weight: 500;
+  color: #22282d;
+  font-family: "DM Sans", sans-serif;
+  position: relative;
+  line-height: 1.3;
+  display: block;
+  margin-bottom: 15px;
+}
 .disable__comment__option .disable_option input[type=radio] {
   display: none;
 }
@@ -2181,6 +2264,9 @@ button.button__instagram.hover__highlight:hover .icon {
   flex-wrap: wrap;
   margin-bottom: 10px;
 }
+.disable__comment__option .disable_option .delete__checklist.disabled__sites .delete__checklist__item {
+  flex: 0 1 200px;
+}
 .disable__comment__option .disable_option .delete__checklist .delete__checklist__item {
   flex: 0 0 130px;
   margin-right: 10px;
@@ -2230,6 +2316,9 @@ button.button__instagram.hover__highlight:hover .icon {
   display: flex;
   flex-wrap: wrap;
   margin-bottom: 10px;
+}
+.disable__comment__option .disable_option .remove__checklist.disabled__sites .remove__checklist__item {
+  flex: 0 1 200px;
 }
 .disable__comment__option .disable_option .remove__checklist .remove__checklist__item {
   flex: 0 0 130px;

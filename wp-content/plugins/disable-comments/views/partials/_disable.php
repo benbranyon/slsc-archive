@@ -14,10 +14,31 @@
                         <span class="switch__text on"><?php _e('On', 'disable-comments'); ?></span>
                         <span class="switch__text off"><?php _e('Off', 'disable-comments'); ?></span>
                     </span>
-                    Enable site wise settings.
+                    Enable Site Wise settings.
                 </label>
-                <p class="disable__option__description"><span class="danger"><?php _e('Note:', 'disable-comments'); ?></span> <?php _e('If you enable site wise settings, You need to configure your Disable Comments settings individually on every website in the network.', 'disable-comments'); ?></p>
+                <p class="disable__option__description"><span class="danger"><?php _e('Note:', 'disable-comments'); ?></span> <?php _e('If you enable Site Wise settings, you need to configure your “Disable Comments” settings individually on every website in the network.', 'disable-comments'); ?></p>
             </div>
+        </div>
+        <div class="disable_option dc-text__block mb30 mt30">
+            <h3>Disable comments in the following sites:</h3>
+            <div class="disabled__sites remove__checklist">
+            <?php
+            $disabled_site_options = isset($this->options['disabled_sites']) ? $this->options['disabled_sites'] : [];
+            $sub_sites = get_sites([
+                'number' => 0,
+            ]);
+            foreach ( $sub_sites as $sub_site ) {
+                $sub_site_id = $sub_site->blog_id;
+                $blog = get_blog_details($sub_site_id);
+                echo
+                "<div class='remove__checklist__item'>
+                    <input type='checkbox' id='remove__checklist__item-$sub_site_id' name='disabled_sites[]' value='$sub_site_id'" . checked(in_array($sub_site_id, $disabled_site_options), true, false) . ">
+                    <label for='remove__checklist__item-$sub_site_id'>{$blog->blogname}</label>
+                </div>";
+            }
+            ?>
+            </div>
+            <p class="disable__option__description"><span class="danger"><?php _e('Note:', 'disable-comments'); ?></span> <?php _e('Enable Site Wise settings if you want to configure “Disable Comments” settings individually on every website.', 'disable-comments'); ?></p>
         </div>
         <?php elseif($this->options['sitewide_settings'] && !empty($this->options['is_network_options'])):?>
             <div class="disable_option dc-text__block mb30 mt30">
@@ -35,7 +56,7 @@
         <div class="disable_option dc-text__block">
             <input type="radio" id="selected_types" name="mode" value="<?php echo esc_attr('selected_types'); ?>" <?php checked(!$this->options['remove_everywhere']); ?> />
             <label for="selected_types"><?php _e('On Specific Post Types:', 'disable-comments'); ?></label>
-            <div class="remove__checklist">
+            <div id="disable__post__types" class="remove__checklist">
                 <?php
                 $types = $this->get_all_post_types();
                 foreach ($types as $key => $value) {
@@ -50,7 +71,7 @@
                     $extradisabletypes = implode(', ', (array) $this->options['extra_post_types']);
                 ?>
                     <p class="indent subtitle" id="extratypes"><?php _e('Only the built-in post types appear above. If you want to disable comments on other custom post types on the entire network, you can supply a comma-separated list of post types below (use the slug that identifies the post type).', 'disable-comments'); ?>
-                        <br /><label><strong><?php _e('Custom post types:', 'disable-comments'); ?></strong> <input type="text" name="extra_post_types" size="30" value="<?php echo esc_attr($extradisabletypes); ?>" /></label></p>
+                        <br /><br /><label class="hello"><strong><?php _e('Custom post types:', 'disable-comments'); ?></strong> <input type="text" class="form__control" name="extra_post_types" size="30" value="<?php echo esc_attr($extradisabletypes); ?>" /></label></p>
                 <?php endif; ?>
             </div>
             <p class="subtitle"><span class="danger"><?php _e('Note:', 'disable-comments'); ?></span> <?php _e('Disabling comments will also disable trackbacks and pingbacks. All comment-related fields will also be hidden from the edit/quick-edit screens of the affected posts. These settings cannot be overridden for individual posts. Comments will be visible on all other post types.', 'disable-comments'); ?></p>
@@ -85,7 +106,9 @@
         </div>
     </div>
     <!-- save -->
-    <button class="button button__success"><?php _e('Save Changes', 'disable-comments'); ?></button>
+    <button class="button button__success button__fade">
+        <span><?php _e('Save Changes', 'disable-comments'); ?></span>
+    </button>
     <?php if(is_network_admin()):?>
         <input type="hidden" name="is_network_admin" value="1">
     <?php endif;?>
