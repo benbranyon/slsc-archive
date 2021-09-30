@@ -461,7 +461,44 @@ jQuery(".sp-testimonials-wrapper").mouseleave(function () {
     }, speed);
   }
 });
+/* start  of twitter timline js code */
+
+function seedprod_twitterembedtimeline(blockId, timelineid, showReplies, width, height, chrome, align, borderColors, colorScheme, lang) {
+  //jQuery("#sp-animated-head-"+blockId+' .preview-sp-title' ).seedprod_responsive_title_shortcode();
+  twttr.ready(function (twttr) {
+    window.twttr.widgets.createTimeline({
+      sourceType: "profile",
+      screenName: timelineid
+    }, document.getElementById('sp-twitterembedtimeline-preview-' + blockId), {
+      showReplies: showReplies,
+      width: width,
+      height: height,
+      chrome: chrome,
+      align: align,
+      borderColor: borderColors,
+      theme: colorScheme,
+      lang: lang
+    }).then(function (el) {//console.log('Tweet added.'); 
+    });
+  });
+}
+
+function seedprod_twittertweetbutton(blockId, tweetUrl, buttonSize, tweetText, tweetHashTag, viaHandle, relatedTweet, lang) {
+  twttr.ready(function (twttr) {
+    window.twttr.widgets.createShareButton(tweetUrl, document.getElementById('sp-twittertweetbutton-preview-' + blockId), {
+      size: buttonSize,
+      text: tweetText,
+      hashtags: tweetHashTag,
+      via: viaHandle,
+      related: relatedTweet,
+      lang: lang
+    });
+  });
+}
+/* end of twitter timline js code */
+
 /* this is image carousel block code */
+
 
 jQuery('.sp-imagecarousel-nav button').click(function () {
   var currentId = '#' + jQuery(this).parents('.sp-imagecarousels-wrapper').attr('id');

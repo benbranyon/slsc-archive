@@ -2405,6 +2405,7 @@ html{scroll-behavior:smooth}
 img{display:inline-block}
 .fab{font-weight:normal}
 .spBgcover{background-size:cover;background-repeat:no-repeat;background-position:center top;background-attachment:scroll;min-height:100%}
+.spBgcontain{background-size:contain;background-repeat:no-repeat;background-position:center top;background-attachment:scroll;min-height:100%}
 .spBgfull{background-size:100% auto;background-repeat:no-repeat;background-position:center top;background-attachment:scroll;min-height:100%}
 .spBgfullbottom{background-size:100% auto;background-repeat:no-repeat;background-position:center bottom;background-attachment:scroll;min-height:100%}
 .spBgrepeat{background-repeat:repeat;background-position:center top;background-attachment:scroll;min-height:100%}
@@ -3020,6 +3021,8 @@ to{opacity:0;-webkit-transform:translate3d(100%,0,0) rotate3d(0,0,1,120deg);tran
 .sp-title-animated.zoomOut{-webkit-animation-name:zoomOut;animation-name:zoomOut}
 .sp-notifications-custom{background:#fdf6f4;border:1px solid #f6d2c7}
 .sp-notification-button{background:#0f8a5e !important;border:#0f8a5e !important;color:#fff !important;text-decoration:none !important;text-shadow:none !important}
+.sp-notification-alt-button{border:1px solid #af9ca6 !important;color:#4f394d !important;background:transparent !important}
+.sp-alt-notification-button-y{padding-top:.18rem !important;padding-bottom:.18rem !important}
 @media(min-width:640px){.sm\:sp-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
 .sm\:sp-not-sr-only{position:static;width:auto;height:auto;padding:0;margin:0;overflow:visible;clip:auto;white-space:normal}
 .sm\:focus\:sp-sr-only:focus{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}

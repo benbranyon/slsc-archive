@@ -186,15 +186,43 @@ if ( ! empty( $settings ) ) {
 		<?php echo $settings->document->settings->placeholderCss; ?>
 <?php } ?>
 
-	<?php if ( ! empty( $settings->document->settings->mobileCss ) ) { ?>
-@media only screen and (max-width: 480px) {
-		<?php echo str_replace( '.sp-mobile-view', '', $settings->document->settings->mobileCss ); ?>
-}
-<?php } ?>
+	<?php // Replace classnames for device visibility like below ?>
+
+	@media only screen and (max-width: 480px) {
+		<?php if ( ! empty( $settings->document->settings->mobileCss ) ) { ?>
+			<?php echo str_replace( '.sp-mobile-view', '', $settings->document->settings->mobileCss ); ?>
+		<?php } ?>
+
+		<?php if ( ! empty( $settings->document->settings->mobileVisibilityCss ) ) { ?>
+			<?php echo str_replace( '.sp-mobile-view', '', $settings->document->settings->mobileVisibilityCss ); ?>
+		<?php } ?>
+	}
+
+	@media only screen and (min-width: 480px) {
+		<?php if ( ! empty( $settings->document->settings->desktopVisibilityCss ) ) { ?>
+			<?php echo $settings->document->settings->desktopVisibilityCss; ?>
+		<?php } ?>
+	}
 
 	<?php
-	// get mobile css
+	// Get mobile css & Remove inline data attributes.
 	preg_match_all( '/data-mobile-css="([^"]*)"/', $content, $matches );
+	if ( ! empty( $matches ) ) {
+		// remove inline data attributes
+		foreach ( $matches[0] as $v ) {
+			$content = str_replace( $v, '', $content );
+		}
+	}
+
+	preg_match_all( '/data-mobile-visibility="([^"]*)"/', $content, $matches );
+	if ( ! empty( $matches ) ) {
+		// remove inline data attributes
+		foreach ( $matches[0] as $v ) {
+			$content = str_replace( $v, '', $content );
+		}
+	}
+
+	preg_match_all( '/data-desktop-visibility="([^"]*)"/', $content, $matches );
 	if ( ! empty( $matches ) ) {
 		// remove inline data attributes
 		foreach ( $matches[0] as $v ) {
@@ -225,7 +253,8 @@ if ( ! empty( $settings ) ) {
 <script src="<?php echo $plugin_url; ?>public/js/tubular.js" defer></script>
 	<?php } ?>
 
-
+<?php 
+?>
 
 
 	<?php
@@ -256,7 +285,15 @@ if ( ! empty( $settings ) ) {
 	<?php 
 	?>
 
-
+	<script>
+		window.twttr = (function (d,s,id) {
+			var t, js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) return; js=d.createElement(s); js.id=id;
+			js.src="https://platform.twitter.com/widgets.js";
+			fjs.parentNode.insertBefore(js, fjs);
+			return window.twttr || (t = { _e: [], ready: function(f){ t._e.push(f) } });
+		}(document, "script", "twitter-wjs"));
+	</script>
 
 	<?php
 	$actual_link = urlencode( ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http' ) . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" );
@@ -286,15 +323,7 @@ if ( ! empty( $settings ) ) {
 	?>
 
 <script>
-	var sp_is_mobile = 
-	<?php
-	if ( wp_is_mobile() ) {
-		echo 'true';
-	} else {
-		echo 'false';
-	}
-	?>
-	;
+	 <?php if ( wp_is_mobile() ) { echo 'var sp_is_mobile = true;';} else {echo 'var sp_is_mobile = false;';}?>
 	<?php 
 	?>
 

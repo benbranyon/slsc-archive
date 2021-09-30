@@ -397,7 +397,7 @@ function seedprod_lite_add_admin_edit_seedprod() {
 		$back_wordpress_label = __( 'Back to WordPress Editor', 'coming-soon' );
 
 		$localizations = array( 
-			'ajax_url' => admin_url( 'admin-ajax.php' ),
+			'ajax_url' => admin_url( 'admin-ajax.php' ), 
 			'nonce' =>  wp_create_nonce( 'seedprod_back_to_editor_'.$id ),
 		);
 
@@ -607,7 +607,7 @@ function seedprod_lite_remove_post() {
         $post_id = absint($_POST['post_id']);
         $data    = array(
         'ID'           => $post_id,
-    );
+    	);
 
         delete_post_meta($post_id, '_seedprod_page');
         wp_die();

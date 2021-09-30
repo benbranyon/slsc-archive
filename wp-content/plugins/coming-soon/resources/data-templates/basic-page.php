@@ -59,6 +59,8 @@ $seedprod_basic_lpage = '
            "customCss":"",
            "headCss":"",
            "mobileCss":"",
+           "mobileVisibilityCss":"",
+           "desktopVisibilityCss":"",
            "placeholderCss":"",
            "useVideoBg":false,
            "useVideoBgUrl":"",
@@ -124,7 +126,9 @@ $seedprod_basic_lpage = '
       "borderLeft": "0",
       "borderRight": "0",
       "borderSync": true,
-      "borderStyle":"solid"
+      "borderStyle":"solid",
+      "hideOnDesktop": false,
+      "hideOnMobile": false
    },
    "section":{
       "bgStyle": "s",
@@ -177,7 +181,12 @@ $seedprod_basic_lpage = '
     "borderLeft": "0",
     "borderRight": "0",
     "borderSync": true,
-    "borderStyle":"solid"
+    "borderStyle":"solid",
+    "alignType":"s",
+    "display":"",
+    "flexDirection":"column",
+    "justifyContent":"",
+    "alignItems":""
  },
    "icon":{
      "icon":"fas fa-angle-double-down",
@@ -190,7 +199,9 @@ $seedprod_basic_lpage = '
      "paddingBottom": "",
      "paddingLeft": "",
      "paddingRight": "",
-     "paddingSync": true
+     "paddingSync": true,
+     "hideOnDesktop": false,
+     "hideOnMobile": false
    },
    "starrating":{
     "label":"",
@@ -219,7 +230,9 @@ $seedprod_basic_lpage = '
     "paddingBottom": "",
     "paddingLeft": "",
     "paddingRight": "",
-    "paddingSync": true
+    "paddingSync": true,
+    "hideOnDesktop": false,
+    "hideOnMobile": false
   },
   "testimonial":{
     "items": [{ "img": "", "txt": "\"This is the greatest thing since sliced bread!\"","name": "John Smith", "title": "CEO" }],
@@ -259,7 +272,9 @@ $seedprod_basic_lpage = '
     "nametypographyBold": "",
     "nametypographyItalic": "",
     "nametypographyUnderline": "",
-    "nametypographyLetterCase": ""
+    "nametypographyLetterCase": "",
+    "hideOnDesktop": false,
+    "hideOnMobile": false
    },
    "imagecarousel":{
     "items": [{ "img": "", "name": "", "title": "CEO" }],
@@ -298,7 +313,9 @@ $seedprod_basic_lpage = '
     "imageBorderSync": true,
     "imageBorderStyle":"solid",
     "imageBorderColor": "",
-    "blockTemplateId":false    
+    "blockTemplateId": false,
+    "hideOnDesktop": false,
+    "hideOnMobile": false
    },
    "feature":{
     "tag": "h2",
@@ -345,7 +362,9 @@ $seedprod_basic_lpage = '
     "headertypographyBold": "",
     "headertypographyItalic": "",
     "headertypographyUnderline": "",
-    "headertypographyLetterCase": ""
+    "headertypographyLetterCase": "",
+    "hideOnDesktop": false,
+    "hideOnMobile": false
    },
    "iconfeature":{
     "tag": "h2",
@@ -392,7 +411,9 @@ $seedprod_basic_lpage = '
     "headertypographyBold": "",
     "headertypographyItalic": "",
     "headertypographyUnderline": "",
-    "headertypographyLetterCase": ""
+    "headertypographyLetterCase": "",
+    "hideOnDesktop": false,
+    "hideOnMobile": false
    },
    "header":{
       "headerTxt": "' . __( 'My Awesome Headline', 'coming-soon' ) . '",
@@ -426,7 +447,9 @@ $seedprod_basic_lpage = '
       "typographyItalic": "",
       "typographyUnderline": "",
       "align": "center",
-      "typographyLetterCase": ""
+      "typographyLetterCase": "",
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "animatedheadline":{
       "beforeHeaderTxt": "' . __( 'Before text', 'coming-soon' ) . '",
@@ -470,7 +493,9 @@ $seedprod_basic_lpage = '
       "typographyItalic": "",
       "typographyUnderline": "",
       "align": "center",
-      "typographyLetterCase": ""
+      "typographyLetterCase": "",
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "button":{
       "action": "link",
@@ -513,7 +538,9 @@ $seedprod_basic_lpage = '
       "typographyItalic": "",
       "typographyUnderline": "",
       "align": "center",
-      "typographyLetterCase": ""
+      "typographyLetterCase": "",
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "text":{
       "txt": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam commodo velit ex, non ultrices leo auctor at. Integer blandit ex velit, vel aliquam sem tempor eu. Pellentesque sem tortor, elementum et nisi sed, convallis pharetra lorem. Aenean rhoncus rhoncus ex, in dictum massa dictum et. Morbi at nisl fermentum, condimentum tortor a, laoreet leo. Curabitur laoreet diam a metus tincidunt, sed dapibus orci venenatis.",
@@ -546,7 +573,9 @@ $seedprod_basic_lpage = '
       "typographyItalic": "",
       "typographyUnderline": "",
       "align": "left",
-      "typographyLetterCase": ""
+      "typographyLetterCase": "",
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "facebooklike":{
       "buttonType":"like",
@@ -562,7 +591,9 @@ $seedprod_basic_lpage = '
       "paddingBottom": "",
       "paddingLeft": "",
       "paddingRight": "",
-      "paddingSync": true
+      "paddingSync": true,
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "facebookcomments":{
       "orderBy" :"social",
@@ -578,7 +609,9 @@ $seedprod_basic_lpage = '
       "paddingBottom": "",
       "paddingLeft": "",
       "paddingRight": "",
-      "paddingSync": true
+      "paddingSync": true,
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "facebookpage":{
       "layoutPage":"timeline",
@@ -595,7 +628,9 @@ $seedprod_basic_lpage = '
       "paddingBottom": "",
       "paddingLeft": "",
       "paddingRight": "",
-      "paddingSync": true
+      "paddingSync": true,
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "facebookembed":{
       "embedType":"post",
@@ -614,6 +649,71 @@ $seedprod_basic_lpage = '
       "paddingBottom": "",
       "paddingLeft": "",
       "paddingRight": "",
+      "paddingSync": true,
+      "hideOnDesktop": false,
+      "hideOnMobile": false
+    },
+    "twitterembedtweet":{    
+      "align": "left",
+      "tweeterid":"1385250840898850816",
+      "colorScheme":"light",
+      "width":"350",
+      "marginTop": "0",
+      "paddingTop": "",
+      "paddingBottom": "",
+      "paddingLeft": "",
+      "paddingRight": "",
+      "lang":"en",
+      "paddingSync": true
+    },
+    "twitterembedtimeline":{    
+      "align": "left",
+      "tweeterid":"seedprod",
+      "colorScheme":"light",
+      "width":"350",
+      "height":"350",
+      "hideHeader": false,
+      "hideFooter": true,
+      "hideBorders": false,
+      "transparent": false,
+      "hideScrollbar": false,
+      "showReplies":false,
+      "marginTop": "0",
+      "paddingTop": "",
+      "paddingBottom": "",
+      "paddingLeft": "",
+      "paddingRight": "",
+      "lang":"en",
+      "paddingSync": true
+    },
+    "twittertweetbutton":{
+      "tweetUrl":"https://twitter.com/seedprod",
+      "buttonSize":"small",
+      "tweetText":"",
+      "tweetHashTag":"", 
+      "viaHandle":"", 
+      "relatedTweet":"",   
+      "align": "left",
+      "marginTop": "0",
+      "paddingTop": "",
+      "paddingBottom": "",
+      "paddingLeft": "",
+      "paddingRight": "",
+      "lang":"en",
+      "paddingSync": true
+    },
+    "twitterfollowbutton":{
+      "screenName":"seedprod",
+      "buttonSize":"small",
+      "showScreenName":true,
+      "showCount":false, 
+      "align": "left",
+      "marginTop": "0",
+      "paddingTop": "",
+      "paddingBottom": "",
+      "paddingLeft": "",
+      "paddingRight": "",
+      "lang":"en",
       "paddingSync": true
     },
     "contactform":{
@@ -638,7 +738,9 @@ $seedprod_basic_lpage = '
       "typographyItalic": "",
       "typographyUnderline": "",
       "align": "left",
-      "typographyLetterCase": ""
+      "typographyLetterCase": "",
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "giveaway":{
       "giveawayId":"",
@@ -648,7 +750,9 @@ $seedprod_basic_lpage = '
       "paddingLeft": "",
       "paddingRight": "",
       "paddingSync": true,
-      "align": "center"
+      "align": "center",
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "image":{
       "link": "",
@@ -677,7 +781,9 @@ $seedprod_basic_lpage = '
       "imageBorderSync": true,
       "imageBorderStyle":"solid",
       "imageBorderColor": "",
-      "blockTemplateId":false
+      "blockTemplateId":false,
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "divider":{
       "style": "solid",
@@ -691,7 +797,9 @@ $seedprod_basic_lpage = '
       "paddingLeft": "0",
       "paddingRight": "0",
       "paddingSync": false,
-      "shadow": ""
+      "shadow": "",
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "spacer": {
       "height": 60
@@ -745,7 +853,9 @@ $seedprod_basic_lpage = '
       "headertypographyBold": "",
       "headertypographyItalic": "",
       "headertypographyUnderline": "",
-      "headertypographyLetterCase": ""
+      "headertypographyLetterCase": "",
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "anchor": {
       "name": ""
@@ -761,7 +871,9 @@ $seedprod_basic_lpage = '
       "paddingBottom": "",
       "paddingLeft": "",
       "paddingRight": "",
-      "paddingSync": true
+      "paddingSync": true,
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "customhtml":{
       "code": "",
@@ -770,7 +882,9 @@ $seedprod_basic_lpage = '
       "paddingBottom": "",
       "paddingLeft": "",
       "paddingRight": "",
-      "paddingSync": true
+      "paddingSync": true,
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "shortcode":{
       "shortcode": "",
@@ -779,7 +893,9 @@ $seedprod_basic_lpage = '
       "paddingBottom": "",
       "paddingLeft": "",
       "paddingRight": "",
-      "paddingSync": true
+      "paddingSync": true,
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "login":{
       "align": "left",
@@ -829,7 +945,9 @@ $seedprod_basic_lpage = '
       "btnBgColor": "",
       "btnPaddingVertical": "8",
       "btnPaddingHorizontal": "12",
-      "btnBorderRadius": "3"
+      "btnBorderRadius": "3",
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "video":{
       "type":"youtube",
@@ -843,7 +961,9 @@ $seedprod_basic_lpage = '
       "paddingBottom": "",
       "paddingLeft": "",
       "paddingRight": "",
-      "paddingSync": true
+      "paddingSync": true,
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "countdown":{
       "countdownType":"",
@@ -890,7 +1010,9 @@ $seedprod_basic_lpage = '
       "typographyUnderline": "",
       "align": "center",
       "typographyLetterCase": "uppercase",
-      "blockTemplateId":false
+      "blockTemplateId":false,
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "bulletlist":{
       "layout": "v",
@@ -926,7 +1048,9 @@ $seedprod_basic_lpage = '
       "typographyUnderline": "",
       "align": "left",
       "typographyLetterCase": "",
-      "blockTemplateId":false
+      "blockTemplateId":false,
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "nav":{
       "layout": "h",
@@ -958,7 +1082,9 @@ $seedprod_basic_lpage = '
       "typographyItalic": "",
       "typographyUnderline": "",
       "align": "left",
-      "typographyLetterCase": ""
+      "typographyLetterCase": "",
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "form":{
       "items": []
@@ -1014,7 +1140,9 @@ $seedprod_basic_lpage = '
       "paddingRight": "",
       "paddingSync": true,
       "gap": false,
-      "blockTemplateId":false
+      "blockTemplateId":false,
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "progressbar":{
       "txt": "My Text",
@@ -1043,7 +1171,9 @@ $seedprod_basic_lpage = '
       "paddingLeft": "",
       "paddingRight": "",
       "paddingSync": true,
-      "blockTemplateId":false
+      "blockTemplateId":false,
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "socialprofiles":{
       "iconStyle":"1",
@@ -1066,7 +1196,9 @@ $seedprod_basic_lpage = '
       "borderColor": "",
       "shadow": "",
       "align": "center",
-      "blockTemplateId":false
+      "blockTemplateId":false,
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "socialsharing":{
       "size": "sm",
@@ -1084,7 +1216,9 @@ $seedprod_basic_lpage = '
       "borderSize": "",
       "borderColor": "",
       "shadow": "",
-      "align": "center"
+      "align": "center",
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "pricingtable":{
       "planName": "Enter Your Plan Name",
@@ -1265,7 +1399,9 @@ $seedprod_basic_lpage = '
       "blockBorderRight": "1",
       "blockBorderSync": true,
       "blockBorderStyle":"solid",
-      "blockBorderColor": "#f3f3f3"
+      "blockBorderColor": "#f3f3f3",
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "wcaddtocart":{
       "productId": "",
@@ -1306,7 +1442,9 @@ $seedprod_basic_lpage = '
       "typographyItalic": "",
       "typographyUnderline": "",
       "align": "center",
-      "typographyLetterCase": ""
+      "typographyLetterCase": "",
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "wccart":{
       "marginTop": "0",
@@ -1359,7 +1497,9 @@ $seedprod_basic_lpage = '
       "cartHeaderBgColor": "",
       "cartHeaderFont": "",
       "cartHeaderFontVariant": "",
-      "cartHeaderColor": ""
+      "cartHeaderColor": "",
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
   "wccheckout":{
       "css": "",
@@ -1428,7 +1568,9 @@ $seedprod_basic_lpage = '
       "paymentBgColor": "",
       "paymentTextColor": "#333",
       "paymentFont": "",
-      "paymentFontVariant": ""
+      "paymentFontVariant": "",
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
 
  "wccustomproductsgrid":{
@@ -1532,7 +1674,9 @@ $seedprod_basic_lpage = '
       "imageBorderLeft": "1",
       "imageBorderRight": "1",
       "imageBorderSync": true,
-      "imagePadding": ""
+      "imagePadding": "",
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "wcfeaturedproductsgrid":{
       "columns": "4",
@@ -1634,7 +1778,9 @@ $seedprod_basic_lpage = '
       "imageBorderLeft": "1",
       "imageBorderRight": "1",
       "imageBorderSync": true,
-      "imagePadding": ""
+      "imagePadding": "",
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "wcsaleproductsgrid":{
       "columns": "4",
@@ -1736,7 +1882,9 @@ $seedprod_basic_lpage = '
       "imageBorderLeft": "1",
       "imageBorderRight": "1",
       "imageBorderSync": true,
-      "imagePadding": ""
+      "imagePadding": "",
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "wcbestsellingproductsgrid":{
       "columns": "4",
@@ -1838,7 +1986,9 @@ $seedprod_basic_lpage = '
       "imageBorderLeft": "1",
       "imageBorderRight": "1",
       "imageBorderSync": true,
-      "imagePadding": ""
+      "imagePadding": "",
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "wcrecentproductsgrid":{
       "columns": "4",
@@ -1940,7 +2090,9 @@ $seedprod_basic_lpage = '
       "imageBorderLeft": "1",
       "imageBorderRight": "1",
       "imageBorderSync": true,
-      "imagePadding": ""
+      "imagePadding": "",
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     },
     "wctopratedproductsgrid":{
       "columns": "4",
@@ -2042,7 +2194,9 @@ $seedprod_basic_lpage = '
       "imageBorderLeft": "1",
       "imageBorderRight": "1",
       "imageBorderSync": true,
-      "imagePadding": ""
+      "imagePadding": "",
+      "hideOnDesktop": false,
+      "hideOnMobile": false
     }
 
  }
