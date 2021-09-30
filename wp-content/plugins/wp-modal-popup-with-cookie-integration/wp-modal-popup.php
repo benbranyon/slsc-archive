@@ -1,16 +1,16 @@
 <?php
 /**
  * Plugin Name: WP Modal Popup with Cookie Integration
- * Plugin URI: https://www.wponlinesupport.com/plugins/
+ * Plugin URI: https://astoundify.com/products/modalify/
  * Description: Show Popup on your blog with desired content.
  * Text Domain: wp-modal-popup-with-cookie-integration
  * Domain Path: /languages/
- * Author: WP OnlineSupport 
- * Version: 2.1
- * Author URI: https://www.wponlinesupport.com/
+ * Author: Astoundify
+ * Version: 2.2
+ * Author URI: https://astoundify.com/
  *
  * @package WordPress
- * @author WP OnlineSupport 
+ * @author Astoundify
  */
 
 // Exit if accessed directly
@@ -18,12 +18,12 @@ if ( !defined( 'ABSPATH' ) ) exit;
 
 /**
  * Basic plugin definitions
- * 
+ *
  * @package WP Modal Popup with Cookie Integration
  * @since 1.0.0
  */
 if( !defined( 'WMPCI_VERSION' ) ) {
-	define( 'WMPCI_VERSION', '2.1' );	// Version of plugin
+	define( 'WMPCI_VERSION', '2.2' );	// Version of plugin
 }
 if( !defined( 'WMPCI_DIR' ) ) {
 	define( 'WMPCI_DIR', dirname( __FILE__ ) );	// Plugin dir
@@ -41,7 +41,7 @@ if( !defined( 'WMPCI_META_PREFIX' ) ) {
 /**
  * Load Text Domain
  * This gets the plugin ready for translation
- * 
+ *
  * @package WP Modal Popup with Cookie Integration
  * @since 1.0.0
  */
@@ -54,9 +54,9 @@ add_action('plugins_loaded', 'wmpci_load_textdomain');
 
 /**
  * Activation Hook
- * 
+ *
  * Register plugin activation hook.
- * 
+ *
  * @package WP Modal Popup with Cookie Integration
  * @since 1.0.0
  */
@@ -64,9 +64,9 @@ register_activation_hook( __FILE__, 'wmpci_install' );
 
 /**
  * Deactivation Hook
- * 
+ *
  * Register plugin deactivation hook.
- * 
+ *
  * @package WP Modal Popup with Cookie Integration
  * @since 1.0.0
  */
@@ -75,7 +75,7 @@ register_deactivation_hook( __FILE__, 'wmpci_uninstall');
 /**
  * Plugin Activation Function
  * Does the initial setup, sets the default values for the plugin options
- * 
+ *
  * @package WP Modal Popup with Cookie Integration
  * @since 1.0.0
  */
@@ -83,9 +83,9 @@ function wmpci_install(){
 
 	// Get settings for the plugin
 	$wmpci_options = get_option( 'wmpci_options' );
-	
+
 	if( empty( $wmpci_options ) ) { // Check plugin version option
-		
+
 		// set default settings
 		wmpci_default_settings();
 
@@ -130,7 +130,7 @@ add_action( 'admin_notices', 'wmpci_admin_notice');
 /**
  * Plugin Deactivation Function
  * Delete  plugin options
- * 
+ *
  * @package WP Modal Popup with Cookie Integration
  * @since 1.0.0
  */

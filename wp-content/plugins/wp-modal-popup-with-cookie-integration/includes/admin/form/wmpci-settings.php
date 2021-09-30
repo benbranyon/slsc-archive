@@ -37,15 +37,8 @@ if( isset($_GET['settings-updated']) && $_GET['settings-updated'] == 'true' ) {
 	    settings_fields( 'wmpci_plugin_options' );
 	    global $wmpci_options;
 	?>
-	<style>
-	.wpci-notice{background-color: #f04124;border-color: #de2d0f;color: #FFFFFF;border-style: solid;border-width: 1px;display: block;
-	margin-bottom: 1.11111rem;padding: 0.77778rem 1.33333rem 0.77778rem 0.77778rem;position: relative; }
-.wpci-notice p{font-size: 1rem;font-weight: normal; line-height:24px; }
-.wpci-notice a{color:#fff;}
-	</style>
-	<div class="wpci-notice">
-		<p>Important Recommendations : For better user experience we have shifted <strong>WP Modal Popup with Cookie Integration</strong> plugin in to our new plugin ie <a href="https://wordpress.org/plugins/inboundwp-lite/" target="_blank">InboundWP-A Complete Inbound Marketing Pack</a>. It help us to maintain our plugins in a single plugin package and provide you better and fast support. Module name under <strong>InboundWP</strong> is : Marketing PopUp where you will get 5 type  PopUp Goal - 1) Collect Emails 2) Target URL 3) Announcement 4) Get Phone Calls 5) Social Traffic.</p>
-	</div>
+
+	
 	<div id="wmpci-general-settings" class="post-box-container wmpci-general-settings">
 		<div class="metabox-holder">
 			<div class="meta-box-sortables ui-sortable">

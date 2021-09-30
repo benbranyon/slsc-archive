@@ -1,8 +1,8 @@
 /*!
  * WmpciPop 1.0.0
- * http://wponlinesupport.com
+ * https://astoundify.com
  *
- * Copyright (c) 2016 WP Online Support
+ * Copyright (c) 2021 Astoundify
  */
 
 (function (WmpciPop, undefined) {

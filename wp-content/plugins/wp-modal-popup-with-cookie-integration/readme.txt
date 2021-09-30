@@ -1,8 +1,8 @@
 === WP Modal Popup with Cookie Integration ===
-Contributors: wponlinesupport, anoopranawat, pratik-jain
+Contributors: astoundify
 Tags: advertise, lightbox, marketing, pop over, pop-up, popover, popup, subsription popup, shortcode popup, promotion, cookie popup, age restriction popup, automatic popup, exit popup, fly-in, full screen popup, html popup, layer popup, lead, lightbox popup, Mailing list pop-up, modal, modal window, notification bar, optin, optinmonster, pop over, pop-up, popover, popup, popup builder, popup contact form, popup form, popup lock, popup subscription, Responsive Popup, simple popup, social popup, video popup, wordpress popup, youtube popup
 Requires at least: 4.0
-Tested up to: 5.6
+Tested up to: 5.8
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -15,7 +15,7 @@ If you are trying to show up a lightbox popup similar first time visitors that i
 
 Create and manage powerful promotion popups for your WordPress blog or website. Easy to use popup plugin that will help you to grab your visitor's attention to introduce him offers, discounts or other kind of promotional notices.
 
-WP Modal Popup with Cookie Integration is a popup plugin for WordPress website that allows you to add highly customizable popup windows. 
+WP Modal Popup with Cookie Integration is a popup plugin for WordPress website that allows you to add highly customizable popup windows.
 
 Create Popups for advertise, lightbox, marketing, promotion, Subscription Forms, Social Buttons, Contact Form, Google Map, Slider, Lightbox and more:
 
@@ -40,6 +40,30 @@ Create Popups for advertise, lightbox, marketing, promotion, Subscription Forms,
 * If your visitors don not want to see your popup, you can let them to choose to hide them for future visits.
 * You can decide how many days before the user will see the popup again.
 
+= PRO Features : =
+
+* Create Unlimited Popups
+* Welcome popup on page load
+* Exit Intent!
+* Open when user scrolled XX% page!
+* Open after X sec of inactivity (no mouse or keyboards actions)!
+* 8 Popup position
+* Insert your pop-up into any page or a post
+* 10 predefined layouts
+* Add any Video, HTML, iFrame, Shortcode of any plugin to display on popup.
+* Display Popup on load page
+* Display Popup on close/leave page
+* Page level Targeting (different popups for each post/page, turn popup on/off for all page or for few pages/posts)
+* Close button (show button: yes/no, auto close popup)
+* Open Delay (open popup delay in seconds)
+* Customize the look and feel of the popup
+* Change popup content background color
+* Customize popup overlay color and opacity
+
+
+View [PRO](https://astoundify.com/products/modalify/) for more details.
+
+
 
 == Installation ==
 
@@ -55,6 +79,9 @@ Create Popups for advertise, lightbox, marketing, promotion, Subscription Forms,
 
 == Changelog ==
 
+= 2.2 (30, July 2021) =
+* [*] Tested with WordPress 5.8 and PHP 8
+
 = 2.1 (14, Dec 2020) =
 * [*] Tested up to: 5.6
 
@@ -63,7 +90,7 @@ Create Popups for advertise, lightbox, marketing, promotion, Subscription Forms,
 * [-] Removed premium page.
 
 = 1.3 (28, May 2019) =
-* [*] Important Recommendations : For better user experience we have shifted WP Modal Popup with Cookie Integration plugin in to our new plugin ie InboundWP-A Complete Inbound Marketing Pack. It help us to maintain our plugins in a single plugin package and provide you better and fast support. Module name under InboundWP is : Marketing PopUp where you will get 5 type PopUp Goal - 1) Collect Emails 2) Target URL 3) Announcement 4) Get Phone Calls 5) Social Traffic. 
+* [*] Important Recommendations : For better user experience we have shifted WP Modal Popup with Cookie Integration plugin in to our new plugin ie InboundWP-A Complete Inbound Marketing Pack. It help us to maintain our plugins in a single plugin package and provide you better and fast support. Module name under InboundWP is : Marketing PopUp where you will get 5 type PopUp Goal - 1) Collect Emails 2) Target URL 3) Announcement 4) Get Phone Calls 5) Social Traffic.
 * [-] Removed Opt-in flow.
 * [-] Removed Hire Us page.
 
