@@ -33,9 +33,7 @@ class Tree {
       } elseif ($folder_id == 0) {
         return 0;//return 0 if this is uncategorized folder
       }
-      // Fix elementor
-      $where[] = "posts.ID NOT IN (SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_elementor_is_screenshot')";
-      
+      $where = apply_filters('fbv_get_count_where_query', $where);
       $query = apply_filters('fbv_get_count_query', $select . implode(' AND ', $where), $folder_id, $lang);
       return (int)$wpdb->get_var($query);
     }

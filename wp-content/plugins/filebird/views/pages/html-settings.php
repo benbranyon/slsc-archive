@@ -10,6 +10,7 @@ $countWpmlfFolder = count($helpers::foldersFromWpmlf(0, true));
 $countWpmfFolder = count($helpers::foldersFromWpmf(0, true));
 $countRealMediaFolder = count($helpers::foldersFromRealMedia(-1, true));
 $countHappyFiles = count($helpers::foldersFromHappyFiles(0, true));
+$countPremioFolder = count($helpers::foldersFromPremio(0, true));
 $allFolders = Tree::getFolders(null, true, 0, true);
 
 $tabs = array(
@@ -37,7 +38,7 @@ $tabs = array(
   ),
 );
 $current_tab = (isset($_GET['tab']) ? $_GET['tab'] : $tabs[0]['id']);
-if(($countEnhancedFolder + $countWpmlfFolder + $countWpmfFolder + $countRealMediaFolder + $countHappyFiles) > 0) {
+if(($countEnhancedFolder + $countWpmlfFolder + $countWpmfFolder + $countRealMediaFolder + $countHappyFiles + $countPremioFolder) > 0) {
   $tabs[] = array(
     'id' => 'import',
     'name' => __('Import', 'filebird'),
@@ -46,7 +47,8 @@ if(($countEnhancedFolder + $countWpmlfFolder + $countWpmfFolder + $countRealMedi
       'countWpmlfFolder' => $countWpmlfFolder,
       'countWpmfFolder' => $countWpmfFolder,
       'countRealMediaFolder' => $countRealMediaFolder,
-      'countHappyFiles' => $countHappyFiles
+      'countHappyFiles' => $countHappyFiles,
+      'countPremioFolder' => $countPremioFolder
     ))
   );
 }

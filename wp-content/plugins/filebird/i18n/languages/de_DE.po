@@ -3,12 +3,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: FileBird\n"
 "POT-Creation-Date: 2021-05-08 00:10+0700\n"
-"PO-Revision-Date: 2021-05-26 15:28+0700\n"
+"PO-Revision-Date: 2021-08-03 08:24+0700\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.3\n"
+"X-Generator: Poedit 3.0\n"
 "X-Poedit-Basepath: ../..\n"
 "X-Poedit-Flags-xgettext: --add-comments=translators:\n"
 "X-Poedit-WPHeader: filebird.php\n"
@@ -358,11 +358,11 @@ msgstr ""
 
 #: includes/I18n.php:74
 msgid "Sort Ascending"
-msgstr "Αύξουσα Ταξινόμηση"
+msgstr "Name Aufsteigend"
 
 #: includes/I18n.php:75
 msgid "Sort Descending"
-msgstr "Φθίνουσα Ταξινόμηση"
+msgstr "Name Absteigend"
 
 #: includes/I18n.php:76
 msgid "Reset"

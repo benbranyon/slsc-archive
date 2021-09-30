@@ -3,6 +3,8 @@
 namespace FileBird\Controller;
 
 use FileBird\Controller\Convert as ConvertController;
+use FileBird\Classes\Convert as ConvertModel;
+use FileBird\Controller\Exclude;
 
 use FileBird\Model\Folder as FolderModel;
 use FileBird\Classes\Helpers as Helpers;
@@ -36,6 +38,10 @@ class Folder extends Controller
 
   private function doHooks()
   {
+    Exclude::getInstance();
+    
+		add_filter( 'media_library_infinite_scrolling', '__return_true' );
+
     add_action('admin_enqueue_scripts', array($this, 'enqueueAdminScripts'));
 
     add_action('rest_api_init', array($this, 'registerRestFields'));
@@ -241,6 +247,10 @@ class Folder extends Controller
     wp_enqueue_script('jquery-ui-draggable');
     wp_enqueue_script('jquery-ui-droppable');
 
+    if ( wp_is_mobile() ) {
+      wp_enqueue_script('jquery-touch-punch-fixed', NJFB_PLUGIN_URL . 'assets/js/jquery.ui.touch-punch.js', array('jquery-ui-widget', 'jquery-ui-mouse'), NJFB_VERSION, false);
+    }
+
     wp_enqueue_script('fbv-folder', NJFB_PLUGIN_URL . 'assets/dist/js/app.js', array(), NJFB_VERSION, false);
     wp_enqueue_script('fbv-lib', NJFB_PLUGIN_URL . 'assets/js/jstree/jstree.min.js', array(), NJFB_VERSION, false);
 
@@ -255,13 +265,23 @@ class Folder extends Controller
       'default_folder' => Helpers::getDefaultSelectedFolder(),
       'folders' => FolderModel::allFolders('id as term_id, name as term_name', array('term_id', 'term_name')),
       'relations' => FolderModel::getRelations(),
-      // 'is_upload' => $current_screen != null && $current_screen->id === 'upload' ? 1 : 0,
+      'is_upload_screen' => "upload.php" === $screenId ? '1' : '0',
       'i18n' => i18n::getTranslation(),
       'media_mode' => get_user_option('media_library_mode', get_current_user_id()),
       'json_url' => apply_filters('filebird_json_url', rtrim(rest_url(NJFB_REST_URL), "/")),
       'media_url' => admin_url('upload.php'),
       'auto_import_url' => esc_url(add_query_arg(array('page' => 'filebird-settings', 'tab' => 'update-db', 'autorun' => 'true'), admin_url('/options-general.php'))),
       'is_new_user' => get_option('fbv_is_new_user', false),
+      'import_other_plugins' => ConvertModel::getInstance()->get_plugin3rd_folders_to_import(),
+      'import_other_plugins_url' => esc_url(
+        add_query_arg(
+          array(
+            'page' => 'filebird-settings',
+            'tab'  => 'import',
+          ),
+          admin_url( 'options-general.php' )
+        )
+      )
       // 'close_buy_pro_dialog' => time() < get_option('fbv_close_buy_pro_dialog', time())
     )));
   }
@@ -379,10 +399,10 @@ class Folder extends Controller
     $icl_lang = isset($_GET['icl_lang']) ? sanitize_text_field($_GET['icl_lang']) : null;
     if (isset($_GET['sort']) && \in_array(sanitize_text_field($_GET['sort']), array('name_asc', 'name_desc', 'reset'))) {
       if (sanitize_text_field($_GET['sort']) == 'name_asc') {
-        $order_by = 'name asc';
+        $order_by = 'CAST(name as unsigned), name ASC';
         $sort_option = sanitize_text_field($_GET['sort']);
       } elseif (sanitize_text_field($_GET['sort']) == 'name_desc') {
-        $order_by = 'name desc';
+        $order_by = 'CAST(name as unsigned) DESC, name DESC';
         $sort_option = sanitize_text_field($_GET['sort']);
       }
       update_option('njt_fb_sort_folder', $sort_option);

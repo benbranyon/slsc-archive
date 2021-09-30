@@ -6,7 +6,7 @@ function filebird_gallery_fb_block_assets() {
 	wp_register_script(
 		'filebird_gallery-fb-block-js',
 		plugins_url( '/dist/blocks.build.js', dirname( __FILE__ ) ),
-		array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-editor' ),
+		array( 'wp-blocks', 'wp-i18n', 'wp-element' ),
 		null,
 		true
 	);
@@ -97,6 +97,17 @@ function filebird_gallery_render( $attributes ){
 		'post_status' => 'inherit'
 	));
 	$posts = $query->get_posts();
+	if ( $attributes['sortBy'] == 'file_name') {
+		if ( $attributes['sortType'] == 'ASC' ) {
+			usort( $posts, function( $img1,  $img2 ) {
+				return ( basename( $img1->guid ) > basename( $img2->guid ) ) ? 1 : -1;
+			} );
+		} else {
+			usort( $posts, function( $img1,  $img2 ) {
+				return ( basename( $img1->guid ) > basename( $img2->guid ) ) ? -1 : 1;
+			} );
+		}
+	}
 	$ulClass = 'wp-block-filebird-block-filebird-gallery wp-block-gallery blocks-gallery-grid';
 	$ulClass .= ' columns-' . esc_attr($attributes['columns']);
 	$ulClass .= $attributes['isCropped'] ? ' is-cropped' : '';

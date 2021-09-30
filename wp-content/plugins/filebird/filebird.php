@@ -3,7 +3,7 @@
  * Plugin Name: FileBird Lite
  * Plugin URI: https://ninjateam.org/wordpress-media-library-folders/
  * Description: Organize thousands of WordPress media files into folders/ categories at ease.
- * Version: 4.7.7
+ * Version: 4.9.3
  * Author: Ninja Team
  * Author URI: https://ninjateam.org
  * Text Domain: filebird
@@ -15,12 +15,23 @@ namespace FileBird;
 
 defined( 'ABSPATH' ) || exit;
 
+if ( function_exists( 'FileBird\\init' ) ) {
+	require_once plugin_dir_path( __FILE__ ) . 'includes/Fallback.php';
+	if ( isset( $_GET['activate'] ) ) { // phpcs:ignore
+		unset( $_GET['activate'] ); // phpcs:ignore
+	}
+	add_action( 'admin_init', function(){
+		deactivate_plugins( plugin_basename( __FILE__ ) );
+	});
+	return;
+}
+
 if ( ! defined( 'NJFB_PREFIX' ) ) {
 	define( 'NJFB_PREFIX', 'filebird' );
 }
 
 if ( ! defined( 'NJFB_VERSION' ) ) {
-	define( 'NJFB_VERSION', '4.7.7' );
+	define( 'NJFB_VERSION', '4.9.3' );
 }
 
 if ( ! defined( 'NJFB_PLUGIN_FILE' ) ) {
@@ -75,32 +86,36 @@ spl_autoload_register(
 	}
 );
 
-function init() {
-	Plugin::getInstance();
-	Plugin::activate();
+if ( ! function_exists( 'FileBird\\init' ) ) {
+	function init() {
+		Plugin::getInstance();
+		Plugin::activate();
 
-	I18n::loadPluginTextdomain();
+		I18n::loadPluginTextdomain();
 
-	Classes\ACF::getInstance();
-	Classes\Convert::getInstance();
-	Classes\PageBuilders::getInstance();
-	Classes\Feedback::getInstance();
-	Classes\Review::getInstance();
-	Classes\DocumentGallery::getInstance();
+		Classes\ACF::getInstance();
+		Classes\Convert::getInstance();
+		Classes\PageBuilders::getInstance();
+		Classes\Feedback::getInstance();
+		Classes\Review::getInstance();
+		Classes\DocumentGallery::getInstance();
 
-	Page\Settings::getInstance();
-	Controller\Folder::getInstance();
-	Controller\FolderUser::getInstance();
-	Controller\CompatibleWpml::getInstance();
-	Controller\CompatiblePolylang::getInstance();
+		Page\Settings::getInstance();
+		Controller\Folder::getInstance();
+		Controller\FolderUser::getInstance();
+		Controller\CompatibleWpml::getInstance();
+		Controller\CompatiblePolylang::getInstance();
 
-	Controller\Api::getInstance();
+		Controller\Api::getInstance();
+
+		if ( function_exists( 'register_block_type' ) ) {
+			require plugin_dir_path( __FILE__ ) . 'blocks/filebird-gallery/src/init.php';
+		}
+
+		require_once plugin_dir_path( __FILE__ ) . 'includes/YC.php';
+	}
 }
 add_action( 'plugins_loaded', 'FileBird\\init' );
 
 register_activation_hook( __FILE__, array( 'FileBird\\Plugin', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'FileBird\\Plugin', 'deactivate' ) );
-
-if ( function_exists( 'register_block_type' ) ) {
-	require plugin_dir_path( __FILE__ ) . 'blocks/filebird-gallery/src/init.php';
-}

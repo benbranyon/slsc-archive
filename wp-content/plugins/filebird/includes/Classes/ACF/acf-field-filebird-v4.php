@@ -52,7 +52,7 @@ class acf_field_filebird extends acf_field
 	function render_folder_list($folders, $field)
 	{
 		foreach ($folders as $folder) {
-			$selected = $field['value'] === null ? null : in_array( $folder['id'], $field['value'] );
+			$selected = is_array( $field['value'] ) ? in_array( $folder['id'], $field['value'] ) : false;
 		?>
 			<li data-id="<?php echo esc_attr($folder['id']) ?>">
 				<label <?php echo ($selected ? ' class="selected"' : '') ?>>

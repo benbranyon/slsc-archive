@@ -19,6 +19,7 @@ class Schedule {
     wp_clear_scheduled_hook( 'filebird_remove_zip_files' );
   }
   public function actionRemoveZipFiles() {
+    $root_folder = NJFB_UPLOAD_DIR;
     $upload_folder = WP_CONTENT_DIR . DIRECTORY_SEPERATOR . $root_folder . DIRECTORY_SEPARATOR;
     $files = scandir($upload_folder);
     foreach($files as $k => $file) {

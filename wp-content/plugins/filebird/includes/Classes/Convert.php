@@ -21,7 +21,7 @@ class Convert {
     }
 
     private function doHooks(){
-      add_action('admin_notices', array($this, 'adminNotice') );
+      // add_action('admin_notices', array($this, 'adminNotice') );
       add_action('rest_api_init', array($this, 'registerRestFields'));
     }
     
@@ -98,6 +98,96 @@ class Convert {
     public function resPermissionsCheck() {
       return current_user_can("upload_files");
     }
+
+    public function plugin_import_description($counter, $pluginName){
+      return wp_kses_post(sprintf( __( 'We found you have %1$s categories you created from <strong>%2$s</strong> plugin. Would you like to import it to <strong>FileBird</strong>?', 'filebird' ), $counter, $pluginName ));
+    }
+
+    public function get_plugin3rd_folders_to_import() {
+      global $pagenow;
+  
+      $sites = array();
+  
+      if ( $pagenow !== 'upload.php' ) {
+        return $sites;
+      }
+  
+      $oldEnhancedFolders = array();
+      if ( ! $this->isUpdated( 'enhanced' ) && ! $this->isNoThanks( 'enhanced' ) ) {
+        $oldEnhancedFolders = $this->getOldFolders( 'enhanced', true );
+      }
+  
+      $oldWpmlfFolders = array();
+      if ( ! $this->isUpdated( 'wpmlf' ) && ! $this->isNoThanks( 'wpmlf' ) ) {
+        $oldWpmlfFolders = $this->getOldFolders( 'wpmlf', true );
+      }
+  
+      $oldWpmfFolders = array();
+      if ( ! $this->isUpdated( 'wpmf' ) && ! $this->isNoThanks( 'wpmf' ) ) {
+        $oldWpmfFolders = $this->getOldFolders( 'wpmf', true );
+      }
+  
+      $oldRealMediaFolders = array();
+      if ( ! $this->isUpdated( 'realmedia' ) && ! $this->isNoThanks( 'realmedia' ) ) {
+        $oldRealMediaFolders = $this->getOldFolders( 'realmedia', true );
+      }
+  
+      $oldHappyFilesFolders = array();
+      if ( ! $this->isUpdated( 'happyfiles' ) && ! $this->isNoThanks( 'happyfiles' ) ) {
+        $oldHappyFilesFolders = $this->getOldFolders( 'happyfiles', true );
+      }
+
+      $oldPremioFolders = array();
+      if ( ! $this->isUpdated( 'premio' ) && ! $this->isNoThanks( 'premio' ) ) {
+        $oldPremioFolders = $this->getOldFolders( 'premio', true );
+      }
+  
+      if ( count( $oldEnhancedFolders ) > 3 ) {
+        $sites[] = array(
+          'site'  => 'enhanced',
+          'title' => 'Enhanced Media Library',
+          'desc'  => $this->plugin_import_description(count($oldEnhancedFolders), 'Enhanced Media Library')
+        );
+      }
+      if ( count( $oldWpmlfFolders ) > 3 ) {
+        $sites[] = array(
+          'site'  => 'wpmlf',
+          'title' => 'Media Library Folders',
+           'desc'  => $this->plugin_import_description(count($oldWpmlfFolders), 'Media Library Folders')
+        );
+      }
+      if ( count( $oldWpmfFolders ) > 3 ) {
+        $sites[] = array(
+          'site'  => 'wpmf',
+          'title' => 'WP Media folder',
+          'desc'  => $this->plugin_import_description(count($oldWpmfFolders), 'WP Media folder')
+        );
+      }
+      if ( count( $oldRealMediaFolders ) > 3 ) {
+        $sites[] = array(
+          'site'  => 'realmedia',
+          'title' => 'WP Real Media Library',
+          'desc'  => $this->plugin_import_description(count($oldRealMediaFolders), 'WP Real Media Library')
+        );
+      }
+      if ( count( $oldHappyFilesFolders ) > 3 ) {
+        $sites[] = array(
+          'site'  => 'happyfiles',
+          'title' => 'HappyFiles',
+          'desc'  => $this->plugin_import_description(count($oldHappyFilesFolders), 'HappyFiles')
+        );
+      }
+      if ( count( $oldPremioFolders ) > 3 ) {
+        $sites[] = array(
+          'site'  => 'premio',
+          'title' => 'premio',
+          'desc'  => $this->plugin_import_description(count($oldPremioFolders), 'Folders')
+        );
+      }
+  
+      return $sites;
+    }
+
     public function adminNotice() {
         global $pagenow;
         
@@ -213,6 +303,15 @@ class Convert {
           update_option('njt_fb_realmedia_no_thanks', '1');
         } else if($site == 'happyfiles') {
           update_option('njt_fb_happyfiles_no_thanks', '1');
+        } else if($site == 'premio') {
+          update_option('njt_fb_premio_no_thanks', '1');
+        } elseif ( $site == 'all' ) {
+          update_option( 'njt_fb_happyfiles_no_thanks', '1' );
+          update_option( 'njt_fb_realmedia_no_thanks', '1' );
+          update_option( 'njt_fb_wpmf_no_thanks', '1' );
+          update_option( 'njt_fb_enhanced_no_thanks', '1' );
+          update_option( 'njt_fb_wpmlf_no_thanks', '1' );
+          update_option( 'njt_fb_premio_no_thanks', '1' );
         }
         
         wp_send_json_success(array(
@@ -288,6 +387,8 @@ class Convert {
             $is = get_option('njt_fb_updated_from_realmedia', '0') === '1';
           } else if($site == 'happyfiles') {
             $is = get_option('njt_fb_updated_from_happyfiles', '0') === '1';
+          } else if($site == 'premio') {
+            $is = get_option('njt_fb_updated_from_premio', '0') === '1';
           }
 
           return $is;
@@ -303,6 +404,8 @@ class Convert {
           return get_option('njt_fb_realmedia_no_thanks', '0') === '1';
         } else if($site == 'happyfiles') {
           return get_option('njt_fb_happyfiles_no_thanks', '0') === '1';
+        } else if($site == 'premio') {
+          return get_option('njt_fb_premio_no_thanks', '0') === '1';
         }
       }
     // public function ajaxImport() {
@@ -407,6 +510,13 @@ class Convert {
             ));
             exit();
           }
+        } else if($site == 'premio') {
+          if(get_option('njt_fb_updated_from_premio', '0') == '1') {
+            wp_send_json_success(array(
+                'mess' => __('Already Updated', 'filebird')
+            ));
+            exit();
+          }
         }
     }
     public function getOldFolders($site, $flat = false) {
@@ -425,6 +535,8 @@ class Convert {
           }
         } else if($site == 'happyfiles') {
           $folders = Helpers::foldersFromHappyFiles(0, $flat);
+        } else if($site == 'premio') {
+          $folders = Helpers::foldersFromPremio(0, $flat);
         }
         return $folders;
     }
@@ -470,7 +582,9 @@ class Convert {
           $att = $wpdb->get_col($wpdb->prepare('SELECT attachment FROM %1$s WHERE fid = %2$d', $folder_table, $folder->id));
         } else if($site == 'happyfiles') {
           $att = $wpdb->get_col($wpdb->prepare('SELECT object_id FROM %1$s WHERE term_taxonomy_id = %2$d', $wpdb->term_relationships, $folder->term_taxonomy_id));
-        }
+        } else if($site == 'premio') {
+          $att = $wpdb->get_col($wpdb->prepare('SELECT object_id FROM %1$s WHERE term_taxonomy_id = %2$d', $wpdb->term_relationships, $folder->term_taxonomy_id));
+        } 
         return $att;
     }
     private function afterInsertingNewFolders($site) {
@@ -488,6 +602,8 @@ class Convert {
             update_option('njt_fb_updated_from_realmedia', '1');
         } else if($site == 'happyfiles') {
             update_option('njt_fb_updated_from_happyfiles', '1');
+        } else if($site == 'premio') {
+            update_option('njt_fb_updated_from_premio', '1');
         }
     }
   
