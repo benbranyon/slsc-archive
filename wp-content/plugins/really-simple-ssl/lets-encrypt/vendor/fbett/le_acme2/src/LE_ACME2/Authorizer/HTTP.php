@@ -1,6 +1,7 @@
 <?php
 
 namespace LE_ACME2\Authorizer;
+defined('ABSPATH') or die();
 
 use LE_ACME2\Request;
 use LE_ACME2\Response;
@@ -89,6 +90,10 @@ class HTTP extends AbstractAuthorizer {
      * @throws Exception\HTTPAuthorizationInvalid
      */
     private function _validateFile(string $domain, Response\Authorization\Struct\Challenge $challenge) : bool {
+
+	    if ( get_option('rsssl_skip_challenge_directory_request') ) {
+		    return true;
+	    }
 
         $challengeAuthorizationKey = new ChallengeAuthorizationKey($this->_account);
 

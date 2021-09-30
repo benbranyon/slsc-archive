@@ -29,36 +29,42 @@ class rsssl_letsencrypt_handler {
 		if ( isset( self::$_this ) ) {
 			wp_die( sprintf( __( '%s is a singleton class and you cannot create a second instance.', 'really-simple-ssl' ), get_class( $this ) ) );
 		}
-		add_action( 'rsssl_before_save_lets-encrypt_option', array( $this, 'before_save_wizard_option' ), 10, 4 );
-		add_action( 'rsssl_le_activation', array( $this, 'cleanup_on_ssl_activation'));
-		add_action( 'rsssl_le_activation', array( $this, 'plugin_activation_actions'));
-		add_action( 'admin_init', array( $this, 'maybe_add_htaccess_exclude'));
-		add_action( 'admin_init', array( $this, 'maybe_create_htaccess_directories'));
 
-		$this->key_directory = $this->key_directory();
-		$this->challenge_directory = $this->challenge_directory();
-		$this->certs_directory = $this->certs_directory();
+		//loading of these hooks is stricter. The class can be used in the notices, which are needed on the generic dashboard
+		//These functionality is not needed on the dashboard, so should only be loaded in strict circumstances
+		if ( rsssl_letsencrypt_generation_allowed( true ) ) {
+			add_action( 'rsssl_before_save_lets-encrypt_option', array( $this, 'before_save_wizard_option' ), 10, 4 );
+			add_action( 'rsssl_le_activation', array( $this, 'cleanup_on_ssl_activation'));
+			add_action( 'rsssl_le_activation', array( $this, 'plugin_activation_actions'));
+			add_action( 'admin_init', array( $this, 'maybe_add_htaccess_exclude'));
+			add_action( 'admin_init', array( $this, 'maybe_create_htaccess_directories'));
 
-		// Config the desired paths
-        if ( $this->key_directory ) {
-	        Account::setCommonKeyDirectoryPath( $this->key_directory );
-        }
+			$this->key_directory = $this->key_directory();
+			$this->challenge_directory = $this->challenge_directory();
+			$this->certs_directory = $this->certs_directory();
 
-        if ( $this->challenge_directory ) {
-	        HTTP::setDirectoryPath( $this->challenge_directory );
-        }
+			// Config the desired paths
+			if ( $this->key_directory ) {
+				Account::setCommonKeyDirectoryPath( $this->key_directory );
+			}
 
-		// General configs
-		Connector::getInstance()->useStagingServer( false );
-		Logger::getInstance()->setDesiredLevel( Logger::LEVEL_DISABLED );
+			if ( $this->challenge_directory ) {
+				HTTP::setDirectoryPath( $this->challenge_directory );
+			}
 
-		if ( !get_option('rsssl_disable_ocsp') ) {
-			Certificate::enableFeatureOCSPMustStaple();
+			// General configs
+			Connector::getInstance()->useStagingServer( false );
+			Logger::getInstance()->setDesiredLevel( Logger::LEVEL_DISABLED );
+
+			if ( !get_option('rsssl_disable_ocsp') ) {
+				Certificate::enableFeatureOCSPMustStaple();
+			}
+
+			Order::setPreferredChain('ISRG Root X1');
+			$this->subjects = $this->get_subjects();
+			$this->verify_dns();
 		}
 
-		Order::setPreferredChain('ISRG Root X1');
-        $this->subjects = $this->get_subjects();
-        $this->verify_dns();
 		self::$_this = $this;
 	}
 
@@ -181,8 +187,12 @@ class rsssl_letsencrypt_handler {
     public function check_domain(){
 	    $details = parse_url(site_url());
 	    $path = isset($details['path']) ? $details['path'] : '';
-
-	    if (is_multisite() && get_current_blog_id() !== get_main_site_id() ) {
+        if ( strpos(site_url(), 'localhost')!==false ) {
+	        rsssl_progress_remove( 'system-status' );
+	        $action  = 'stop';
+	        $status  = 'error';
+	        $message = __( "It is not possible to install Let's Encrypt on a localhost environment.", "really-simple-ssl" );
+        } else if (is_multisite() && get_current_blog_id() !== get_main_site_id() ) {
 		    rsssl_progress_remove('system-status');
 		    $action = 'stop';
 		    $status = 'error';
@@ -192,16 +202,6 @@ class rsssl_letsencrypt_handler {
 		    $action = 'stop';
 		    $status = 'error';
 		    $message = __("It is not possible to install Let's Encrypt on a subfolder configuration.", "really-simple-ssl" ).rsssl_read_more('https://really-simple-ssl.com/install-ssl-on-subfolders');
-	    } else if ( strlen($path)>0 ) {
-		    rsssl_progress_remove('system-status');
-		    $action = 'stop';
-		    $status = 'error';
-		    $message = __("It is not possible to install Let's Encrypt on a subfolder configuration.", "really-simple-ssl" );
-	    } else if ( strpos(site_url(), 'localhost')!==false ) {
-		    rsssl_progress_remove('system-status');
-		    $action = 'stop';
-		    $status = 'error';
-		    $message = __("It is not possible to install Let's Encrypt on a localhost environment.", "really-simple-ssl" );
 	    } else {
 		    $action = 'continue';
 		    $status = 'success';
@@ -277,7 +277,7 @@ class rsssl_letsencrypt_handler {
 			    $status = 'success';
 			    $message = sprintf(__("Your certificate will expire on %s.", "really-simple-ssl" ).' '.__("Continue to renew.", "really-simple-ssl" ), $expiry_date);   ;
 		    } else {
-			    $action = 'stop';
+			    $action = 'continue';
 			    $status = 'error';
 			    $message = __("You already have a valid SSL certificate.", "really-simple-ssl" );
 		    }
@@ -443,10 +443,22 @@ class rsssl_letsencrypt_handler {
 						    }
 					    } catch ( Exception $e ) {
 						    error_log( print_r( $e, true ) );
+						    $error = $this->get_error( $e );
+						    if (strpos($error, 'Order has status "invalid"')!==false) {
+							    $order->clear();
+							    $error = __("The order is invalid, possibly due to too many failed authorization attempts. Please start at the previous step.","really-simple-ssl");
+						    } else
+						    //fixing a plesk bug
+						    if ( strpos($error, 'No order for ID ') !== FALSE){
+							    $error .= '&nbsp;'.__("Order ID mismatch, regenerate order.","really-simple-ssl");
+							    $order->clear();
+							    rsssl_progress_remove('dns-verification');
+							    $error .= '&nbsp;'.__("If you entered your DNS records before, they need to be changed.","really-simple-ssl");
+						    }
 						    $response = new RSSSL_RESPONSE(
 							    'error',
 							    'retry',
-							    $this->get_error( $e )
+							    $error
 						    );
 					    }
 				    }
@@ -481,7 +493,7 @@ class rsssl_letsencrypt_handler {
 
 	/**
 	 * Check DNS txt records.
-	 * @return string|void
+	 * @return RSSSL_RESPONSE
 	 */
 
 	public function verify_dns(){
@@ -552,7 +564,7 @@ class rsssl_letsencrypt_handler {
 
 	/**
      * Authorize the order
-	 * @return string|void
+	 * @return RSSSL_RESPONSE
 	 */
 
     public function create_bundle_or_renew(){
@@ -663,8 +675,6 @@ class rsssl_letsencrypt_handler {
 							    $response->status = 'warning';
 							    $response->message = __("OCSP not supported, the certificate will be generated without OCSP.","really-simple-ssl");
 						    }
-
-
 					    }
 				    }
 
@@ -750,6 +760,7 @@ class rsssl_letsencrypt_handler {
 
 	/**
 	 * Get the order object
+	 *
 	 * @return RSSSL_RESPONSE
 	 */
     public function get_order(){
@@ -796,13 +807,7 @@ class rsssl_letsencrypt_handler {
 		delete_transient('rsssl_le_generate_attempt_count');
 	}
 
-	/**
-     * If a bundle generation is completed, this value is set to true.
-	 * @return bool
-	 */
-    public function generated_by_rsssl(){
-	    return get_option('rsssl_le_certificate_generated_by_rsssl');
-    }
+
 
 	/**
 	 * Check if SSL generation renewal can be handled automatically
@@ -898,6 +903,10 @@ class rsssl_letsencrypt_handler {
     public function cron_certificate_needs_renewal(){
 
 	    $cert_file = get_option('rsssl_certificate_path');
+	    if ( empty($cert_file) ) {
+	    	return false;
+	    }
+
 	    $certificate = file_get_contents($cert_file);
 	    $certificateInfo = openssl_x509_parse($certificate);
 	    $valid_to = $certificateInfo['validTo_time_t'];
@@ -1154,6 +1163,10 @@ class rsssl_letsencrypt_handler {
 	public function directory_has_writing_permissions( $directory ){
 		set_error_handler(array($this, 'custom_error_handling'));
 		$test_file = fopen( $directory . "/really-simple-ssl-permissions-check.txt", "w" );
+		if ( !$test_file ) {
+			return false;
+		}
+
 		fwrite($test_file, 'file to test writing permissions for Really Simple SSL');
 		fclose( $test_file );
 		restore_error_handler();
@@ -1313,21 +1326,38 @@ class rsssl_letsencrypt_handler {
 
 	/**
 	 * Clear the keys directory, used in reset function
+	 * @since 5.0
 	 */
-	public function clear_keys_directory(){
+
+	public function clear_keys_directory() {
+
 		if (!current_user_can('manage_options')) {
 			return;
 		}
-		$path = $this->key_directory();
-		if ( file_exists( $path ) && $handle = opendir( $path ) ) {
-			while ( false !== ( $file = readdir( $handle ) ) ) {
-				if ( strpos($file, 'account_live_')!==false || strpos($file, 'account_staging_')!==false ){
-					unlink($path.'/'.$file);
+
+		$dir = $this->key_directory();
+		$this->delete_files_directories_recursively( $dir );
+
+	}
+
+	/**
+	 * @param $dir
+	 * Delete files and directories recursively. Used to clear the order from keys directory
+	 * @since 5.0.11
+	 */
+
+	private function delete_files_directories_recursively( $dir ) {
+
+		if ( strpos( $dir, 'ssl/keys' ) !== false ) {
+			foreach ( glob( $dir . '/*' ) as $file ) {
+				if ( is_dir( $file ) ) {
+					$this->delete_files_directories_recursively( $file );
+				} else {
+					unlink( $file );
 				}
 			}
-			closedir( $handle );
+			rmdir( $dir );
 		}
-
 	}
 
 	public function maybe_create_htaccess_directories(){
@@ -1557,19 +1587,15 @@ class rsssl_letsencrypt_handler {
 
 	/**
 	 * Generic SSL cert installation function
-	 * @param $server
-	 * @param $type
 	 *
 	 * @return RSSSL_RESPONSE
 	 */
-	public function cron_renew_installation($server, $type) {
-		//autodetect if empty
-		if (!$server) {
-			$install_method = get_option('rsssl_le_certificate_installed_by_rsssl');
-			$data = explode($install_method, ':');
-			$server = isset($data[0]) ? $data[0] : false;
-			$type = isset($data[1]) ? $data[1] : false;
-		}
+	public function cron_renew_installation() {
+		$install_method = get_option('rsssl_le_certificate_installed_by_rsssl');
+		$data = explode(':', $install_method );
+
+		$server = isset($data[0]) ? $data[0] : false;
+		$type = isset($data[1]) ? $data[1] : false;
 
 		$attempt_count = intval(get_transient('rsssl_le_install_attempt_count'));
 		$attempt_count++;
@@ -1585,7 +1611,11 @@ class rsssl_letsencrypt_handler {
 		if (rsssl_is_ready_for('installation')) {
 			try {
 				if ( $server === 'cpanel' ) {
-					$response = rsssl_install_cpanel_default();
+					if ($type==='default') {
+						$response = rsssl_install_cpanel_default();
+					} else if ( function_exists('rsssl_install_cpanel_shell') ) {
+						$response = rsssl_install_cpanel_shell();
+					}
 
 					if ( $response->status === 'success' ) {
 						delete_option( "rsssl_le_start_installation" );

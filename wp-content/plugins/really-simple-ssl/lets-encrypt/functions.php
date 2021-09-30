@@ -150,7 +150,7 @@ if ( !function_exists('rsssl_is_plesk')) {
 		$open_basedir = ini_get("open_basedir");
 		if ( empty($open_basedir) && is_dir( '/usr/local/psa' ) ) {
 			return true;
-		} else if (rsssl_check_port(2222)) {
+		} else if (rsssl_check_port(8443)) {
 			return true;
 		} else {
 			return false;
@@ -193,23 +193,24 @@ if ( !function_exists('rsssl_is_directadmin')) {
  * @param int $port
  *
  * @return bool
- * @throws Exception
  */
+
 function rsssl_check_port( $port)
 {
-	try {
-		$ipAddress = gethostbyname('localhost');
-		$link = @fsockopen($ipAddress, $port, $errno, $error);
-		if ($error) {
-			return false;
-		}
-	} catch (\Exception $ex) {
+	$port_check_status = get_option("rsssl_port_check_$port");
+	if ( !function_exists('fsockopen') || $port_check_status === 'fail' ) {
 		return false;
 	}
 
+	$ipAddress = gethostbyname('localhost');
+	$link = @fsockopen( $ipAddress, $port, $errno, $error, 5 );
+
 	if ( $link ) {
+		update_option("rsssl_port_check_$port", 'success');
 		return true;
 	}
+
+	update_option("rsssl_port_check_$port", 'fail');
 	return false;
 }
 
@@ -634,4 +635,35 @@ if ( !function_exists('rsssl_maybe_drop_subdomain_test') ) {
 	}
 
 	add_filter( 'rsssl_steps', 'rsssl_maybe_drop_subdomain_test', 20 );
+}
+
+if ( !function_exists('rsssl_can_install_shell_addon') ) {
+	function rsssl_can_install_shell_addon(){
+		//if not cpanel
+		if ( !rsssl_is_cpanel() ) {
+			return false;
+		}
+
+		//if already installed
+		if (defined('rsssl_shell_path')){
+			return false;
+		}
+
+		if ( function_exists('shell_exec') || function_exists('system') || function_exists('passthru') || function_exists('exec') ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+}
+
+if ( !function_exists('rsssl_generated_by_rsssl')) {
+	/**
+	 * If a bundle generation is completed, this value is set to true.
+	 *
+	 * @return bool
+	 */
+	function rsssl_generated_by_rsssl() {
+		return get_option( 'rsssl_le_certificate_generated_by_rsssl' );
+	}
 }
