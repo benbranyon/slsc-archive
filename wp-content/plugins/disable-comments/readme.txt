@@ -1,11 +1,11 @@
-=== Disable Comments - Remove Comments & Protect From Spam ===
+=== Disable Comments - Remove Comments & Stop Spam [Multi-Site Support] ===
 Contributors: Asif2BD, priyomukul, wpdevteam, re_enter_rupok, tusharimran, alimuzzamanalim, solarissmoke, garrett-eclipse
 Donate link: https://wpdeveloper.net/
-Tags: comments, delete comments, disable comments, spam comment, disable, stop spam, remove comments, anti spam, disable xml-rpc, hide comment, XML-RPC, REST-API, WP-CLI
+Tags: comments, delete comments, disable comments, spam comment, disable, stop spam, remove comments, anti spam, disable xml-rpc, hide comment, XML-RPC, REST-API, WP-CLI, multi-site support
 Requires at least: 5.0
 Tested up to: 5.8
 Requires PHP: 5.6
-Stable tag: 2.2.1
+Stable tag: 2.2.3
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -13,7 +13,7 @@ Allows administrators to globally disable comments on their site. Comments can b
 
 == Description ==
 
-= Disable Comments - Remove Comments & Protect From Spam =
+= Disable Comments - Remove Comments & Stop Spam [Multi-Site Support] =
 
 Instantly allow or disallow comments from any post type in WordPress (Pages, Posts, or Media) to stop the spammers and gain complete control over your full website. WP-CLI Support & Control comments via XML-RPC and REST-API too!
 
@@ -44,6 +44,7 @@ https://www.youtube.com/watch?v=J9AteKzQpPs
 * Stop spam comments entirely from the site with one click.
 * **[New]** Delete comments by type.
 * **[New]** Disable comments via [XML-RPC](https://wpdeveloper.net/docs/how-to-disable-comments-made-via-xml-rpc/) & [REST-API](https://wpdeveloper.net/docs/how-to-disable-comments-made-via-rest-api/)
+* **[New]** Fully Multi-site Network supported.
 
 https://www.youtube.com/watch?v=FBq3-W-p-DM
 
@@ -189,6 +190,13 @@ Go to the tools page for the Disable Comments plugin and utlize the Delete Comme
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 This will be maiintained from August 19, 2020 - @asif2bd
+
+= [2.2.3] - 2021-10-25 =
+* Few minor bug fixes and improvement.
+
+= [2.2.2] - 2021-10-05 =
+* Added: "Select All" checkbox for subsites selection in a multisite network.
+* Few minor bug fixes and improvement.
 
 = [2.2.1] - 2021-09-26 =
 * Fixed: 100+ subsites limit issue in multisite network
@@ -370,4 +378,4 @@ This will be maiintained from August 19, 2020 - @asif2bd
 
 == Upgrade Notice ==
 
-[Minor Update] 100+ subsites limit issue in multisite network
+[Minor Update] Few minor bug fixes and improvement.

@@ -220,4 +220,33 @@ jQuery(document).ready(function ($) {
 		// jQuery(this).off(e);
 		saveBtn.addClass('form-dirty');
 	});
+	jQuery("#deleteCommentSettings .check-all, #disableCommentSaveSettings .check-all").on('change', function(){
+		var checked      = jQuery(this).is(':checked');
+		var sites_option = jQuery(this).closest('.sites_option')
+		var site_option  = sites_option.find('.site_option')
+		site_option.prop('checked', checked);
+	});
+
+	var countSelected = function(sites_option){
+		var site_option  = sites_option.find('.site_option')
+		var totalChecked = 0;
+		site_option.each(function(){
+			if(jQuery(this).is(':checked')){
+				totalChecked++;
+			}
+		});
+
+		if(totalChecked){
+			sites_option.find('.check-all').addClass('semi-checked');
+		}
+		sites_option.find('.check-all').prop('checked', totalChecked == site_option.length);
+		sites_option.find('.check-all+label small').text(`(${totalChecked} selected)`)
+	}
+
+	jQuery("#deleteCommentSettings .sites_option, #disableCommentSaveSettings .sites_option").on('change', function(){
+		var sites_option = jQuery(this).closest('.sites_option')
+		countSelected(sites_option);
+	});
+	countSelected(jQuery("#deleteCommentSettings .sites_option"));
+	countSelected(jQuery("#disableCommentSaveSettings .sites_option"));
 });

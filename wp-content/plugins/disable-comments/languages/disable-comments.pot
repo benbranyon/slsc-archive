@@ -2,9 +2,9 @@
 # This file is distributed under the GPL-3.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: Disable Comments 2.2.1\n"
+"Project-Id-Version: Disable Comments 2.2.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/disable-comments\n"
-"POT-Creation-Date: 2021-09-26 11:49:56+00:00\n"
+"POT-Creation-Date: 2021-10-25 06:12:22+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,11 +24,11 @@ msgstr ""
 "X-Textdomain-Support: yes\n"
 "X-Generator: grunt-wp-i18n 1.0.3\n"
 
-#: disable-comments.php:147
+#: disable-comments.php:154
 msgid "Want to help make Disable Comments even better?"
 msgstr ""
 
-#: disable-comments.php:148
+#: disable-comments.php:155
 msgid ""
 "We collect non-sensitive diagnostic data and plugin usage information. Your "
 "site URL, WordPress & PHP version, plugins & themes and email address to "
@@ -37,16 +37,16 @@ msgid ""
 "I promise."
 msgstr ""
 
-#: disable-comments.php:160
+#: disable-comments.php:167
 #. translators: %s: WordPress version no.
 msgid "Disable Comments requires WordPress version %s or greater."
 msgstr ""
 
-#: disable-comments.php:405 disable-comments.php:548 disable-comments.php:555
+#: disable-comments.php:454 disable-comments.php:600 disable-comments.php:607
 msgid "Comments are closed."
 msgstr ""
 
-#: disable-comments.php:507
+#: disable-comments.php:556
 #. translators: %s: disabled post types.
 msgid ""
 "Note: The <em>Disable Comments</em> plugin is currently active, and "
@@ -54,11 +54,11 @@ msgid ""
 "not be applicable for those post types."
 msgstr ""
 
-#: disable-comments.php:507
+#: disable-comments.php:556
 msgid ", "
 msgstr ""
 
-#: disable-comments.php:539
+#: disable-comments.php:591
 #. translators: %s: URL to Disabled Comment settings page.
 msgid ""
 "The <strong>Disable Comments</strong> plugin is active, but isn't "
@@ -66,31 +66,31 @@ msgid ""
 "page</a> to choose which post types to disable comments on."
 msgstr ""
 
-#: disable-comments.php:628 views/partials/_disable.php:3
+#: disable-comments.php:680 views/partials/_disable.php:3
 msgid "Settings"
 msgstr ""
 
-#: disable-comments.php:629
+#: disable-comments.php:681
 msgid "Tools"
 msgstr ""
 
-#: disable-comments.php:648 views/partials/_delete.php:80
+#: disable-comments.php:700 views/partials/_delete.php:84
 msgid "Delete Comments"
 msgstr ""
 
-#: disable-comments.php:711
+#: disable-comments.php:763
 msgid "Default (no type)"
 msgstr ""
 
-#: disable-comments.php:815
+#: disable-comments.php:878
 msgid "Saved"
 msgstr ""
 
-#: disable-comments.php:884 disable-comments.php:918 disable-comments.php:941
+#: disable-comments.php:948 disable-comments.php:982 disable-comments.php:1005
 msgid "All comments have been deleted"
 msgstr ""
 
-#: disable-comments.php:886 disable-comments.php:890
+#: disable-comments.php:950 disable-comments.php:954
 msgid "Internal error occured. Please try again later."
 msgstr ""
 
@@ -189,44 +189,44 @@ msgstr ""
 msgid "Disable Comments via REST API. "
 msgstr ""
 
-#: views/partials/_delete.php:28 views/partials/_delete.php:32
-#: views/partials/_disable.php:19 views/partials/_disable.php:41
-#: views/partials/_disable.php:46 views/partials/_disable.php:77
+#: views/partials/_delete.php:32 views/partials/_delete.php:36
+#: views/partials/_disable.php:19 views/partials/_disable.php:48
+#: views/partials/_disable.php:53 views/partials/_disable.php:84
 msgid "Note:"
 msgstr ""
 
-#: views/partials/_delete.php:28
+#: views/partials/_delete.php:32
 msgid "Select your sub-sites where you want to delete comments."
 msgstr ""
 
-#: views/partials/_delete.php:32
+#: views/partials/_delete.php:36
 msgid ""
 "These settings will permanently delete comments for your entire website, or "
 "for specific posts and comment types."
 msgstr ""
 
-#: views/partials/_delete.php:35 views/partials/_disable.php:53
+#: views/partials/_delete.php:39 views/partials/_disable.php:60
 msgid "Everywhere:"
 msgstr ""
 
-#: views/partials/_delete.php:35
+#: views/partials/_delete.php:39
 msgid "Permanently delete all comments on your WordPress website"
 msgstr ""
 
-#: views/partials/_delete.php:36 views/partials/_delete.php:59
-#: views/partials/_delete.php:72 views/partials/_disable.php:54
+#: views/partials/_delete.php:40 views/partials/_delete.php:63
+#: views/partials/_delete.php:76 views/partials/_disable.php:61
 msgid "Warnings:"
 msgstr ""
 
-#: views/partials/_delete.php:36
+#: views/partials/_delete.php:40
 msgid "This will permanently delete comments everywhere on your website."
 msgstr ""
 
-#: views/partials/_delete.php:40
+#: views/partials/_delete.php:44
 msgid "On Certain Post Types:"
 msgstr ""
 
-#: views/partials/_delete.php:55 views/partials/_disable.php:73
+#: views/partials/_delete.php:59 views/partials/_disable.php:80
 msgid ""
 "Only the built-in post types appear above. If you want to disable comments "
 "on other custom post types on the entire network, you can supply a "
@@ -234,32 +234,32 @@ msgid ""
 "post type)."
 msgstr ""
 
-#: views/partials/_delete.php:56 views/partials/_disable.php:74
+#: views/partials/_delete.php:60 views/partials/_disable.php:81
 msgid "Custom post types:"
 msgstr ""
 
-#: views/partials/_delete.php:59
+#: views/partials/_delete.php:63
 msgid ""
 "This will remove existing comment entries for the selected post type(s) in "
 "the database and cannot be reverted without a database backups."
 msgstr ""
 
-#: views/partials/_delete.php:63
+#: views/partials/_delete.php:67
 msgid "Delete Certain Comment Types:"
 msgstr ""
 
-#: views/partials/_delete.php:72
+#: views/partials/_delete.php:76
 msgid ""
 "Deleting comments by comment type will remove existing comment entries of "
 "the selected comment type(s) in the database and cannot be reverted without "
 "a database backup."
 msgstr ""
 
-#: views/partials/_delete.php:74
+#: views/partials/_delete.php:78
 msgid "Total Comments:"
 msgstr ""
 
-#: views/partials/_delete.php:218
+#: views/partials/_delete.php:222
 msgid "No comments are available for deletion."
 msgstr ""
 
@@ -269,13 +269,13 @@ msgid ""
 "types of posts."
 msgstr ""
 
-#: views/partials/_disable.php:14 views/partials/_disable.php:89
-#: views/partials/_disable.php:99
+#: views/partials/_disable.php:14 views/partials/_disable.php:96
+#: views/partials/_disable.php:106
 msgid "On"
 msgstr ""
 
-#: views/partials/_disable.php:15 views/partials/_disable.php:90
-#: views/partials/_disable.php:100
+#: views/partials/_disable.php:15 views/partials/_disable.php:97
+#: views/partials/_disable.php:107
 msgid "Off"
 msgstr ""
 
@@ -285,33 +285,31 @@ msgid ""
 "Comments” settings individually on every website in the network."
 msgstr ""
 
-#: views/partials/_disable.php:41
-msgid ""
-"Enable Site Wise settings if you want to configure “Disable Comments” "
-"settings individually on every website."
+#: views/partials/_disable.php:48
+msgid "All the underneath settings will be applied for these selected sub sites."
 msgstr ""
 
-#: views/partials/_disable.php:46
+#: views/partials/_disable.php:53
 msgid ""
 "This site will be controlled by the network admin until you click the "
 "\"Save Changes\" button."
 msgstr ""
 
-#: views/partials/_disable.php:53
+#: views/partials/_disable.php:60
 msgid "Disable comments globally on your entire website"
 msgstr ""
 
-#: views/partials/_disable.php:54
+#: views/partials/_disable.php:61
 msgid ""
 "This will disable comments from every page and post on your website. Use "
 "this setting if you do not want to show comments anywhere."
 msgstr ""
 
-#: views/partials/_disable.php:58
+#: views/partials/_disable.php:65
 msgid "On Specific Post Types:"
 msgstr ""
 
-#: views/partials/_disable.php:77
+#: views/partials/_disable.php:84
 msgid ""
 "Disabling comments will also disable trackbacks and pingbacks. All "
 "comment-related fields will also be hidden from the edit/quick-edit screens "
@@ -319,31 +317,31 @@ msgid ""
 "posts. Comments will be visible on all other post types."
 msgstr ""
 
-#: views/partials/_disable.php:81
+#: views/partials/_disable.php:88
 msgid "Disable Comments With API"
 msgstr ""
 
-#: views/partials/_disable.php:82
+#: views/partials/_disable.php:89
 msgid ""
 "You can disable comments made on your website using WordPress "
 "specifications."
 msgstr ""
 
-#: views/partials/_disable.php:92
+#: views/partials/_disable.php:99
 msgid "Disable Comments via XML-RPC"
 msgstr ""
 
-#: views/partials/_disable.php:101
+#: views/partials/_disable.php:108
 msgid "Disable Comments via REST API"
 msgstr ""
 
-#: views/partials/_disable.php:105
+#: views/partials/_disable.php:112
 msgid ""
 "Turning on these settings will disable any comments made on your website "
 "via XML-RPC or REST API specifications."
 msgstr ""
 
-#: views/partials/_disable.php:110
+#: views/partials/_disable.php:117
 msgid "Save Changes"
 msgstr ""
 
@@ -426,7 +424,7 @@ msgstr ""
 msgid "https://wpdeveloper.net"
 msgstr ""
 
-#: disable-comments.php:638
+#: disable-comments.php:690
 msgctxt "settings menu title"
 msgid "Disable Comments"
 msgstr ""
