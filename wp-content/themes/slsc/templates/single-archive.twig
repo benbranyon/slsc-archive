@@ -17,17 +17,23 @@
               <a href="/archive/?_topic={{ topic.slug }}">{{ topic }}</a>
             {% endfor %}
           </div>
-          <label class="form-item__label">Additional Metadata</label>
-          <div class="single-archive__metadata">
-            <div class="single-archive__date"><span>Date:</span> {{ post.date|date("F Y") }}</div>
-            <div class="single-archive__type"><span>Type:</span> {{ post.terms('file_type')[0] }}</div>
-          </div>
           <label class="form-item__label">Provenace</label>
           <div class="single-archive__provenance">
-            <div class="single-archive__collection"><span>Collection:</span> <a href="{{ collection_slug }}">{{ collection_title }}</a></div> 
-            {% if post.archive_author %}
-              <div class="single-archive__author"><span>Author:</span> {{ post.archive_author }}</div>
+            <div class="single-archive__collection"><span>Collection:</span> <a href="{{ collection_slug }}">{{ collection_title }}</a></div>
+            {% if post.archive_original_filename %}
+              <div><span>Original Filename:</span> {{ post.archive_original_filename }}</div>
             {% endif %}
+            {% if post.archive_author %}
+              <div class="single-archive__author"><span>Original Author:</span> {{ post.archive_author }}</div>
+            {% endif %}
+            {% if post.archive_file_date %}
+              <div><span>Original Date Created:</span> {{ post.archive_file_date|date('F j, Y') }}</div>
+            {% endif %}
+          </div>
+          <label class="form-item__label">Additional Metadata</label>
+          <div class="single-archive__metadata">
+            <div class="single-archive__type"><span>Type:</span> {{ post.terms('file_type')[0] }}</div>
+            <div><span>Language</span> {{ post.archive_language }}</div>
           </div>
       </div>
 

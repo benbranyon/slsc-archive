@@ -1215,16 +1215,16 @@ h1, h2, h3, h4, h5, h6 {
 .single-archive__topics {
   margin-bottom: 40px; }
 
-.single-archive__metadata {
-  margin-bottom: 40px; }
-  .single-archive__metadata span {
-    font-weight: bold; }
+.single-archive__metadata span {
+  font-weight: bold; }
 
 .single-archive__type {
   text-transform: capitalize; }
 
-.single-archive__provenance span {
-  font-weight: bold; }
+.single-archive__provenance {
+  margin-bottom: 40px; }
+  .single-archive__provenance span {
+    font-weight: bold; }
 
 .single-get_involved .l-sidebar__sidebar {
   background-color: #fff;
