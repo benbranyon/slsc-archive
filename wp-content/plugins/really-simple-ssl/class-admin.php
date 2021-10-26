@@ -511,13 +511,7 @@ class rsssl_admin extends rsssl_front_end
 		_e("Before you migrate, please check for: ", 'really-simple-ssl'); ?>
         <ul>
             <li><?php _e('Http references in your .css and .js files: change any http:// into https://', 'really-simple-ssl'); ?></li>
-            <li><?php _e('Images, stylesheets or scripts from a domain without an SSL certificate: remove them or move to your own server', 'really-simple-ssl'); ?></li><?php
-
-            $backup_link = "https://really-simple-ssl.com/knowledge-base/backing-up-your-site/";
-            $link_open = '<a target="_blank" href="'.$backup_link.'">';
-            $link_close = '</a>';
-            ?>
-            <li><?php printf(__("We strongly recommend to create a %sbackup%s of your site before activating SSL", 'really-simple-ssl'), $link_open, $link_close); ?> </li>
+            <li><?php _e('Images, stylesheets or scripts from a domain without an SSL certificate: remove them or move to your own server', 'really-simple-ssl'); ?></li>
             <li><?php _e("You may need to login in again.", "really-simple-ssl") ?></li>
             <?php
             if (RSSSL()->rsssl_certificate->is_valid()) { ?>
@@ -3155,10 +3149,8 @@ class rsssl_admin extends rsssl_front_end
                 'score' => 5,
                 'output' => array(
                     'set' => array(
-                        'msg' =>__('New feature! HttpOnly Secure cookies have been set automatically!', 'really-simple-ssl'),
-                        'icon' => 'open',
-                        'dismissible' => true,
-                        'plusone' => true,
+                        'msg' =>__('HttpOnly Secure cookies have been set automatically!', 'really-simple-ssl'),
+                        'icon' => 'success',
                         'url' => 'https://really-simple-ssl.com/secure-cookies-with-httponly-secure-and-use_only_cookies/',
                     ),
                     'not-set' => array(

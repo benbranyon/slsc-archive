@@ -159,12 +159,6 @@ class rsssl_letsencrypt_handler {
 			return;
 		}
 
-		if ($fieldname==='accept_le_terms'){
-		    if (!$fieldvalue) {
-		        rsssl_progress_remove('domain');
-            }
-        }
-
 		if ($fieldname==='other_host_type'){
 			if ( !rsssl_do_local_lets_encrypt_generation() ) {
 				rsssl_progress_add('directories');
@@ -555,10 +549,12 @@ class rsssl_letsencrypt_handler {
 	 */
 	public function clear_order(){
 		$this->get_account();
-		$response = $this->get_order();
-		$order = $response->output;
-		if ( $order ) {
-			$order->clear();
+		if ( $this->account ) {
+			$response = $this->get_order();
+			$order = $response->output;
+			if ( $order ) {
+				$order->clear();
+			}
 		}
 	}
 
@@ -929,11 +925,23 @@ class rsssl_letsencrypt_handler {
     }
 	/**
      * Get terms accepted
-	 * @return bool
+	 * @return RSSSL_RESPONSE
 	 */
+
 	public function terms_accepted(){
 	    //don't use the default value: we want users to explicitly enter a value
-	    return rsssl_get_value('accept_le_terms', false);
+	    $accepted =  rsssl_get_value('accept_le_terms', false);
+		if ( $accepted ) {
+			$status = 'success';
+			$action = 'continue';
+			$message = __("Terms & Conditions are accepted.",'really-simple-ssl');
+		} else {
+			$status = 'error';
+			$action = 'stop';
+			$message = __("The Terms & Conditions were not accepted. Please accept in the general settings.",'really-simple-ssl');
+		}
+
+		return new RSSSL_RESPONSE($status, $action, $message);
     }
 
 

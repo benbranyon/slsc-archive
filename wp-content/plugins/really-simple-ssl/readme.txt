@@ -6,7 +6,7 @@ Requires at least: 4.9
 License: GPL2
 Tested up to: 5.8
 Requires PHP: 5.6
-Stable tag: 5.1.1
+Stable tag: 5.1.2
 
 No setup required! You only need an SSL certificate, and this plugin will do the rest.
 
@@ -50,7 +50,7 @@ Check out other plugins developed by Really Simple Plugins as well: [Complianz](
 
 For free SSL certificate generation, Really Simple SSL uses the [le acme2 PHP](https://github.com/fbett/le-acme2-php/) Let's Encrypt client library, thanks to 'fbett' for providing it.
 
-Any code suggestions? We're on [GitHub (https://github.com/rlankhorst/really-simple-ssl) as well!
+Any code suggestions? We're on [GitHub](https://github.com/really-simple-plugins/really-simple-ssl) as well!
 
 = Really Simple SSL in your language? =
 Translations can be added very easily [here](https://translate.wordpress.org/projects/wp-plugins/really-simple-ssl). 
@@ -90,6 +90,12 @@ The plugin checks your certificate before enabling, but if, for example, you mig
 If you can't deactivate, do not just remove the plugin folder to uninstall! Follow these [instructions] instead: (https://really-simple-ssl.com/knowledge-base/uninstall-websitebackend-not-accessible/).
 
 == Changelog ==
+= 5.1.2 =
+* Improvement: remove one recommendation from the activate ssl notice, to keep it clean
+* Improvement: continue instead of stop when no auto installation possible
+* Improvement: add reset option to Let's Encrypt generation wizard, to allow fully resetting Lets Encrypt
+* Improvement: saved settings feedback
+
 = 5.1.1 =
 * Improvement: color of progress bar
 * Improvement: make notice about not protected directories dismissible, in case the Let's Encrypt certificate generation process is not completed.
