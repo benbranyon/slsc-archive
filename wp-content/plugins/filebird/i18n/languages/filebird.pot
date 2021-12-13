@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: FileBird\n"
-"POT-Creation-Date: 2021-08-13 16:46+0700\n"
+"POT-Creation-Date: 2021-10-19 17:43+0700\n"
 "PO-Revision-Date: 2020-12-18 14:31+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -30,63 +30,66 @@ msgstr ""
 msgid "FileBird Folder"
 msgstr ""
 
-#: includes/Classes/Convert.php:166
-msgid "Import categories to FileBird"
-msgstr ""
-
-#: includes/Classes/Convert.php:169
+#: includes/Classes/Convert.php:103 includes/Classes/Convert.php:259
 #, php-format
 msgid ""
 "We found you have %1$s categories you created from <strong>%2$s</strong> "
 "plugin. Would you like to import it to <strong>FileBird</strong>?"
 msgstr ""
 
-#: includes/Classes/Convert.php:172 views/pages/settings/tab-import.php:25
+#: includes/Classes/Convert.php:256
+msgid "Import categories to FileBird"
+msgstr ""
+
+#: includes/Classes/Convert.php:262 views/pages/settings/tab-import.php:25
 #: views/pages/settings/tab-import.php:53
 #: views/pages/settings/tab-import.php:81
 #: views/pages/settings/tab-import.php:109
 #: views/pages/settings/tab-import.php:137
+#: views/pages/settings/tab-import.php:165
 msgid "Import Now"
 msgstr ""
 
-#: includes/Classes/Convert.php:173
+#: includes/Classes/Convert.php:263 includes/Classes/Review.php:84
+#: includes/I18n.php:158
 msgid "No, thanks"
 msgstr ""
 
-#: includes/Classes/Convert.php:219
+#: includes/Classes/Convert.php:318
 msgid "Success"
 msgstr ""
 
-#: includes/Classes/Convert.php:235
+#: includes/Classes/Convert.php:334
 msgid "success"
 msgstr ""
 
-#: includes/Classes/Convert.php:237
+#: includes/Classes/Convert.php:336
 msgid "validation failed"
 msgstr ""
 
-#: includes/Classes/Convert.php:253
+#: includes/Classes/Convert.php:352
 msgid "Successfully wiped."
 msgstr ""
 
-#: includes/Classes/Convert.php:269
+#: includes/Classes/Convert.php:368
 msgid "Successfully cleared."
 msgstr ""
 
-#: includes/Classes/Convert.php:273
+#: includes/Classes/Convert.php:372
 msgid "Please try again."
 msgstr ""
 
-#: includes/Classes/Convert.php:368
+#: includes/Classes/Convert.php:471
 #, php-format
 msgid ""
 "Congratulations! We imported successfully %d folders into <strong>FileBird.</"
 "strong>"
 msgstr ""
 
-#: includes/Classes/Convert.php:378 includes/Classes/Convert.php:385
-#: includes/Classes/Convert.php:392 includes/Classes/Convert.php:399
-#: includes/Classes/Convert.php:406 includes/Classes/EnhancedConvert.php:43
+#: includes/Classes/Convert.php:481 includes/Classes/Convert.php:488
+#: includes/Classes/Convert.php:495 includes/Classes/Convert.php:502
+#: includes/Classes/Convert.php:509 includes/Classes/Convert.php:516
+#: includes/Classes/EnhancedConvert.php:43
 msgid "Already Updated"
 msgstr ""
 
@@ -120,10 +123,6 @@ msgstr ""
 msgid "Later"
 msgstr ""
 
-#: includes/Classes/Review.php:84
-msgid "Already did"
-msgstr ""
-
 #: includes/Controller/Api.php:105
 msgid "Invalid action"
 msgstr ""
@@ -136,60 +135,60 @@ msgstr ""
 msgid "Required fields are missing."
 msgstr ""
 
-#: includes/Controller/Api.php:155 includes/Controller/Folder.php:471
-#: includes/Controller/Folder.php:540 includes/Controller/Folder.php:557
+#: includes/Controller/Api.php:155 includes/Controller/Folder.php:482
+#: includes/Controller/Folder.php:551 includes/Controller/Folder.php:568
 msgid "Validation failed"
 msgstr ""
 
-#: includes/Controller/Folder.php:77
+#: includes/Controller/Folder.php:78
 msgid "Create your first folder for media library now."
 msgstr ""
 
-#: includes/Controller/Folder.php:79
+#: includes/Controller/Folder.php:80
 msgid "Get Started"
 msgstr ""
 
-#: includes/Controller/Folder.php:102 includes/I18n.php:129
+#: includes/Controller/Folder.php:103 includes/I18n.php:129
 msgid "FileBird 4 Update Required"
 msgstr ""
 
-#: includes/Controller/Folder.php:106
+#: includes/Controller/Folder.php:107
 msgid ""
 "You're using the new FileBird 4. Please update database to view your folders "
 "correctly."
 msgstr ""
 
-#: includes/Controller/Folder.php:112
+#: includes/Controller/Folder.php:113
 #: views/pages/settings/tab-update-database.php:10
 msgid "Update now"
 msgstr ""
 
-#: includes/Controller/Folder.php:262
+#: includes/Controller/Folder.php:263
 msgid "Your request can't be processed."
 msgstr ""
 
-#: includes/Controller/Folder.php:287 includes/Model/Folder.php:30
+#: includes/Controller/Folder.php:298 includes/Model/Folder.php:30
 msgid "All Folders"
 msgstr ""
 
-#: includes/Controller/Folder.php:291 includes/Controller/Folder.php:609
+#: includes/Controller/Folder.php:302 includes/Controller/Folder.php:620
 #: includes/I18n.php:71 includes/Model/Folder.php:34
 msgid "Uncategorized"
 msgstr ""
 
-#: includes/Controller/Folder.php:425
+#: includes/Controller/Folder.php:436
 msgid "Please choose folder"
 msgstr ""
 
-#: includes/Controller/Folder.php:467 includes/Controller/Folder.php:490
+#: includes/Controller/Folder.php:478 includes/Controller/Folder.php:501
 msgid "A folder with this name already exists. Please choose another one."
 msgstr ""
 
-#: includes/Controller/Folder.php:525
+#: includes/Controller/Folder.php:536
 msgid "Can't delete folder, please try again later"
 msgstr ""
 
-#: includes/Controller/Folder.php:553
+#: includes/Controller/Folder.php:564
 msgid "Folder tree has been updated."
 msgstr ""
 
@@ -546,12 +545,12 @@ msgstr ""
 msgid "Can not active your License, please try again."
 msgstr ""
 
-#: includes/I18n.php:136 views/pages/html-settings.php:18
+#: includes/I18n.php:136 views/pages/html-settings.php:19
 #: views/pages/settings/tab-settings.php:1
 msgid "Settings"
 msgstr ""
 
-#: includes/I18n.php:137 views/pages/html-settings.php:56
+#: includes/I18n.php:137 views/pages/html-settings.php:58
 msgid "FileBird Settings"
 msgstr ""
 
@@ -631,6 +630,20 @@ msgstr ""
 msgid "items"
 msgstr ""
 
+#: includes/I18n.php:156
+msgid "Import folders to FileBird"
+msgstr ""
+
+#: includes/I18n.php:157
+msgid "Go to import"
+msgstr ""
+
+#: includes/I18n.php:159
+msgid ""
+"You have some folders created by other media plugins. Would you like to "
+"import them?"
+msgstr ""
+
 #: includes/Page/Settings.php:39 includes/Page/Settings.php:40
 msgid "FileBird"
 msgstr ""
@@ -639,20 +652,38 @@ msgstr ""
 msgid "Documentation"
 msgstr ""
 
-#: views/pages/html-settings.php:25
+#: includes/YC.php:63
+msgid "Email Customizer for WooCommerce"
+msgstr ""
+
+#: includes/YC.php:64
+msgid ""
+"YayMail helps you easily customize your WooCommerce emails with email "
+"builder. Try it today!"
+msgstr ""
+
+#: includes/YC.php:66
+msgid "Install for Free"
+msgstr ""
+
+#: includes/YC.php:67
+msgid "No, Thanks"
+msgstr ""
+
+#: views/pages/html-settings.php:26
 #: views/pages/settings/tab-update-database.php:1
 msgid "Update Database"
 msgstr ""
 
-#: views/pages/html-settings.php:30
+#: views/pages/html-settings.php:31
 msgid "API"
 msgstr ""
 
-#: views/pages/html-settings.php:35 views/pages/settings/tab-uninstall.php:1
+#: views/pages/html-settings.php:36 views/pages/settings/tab-uninstall.php:1
 msgid "Uninstall"
 msgstr ""
 
-#: views/pages/html-settings.php:43
+#: views/pages/html-settings.php:44
 msgid "Import"
 msgstr ""
 
@@ -704,6 +735,7 @@ msgstr ""
 #: views/pages/settings/tab-import.php:72
 #: views/pages/settings/tab-import.php:100
 #: views/pages/settings/tab-import.php:128
+#: views/pages/settings/tab-import.php:156
 msgid " Would you like to import to <strong>FileBird</strong>?"
 msgstr ""
 
@@ -749,6 +781,17 @@ msgstr ""
 msgid ""
 "We found you have <strong>(%1$s)</strong> categories you created from "
 "<strong>HappyFiles</strong> plugin."
+msgstr ""
+
+#: views/pages/settings/tab-import.php:150
+msgid "Folders by Premio"
+msgstr ""
+
+#: views/pages/settings/tab-import.php:154
+#, php-format
+msgid ""
+"We found you have <strong>(%1$s)</strong> categories you created from "
+"<strong>Folders</strong> plugin."
 msgstr ""
 
 #: views/pages/settings/tab-settings.php:5

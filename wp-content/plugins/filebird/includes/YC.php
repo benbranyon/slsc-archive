@@ -31,14 +31,6 @@ if ( ! class_exists( 'YayCommerce' ) ) {
 		public function init() {
 			add_action( 'admin_notices', array( $this, 'notification' ) );
 			add_action( 'wp_ajax_njt_yaycommerce_dismiss', array( $this, 'ajax_dismiss_plugin' ) );
-			wp_enqueue_script( 'yaycommerce', NJFB_PLUGIN_URL . 'assets/js/yc.js', array( 'plugin-install', 'updates' ), NJFB_VERSION, true );
-			wp_localize_script(
-				'yaycommerce',
-				'yaycommerce',
-				array(
-					'nonce' => $this->nonce,
-				)
-			);
 		}
 
 		public function ajax_dismiss_plugin() {
@@ -56,6 +48,15 @@ if ( ! class_exists( 'YayCommerce' ) ) {
 			} else {
 				return;
 			}
+			
+			wp_enqueue_script( 'yaycommerce', NJFB_PLUGIN_URL . 'assets/js/yc.js', array(), NJFB_VERSION, true );
+			wp_localize_script(
+				'yaycommerce',
+				'yaycommerce',
+				array(
+					'nonce' => $this->nonce,
+				)
+			);
 
 			?>
 				<div class="notice notice-info is-dismissible" id="njt-yc">

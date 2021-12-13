@@ -59,6 +59,23 @@ class Folder extends Controller
     add_action('wp_ajax_fbv_first_folder_notice', array($this, 'ajax_first_folder_notice'));
     // add_action( 'wp_ajax_fbv_close_buy_pro_dialog', array($this, 'ajaxCloseBuyProDialog'));
     add_action('admin_notices', array($this, 'adminNotices'));
+    add_action('attachment_fields_to_edit', array($this, 'attachment_fields_to_edit'), 10, 2);
+    add_filter('attachment_fields_to_save', array($this, 'attachment_fields_to_save'), 10, 2);
+    // MailPoet plugin support
+    add_filter('mailpoet_conflict_resolver_whitelist_script', array($this, 'mailpoet_conflict_resolver_whitelist_script'), 10, 1);
+    add_filter('mailpoet_conflict_resolver_whitelist_style', array($this, 'mailpoet_conflict_resolver_whitelist_style'), 10, 1);
+ }
+
+  public function mailpoet_conflict_resolver_whitelist_script($scripts){
+    $scripts[] = 'filebird';
+    $scripts[] = 'filebird-pro';
+    return $scripts;
+  }
+
+  public function mailpoet_conflict_resolver_whitelist_style($styles){
+    $styles[] = 'filebird';
+    $styles[] = 'filebird-pro';
+    return $styles;
   }
 
   public function adminNotices()
@@ -271,6 +288,7 @@ class Folder extends Controller
       'json_url' => apply_filters('filebird_json_url', rtrim(rest_url(NJFB_REST_URL), "/")),
       'media_url' => admin_url('upload.php'),
       'auto_import_url' => esc_url(add_query_arg(array('page' => 'filebird-settings', 'tab' => 'update-db', 'autorun' => 'true'), admin_url('/options-general.php'))),
+      'pll_lang'=> apply_filters('fbv_pll_lang',''),
       'is_new_user' => get_option('fbv_is_new_user', false),
       'import_other_plugins' => ConvertModel::getInstance()->get_plugin3rd_folders_to_import(),
       'import_other_plugins_url' => esc_url(
@@ -396,7 +414,13 @@ class Folder extends Controller
     $order_by = null;
     $sort_option = 'reset';
 
+    $lang = null;
     $icl_lang = isset($_GET['icl_lang']) ? sanitize_text_field($_GET['icl_lang']) : null;
+    $pll_lang = isset($_GET['pll_lang']) ? sanitize_text_field($_GET['pll_lang']) : null;
+
+    if (!is_null($icl_lang)) $lang = $icl_lang;
+    if (!is_null($pll_lang)) $lang = $pll_lang;
+
     if (isset($_GET['sort']) && \in_array(sanitize_text_field($_GET['sort']), array('name_asc', 'name_desc', 'reset'))) {
       if (sanitize_text_field($_GET['sort']) == 'name_asc') {
         $order_by = 'CAST(name as unsigned), name ASC';
@@ -422,8 +446,8 @@ class Folder extends Controller
     wp_send_json_success(array(
       'tree' => $tree,
       'folder_count' => array(
-        'total' => is_null($icl_lang) ? Tree::getCount(-1) : Tree::getCount(-1, $icl_lang),
-        'folders' => is_null($icl_lang) ? Tree::getAllFoldersAndCount() : Tree::getAllFoldersAndCount($icl_lang)
+        'total' => Tree::getCount(-1, $lang),
+        'folders' => Tree::getAllFoldersAndCount($lang)
       )
     ));
   }
@@ -588,6 +612,39 @@ class Folder extends Controller
   //   update_option('fbv_close_buy_pro_dialog', time() + 7*24*3600); //After 7 days show
   //   wp_send_json_success();
   // }
+
+  public function attachment_fields_to_edit($form_fields, $post){
+    $screen = null;
+    if (function_exists('get_current_screen'))
+    {
+      $screen = get_current_screen();
+
+      if( 'attachment' === $screen->id && ! is_null($screen) )
+        return $form_fields;
+    }
+
+    $fbv_folder = FolderModel::getFolderFromPostId($post->ID);
+    $fbv_folder = count($fbv_folder) > 0 ? $fbv_folder[0] : (object) array(
+      'folder_id' => 0,
+      'name' => __( 'Uncategorized', 'filebird' ),
+    );
+    $form_fields['fbv'] = array(
+      'html'  => "<div class='fbv-attachment-edit-wrapper' data-folder-id='{$fbv_folder->folder_id}' data-attachment-id='{$post->ID}'><input readonly type='text' value='{$fbv_folder->name}'/></div>",
+      'label' => esc_html__( 'FileBird folder:',  'filebird'),
+      'helps' => esc_html__( "Click on the button to move this file to another folder", "filebird" ),
+      'input' => 'html'
+    );
+   
+    return $form_fields;
+  }
+
+  public function attachment_fields_to_save($post, $attachment){
+    if (isset($attachment['fbv'])){
+      FolderModel::setFoldersForPosts($post['ID'], $attachment['fbv']);
+    }
+    return $post;
+  }
+  
   private static function addFolderToZip(&$zip, $children, $parent_dir = '')
   {
     foreach ($children as $k => $v) {

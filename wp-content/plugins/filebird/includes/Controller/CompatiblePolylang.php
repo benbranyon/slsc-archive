@@ -34,19 +34,40 @@ class CompatiblePolylang extends Controller {
 				if ( $this->lang ) {
 					$this->lang_id = $this->lang->term_id;
 				}
-				add_action( 'pll_translate_media', array( $this, 'duplicateAttachmentToFolder' ), 10, 3 );
 				if ( $this->lang_id != null ) {
 					add_filter( 'fbv_speedup_get_count_query', '__return_true' );
 				}
+				add_action( 'pll_translate_media', array( $this, 'duplicateAttachmentToFolder' ), 10, 3 );
 				add_filter( 'fbv_get_count_query', array( $this, 'fbv_get_count_query' ), 10, 3 );
 				add_filter( 'fbv_all_folders_and_count', array( $this, 'all_folders_and_count_query' ), 10, 2 );
+				add_filter( 'fbv_pll_lang', array( $this, 'fbv_pll_lang' ), 10, 1 );
 			}
 		}
 	}
 
+	public function get_preferred_language($lang) {
+		$pll_lang = PLL()->model->get_language( $lang );
+		if ( $pll_lang ) {
+			return $pll_lang->term_id;
+		}
+		return $this->lang_id;
+	}
+
+	public function fbv_pll_lang( $lang ) {
+		if ( ! PLL_SETTINGS && ! PLL_ADMIN && PLL()->model->get_languages_list() ) {
+			return true;
+		}
+	}
+
 	public function fbv_get_count_query( $q, $folder_id, $lang ) {
+		$lang_id = $this->lang_id;
+
+		if ( $lang ) {
+			$lang_id = $this->get_preferred_language($lang);
+		}
+
 		global $wpdb;
-		if ( is_null( $this->lang_id ) ) {
+		if ( is_null( $lang_id ) ) {
 			return $q;
 		} else {
 			if ( $folder_id == -1 ) {
@@ -58,7 +79,7 @@ class CompatiblePolylang extends Controller {
             ON posts.ID = trs.object_id
             WHERE posts.post_type = 'attachment' 
             AND posts.ID NOT IN (SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_elementor_is_screenshot') ";
-				$q .= "AND trs.term_taxonomy_id IN ({$this->lang_id})";
+				$q .= "AND trs.term_taxonomy_id IN ({$lang_id})";
 				$q .= "AND (posts.post_status = 'inherit' OR posts.post_status = 'private')
             GROUP BY posts.ID
         ) as tmp";
@@ -73,7 +94,7 @@ class CompatiblePolylang extends Controller {
               WHERE posts.post_type = 'attachment' 
               AND posts.ID NOT IN (SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_elementor_is_screenshot') 
               AND fbv.folder_id = " . (int) $folder_id . ' ';
-					$q .= "AND trs.term_taxonomy_id IN ({$this->lang_id}) ";
+					$q .= "AND trs.term_taxonomy_id IN ({$lang_id}) ";
 					$q .= "AND (posts.post_status = 'inherit' OR posts.post_status = 'private')
               GROUP BY posts.ID
           ) as tmp";
@@ -85,17 +106,24 @@ class CompatiblePolylang extends Controller {
 	}
 	public function all_folders_and_count_query( $query, $lang ) {
 		global $wpdb;
+
+		$lang_id = $this->lang_id;
+
+		if ( $lang ) {
+			$lang_id = $this->get_preferred_language($lang);
+		}
+
 		$select = '';
 		$join   = '';
 		$where  = '';
-		if ( is_null( $this->lang_id ) ) {
+		if ( is_null( $lang_id ) ) {
 			$select = "SELECT fbva.folder_id as folder_id, count(DISTINCT(fbva.attachment_id)) as count
                   FROM {$wpdb->prefix}fbv_attachment_folder AS fbva";
 		} else {
 			$select = "SELECT fbva.folder_id as folder_id, count(fbva.attachment_id) as count
                   FROM {$wpdb->prefix}fbv_attachment_folder AS fbva";
 			$join  .= " INNER JOIN {$wpdb->term_relationships} AS trs ON fbva.attachment_id = trs.object_id ";
-			$where .= " AND trs.term_taxonomy_id IN ({$this->lang_id}) ";
+			$where .= " AND trs.term_taxonomy_id IN ({$lang_id}) ";
 		}
 
 		$join .= " INNER JOIN {$wpdb->prefix}fbv as fbv ON fbv.id = fbva.folder_id ";

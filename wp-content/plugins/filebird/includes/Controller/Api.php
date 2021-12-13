@@ -81,6 +81,16 @@ class Api {
           )
         );
 
+        //GET http://yoursite/wp-json/filebird/public/v1/attachment-count/?folder_id=
+        register_rest_route(NJFB_REST_PUBLIC_URL,
+            'attachment-count',
+            array(
+                'methods' => 'GET',
+                'callback' => array($this, 'publicRestApiGetAttachmentCount'),
+                'permission_callback' => array($this, 'resPublicPermissionsCheck'),
+            )
+        );
+
         //POST http://yoursite/wp-json/filebird/public/v1/folders
         //parent_id=&name=
         register_rest_route(NJFB_REST_PUBLIC_URL,
@@ -123,7 +133,35 @@ class Api {
         $folder_id = isset($_GET['folder_id']) ? (int)$_GET['folder_id'] : '';
         if($folder_id != '') {
             wp_send_json_success(array(
-                'attachment_ids' => Helpers::getAttachmentIdsByFolderId((int)$_GET['folder_id'])
+                'attachment_ids' => Helpers::getAttachmentIdsByFolderId($folder_id)
+            ));
+        }
+        wp_send_json_error(array(
+            'mess' => __('folder_id is missing.', 'filebird')
+        ));
+    }
+    public function publicRestApiGetAttachmentCount() {
+        $folder_id = isset($_GET['folder_id']) ? (int)$_GET['folder_id'] : '';
+
+        if($folder_id !== '') {
+            $icl_lang = isset($_GET['icl_lang']) ? sanitize_text_field($_GET['icl_lang']) : null;
+            $count = 0;
+            if($folder_id > 0) {
+                $count = Helpers::getAttachmentCountByFolderId($folder_id);
+            } elseif($folder_id == -1) {
+                $count = is_null($icl_lang) ? Tree::getCount(-1) : Tree::getCount(-1, $icl_lang);
+            } else {
+                //Uncategorized
+                $total = is_null($icl_lang) ? Tree::getCount(-1) : Tree::getCount(-1, $icl_lang);
+                $folders = is_null($icl_lang) ? Tree::getAllFoldersAndCount() : Tree::getAllFoldersAndCount($icl_lang);
+                $count_of_folders = 0;
+                foreach($folders as $k => $v) {
+                    $count_of_folders += $v;
+                }
+                $count = $total - $count_of_folders;
+            }
+            wp_send_json_success(array(
+                'count' => $count
             ));
         }
         wp_send_json_error(array(

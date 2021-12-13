@@ -154,6 +154,11 @@ class Helpers {
 		global $wpdb;
 		return $wpdb->get_col( 'SELECT `attachment_id` FROM ' . $wpdb->prefix . 'fbv_attachment_folder WHERE `folder_id` = ' . (int) $folder_id );
 	}
+
+	public static function getAttachmentCountByFolderId( $folder_id ) {
+		return Tree::getCount( $folder_id );
+	}
+
 	public static function view( $path, $data = array() ) {
 		extract( $data );
 		ob_start();

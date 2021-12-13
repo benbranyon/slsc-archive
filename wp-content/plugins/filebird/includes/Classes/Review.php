@@ -55,8 +55,8 @@ class Review
             $this->checkNonce($nonce);
 
             if ($field == 'later'){
-                update_option('fbv_review', time() + 3*60*60*24); //After 3 days show
-            } else if ($field == 'alreadyDid'){
+                update_option('fbv_review', time() + 5*60*60*24); //After 3 days show
+            } else if ($field == 'alreadyDid' || $field == 'rateNow'){
                 update_option('fbv_review', 0);
             }
             wp_send_json_success();
@@ -81,7 +81,7 @@ class Review
                     <p>
                         <a href="javascript:;" data="rateNow" class="button button-primary" style="margin-right: 5px"><?php _e('Rate now', 'filebird')?></a>
                         <a href="javascript:;" data="later" class="button" style="margin-right: 5px"><?php _e('Later', 'filebird')?></a>
-                        <a href="javascript:;" data="alreadyDid" class="button"><?php _e('Already did', 'filebird')?></a>
+                        <a href="javascript:;" data="alreadyDid" class="button"><?php _e('No, thanks', 'filebird')?></a>
                     </p>
                 </div>
                 <?php

@@ -124,6 +124,8 @@ function filebird_gallery_render( $attributes ){
 		$href = '';
 		$imageSrc = wp_get_attachment_image_src($post->ID, 'full');
 		$imageSrc = $imageSrc[0];
+		$imageAlt = get_post_meta($post->ID, '_wp_attachment_image_alt', true);
+		$imageAlt = empty($imageAlt) ? $post->post_title : $imageAlt;
 		switch ($attributes['linkTo']) {
 			case 'media':
 				$href = $imageSrc;
@@ -135,7 +137,7 @@ function filebird_gallery_render( $attributes ){
 				break;
 		}
 
-		$img = '<img src="' . esc_attr($imageSrc) . '"' . ' alt="' . 'img' . '"';    
+		$img = '<img src="' . esc_attr($imageSrc) . '"' . ' alt="' . $imageAlt . '"';    
 		$img .= 'class="' . "wp-image-{$post->ID}" . '"/>';
 
 		$li = '<li class="blocks-gallery-item">';

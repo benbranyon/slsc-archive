@@ -13,15 +13,16 @@ Organize thousands of WordPress media files in folders / categories at ease.
 
 **The most user-friendly media library plugin for all WordPress blogs and shops.**
 
-⚡️ Let's organize WordPress media library folders using a drag and drop organizer.
+Let's organize WordPress media library folders using a drag and drop organizer.
 
-[TEST DRIVE](https://media-folder.ninjateam.org/create/) | [GO PRO (LIFETIME DEAL)](https://1.envato.market/FileBird-Premium) 💪
+[TEST DRIVE](https://media-folder.ninjateam.org/create/) | [**GO PRO** (Lifetime Deal)](https://1.envato.market/FileBird-Premium) 💪
+
 
 FileBird enhances your media library with clean UI, native icons, smooth drag & drop, advanced sort and organization. 
 
 The free version allows you to create **unlimited main folders** and **subfolders**.
 
-📌 [COMPARE FREE & PRO](https://ninjateam.gitbook.io/filebird/compare-filebird-free-and-pro)
+[Compare Free vs Pro](https://ninjateam.gitbook.io/filebird/compare-filebird-free-and-pro)
 
 [youtube https://www.youtube.com/watch?v=NjeEbqmMVwU]
 
@@ -166,7 +167,18 @@ Happy Organizing! 😍
 7. Upload files to a specific folder
 8. FileBird gallery block settings
 
+
 == Changelog ==
+
+= Dec 07, 2021 - Version 4.9.6 =
+- Fixed: Conflict with ACF plugin
+
+= Nov 17, 2021 - Version 4.9.5 =
+- Fixed: WooCommerce conflict (break Upload Theme button)
+
+= Nov 10, 2021 – Version 4.9.4 =
+- Fixed: Elementor With PolyLang wrong folder counter
+- Fixed: Image ALT in FileBird Gutenberg Gallery
 
 = Sep 30, 2021 =
 - Updated: Some notice

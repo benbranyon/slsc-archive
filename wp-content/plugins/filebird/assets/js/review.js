@@ -1,5 +1,5 @@
 jQuery(document).ready(function () {
-  jQuery("#njt-FileBird-review a").on("click", function () {
+  jQuery("#njt-FileBird-review a, #njt-FileBird-review button.notice-dismiss").on("click", function () {
     var thisElement = this;
     var fieldValue = jQuery(thisElement).attr("data");
     var proLink = "https://codecanyon.net/item/media-folders-manager-for-wordpress/reviews/21715379?utf8=%E2%9C%93&reviews_controls%5Bsort%5D=ratings_descending";
@@ -9,6 +9,10 @@ jQuery(document).ready(function () {
       window.open(freeLink, "_blank");
     } else {
       hidePopup = true;
+    }
+
+    if (jQuery(thisElement).hasClass('notice-dismiss')) {
+      fieldValue = 'later'
     }
 
     jQuery

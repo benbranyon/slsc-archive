@@ -72,6 +72,15 @@ class Folder {
     global $wpdb;
     return $wpdb->get_col("SELECT `folder_id` FROM " . self::getTable(self::$relation_table) . " WHERE `attachment_id` = " . (int)$post_id . " GROUP BY `folder_id`");
   }
+  public static function getFolderFromPostId($post_id) {
+    global $wpdb;
+    $query = $wpdb->prepare("
+      SELECT `folder_id`,`name` FROM {$wpdb->prefix}fbv as fbv
+      JOIN {$wpdb->prefix}fbv_attachment_folder as fbva ON fbv.id = fbva.folder_id
+      WHERE `attachment_id` = %d GROUP BY `folder_id`
+    ", $post_id);
+    return $wpdb->get_results($query, OBJECT);
+  }
   public static function setFoldersForPosts($post_ids, $folder_ids, $has_action = true) {
     global $wpdb;
     if(!is_array($post_ids)) $post_ids = array($post_ids);

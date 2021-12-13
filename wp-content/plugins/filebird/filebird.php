@@ -3,7 +3,7 @@
  * Plugin Name: FileBird Lite
  * Plugin URI: https://ninjateam.org/wordpress-media-library-folders/
  * Description: Organize thousands of WordPress media files into folders/ categories at ease.
- * Version: 4.9.3
+ * Version: 4.9.6
  * Author: Ninja Team
  * Author URI: https://ninjateam.org
  * Text Domain: filebird
@@ -31,7 +31,7 @@ if ( ! defined( 'NJFB_PREFIX' ) ) {
 }
 
 if ( ! defined( 'NJFB_VERSION' ) ) {
-	define( 'NJFB_VERSION', '4.9.3' );
+	define( 'NJFB_VERSION', '4.9.6' );
 }
 
 if ( ! defined( 'NJFB_PLUGIN_FILE' ) ) {
