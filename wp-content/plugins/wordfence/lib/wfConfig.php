@@ -514,7 +514,7 @@ class wfConfig {
 	public static function setJSON($key, $val, $autoload = self::AUTOLOAD) {
 		self::set($key, @json_encode($val), $autoload);
 	}
-	public static function get($key, $default = false, $allowCached = true) {
+	public static function get($key, $default = false, $allowCached = true, &$isDefault = false) {
 		global $wpdb;
 		
 		if ($allowCached && self::hasCachedOption($key)) {
@@ -522,11 +522,13 @@ class wfConfig {
 		}
 		
 		if (!self::$tableExists) {
+			$isDefault = true;
 			return $default;
 		}
 		
 		$table = self::table();
 		if (!($option = $wpdb->get_row($wpdb->prepare("SELECT name, val, autoload FROM {$table} WHERE name = %s", $key)))) {
+			$isDefault = true;
 			return $default;
 		}
 		
@@ -541,7 +543,9 @@ class wfConfig {
 	}
 	
 	public static function getJSON($key, $default = false, $allowCached = true) {
-		$json = self::get($key, $default, $allowCached);
+		$json = self::get($key, $default, $allowCached, $isDefault);
+		if ($isDefault)
+			return $json;
 		$decoded = @json_decode($json, true);
 		if ($decoded === null) {
 			return $default;
