@@ -79,6 +79,11 @@ class WPSEO_Option_Wpseo extends WPSEO_Option {
 		'enable_metabox_insights'                  => true,
 		'enable_link_suggestions'                  => true,
 		'algolia_integration_active'               => false,
+		'import_cursors'                           => [],
+		'workouts_data'                            => [ 'configuration' => [ 'finishedSteps' => [] ] ],
+		'dismiss_configuration_workout_notice'     => false,
+		'importing_completed'                      => [],
+		'first_time_install'                       => false,
 	];
 
 	/**
@@ -335,6 +340,7 @@ class WPSEO_Option_Wpseo extends WPSEO_Option {
 				case 'semrush_tokens':
 				case 'custom_taxonomy_slugs':
 				case 'zapier_subscription':
+				case 'workouts_data':
 					$clean[ $key ] = $old[ $key ];
 
 					if ( isset( $dirty[ $key ] ) ) {
@@ -358,6 +364,14 @@ class WPSEO_Option_Wpseo extends WPSEO_Option {
 					}
 					break;
 
+				case 'import_cursors':
+				case 'workouts_data':
+				case 'importing_completed':
+					if ( isset( $dirty[ $key ] ) && is_array( $dirty[ $key ] ) ) {
+						$clean[ $key ] = $dirty[ $key ];
+					}
+					break;
+
 				/*
 				 * Boolean (checkbox) fields.
 				 */
@@ -369,6 +383,7 @@ class WPSEO_Option_Wpseo extends WPSEO_Option {
 				 *  'yoast_tracking'
 				 *  'dynamic_permalinks'
 				 *  'indexing_first_time'
+				 *  'first_time_install'
 				 *  and most of the feature variables.
 				 */
 				default:
