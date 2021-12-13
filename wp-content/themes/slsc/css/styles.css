@@ -2575,6 +2575,10 @@ details.details {
   [dir='rtl'] .progress__percentage {
     float: left; }
 
+.searchform__input {
+  height: 46px;
+  padding-left: 5px; }
+
 .site-logo {
   max-width: 400px;
   padding-bottom: 20px;

@@ -5,6 +5,12 @@
   {% embed '@layouts/sidebar/sidebar.twig' %}
     {% block sidebar_aside %}
       <div class="arhcive-filters">
+        <h2>Search</h2>
+        {% include '@components/searchform/searchform.twig' with {
+          'action': '/',
+          'placeholder' : 'Enter Keyword',
+          'button_label': 'Search'
+        } %}
         <h2>Filter By</h2>
         <label class="form-item__label">Collection</label>
         {{ function( 'facetwp_display', 'facet', 'collection' ) }}
