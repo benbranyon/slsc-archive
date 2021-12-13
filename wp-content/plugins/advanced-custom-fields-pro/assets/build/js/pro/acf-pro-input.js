@@ -1,427 +1,11 @@
-(function ($) {
-  var Field = acf.Field.extend({
-    type: 'repeater',
-    wait: '',
-    events: {
-      'click a[data-event="add-row"]': 'onClickAdd',
-      'click a[data-event="duplicate-row"]': 'onClickDuplicate',
-      'click a[data-event="remove-row"]': 'onClickRemove',
-      'click a[data-event="collapse-row"]': 'onClickCollapse',
-      'showField': 'onShow',
-      'unloadField': 'onUnload',
-      'mouseover': 'onHover',
-      'unloadField': 'onUnload'
-    },
-    $control: function () {
-      return this.$('.acf-repeater:first');
-    },
-    $table: function () {
-      return this.$('table:first');
-    },
-    $tbody: function () {
-      return this.$('tbody:first');
-    },
-    $rows: function () {
-      return this.$('tbody:first > tr').not('.acf-clone');
-    },
-    $row: function (index) {
-      return this.$('tbody:first > tr:eq(' + index + ')');
-    },
-    $clone: function () {
-      return this.$('tbody:first > tr.acf-clone');
-    },
-    $actions: function () {
-      return this.$('.acf-actions:last');
-    },
-    $button: function () {
-      return this.$('.acf-actions:last .button');
-    },
-    getValue: function () {
-      return this.$rows().length;
-    },
-    allowRemove: function () {
-      var min = parseInt(this.get('min'));
-      return !min || min < this.val();
-    },
-    allowAdd: function () {
-      var max = parseInt(this.get('max'));
-      return !max || max > this.val();
-    },
-    addSortable: function (self) {
-      // bail early if max 1 row
-      if (this.get('max') == 1) {
-        return;
-      } // add sortable
-
-
-      this.$tbody().sortable({
-        items: '> tr',
-        handle: '> td.order',
-        forceHelperSize: true,
-        forcePlaceholderSize: true,
-        scroll: true,
-        stop: function (event, ui) {
-          self.render();
-        },
-        update: function (event, ui) {
-          self.$input().trigger('change');
-        }
-      });
-    },
-    addCollapsed: function () {
-      // vars
-      var indexes = preference.load(this.get('key')); // bail early if no collapsed
-
-      if (!indexes) {
-        return false;
-      } // loop
-
-
-      this.$rows().each(function (i) {
-        if (indexes.indexOf(i) > -1) {
-          $(this).addClass('-collapsed');
-        }
-      });
-    },
-    addUnscopedEvents: function (self) {
-      // invalidField
-      this.on('invalidField', '.acf-row', function (e) {
-        var $row = $(this);
-
-        if (self.isCollapsed($row)) {
-          self.expand($row);
-        }
-      });
-    },
-    initialize: function () {
-      // add unscoped events
-      this.addUnscopedEvents(this); // add collapsed
-
-      this.addCollapsed(); // disable clone
-
-      acf.disable(this.$clone(), this.cid); // render
-
-      this.render();
-    },
-    render: function () {
-      // update order number
-      this.$rows().each(function (i) {
-        $(this).find('> .order > span').html(i + 1);
-      }); // Extract vars.
-
-      var $controll = this.$control();
-      var $button = this.$button(); // empty
-
-      if (this.val() == 0) {
-        $controll.addClass('-empty');
-      } else {
-        $controll.removeClass('-empty');
-      } // Reached max rows.
-
-
-      if (!this.allowAdd()) {
-        $controll.addClass('-max');
-        $button.addClass('disabled');
-      } else {
-        $controll.removeClass('-max');
-        $button.removeClass('disabled');
-      } // Reached min rows (not used).
-      //if( !this.allowRemove() ) {
-      //	$controll.addClass('-min');
-      //} else {
-      //	$controll.removeClass('-min');
-      //}	
-
-    },
-    validateAdd: function () {
-      // return true if allowed
-      if (this.allowAdd()) {
-        return true;
-      } // vars
-
-
-      var max = this.get('max');
-
-      var text = acf.__('Maximum rows reached ({max} rows)'); // replace
-
-
-      text = text.replace('{max}', max); // add notice
-
-      this.showNotice({
-        text: text,
-        type: 'warning'
-      }); // return
-
-      return false;
-    },
-    onClickAdd: function (e, $el) {
-      // validate
-      if (!this.validateAdd()) {
-        return false;
-      } // add above row
-
-
-      if ($el.hasClass('acf-icon')) {
-        this.add({
-          before: $el.closest('.acf-row')
-        }); // default
-      } else {
-        this.add();
-      }
-    },
-    add: function (args) {
-      // validate
-      if (!this.allowAdd()) {
-        return false;
-      } // defaults
-
-
-      args = acf.parseArgs(args, {
-        before: false
-      }); // add row
-
-      var $el = acf.duplicate({
-        target: this.$clone(),
-        append: this.proxy(function ($el, $el2) {
-          // append
-          if (args.before) {
-            args.before.before($el2);
-          } else {
-            $el.before($el2);
-          } // remove clone class
-
-
-          $el2.removeClass('acf-clone'); // enable
-
-          acf.enable($el2, this.cid); // render
-
-          this.render();
-        })
-      }); // trigger change for validation errors
-
-      this.$input().trigger('change'); // return
-
-      return $el;
-    },
-    onClickDuplicate: function (e, $el) {
-      // Validate with warning.
-      if (!this.validateAdd()) {
-        return false;
-      } // get layout and duplicate it.
-
-
-      var $row = $el.closest('.acf-row');
-      this.duplicateRow($row);
-    },
-    duplicateRow: function ($row) {
-      // Validate without warning.
-      if (!this.allowAdd()) {
-        return false;
-      } // Vars.
-
-
-      var fieldKey = this.get('key'); // Duplicate row.
-
-      var $el = acf.duplicate({
-        target: $row,
-        // Provide a custom renaming callback to avoid renaming parent row attributes.
-        rename: function (name, value, search, replace) {
-          // Rename id attributes from "field_1-search" to "field_1-replace".
-          if (name === 'id') {
-            return value.replace(fieldKey + '-' + search, fieldKey + '-' + replace); // Rename name and for attributes from "[field_1][search]" to "[field_1][replace]".
-          } else {
-            return value.replace(fieldKey + '][' + search, fieldKey + '][' + replace);
-          }
-        },
-        before: function ($el) {
-          acf.doAction('unmount', $el);
-        },
-        after: function ($el, $el2) {
-          acf.doAction('remount', $el);
-        }
-      }); // trigger change for validation errors
-
-      this.$input().trigger('change'); // Update order numbers.
-
-      this.render(); // Focus on new row.
-
-      acf.focusAttention($el); // Return new layout.
-
-      return $el;
-    },
-    validateRemove: function () {
-      // return true if allowed
-      if (this.allowRemove()) {
-        return true;
-      } // vars
-
-
-      var min = this.get('min');
-
-      var text = acf.__('Minimum rows reached ({min} rows)'); // replace
-
-
-      text = text.replace('{min}', min); // add notice
-
-      this.showNotice({
-        text: text,
-        type: 'warning'
-      }); // return
-
-      return false;
-    },
-    onClickRemove: function (e, $el) {
-      var $row = $el.closest('.acf-row'); // Bypass confirmation when holding down "shift" key.
-
-      if (e.shiftKey) {
-        return this.remove($row);
-      } // add class
-
-
-      $row.addClass('-hover'); // add tooltip
-
-      var tooltip = acf.newTooltip({
-        confirmRemove: true,
-        target: $el,
-        context: this,
-        confirm: function () {
-          this.remove($row);
-        },
-        cancel: function () {
-          $row.removeClass('-hover');
-        }
-      });
-    },
-    remove: function ($row) {
-      // reference
-      var self = this; // remove
-
-      acf.remove({
-        target: $row,
-        endHeight: 0,
-        complete: function () {
-          // trigger change to allow attachment save
-          self.$input().trigger('change'); // render
-
-          self.render(); // sync collapsed order
-          //self.sync();
-        }
-      });
-    },
-    isCollapsed: function ($row) {
-      return $row.hasClass('-collapsed');
-    },
-    collapse: function ($row) {
-      $row.addClass('-collapsed');
-      acf.doAction('hide', $row, 'collapse');
-    },
-    expand: function ($row) {
-      $row.removeClass('-collapsed');
-      acf.doAction('show', $row, 'collapse');
-    },
-    onClickCollapse: function (e, $el) {
-      // vars
-      var $row = $el.closest('.acf-row');
-      var isCollpased = this.isCollapsed($row); // shift
-
-      if (e.shiftKey) {
-        $row = this.$rows();
-      } // toggle
-
-
-      if (isCollpased) {
-        this.expand($row);
-      } else {
-        this.collapse($row);
-      }
-    },
-    onShow: function (e, $el, context) {
-      // get sub fields
-      var fields = acf.getFields({
-        is: ':visible',
-        parent: this.$el
-      }); // trigger action
-      // - ignore context, no need to pass through 'conditional_logic'
-      // - this is just for fields like google_map to render itself
-
-      acf.doAction('show_fields', fields);
-    },
-    onUnload: function () {
-      // vars
-      var indexes = []; // loop
-
-      this.$rows().each(function (i) {
-        if ($(this).hasClass('-collapsed')) {
-          indexes.push(i);
-        }
-      }); // allow null
-
-      indexes = indexes.length ? indexes : null; // set
-
-      preference.save(this.get('key'), indexes);
-    },
-    onHover: function () {
-      // add sortable
-      this.addSortable(this); // remove event
-
-      this.off('mouseover');
-    }
-  });
-  acf.registerFieldType(Field); // register existing conditions
-
-  acf.registerConditionForFieldType('hasValue', 'repeater');
-  acf.registerConditionForFieldType('hasNoValue', 'repeater');
-  acf.registerConditionForFieldType('lessThan', 'repeater');
-  acf.registerConditionForFieldType('greaterThan', 'repeater'); // state
-
-  var preference = new acf.Model({
-    name: 'this.collapsedRows',
-    key: function (key, context) {
-      // vars
-      var count = this.get(key + context) || 0; // update
-
-      count++;
-      this.set(key + context, count, true); // modify fieldKey
-
-      if (count > 1) {
-        key += '-' + count;
-      } // return
-
-
-      return key;
-    },
-    load: function (key) {
-      // vars 
-      var key = this.key(key, 'load');
-      var data = acf.getPreference(this.name); // return
-
-      if (data && data[key]) {
-        return data[key];
-      } else {
-        return false;
-      }
-    },
-    save: function (key, value) {
-      // vars 
-      var key = this.key(key, 'save');
-      var data = acf.getPreference(this.name) || {}; // delete
-
-      if (value === null) {
-        delete data[key]; // append
-      } else {
-        data[key] = value;
-      } // allow null
-
-
-      if ($.isEmptyObject(data)) {
-        data = null;
-      } // save
-
-
-      acf.setPreference(this.name, data);
-    }
-  });
-})(jQuery);
+/******/ (function() { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./src/advanced-custom-fields-pro/assets/src/js/pro/_acf-field-flexible-content.js":
+/*!*****************************************************************************************!*\
+  !*** ./src/advanced-custom-fields-pro/assets/src/js/pro/_acf-field-flexible-content.js ***!
+  \*****************************************************************************************/
+/***/ (function() {
 
 (function ($) {
   var Field = acf.Field.extend({
@@ -432,9 +16,9 @@
       'click [data-name="duplicate-layout"]': 'onClickDuplicate',
       'click [data-name="remove-layout"]': 'onClickRemove',
       'click [data-name="collapse-layout"]': 'onClickCollapse',
-      'showField': 'onShow',
-      'unloadField': 'onUnload',
-      'mouseover': 'onHover'
+      showField: 'onShow',
+      unloadField: 'onUnload',
+      mouseover: 'onHover'
     },
     $control: function () {
       return this.$('.acf-flexible-content:first');
@@ -700,7 +284,7 @@
             args.before.before($el2);
           } else {
             this.$layoutsWrap().append($el2);
-          } // enable 
+          } // enable
 
 
           acf.enable($el2, this.cid); // render
@@ -901,16 +485,16 @@
   });
   acf.registerFieldType(Field);
   /**
-  *  Popup
-  *
-  *  description
-  *
-  *  @date	7/4/18
-  *  @since	5.6.9
-  *
-  *  @param	type $var Description. Default.
-  *  @return	type Description.
-  */
+   *  Popup
+   *
+   *  description
+   *
+   *  @date	7/4/18
+   *  @since	5.6.9
+   *
+   *  @param	type $var Description. Default.
+   *  @return	type Description.
+   */
 
   var Popup = acf.models.TooltipConfirm.extend({
     events: {
@@ -925,16 +509,16 @@
     }
   });
   /**
-  *  conditions
-  *
-  *  description
-  *
-  *  @date	9/4/18
-  *  @since	5.6.9
-  *
-  *  @param	type $var Description. Default.
-  *  @return	type Description.
-  */
+   *  conditions
+   *
+   *  description
+   *
+   *  @date	9/4/18
+   *  @since	5.6.9
+   *
+   *  @param	type $var Description. Default.
+   *  @return	type Description.
+   */
   // register existing conditions
 
   acf.registerConditionForFieldType('hasValue', 'flexible_content');
@@ -959,7 +543,7 @@
       return key;
     },
     load: function (key) {
-      // vars 
+      // vars
       var key = this.key(key, 'load');
       var data = acf.getPreference(this.name); // return
 
@@ -970,7 +554,7 @@
       }
     },
     save: function (key, value) {
-      // vars 
+      // vars
       var key = this.key(key, 'save');
       var data = acf.getPreference(this.name) || {}; // delete
 
@@ -991,6 +575,14 @@
   });
 })(jQuery);
 
+/***/ }),
+
+/***/ "./src/advanced-custom-fields-pro/assets/src/js/pro/_acf-field-gallery.js":
+/*!********************************************************************************!*\
+  !*** ./src/advanced-custom-fields-pro/assets/src/js/pro/_acf-field-gallery.js ***!
+  \********************************************************************************/
+/***/ (function() {
+
 (function ($) {
   var Field = acf.Field.extend({
     type: 'gallery',
@@ -1002,13 +594,13 @@
       'click .acf-gallery-close': 'onClickClose',
       'change .acf-gallery-sort': 'onChangeSort',
       'click .acf-gallery-update': 'onUpdate',
-      'mouseover': 'onHover',
-      'showField': 'render'
+      mouseover: 'onHover',
+      showField: 'render'
     },
     actions: {
-      'validation_begin': 'onValidationBegin',
-      'validation_failure': 'onValidationFailure',
-      'resize': 'onResize'
+      validation_begin: 'onValidationBegin',
+      validation_failure: 'onValidationFailure',
+      resize: 'onResize'
     },
     onValidationBegin: function () {
       acf.disable(this.$sideData(), this.cid);
@@ -1138,13 +730,13 @@
       width = Math.max(width, 350); // animate
 
       this.$('.acf-gallery-side-inner').css({
-        'width': width - 1
+        width: width - 1
       });
       this.$side().animate({
-        'width': width - 1
+        width: width - 1
       }, 250);
       this.$main().animate({
-        'right': width
+        right: width
       }, 250);
     },
     closeSidebar: function () {
@@ -1255,7 +847,7 @@
 
       if (attachment.type == 'image') {
         // Remove filename.
-        $el.find('.filename').remove(); // Other file type.	
+        $el.find('.filename').remove(); // Other file type.
       } else {
         // Check for attachment featured image.
         var image = acf.isget(attachment, 'image', 'src');
@@ -1469,7 +1061,7 @@
       var ajaxData = acf.serialize(this.$sideData()); // loading
 
       $submit.addClass('disabled');
-      $submit.before('<i class="acf-loading"></i> '); // append AJAX action		
+      $submit.before('<i class="acf-loading"></i> '); // append AJAX action
 
       ajaxData.action = 'acf/fields/gallery/update_attachment'; // ajax
 
@@ -1498,3 +1090,530 @@
   acf.registerConditionForFieldType('selectionLessThan', 'gallery');
   acf.registerConditionForFieldType('selectionGreaterThan', 'gallery');
 })(jQuery);
+
+/***/ }),
+
+/***/ "./src/advanced-custom-fields-pro/assets/src/js/pro/_acf-field-repeater.js":
+/*!*********************************************************************************!*\
+  !*** ./src/advanced-custom-fields-pro/assets/src/js/pro/_acf-field-repeater.js ***!
+  \*********************************************************************************/
+/***/ (function() {
+
+(function ($) {
+  var Field = acf.Field.extend({
+    type: 'repeater',
+    wait: '',
+    events: {
+      'click a[data-event="add-row"]': 'onClickAdd',
+      'click a[data-event="duplicate-row"]': 'onClickDuplicate',
+      'click a[data-event="remove-row"]': 'onClickRemove',
+      'click a[data-event="collapse-row"]': 'onClickCollapse',
+      showField: 'onShow',
+      unloadField: 'onUnload',
+      mouseover: 'onHover',
+      unloadField: 'onUnload'
+    },
+    $control: function () {
+      return this.$('.acf-repeater:first');
+    },
+    $table: function () {
+      return this.$('table:first');
+    },
+    $tbody: function () {
+      return this.$('tbody:first');
+    },
+    $rows: function () {
+      return this.$('tbody:first > tr').not('.acf-clone');
+    },
+    $row: function (index) {
+      return this.$('tbody:first > tr:eq(' + index + ')');
+    },
+    $clone: function () {
+      return this.$('tbody:first > tr.acf-clone');
+    },
+    $actions: function () {
+      return this.$('.acf-actions:last');
+    },
+    $button: function () {
+      return this.$('.acf-actions:last .button');
+    },
+    getValue: function () {
+      return this.$rows().length;
+    },
+    allowRemove: function () {
+      var min = parseInt(this.get('min'));
+      return !min || min < this.val();
+    },
+    allowAdd: function () {
+      var max = parseInt(this.get('max'));
+      return !max || max > this.val();
+    },
+    addSortable: function (self) {
+      // bail early if max 1 row
+      if (this.get('max') == 1) {
+        return;
+      } // add sortable
+
+
+      this.$tbody().sortable({
+        items: '> tr',
+        handle: '> td.order',
+        forceHelperSize: true,
+        forcePlaceholderSize: true,
+        scroll: true,
+        stop: function (event, ui) {
+          self.render();
+        },
+        update: function (event, ui) {
+          self.$input().trigger('change');
+        }
+      });
+    },
+    addCollapsed: function () {
+      // vars
+      var indexes = preference.load(this.get('key')); // bail early if no collapsed
+
+      if (!indexes) {
+        return false;
+      } // loop
+
+
+      this.$rows().each(function (i) {
+        if (indexes.indexOf(i) > -1) {
+          if ($(this).find('.-collapsed-target').length) {
+            $(this).addClass('-collapsed');
+          }
+        }
+      });
+    },
+    addUnscopedEvents: function (self) {
+      // invalidField
+      this.on('invalidField', '.acf-row', function (e) {
+        var $row = $(this);
+
+        if (self.isCollapsed($row)) {
+          self.expand($row);
+        }
+      });
+    },
+    initialize: function () {
+      // add unscoped events
+      this.addUnscopedEvents(this); // add collapsed
+
+      this.addCollapsed(); // disable clone
+
+      acf.disable(this.$clone(), this.cid); // render
+
+      this.render();
+    },
+    render: function () {
+      // update order number
+      this.$rows().each(function (i) {
+        $(this).find('> .order > span').html(i + 1);
+      }); // Extract vars.
+
+      var $controll = this.$control();
+      var $button = this.$button(); // empty
+
+      if (this.val() == 0) {
+        $controll.addClass('-empty');
+      } else {
+        $controll.removeClass('-empty');
+      } // Reached max rows.
+
+
+      if (!this.allowAdd()) {
+        $controll.addClass('-max');
+        $button.addClass('disabled');
+      } else {
+        $controll.removeClass('-max');
+        $button.removeClass('disabled');
+      } // Reached min rows (not used).
+      //if( !this.allowRemove() ) {
+      //	$controll.addClass('-min');
+      //} else {
+      //	$controll.removeClass('-min');
+      //}
+
+    },
+    validateAdd: function () {
+      // return true if allowed
+      if (this.allowAdd()) {
+        return true;
+      } // vars
+
+
+      var max = this.get('max');
+
+      var text = acf.__('Maximum rows reached ({max} rows)'); // replace
+
+
+      text = text.replace('{max}', max); // add notice
+
+      this.showNotice({
+        text: text,
+        type: 'warning'
+      }); // return
+
+      return false;
+    },
+    onClickAdd: function (e, $el) {
+      // validate
+      if (!this.validateAdd()) {
+        return false;
+      } // add above row
+
+
+      if ($el.hasClass('acf-icon')) {
+        this.add({
+          before: $el.closest('.acf-row')
+        }); // default
+      } else {
+        this.add();
+      }
+    },
+    add: function (args) {
+      // validate
+      if (!this.allowAdd()) {
+        return false;
+      } // defaults
+
+
+      args = acf.parseArgs(args, {
+        before: false
+      }); // add row
+
+      var $el = acf.duplicate({
+        target: this.$clone(),
+        append: this.proxy(function ($el, $el2) {
+          // append
+          if (args.before) {
+            args.before.before($el2);
+          } else {
+            $el.before($el2);
+          } // remove clone class
+
+
+          $el2.removeClass('acf-clone'); // enable
+
+          acf.enable($el2, this.cid); // render
+
+          this.render();
+        })
+      }); // trigger change for validation errors
+
+      this.$input().trigger('change'); // return
+
+      return $el;
+    },
+    onClickDuplicate: function (e, $el) {
+      // Validate with warning.
+      if (!this.validateAdd()) {
+        return false;
+      } // get layout and duplicate it.
+
+
+      var $row = $el.closest('.acf-row');
+      this.duplicateRow($row);
+    },
+    duplicateRow: function ($row) {
+      // Validate without warning.
+      if (!this.allowAdd()) {
+        return false;
+      } // Vars.
+
+
+      var fieldKey = this.get('key'); // Duplicate row.
+
+      var $el = acf.duplicate({
+        target: $row,
+        // Provide a custom renaming callback to avoid renaming parent row attributes.
+        rename: function (name, value, search, replace) {
+          // Rename id attributes from "field_1-search" to "field_1-replace".
+          if (name === 'id') {
+            return value.replace(fieldKey + '-' + search, fieldKey + '-' + replace); // Rename name and for attributes from "[field_1][search]" to "[field_1][replace]".
+          } else {
+            return value.replace(fieldKey + '][' + search, fieldKey + '][' + replace);
+          }
+        },
+        before: function ($el) {
+          acf.doAction('unmount', $el);
+        },
+        after: function ($el, $el2) {
+          acf.doAction('remount', $el);
+        }
+      }); // trigger change for validation errors
+
+      this.$input().trigger('change'); // Update order numbers.
+
+      this.render(); // Focus on new row.
+
+      acf.focusAttention($el); // Return new layout.
+
+      return $el;
+    },
+    validateRemove: function () {
+      // return true if allowed
+      if (this.allowRemove()) {
+        return true;
+      } // vars
+
+
+      var min = this.get('min');
+
+      var text = acf.__('Minimum rows reached ({min} rows)'); // replace
+
+
+      text = text.replace('{min}', min); // add notice
+
+      this.showNotice({
+        text: text,
+        type: 'warning'
+      }); // return
+
+      return false;
+    },
+    onClickRemove: function (e, $el) {
+      var $row = $el.closest('.acf-row'); // Bypass confirmation when holding down "shift" key.
+
+      if (e.shiftKey) {
+        return this.remove($row);
+      } // add class
+
+
+      $row.addClass('-hover'); // add tooltip
+
+      var tooltip = acf.newTooltip({
+        confirmRemove: true,
+        target: $el,
+        context: this,
+        confirm: function () {
+          this.remove($row);
+        },
+        cancel: function () {
+          $row.removeClass('-hover');
+        }
+      });
+    },
+    remove: function ($row) {
+      // reference
+      var self = this; // remove
+
+      acf.remove({
+        target: $row,
+        endHeight: 0,
+        complete: function () {
+          // trigger change to allow attachment save
+          self.$input().trigger('change'); // render
+
+          self.render(); // sync collapsed order
+          //self.sync();
+        }
+      });
+    },
+    isCollapsed: function ($row) {
+      return $row.hasClass('-collapsed');
+    },
+    collapse: function ($row) {
+      $row.addClass('-collapsed');
+      acf.doAction('hide', $row, 'collapse');
+    },
+    expand: function ($row) {
+      $row.removeClass('-collapsed');
+      acf.doAction('show', $row, 'collapse');
+    },
+    onClickCollapse: function (e, $el) {
+      // vars
+      var $row = $el.closest('.acf-row');
+      var isCollpased = this.isCollapsed($row); // shift
+
+      if (e.shiftKey) {
+        $row = this.$rows();
+      } // toggle
+
+
+      if (isCollpased) {
+        this.expand($row);
+      } else {
+        this.collapse($row);
+      }
+    },
+    onShow: function (e, $el, context) {
+      // get sub fields
+      var fields = acf.getFields({
+        is: ':visible',
+        parent: this.$el
+      }); // trigger action
+      // - ignore context, no need to pass through 'conditional_logic'
+      // - this is just for fields like google_map to render itself
+
+      acf.doAction('show_fields', fields);
+    },
+    onUnload: function () {
+      // vars
+      var indexes = []; // loop
+
+      this.$rows().each(function (i) {
+        if ($(this).hasClass('-collapsed')) {
+          indexes.push(i);
+        }
+      }); // allow null
+
+      indexes = indexes.length ? indexes : null; // set
+
+      preference.save(this.get('key'), indexes);
+    },
+    onHover: function () {
+      // add sortable
+      this.addSortable(this); // remove event
+
+      this.off('mouseover');
+    }
+  });
+  acf.registerFieldType(Field); // register existing conditions
+
+  acf.registerConditionForFieldType('hasValue', 'repeater');
+  acf.registerConditionForFieldType('hasNoValue', 'repeater');
+  acf.registerConditionForFieldType('lessThan', 'repeater');
+  acf.registerConditionForFieldType('greaterThan', 'repeater'); // state
+
+  var preference = new acf.Model({
+    name: 'this.collapsedRows',
+    key: function (key, context) {
+      // vars
+      var count = this.get(key + context) || 0; // update
+
+      count++;
+      this.set(key + context, count, true); // modify fieldKey
+
+      if (count > 1) {
+        key += '-' + count;
+      } // return
+
+
+      return key;
+    },
+    load: function (key) {
+      // vars
+      var key = this.key(key, 'load');
+      var data = acf.getPreference(this.name); // return
+
+      if (data && data[key]) {
+        return data[key];
+      } else {
+        return false;
+      }
+    },
+    save: function (key, value) {
+      // vars
+      var key = this.key(key, 'save');
+      var data = acf.getPreference(this.name) || {}; // delete
+
+      if (value === null) {
+        delete data[key]; // append
+      } else {
+        data[key] = value;
+      } // allow null
+
+
+      if ($.isEmptyObject(data)) {
+        data = null;
+      } // save
+
+
+      acf.setPreference(this.name, data);
+    }
+  });
+})(jQuery);
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	!function() {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = function(module) {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	!function() {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	!function() {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = function(exports) {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+!function() {
+"use strict";
+/*!***************************************************************************!*\
+  !*** ./src/advanced-custom-fields-pro/assets/src/js/pro/acf-pro-input.js ***!
+  \***************************************************************************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _acf_field_repeater_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_acf-field-repeater.js */ "./src/advanced-custom-fields-pro/assets/src/js/pro/_acf-field-repeater.js");
+/* harmony import */ var _acf_field_repeater_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_acf_field_repeater_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _acf_field_flexible_content_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_acf-field-flexible-content.js */ "./src/advanced-custom-fields-pro/assets/src/js/pro/_acf-field-flexible-content.js");
+/* harmony import */ var _acf_field_flexible_content_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_acf_field_flexible_content_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _acf_field_gallery_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./_acf-field-gallery.js */ "./src/advanced-custom-fields-pro/assets/src/js/pro/_acf-field-gallery.js");
+/* harmony import */ var _acf_field_gallery_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_acf_field_gallery_js__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+}();
+/******/ })()
+;
+//# sourceMappingURL=acf-pro-input.js.map

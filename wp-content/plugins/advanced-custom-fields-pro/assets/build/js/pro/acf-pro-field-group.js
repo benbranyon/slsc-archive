@@ -1,63 +1,160 @@
-(function ($) {
-  /*
-  *  Repeater
-  *
-  *  This field type requires some extra logic for its settings
-  *
-  *  @type	function
-  *  @date	24/10/13
-  *  @since	5.0.0
-  *
-  *  @param	n/a
-  *  @return	n/a
-  */
-  var RepeaterCollapsedFieldSetting = acf.FieldSetting.extend({
-    type: 'repeater',
-    name: 'collapsed',
-    events: {
-      'focus select': 'onFocus'
-    },
-    onFocus: function (e, $el) {
-      // vars
-      var $select = $el; // collapsed
+/******/ (function() { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
 
-      var choices = []; // keep 'null' choice
-
-      choices.push({
-        label: $select.find('option[value=""]').text(),
-        value: ''
-      }); // find sub fields
-
-      var $list = this.fieldObject.$('.acf-field-list:first');
-      var fields = acf.getFieldObjects({
-        list: $list
-      }); // loop
-
-      fields.map(function (field) {
-        choices.push({
-          label: field.prop('label'),
-          value: field.prop('key')
-        });
-      }); // render
-
-      acf.renderSelect($select, choices);
-    }
-  });
-  acf.registerFieldSetting(RepeaterCollapsedFieldSetting);
-})(jQuery);
+/***/ "./src/advanced-custom-fields-pro/assets/src/js/pro/_acf-setting-clone.js":
+/*!********************************************************************************!*\
+  !*** ./src/advanced-custom-fields-pro/assets/src/js/pro/_acf-setting-clone.js ***!
+  \********************************************************************************/
+/***/ (function() {
 
 (function ($) {
   /**
-  *  CloneDisplayFieldSetting
-  *
-  *  Extra logic for this field setting
-  *
-  *  @date	18/4/18
-  *  @since	5.6.9
-  *
-  *  @param	void
-  *  @return	void
-  */
+   *  CloneDisplayFieldSetting
+   *
+   *  Extra logic for this field setting
+   *
+   *  @date	18/4/18
+   *  @since	5.6.9
+   *
+   *  @param	void
+   *  @return	void
+   */
+  var CloneDisplayFieldSetting = acf.FieldSetting.extend({
+    type: 'clone',
+    name: 'display',
+    render: function () {
+      // vars
+      var display = this.field.val(); // set data attribute used by CSS to hide/show
+
+      this.$fieldObject.attr('data-display', display);
+    }
+  });
+  acf.registerFieldSetting(CloneDisplayFieldSetting);
+  /**
+   *  ClonePrefixLabelFieldSetting
+   *
+   *  Extra logic for this field setting
+   *
+   *  @date	18/4/18
+   *  @since	5.6.9
+   *
+   *  @param	void
+   *  @return	void
+   */
+
+  var ClonePrefixLabelFieldSetting = acf.FieldSetting.extend({
+    type: 'clone',
+    name: 'prefix_label',
+    render: function () {
+      // vars
+      var prefix = ''; // if checked
+
+      if (this.field.val()) {
+        prefix = this.fieldObject.prop('label') + ' ';
+      } // update HTML
+
+
+      this.$('code').html(prefix + '%field_label%');
+    }
+  });
+  acf.registerFieldSetting(ClonePrefixLabelFieldSetting);
+  /**
+   *  ClonePrefixNameFieldSetting
+   *
+   *  Extra logic for this field setting
+   *
+   *  @date	18/4/18
+   *  @since	5.6.9
+   *
+   *  @param	void
+   *  @return	void
+   */
+
+  var ClonePrefixNameFieldSetting = acf.FieldSetting.extend({
+    type: 'clone',
+    name: 'prefix_name',
+    render: function () {
+      // vars
+      var prefix = ''; // if checked
+
+      if (this.field.val()) {
+        prefix = this.fieldObject.prop('name') + '_';
+      } // update HTML
+
+
+      this.$('code').html(prefix + '%field_name%');
+    }
+  });
+  acf.registerFieldSetting(ClonePrefixNameFieldSetting);
+  /**
+   *  cloneFieldSelectHelper
+   *
+   *  Customizes the clone field setting Select2 isntance
+   *
+   *  @date	18/4/18
+   *  @since	5.6.9
+   *
+   *  @param	void
+   *  @return	void
+   */
+
+  var cloneFieldSelectHelper = new acf.Model({
+    filters: {
+      select2_args: 'select2Args'
+    },
+    select2Args: function (options, $select, data, $el, instance) {
+      // check
+      if (data.ajaxAction == 'acf/fields/clone/query') {
+        // remain open on select
+        options.closeOnSelect = false; // customize ajaxData function
+
+        instance.data.ajaxData = this.ajaxData;
+      } // return
+
+
+      return options;
+    },
+    ajaxData: function (data) {
+      // find current fields
+      data.fields = {}; // loop
+
+      acf.getFieldObjects().map(function (fieldObject) {
+        // append
+        data.fields[fieldObject.prop('key')] = {
+          key: fieldObject.prop('key'),
+          type: fieldObject.prop('type'),
+          label: fieldObject.prop('label'),
+          ancestors: fieldObject.getParents().length
+        };
+      }); // append title
+
+      data.title = $('#title').val(); // return
+
+      return data;
+    }
+  });
+})(jQuery);
+
+/***/ }),
+
+/***/ "./src/advanced-custom-fields-pro/assets/src/js/pro/_acf-setting-flexible-content.js":
+/*!*******************************************************************************************!*\
+  !*** ./src/advanced-custom-fields-pro/assets/src/js/pro/_acf-setting-flexible-content.js ***!
+  \*******************************************************************************************/
+/***/ (function() {
+
+(function ($) {
+  /**
+   *  CloneDisplayFieldSetting
+   *
+   *  Extra logic for this field setting
+   *
+   *  @date	18/4/18
+   *  @since	5.6.9
+   *
+   *  @param	void
+   *  @return	void
+   */
   var FlexibleContentLayoutFieldSetting = acf.FieldSetting.extend({
     type: 'flexible_content',
     name: 'fc_layout',
@@ -230,21 +327,21 @@
   });
   acf.registerFieldSetting(FlexibleContentLayoutFieldSetting);
   /**
-  *  flexibleContentHelper
-  *
-  *  description
-  *
-  *  @date	19/4/18
-  *  @since	5.6.9
-  *
-  *  @param	type $var Description. Default.
-  *  @return	type Description.
-  */
+   *  flexibleContentHelper
+   *
+   *  description
+   *
+   *  @date	19/4/18
+   *  @since	5.6.9
+   *
+   *  @param	type $var Description. Default.
+   *  @return	type Description.
+   */
 
   var flexibleContentHelper = new acf.Model({
     actions: {
-      'sortstop_field_object': 'updateParentLayout',
-      'change_field_object_parent': 'updateParentLayout'
+      sortstop_field_object: 'updateParentLayout',
+      change_field_object_parent: 'updateParentLayout'
     },
     updateParentLayout: function (fieldObject) {
       // vars
@@ -270,130 +367,150 @@
   });
 })(jQuery);
 
+/***/ }),
+
+/***/ "./src/advanced-custom-fields-pro/assets/src/js/pro/_acf-setting-repeater.js":
+/*!***********************************************************************************!*\
+  !*** ./src/advanced-custom-fields-pro/assets/src/js/pro/_acf-setting-repeater.js ***!
+  \***********************************************************************************/
+/***/ (function() {
+
 (function ($) {
-  /**
-  *  CloneDisplayFieldSetting
-  *
-  *  Extra logic for this field setting
-  *
-  *  @date	18/4/18
-  *  @since	5.6.9
-  *
-  *  @param	void
-  *  @return	void
-  */
-  var CloneDisplayFieldSetting = acf.FieldSetting.extend({
-    type: 'clone',
-    name: 'display',
-    render: function () {
-      // vars
-      var display = this.field.val(); // set data attribute used by CSS to hide/show
-
-      this.$fieldObject.attr('data-display', display);
-    }
-  });
-  acf.registerFieldSetting(CloneDisplayFieldSetting);
-  /**
-  *  ClonePrefixLabelFieldSetting
-  *
-  *  Extra logic for this field setting
-  *
-  *  @date	18/4/18
-  *  @since	5.6.9
-  *
-  *  @param	void
-  *  @return	void
-  */
-
-  var ClonePrefixLabelFieldSetting = acf.FieldSetting.extend({
-    type: 'clone',
-    name: 'prefix_label',
-    render: function () {
-      // vars
-      var prefix = ''; // if checked
-
-      if (this.field.val()) {
-        prefix = this.fieldObject.prop('label') + ' ';
-      } // update HTML
-
-
-      this.$('code').html(prefix + '%field_label%');
-    }
-  });
-  acf.registerFieldSetting(ClonePrefixLabelFieldSetting);
-  /**
-  *  ClonePrefixNameFieldSetting
-  *
-  *  Extra logic for this field setting
-  *
-  *  @date	18/4/18
-  *  @since	5.6.9
-  *
-  *  @param	void
-  *  @return	void
-  */
-
-  var ClonePrefixNameFieldSetting = acf.FieldSetting.extend({
-    type: 'clone',
-    name: 'prefix_name',
-    render: function () {
-      // vars
-      var prefix = ''; // if checked
-
-      if (this.field.val()) {
-        prefix = this.fieldObject.prop('name') + '_';
-      } // update HTML
-
-
-      this.$('code').html(prefix + '%field_name%');
-    }
-  });
-  acf.registerFieldSetting(ClonePrefixNameFieldSetting);
-  /**
-  *  cloneFieldSelectHelper
-  *
-  *  Customizes the clone field setting Select2 isntance
-  *
-  *  @date	18/4/18
-  *  @since	5.6.9
-  *
-  *  @param	void
-  *  @return	void
-  */
-
-  var cloneFieldSelectHelper = new acf.Model({
-    filters: {
-      'select2_args': 'select2Args'
+  /*
+   *  Repeater
+   *
+   *  This field type requires some extra logic for its settings
+   *
+   *  @type	function
+   *  @date	24/10/13
+   *  @since	5.0.0
+   *
+   *  @param	n/a
+   *  @return	n/a
+   */
+  var RepeaterCollapsedFieldSetting = acf.FieldSetting.extend({
+    type: 'repeater',
+    name: 'collapsed',
+    events: {
+      'focus select': 'onFocus'
     },
-    select2Args: function (options, $select, data, $el, instance) {
-      // check
-      if (data.ajaxAction == 'acf/fields/clone/query') {
-        // remain open on select
-        options.closeOnSelect = false; // customize ajaxData function
+    onFocus: function (e, $el) {
+      // vars
+      var $select = $el; // collapsed
 
-        instance.data.ajaxData = this.ajaxData;
-      } // return
+      var choices = []; // keep 'null' choice
 
+      choices.push({
+        label: $select.find('option[value=""]').text(),
+        value: ''
+      }); // find sub fields
 
-      return options;
-    },
-    ajaxData: function (data) {
-      // find current fields
-      data.fields = {}; // loop
+      var $list = this.fieldObject.$('.acf-field-list:first');
+      var fields = acf.getFieldObjects({
+        list: $list
+      }); // loop
 
-      acf.getFieldObjects().map(function (fieldObject) {
-        // append
-        data.fields[fieldObject.prop('key')] = {
-          key: fieldObject.prop('key'),
-          type: fieldObject.prop('type'),
-          label: fieldObject.prop('label'),
-          ancestors: fieldObject.getParents().length
-        };
-      }); // append title
+      fields.map(function (field) {
+        choices.push({
+          label: field.prop('label'),
+          value: field.prop('key')
+        });
+      }); // render
 
-      data.title = $('#title').val(); // return
-
-      return data;
+      acf.renderSelect($select, choices);
     }
   });
+  acf.registerFieldSetting(RepeaterCollapsedFieldSetting);
 })(jQuery);
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	!function() {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = function(module) {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	!function() {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	!function() {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = function(exports) {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+!function() {
+"use strict";
+/*!*********************************************************************************!*\
+  !*** ./src/advanced-custom-fields-pro/assets/src/js/pro/acf-pro-field-group.js ***!
+  \*********************************************************************************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _acf_setting_repeater_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_acf-setting-repeater.js */ "./src/advanced-custom-fields-pro/assets/src/js/pro/_acf-setting-repeater.js");
+/* harmony import */ var _acf_setting_repeater_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_acf_setting_repeater_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _acf_setting_flexible_content_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_acf-setting-flexible-content.js */ "./src/advanced-custom-fields-pro/assets/src/js/pro/_acf-setting-flexible-content.js");
+/* harmony import */ var _acf_setting_flexible_content_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_acf_setting_flexible_content_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _acf_setting_clone_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./_acf-setting-clone.js */ "./src/advanced-custom-fields-pro/assets/src/js/pro/_acf-setting-clone.js");
+/* harmony import */ var _acf_setting_clone_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_acf_setting_clone_js__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+}();
+/******/ })()
+;
+//# sourceMappingURL=acf-pro-field-group.js.map
