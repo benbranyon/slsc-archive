@@ -883,7 +883,8 @@ h1, h2, h3, h4, h5, h6 {
       padding: 30px;
       min-height: calc(100vh - 71px); } }
 
-.archive .l-sidebar__main {
+.archive .l-sidebar__main,
+.search .l-sidebar__main {
   background-color: #fff; }
 
 .sidebar-title {
@@ -1162,6 +1163,12 @@ h1, h2, h3, h4, h5, h6 {
   top: 5px;
   width: auto;
   z-index: 100000; }
+
+.search .page-title {
+  color: #000; }
+
+.search .arhcive-filters {
+  height: 100%; }
 
 .single-archive .l-sidebar {
   display: -webkit-box;

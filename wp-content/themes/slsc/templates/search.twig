@@ -1,19 +1,30 @@
 {% extends 'base.twig' %}
 
 {% block content %}
-  <!-- Provided by templates/search.twig -->
-  {% embed '@layouts/regions/content/content.twig' %}
-    {% block content %}
-      {% include '@components/page-title/page-title.twig' with {
-        'page_title': __('Search results for term: ', 'gesso') ~ function('get_search_query')
-      } %}
-      {% for post in posts %}
-        {% include '@components/teaser/teaser.twig' with {
-          'url': post.link,
-          'title': post.title
+  <!-- Provided by templates/archive-archive.twig -->
+  {% embed '@layouts/sidebar/sidebar.twig' %}
+    {% block sidebar_aside %}
+      <div class="arhcive-filters">
+        <h2>Search</h2>
+        {% include '@components/searchform/searchform.twig' with {
+          'action': '/',
+          'placeholder' : 'Enter Keyword',
+          'button_label': 'Search'
         } %}
-      {% endfor %}
-      {% include '@components/pager/pager.twig' %}
+      </div>
+    {% endblock %}
+    {% block sidebar_main %}
+      <div class="archive-results">
+        <div class="archive-toolbar">
+          {% include '@components/page-title/page-title.twig' with {
+            'page_title': __('Search results for term: ', 'gesso') ~ function('get_search_query')
+          } %}
+        </div>
+        <div id="cbp-vm" class="facetwp-template cbp-vm-view-grid">
+        {% include 'templates/components/archive-loop.twig' %}
+        </div>
+        {% include '@components/pager/pager.twig' %}
+      </div>
     {% endblock %}
   {% endembed %}
 {% endblock %}
