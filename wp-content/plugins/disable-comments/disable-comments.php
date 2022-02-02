@@ -4,9 +4,9 @@
  * Plugin Name: Disable Comments
  * Plugin URI: https://wordpress.org/plugins/disable-comments/
  * Description: Allows administrators to globally disable comments on their site. Comments can be disabled according to post type. You could bulk delete comments using Tools.
- * Version: 2.2.4
+ * Version: 2.3.3
  * Author: WPDeveloper
- * Author URI: https://wpdeveloper.net
+ * Author URI: https://wpdeveloper.com
  * License: GPL-3.0+
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
  * Text Domain: disable-comments
@@ -37,7 +37,7 @@ class Disable_Comments
 
 	function __construct()
 	{
-		define('DC_VERSION', '2.2.4');
+		define('DC_VERSION', '2.3.3');
 		define('DC_PLUGIN_SLUG', 'disable_comments_settings');
 		define('DC_PLUGIN_ROOT_PATH', dirname(__FILE__));
 		define('DC_PLUGIN_VIEWS_PATH', DC_PLUGIN_ROOT_PATH . '/views/');
@@ -103,6 +103,7 @@ class Disable_Comments
 
 		// Upgrade DB if necessary.
 		$this->check_db_upgrades();
+		$this->check_upgrades();
 
 		$this->init_filters();
 
@@ -212,6 +213,18 @@ class Disable_Comments
 
 			$this->options['db_version'] = self::DB_VERSION;
 			$this->update_options();
+		}
+	}
+
+	public function check_upgrades(){
+		$dc_version = get_option('disable_comment_version');
+		if (version_compare($dc_version, '2.3.1', '<')) {
+			if (!empty($this->options['remove_everywhere'])){
+				update_option('show_avatars', true);
+			}
+		}
+		if(!$dc_version || $dc_version != DC_VERSION){
+			update_option('disable_comment_version', DC_VERSION);
 		}
 	}
 
@@ -806,9 +819,29 @@ class Disable_Comments
 
 	public function settings_page()
 	{
-		if( isset( $_GET['cancel'] ) && trim( $_GET['cancel'] ) === 'setup' ){
-			$this->update_option('dc_setup_screen_seen', true);
+		// if( isset( $_GET['cancel'] ) && trim( $_GET['cancel'] ) === 'setup' ){
+		// 	$this->update_option('dc_setup_screen_seen', true);
+		// }
+		$avatar_status = '-1';
+		if($this->is_network_admin()){
+			$show_avatars = [];
+			$sites = get_sites([
+				'number' => 0,
+				'fields' => 'ids',
+			]);
+			foreach ( $sites as $blog_id ) {
+				switch_to_blog( $blog_id );
+				$show_avatars[] = get_option('show_avatars', '0');
+				restore_current_blog();
+			}
+			if(count($show_avatars) == array_sum($show_avatars)){
+				$avatar_status = '0';
+			}
+			elseif(0 == array_sum($show_avatars)){
+				$avatar_status = '1';
+			}
 		}
+
 		include_once DC_PLUGIN_VIEWS_PATH . 'settings.php';
 	}
 
@@ -902,6 +935,25 @@ class Disable_Comments
 
 			if(isset($formArray['sitewide_settings'])){
 				update_site_option('disable_comments_sitewide_settings', $formArray['sitewide_settings']);
+			}
+
+			if(isset($formArray['disable_avatar'])){
+				if($this->is_network_admin()){
+					if($formArray['disable_avatar'] == '0' || $formArray['disable_avatar'] == '1'){
+						$sites = get_sites([
+							'number' => 0,
+							'fields' => 'ids',
+						]);
+						foreach ( $sites as $blog_id ) {
+							switch_to_blog( $blog_id );
+							update_option('show_avatars', (bool) !$formArray['disable_avatar']);
+							restore_current_blog();
+						}
+					}
+				}
+				else{
+					update_option('show_avatars', (bool) !$formArray['disable_avatar']);
+				}
 			}
 			// xml rpc
 			$this->options['remove_xmlrpc_comments'] = (isset($formArray['remove_xmlrpc_comments']) ? intval($formArray['remove_xmlrpc_comments']) : ($this->is_CLI && isset($this->options['remove_xmlrpc_comments']) ? $this->options['remove_xmlrpc_comments'] : 0));
@@ -1044,8 +1096,19 @@ class Disable_Comments
 
 					$log = __('All comments have been deleted', 'disable-comments');
 				}
+			} elseif ($formArray['delete_mode'] == 'delete_spam') {
+
+				$wpdb->query("DELETE cmeta FROM $wpdb->commentmeta cmeta INNER JOIN $wpdb->comments comments ON cmeta.comment_id=comments.comment_ID WHERE comments.comment_approved = 'spam'");
+				$wpdb->query("DELETE comments FROM $wpdb->comments comments  WHERE comments.comment_approved = 'spam'");
+
+
+				$wpdb->query("OPTIMIZE TABLE $wpdb->commentmeta");
+				$wpdb->query("OPTIMIZE TABLE $wpdb->comments");
+
+				$log = __('All spam comments have been deleted', 'disable-comments');
 			}
 		}
+		delete_transient('wc_count_comments');
 		return $log;
 	}
 
