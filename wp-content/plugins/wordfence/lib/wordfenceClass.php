@@ -194,7 +194,7 @@ class wordfence {
 		
 		$api = new wfAPI(wfConfig::get('apiKey'), wfUtils::getWPVersion());
 		try {
-			$keyType = wfAPI::KEY_TYPE_FREE;
+			$keyType = wfLicense::KEY_TYPE_FREE;
 			$keyData = $api->call('ping_api_key', array(), array('supportHash' => wfConfig::get('supportHash', ''), 'whitelistHash' => wfConfig::get('whitelistHash', ''), 'tldlistHash' => wfConfig::get('tldlistHash', '')));
 			if (isset($keyData['_isPaidKey'])) {
 				$keyType = wfConfig::get('keyType');
@@ -458,7 +458,7 @@ SQL
 				$keyData = $api->call('get_anon_api_key');
 				if($keyData['ok'] && $keyData['apiKey']){
 					wfConfig::set('apiKey', $keyData['apiKey']);
-					wfConfig::set('keyType', wfAPI::KEY_TYPE_FREE);
+					wfConfig::set('keyType', wfLicense::KEY_TYPE_FREE);
 					wfConfig::set('touppPromptNeeded', true);
 					$freshAPIKey = true;
 				} else {
@@ -745,7 +745,7 @@ SQL
 			else { wfConfig::set('scanType', wfScanner::SCAN_TYPE_CUSTOM); }
 			
 			if (wfConfig::get('isPaid')) {
-				wfConfig::set('keyType', wfAPI::KEY_TYPE_PAID_CURRENT);
+				wfConfig::set('keyType', wfLicense::KEY_TYPE_PAID_CURRENT);
 			}
 			
 			wfConfig::remove('premiumAutoRenew');
@@ -1430,9 +1430,15 @@ SQL
 			self::setupI18nJSStrings();
 		}
 	}
+
+	private static function isWordfencePage() {
+		return (isset($_GET['page']) && (preg_match('/^Wordfence/', @$_GET['page']) || ($_GET['page'] == 'WFLS' && wfOnboardingController::shouldShowNewTour(wfOnboardingController::TOUR_LOGIN_SECURITY))));
+	}
+
 	public static function enqueueDashboard() {
 		if (wfUtils::isAdmin()) {
 			wp_enqueue_style('wf-adminbar', wfUtils::getBaseURL() . wfUtils::versionedAsset('css/wf-adminbar.css'), '', WORDFENCE_VERSION);
+			wp_enqueue_style('wordfence-license-global-style', wfLicense::current()->getGlobalStylesheet(), '', WORDFENCE_VERSION);
 			wp_enqueue_script('wordfenceDashboardjs', wfUtils::getBaseURL() . wfUtils::versionedAsset('js/wfdashboard.js'), array('jquery'), WORDFENCE_VERSION);
 			if (wfConfig::get('showAdminBarMenu')) {
 				wp_enqueue_script('wordfencePopoverjs', wfUtils::getBaseURL() . wfUtils::versionedAsset('js/wfpopover.js'), array('jquery'), WORDFENCE_VERSION);
@@ -4014,9 +4020,7 @@ SQL
 		try {
 			$keyData = $api->call('get_anon_api_key', array(), array('previousLicense' => wfConfig::get('apiKey')));
 			if($keyData['ok'] && $keyData['apiKey']){
-				wfConfig::set('apiKey', $keyData['apiKey']);
-				wfConfig::set('isPaid', 0);
-				wfConfig::set('keyType', wfAPI::KEY_TYPE_FREE);
+				wfLicense::current()->downgradeToFree($keyData['apiKey'])->save();
 				//When downgrading we must disable all two factor authentication because it can lock an admin out if we don't.
 				wfConfig::set_ser('twoFactorUsers', array());
 				wfConfig::remove('premiumAutoRenew');
@@ -4423,7 +4427,7 @@ SQL
 						wfConfig::set('isPaid', $isPaid); //res['isPaid'] is boolean coming back as JSON and turned back into PHP struct. Assuming JSON to PHP handles bools.
 						wordfence::licenseStatusChanged();
 						if (!$isPaid) {
-							wfConfig::set('keyType', wfAPI::KEY_TYPE_FREE);
+							wfConfig::set('keyType', wfLicense::KEY_TYPE_FREE);
 						}
 						return array(
 							'success' => 1,
@@ -5944,7 +5948,7 @@ HTML;
 		wp_register_style('wordfence-select2-css', wfUtils::getBaseURL() . wfUtils::versionedAsset('css/wfselect2.min.css'), array(), WORDFENCE_VERSION);
 		wp_register_style('wordfence-font-awesome-style', wfUtils::getBaseURL() . wfUtils::versionedAsset('css/wf-font-awesome.css'), '', WORDFENCE_VERSION);
 
-		if (isset($_GET['page']) && (preg_match('/^Wordfence/', @$_GET['page']) || ($_GET['page'] == 'WFLS' && wfOnboardingController::shouldShowNewTour(wfOnboardingController::TOUR_LOGIN_SECURITY)))) {
+		if (self::isWordfencePage()) {
 			wp_enqueue_style('wp-pointer');
 			wp_enqueue_script('wp-pointer');
 			wp_enqueue_style('wordfence-font', wfUtils::getBaseURL() . wfUtils::versionedAsset('css/wf-roboto-font.css'), '', WORDFENCE_VERSION);
@@ -5952,6 +5956,7 @@ HTML;
 			wp_enqueue_style('wordfence-main-style', wfUtils::getBaseURL() . wfUtils::versionedAsset('css/main.css'), '', WORDFENCE_VERSION);
 			wp_enqueue_style('wordfence-ionicons-style', wfUtils::getBaseURL() . wfUtils::versionedAsset('css/wf-ionicons.css'), '', WORDFENCE_VERSION);
 			wp_enqueue_style('wordfence-colorbox-style', wfUtils::getBaseURL() . wfUtils::versionedAsset('css/wf-colorbox.css'), '', WORDFENCE_VERSION);
+			wp_enqueue_style('wordfence-license-style', wfLicense::current()->getStylesheet());
 
 			wp_enqueue_script('json2');
 			wp_enqueue_script('jquery-ui-core');
@@ -6597,7 +6602,7 @@ HTML;
 		$formattedCount = number_format_i18n($notificationCount);
 		$dashboardExtra = " <span class='update-plugins wf-menu-badge wf-notification-count-container{$hidden}' title='{$notificationCount}'><span class='update-count wf-notification-count-value'>{$formattedCount}</span></span>";
 
-		add_menu_page('Wordfence', "Wordfence{$dashboardExtra}", 'activate_plugins', 'Wordfence', 'wordfence::menu_dashboard', wfUtils::getBaseURL() . 'images/wordfence-logo.svg');
+		add_menu_page('Wordfence', "Wordfence{$dashboardExtra}", 'activate_plugins', 'Wordfence', 'wordfence::menu_dashboard', 'none');
 	}
 	
 	//These are split to allow our module plugins to insert their menu item(s) at any point in the hierarchy
@@ -6638,25 +6643,38 @@ HTML;
 			add_submenu_page('', __('Wordfence Central', 'wordfence'), __('Wordfence Central', 'wordfence'), 'activate_plugins', 'WordfenceCentral', 'wordfence::menu_wordfence_central');
 		}
 	}
-	
+
 	public static function admin_menus_90() {
-		if (wfConfig::get('isPaid')) {
-			add_submenu_page("Wordfence", __("Protect More Sites", 'wordfence'), "<strong id=\"wfMenuCallout\" style=\"color: #FCB214;\">" . __("Protect More Sites", 'wordfence') . "</strong>", "activate_plugins", "WordfenceProtectMoreSites", 'wordfence::_menu_noop');
+		switch (wfLicense::current()->getType()) {
+		case wfLicense::TYPE_FREE:
+			$message = __('Upgrade to Premium', 'wordfence');
+			$slug = 'WordfenceUpgradeToPremium';
+			break;
+		case wfLicense::TYPE_PREMIUM:
+			$message = __('Upgrade to Care', 'wordfence');
+			$slug = 'WordfenceUpgradeToCare';
+			break;
+		case wfLicense::TYPE_CARE:
+			$message = __('Upgrade to Response', 'wordfence');
+			$slug = 'WordfenceUpgradeToResponse';
+			break;
+		default:
+			$message = __('Protect More Sites', 'wordfence');
+			$slug = 'WordfenceProtectMoreSites';
+			break;
 		}
-		else {
-			add_submenu_page("Wordfence", __("Upgrade To Premium", 'wordfence'), "<strong id=\"wfMenuCallout\" style=\"color: #FCB214;\">" . __("Upgrade To Premium", 'wordfence') . "</strong>", "activate_plugins", "WordfenceUpgradeToPremium", 'wordfence::_menu_noop');
-		}
+		add_submenu_page("Wordfence", $message, "<strong id=\"wfMenuCallout\" style=\"color: #FCB214;\">" . $message . "</strong>", "activate_plugins", $slug, 'wordfence::_menu_noop');
 		add_filter('clean_url', 'wordfence::_patchWordfenceSubmenuCallout', 10, 3);
 	}
 	
 	public static function _patchWordfenceSubmenuCallout($url, $original_url, $_context){
-		if (preg_match('/(?:WordfenceUpgradeToPremium)$/i', $url)) {
+		if (preg_match('/(?:WordfenceUpgradeTo(Premium|Care|Response))$/i', $url, $matches)) {
 			remove_filter('clean_url', 'wordfence::_patchWordfenceSubmenuCallout', 10);
-			return 'https://www.wordfence.com/zz11/wordfence-signup/';
+			return wfLicense::current()->getUpgradeUrl("menuUpgrade$matches[1]");
 		}
 		else if (preg_match('/(?:WordfenceProtectMoreSites)$/i', $url)) {
 			remove_filter('clean_url', 'wordfence::_patchWordfenceSubmenuCallout', 10);
-			return 'https://www.wordfence.com/zz10/sign-in/';
+			return 'https://www.wordfence.com/zz10/licenses?purchase';
 		}
 		return $url;
 	}
@@ -6946,7 +6964,7 @@ JQUERY;
 		wp_enqueue_script('wordfence-select2-js');
 		wp_enqueue_script('chart-js');
 		
-		if (wfConfig::get('keyType') == wfAPI::KEY_TYPE_PAID_EXPIRED || (wfConfig::get('keyType') == wfAPI::KEY_TYPE_PAID_CURRENT && wfConfig::get('keyExpDays') < 30)) {
+		if (wfConfig::get('keyType') == wfLicense::KEY_TYPE_PAID_EXPIRED || (wfConfig::get('keyType') == wfLicense::KEY_TYPE_PAID_CURRENT && wfConfig::get('keyExpDays') < 30)) {
 			$api = new wfAPI(wfConfig::get('apiKey', ''), wfUtils::getWPVersion());
 			try {
 				$api->call('check_api_key', array(), array(), false, 2);

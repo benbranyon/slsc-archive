@@ -1975,11 +1975,14 @@
 			colorboxOpen: function(width, html, settings) {
 				var self = this;
 				this.colorboxIsOpen = true;
+				var onClosed = settings.onClosed || null;
 				jQuery.extend(settings, {
 					width: width,
 					html: html,
 					onClosed: function() {
 						self.colorboxClose();
+						if (onClosed)
+							onClosed();
 					}
 				});
 				jQuery.wfcolorbox(settings);
@@ -3334,7 +3337,7 @@
 				return message; //Others
 			},
 			
-			setOption: function(key, value, successCallback, failureCallback) {
+			setOption: function(key, value, successCallback, failureCallback, failureAfterModal) {
 				var changes = {};
 				changes[key] = value;
 				this.ajax('wordfence_saveOptions', {changes: JSON.stringify(changes), page: WFAD.getParameterByName('page')}, function(res) {
@@ -3342,8 +3345,13 @@
 						typeof successCallback == 'function' && successCallback(res);
 					}
 					else {
-						WFAD.colorboxModal((self.isSmallScreen ? '300px' : '400px'), __('Error Saving Option'), res.error);
-						typeof failureCallback == 'function' && failureCallback(res);
+						failureAfterModal = typeof failureAfterModal !== 'undefined' && failureAfterModal;
+						var modalSettings = {};
+						if (failureAfterModal)
+							modalSettings.onClosed = failureCallback;
+						WFAD.colorboxModal((self.isSmallScreen ? '300px' : '400px'), __('Error Saving Option'), res.error, modalSettings);
+						if (!failureAfterModal)
+							typeof failureCallback == 'function' && failureCallback(res);
 					} 
 				});
 			},
