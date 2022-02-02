@@ -4,9 +4,9 @@ Donate link: https://www.paypal.me/reallysimplessl
 Tags: SSL, https, force SSL, mixed content, insecure content, secure website, website security, TLS, security, secure socket layers, HSTS
 Requires at least: 4.9
 License: GPL2
-Tested up to: 5.8
+Tested up to: 5.9
 Requires PHP: 5.6
-Stable tag: 5.2.0
+Stable tag: 5.2.3
 
 No setup required! You only need an SSL certificate, and this plugin will do the rest.
 
@@ -90,11 +90,29 @@ The plugin checks your certificate before enabling, but if, for example, you mig
 If you can't deactivate, do not just remove the plugin folder to uninstall! Follow these [instructions](https://really-simple-ssl.com/knowledge-base/uninstall-websitebackend-not-accessible/) instead.
 
 == Changelog ==
-= 5.2.0
+= 5.2.3 =
+* Bumped tested up to 5.9
+
+= 5.2.2 =
+* Improvement: change text about Google Analytics for a more broader application
+* Improvement: prevent duplicate notice
+* Improvement: better feedback on failed SSL detection
+* Improvement: .htaccess redirect detection with preg_match
+
+= 5.2.1 =
+* Improvement: changed text on security headers feedback
+* Improvement: some resources were not loaded minified on the back-end
+* Improvement: dropped one line from tips&tricks to ensure it all fits when translated
+* Improvement: improve feedback on the Let's Encrypt terms & conditions checkbox being required
+* Improvement: improve feedback on chosen hosting company, if SSL is already available, or not available at all.
+* Improvement: updated wp-config needs fixes notice
+* Improvement: RTL css update
+
+= 5.2.0 =
 * Improvement: updated tips & tricks with Let's Encrypt and Cross-Origin resource policy articles
 * Improvement: updated setting slider styling
 * Improvement: updated WP Config not writable notice and article
-* Improvement: recommend headers check now uses cURL for header detection
+* Improvement: recommended headers check now uses cURL for header detection
 
 = 5.1.3 =
 * Improvement: auto rename force-deactivate.php back to .txt after running
@@ -269,7 +287,7 @@ If you can't deactivate, do not just remove the plugin folder to uninstall! Foll
 
 = 3.2.8 =
 * Added redirect to settings page after activating SSL
-* Improved dashboard SSL certificate check by using the is_valid() check from rsssl_certificate instead of relying on site_has_ssl
+* Improved dashboard SSL certificate check by using the is_valid check from rsssl_certificate instead of relying on site_has_ssl
 * Updated activation notice
 * Updated settings page sidebar styling and links
 
