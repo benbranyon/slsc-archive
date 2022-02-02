@@ -1,18 +1,25 @@
 <?php
-
 /**
  * Notifications.
  *
  * @since 7.10.5
  */
 if ( ! class_exists( 'SeedProd_Notifications' ) ) {
-	class SeedProd_Notifications {
 
+	/**
+	 * Notifications Class
+	 *
+	 */
+	class SeedProd_Notifications {
+		/**
+		 * Get Instance
+		 *
+		 * @var null
+		 */
 		protected static $instance = null;
+
 		/**
 		 * Source of notifications content.
-		 *
-		 * @since {VERSION}
 		 *
 		 * @var string
 		 */
@@ -21,9 +28,7 @@ if ( ! class_exists( 'SeedProd_Notifications' ) ) {
 		/**
 		 * Option value.
 		 *
-		 * @since {VERSION}
-		 *
-		 * @var bool|array
+		 * @var boolean|array
 		 */
 		public $option = false;
 
@@ -49,6 +54,7 @@ if ( ! class_exists( 'SeedProd_Notifications' ) ) {
 
 		/**
 		 * SeedProd_Notifications constructor.
+		 *
 		 */
 		public function __construct() {
 			$this->init();
@@ -75,7 +81,7 @@ if ( ! class_exists( 'SeedProd_Notifications' ) ) {
 		/**
 		 * Check if user has access and is enabled.
 		 *
-		 * @return bool
+		 * @return boolean
 		 * @since {VERSION}
 		 *
 		 */
@@ -92,7 +98,7 @@ if ( ! class_exists( 'SeedProd_Notifications' ) ) {
 		/**
 		 * Get option value.
 		 *
-		 * @param bool $cache Reference property cache if available.
+		 * @param boolean $cache Reference property cache if available.
 		 *
 		 * @return array
 		 * @since {VERSION}
@@ -147,7 +153,7 @@ if ( ! class_exists( 'SeedProd_Notifications' ) ) {
 		 * @since {VERSION}
 		 *
 		 */
-		public function verify( $notifications ) { // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
+		public function verify( $notifications ) { // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh,Squiz.Commenting.FunctionComment.TypeHintMissing
 
 			$data = array();
 
@@ -189,13 +195,11 @@ if ( ! class_exists( 'SeedProd_Notifications' ) ) {
 				// Prevents bombarding the user with notifications after activation.
 				$over_time = get_option( 'seedprod_over_time', array() );
 
-				if (
-				! empty( $over_time['installed_date'] ) &&
-				! empty( $notification['start'] ) &&
-				$over_time['installed_date'] > strtotime( $notification['start'] )
-				) {
-					//continue;
-				}
+				// phpcs:disable
+				// if (! empty( $over_time['installed_date'] ) && ! empty( $notification['start'] ) && $over_time['installed_date'] > strtotime( $notification['start'] )) {
+				// 	//continue;
+				// }
+				// phpcs:enable
 
 				$data[] = $notification;
 			}
@@ -212,7 +216,7 @@ if ( ! class_exists( 'SeedProd_Notifications' ) ) {
 		 * @since {VERSION}
 		 *
 		 */
-		public function verify_active( $notifications ) {
+		public function verify_active( $notifications ) { // phpcs:ignore Squiz.Commenting.FunctionComment.TypeHintMissing
 			if ( ! is_array( $notifications ) || empty( $notifications ) ) {
 				return array();
 			}
@@ -253,7 +257,7 @@ if ( ! class_exists( 'SeedProd_Notifications' ) ) {
 		/**
 		 * Get notification count.
 		 *
-		 * @return int
+		 * @return integer
 		 * @since {VERSION}
 		 *
 		 */
@@ -271,7 +275,7 @@ if ( ! class_exists( 'SeedProd_Notifications' ) ) {
 		 * @since {VERSION}
 		 *
 		 */
-		public function add( $notification ) {
+		public function add( $notification ) { // phpcs:ignore Squiz.Commenting.FunctionComment.TypeHintMissing
 			if ( empty( $notification['id'] ) ) {
 				return;
 			}
@@ -406,10 +410,14 @@ if ( ! class_exists( 'SeedProd_Notifications' ) ) {
 	}
 }
 
-//add_action( 'seedprod_notification', array( 'SeedProd_Notifications', 'update' ) );
 if ( ! function_exists( 'seedprod_lite_do_notifications' ) ) {
 
 	add_action( 'seedprod_notifications', 'seedprod_lite_do_notifications' );
+	/**
+	 * Do SeedProd Notifications
+	 *
+	 * @return void
+	 */
 	function seedprod_lite_do_notifications() {
 		$notifications = new SeedProd_Notifications();
 		$notifications->update();

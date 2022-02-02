@@ -3,9 +3,9 @@ Contributors: seedprod, smub
 Donate link: http://www.seedprod.com
 Tags: maintenance mode, coming soon page, coming soon, under construction, landing page, launch, maintenance, construction, offline, unavailable, under construction page, launch page
 Requires at least: 5.0
-Tested up to: 5.8
+Tested up to: 5.9
 Requires PHP: 5.6
-Stable tag: 6.2.0
+Stable tag: 6.6.0
 Text Domain: coming-soon
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -156,98 +156,15 @@ Yes, you cam build custom Product, Checkout and Cart pages with our WooCommerce 
 
 
 == Changelog ==
-= 6.6.0 =
 
-* Added - Column Alignment Controls
-* Added - Divice Visibility Controls
-* Added - Full Length Template Previews
-* Tweak - Version Sync with Pro
-
-= 6.2.1 =
-
-* Tweak - Clarify External Service is used for license upgrades.
-* Tweak - Removed helper function that was set for pre-release.
-
-= 6.2.0 =
-
-* Added - WooCommerce Blocks Pro Version
-* Added - Accordion Block Pro Version
-* Added - Testimonial Block Version
-* Added - Abilty to Edit WordPress pafges with SeedProd, this can be disbaled in the SeedProd settings page.
-* Fixed - IOS cover image bug
-* Fixed - Yoast and AllinOne SEO Pro edit page links
-* Fixed - WP Version filter not returning default value
-* Tweak - Added filter to top level menu position 'seedprod_top_level_menu_postion'
-* Tweak - Added imprint and privacy to default excluded pages
-
-= 6.0.11.2 =
-* Tweak - Redirect Default Login Page Behavior and added inline explanation
-
-
-= 6.0.11.1 =
-* Fixed - Some SEO plugins not adding title tag to landing pages
-* Tweak - Made settings more accessible
-* Fixed - Background Slideshow Bug - PRO
-* Fixed - Tweet Share Bug - PRO
-
-= 6.0.11.0 =
-* Added - Login Block
-
-= 6.0.10.1 =
-* Added - 10 New Templates
-* Added - Undo and Redo Functionality
-* Added = Permissions Filters
-* Added - Easier Upgrade Path
-* Fixed - WPRocket Compatability
-* Fixed - BGSlideshow timeout issue 
-* Fixed - Highlight left menu when page is selected
-* Fixed - Mobile Fonts Settings
-* Tweak - Animate Optin Button
-* Tweak - Moved Preview Button
-* Tweak - Made Sections Clickable In Free Verson
-* Tweak - Attribution Fix
-
-= 6.0.9.0 =
-* Added - Ability to link an image
-* Tweak - HTML 5 Email Validation
-* Tweak - css fix in admin
-
-= 6.0.8.5 =
-* Added - debug tools
-* Tweak - make sure wp-mediaelement gets loaded in the builder
-* Tweak - feedback request
-
-= 6.0.8.4 =
-* Fixed - Landing page preview link
-* Fixed - Duplicate Page
-* Tweak - removed deprecated function
-
-= 6.0.8.3 =
-* Tweak - menus require manage_options capability
-
-= 6.0.8.2 =
-* Reverted - Preview link ad added flush permalink
-
-= 6.0.8.1 =
-* Tweak - Added preview_nonce to preview link
-
-= 6.0.8 =
-* Fixed - PHP warning in admin to undefined database table 
-* Tweak - How Preview links are constructed
-
-= 6.0.7 =
-* Tweak - Flush Permalinks Programmatically so Previews Work
-
-= 6.0.0 =
-* New - Complete rebuild of the plugin. 
-* New - Drag and Drop Page Builder
-* New - Page Blocks
-* New - Coming Soon Pages
-* New - Maintenance Pages
-* New - Landing Pages
-* New - Custom 404 Pages
+[Changelog &raquo;](https://www.seedprod.com/docs/changelog/?utm_source=wordpress.org&utm_medium=link&utm_campaign=coming-soon-from-wordpress.org)
 
 == Upgrade Notice ==
+
+= 6.9.0 =
+
+* Added - Theme Builder PRO
+* Added - Builder Enhancements and Tweaks
 
 = 6.6.0 =
 
