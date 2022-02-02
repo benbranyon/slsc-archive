@@ -22,26 +22,16 @@ $tabs = array(
     ))
   ),
   array(
-    'id' => 'update-db',
-    'name' => __('Update Database', 'filebird'),
-    'content' => Helpers::view('pages/settings/tab-update-database')
-  ),
-  array(
-    'id' => 'api',
-    'name' => __('API', 'filebird'),
-    'content' => Helpers::view('pages/settings/tab-api')
-  ),
-  array(
-    'id' => 'uninstall',
-    'name' => __('Uninstall', 'filebird'),
-    'content' => Helpers::view('pages/settings/tab-uninstall')
+    'id' => 'tools',
+    'name' => __('Tools', 'filebird'),
+    'content' => Helpers::view('pages/settings/tab-tools')
   ),
 );
 $current_tab = (isset($_GET['tab']) ? $_GET['tab'] : $tabs[0]['id']);
 if(($countEnhancedFolder + $countWpmlfFolder + $countWpmfFolder + $countRealMediaFolder + $countHappyFiles + $countPremioFolder) > 0) {
   $tabs[] = array(
     'id' => 'import',
-    'name' => __('Import', 'filebird'),
+    'name' => __('Import/Export', 'filebird'),
     'content' => Helpers::view('pages/settings/tab-import', array(
       'countEnhancedFolder' =>  $countEnhancedFolder,
       'countWpmlfFolder' => $countWpmlfFolder,
@@ -95,7 +85,7 @@ if(isset($_GET['autorun']) && ($_GET['autorun'] == 'true')) {
   ?>
   <script>
     var njt_auto_run_import = true;
-    var njt_fb_settings_page = '<?php echo add_query_arg(array('page' => 'filebird-settings', 'tab' => 'update-db'), admin_url('options-general.php')); ?>';
+    var njt_fb_settings_page = '<?php echo add_query_arg(array('page' => 'filebird-settings', 'tab' => 'tools'), admin_url('options-general.php')); ?>';
     jQuery(document).ready(function($){
       jQuery('.njt_fbv_import_from_old_now').click();
     })

@@ -157,6 +157,8 @@ class I18n {
 			'go_to_import'                    => __( 'Go to import', 'filebird' ),
 			'no_thanks'						  => __( 'No, thanks', 'filebird' ),
 			'import_some_folders'             => __( 'You have some folders created by other media plugins. Would you like to import them?', 'filebird' ),
+			'default_tree_view'               => __( 'Default Tree View', 'filebird'),
+			'flat_tree_view'			 	  => __( 'Flat Tree View', 'filebird')
 		);
 		return $translation;
 	}

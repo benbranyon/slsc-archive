@@ -1,4 +1,3 @@
-<h1><?php _e('Settings', 'filebird'); ?></h1>
 <table class="form-table">
   <tr>
     <th scope="row">

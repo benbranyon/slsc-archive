@@ -1,5 +1,6 @@
 jQuery( document ).ready(function() {
   var toastr_opt = {
+    positionClass: 'toast-bottom-right',
     closeButton: true,
     showDuration: 300,
     hideDuration: 200,
@@ -116,7 +117,7 @@ jQuery( document ).ready(function() {
     if($this.hasClass('updating-message')) return false;
 
 
-    $this.addClass('updating-message')
+    $this.focusout().addClass('updating-message')
     jQuery.ajax({
       dataType: 'json',
       contentType: 'application/json',
@@ -313,6 +314,130 @@ jQuery( document ).ready(function() {
       })
       .done(function (result) {})
       .fail(function (res) {});
+    }
+  })
+
+  function convertArrayOfObjectsToCSV(args) {  
+    const data = args.data;
+    if (!data || !data.length) return;
+  
+    const columnDelimiter = args.columnDelimiter || ',';
+    const lineDelimiter = args.lineDelimiter || '\n';
+  
+    const keys = Object.keys(data[0]);
+  
+    let result = '';
+    result += keys.join(columnDelimiter);
+    result += lineDelimiter;
+  
+    data.forEach(item => {
+      ctr = 0;
+      keys.forEach(key => {
+        if (ctr > 0) result += columnDelimiter;
+        result += item[key];
+        ctr++;
+      });
+      result += lineDelimiter;
+    });
+  
+    return result;
+  }
+
+  function generateDownloadCSV(args){
+    let csv = convertArrayOfObjectsToCSV({data:args.data});
+    if (!csv) return;
+  
+    const filename = args.filename || 'export.csv';
+  
+    if (!csv.match(/^data:text\/csv/i)) {
+      csv = 'data:text/csv;charset=utf-8,' + csv;
+    }
+  
+    const data = encodeURI(csv);
+  
+    const link = document.createElement('a');
+    link.setAttribute('href', data);
+    link.setAttribute('download', filename);
+    link.click();
+  }
+
+  jQuery('.njt-fb-csv-export').on("click", function(){
+    const $this = jQuery(this)
+    jQuery.ajax({
+      dataType: 'json',
+      contentType: 'application/json',
+      type: "get",
+      url: fbv_data.json_url + '/export-csv',
+      headers: {
+        "X-WP-Nonce": fbv_data.rest_nonce,
+        "X-HTTP-Method-Override": "GET"
+      },
+      beforeSend: function(){
+        $this.addClass('updating-message')
+      },
+      success: function (res) {
+        jQuery('#njt-fb-download-csv').unbind("click").bind("click", function(){
+          generateDownloadCSV({
+            filename: 'filebird.csv',
+            data: res.folders
+          })
+        })
+
+        $this.removeClass('updating-message');
+        jQuery('#njt-fb-download-csv').show()
+        toastr.success('Successfully exported!', '', toastr_opt)
+      }
+    })
+    .fail(function(res){
+        $this.removeClass('updating-message');
+        toastr.error('Please try again later', '', toastr_opt)
+      });
+  })
+
+  jQuery('#njt-fb-upload-csv').on("change", function(event){
+    const fileValue = event.target.files
+    let fileUpload = new FormData()
+
+    if (fileValue.length) {
+      fileUpload.append("file", fileValue[0])
+      jQuery('.njt-fb-csv-import').removeClass('hidden')
+      jQuery('.njt-fb-csv-import').unbind("click").bind("click", function(){
+        $this = jQuery(this)
+        jQuery
+          .ajax({
+            url: fbv_data.json_url + '/import-csv',
+            method: "POST",
+            processData: false,
+            contentType: false,
+            beforeSend: function () {
+              $this.addClass('updating-message');
+            },
+            data: fileUpload,
+            headers: {
+              "X-WP-Nonce": fbv_data.rest_nonce,
+              "X-HTTP-Method-Override": "POST"
+            }
+          })
+          .done(res => {
+            if (res.success) {
+              $this.removeClass('updating-message');
+              toastr.success('Successfully imported!', '', toastr_opt)
+            } else {
+              $this.removeClass('updating-message');
+
+              if (res.message) {
+                toastr.error(res.message, '', toastr_opt)
+                return
+              }
+              toastr.error('Please try again later', '', toastr_opt)
+            }
+          })
+          .fail(error => {
+            console.log(error)
+            $this.removeClass('updating-message');
+            toastr.error('Please try again later', '', toastr_opt)
+          })
+      })
     }
   })
 })
