@@ -16,7 +16,7 @@
  * Plugin URI: https://github.com/WebDevStudios/custom-post-type-ui/
  * Description: Admin panel for creating custom post types and custom taxonomies in WordPress
  * Author: WebDevStudios
- * Version: 1.10.2
+ * Version: 1.11.2
  * Author URI: https://webdevstudios.com/
  * Text Domain: custom-post-type-ui
  * Domain Path: /languages
@@ -30,8 +30,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CPT_VERSION', '1.10.2' ); // Left for legacy purposes.
-define( 'CPTUI_VERSION', '1.10.2' );
+define( 'CPT_VERSION', '1.11.2' ); // Left for legacy purposes.
+define( 'CPTUI_VERSION', '1.11.2' );
 define( 'CPTUI_WP_VERSION', get_bloginfo( 'version' ) );
 
 /**
@@ -492,6 +492,11 @@ function cptui_register_single_post_type( $post_type = [] ) {
 		$rest_controller_class = $post_type['rest_controller_class'];
 	}
 
+	$can_export = null;
+	if ( ! empty( $post_type['can_export'] ) ) {
+		$can_export = get_disp_boolean( $post_type['can_export'] );
+	}
+
 	$args = [
 		'labels'                => $labels,
 		'description'           => $post_type['description'],
@@ -509,6 +514,7 @@ function cptui_register_single_post_type( $post_type = [] ) {
 		'capability_type'       => $capability_type,
 		'map_meta_cap'          => $post_type['map_meta_cap'],
 		'hierarchical'          => get_disp_boolean( $post_type['hierarchical'] ),
+		'can_export'            => $can_export,
 		'rewrite'               => $rewrite,
 		'menu_position'         => $menu_position,
 		'menu_icon'             => $menu_icon,
@@ -699,6 +705,8 @@ function cptui_register_single_taxonomy( $taxonomy = [] ) {
 
 	$show_in_quick_edit = ( ! empty( $taxonomy['show_in_quick_edit'] ) && false !== get_disp_boolean( $taxonomy['show_in_quick_edit'] ) ) ? true : false;
 
+	$sort = ( ! empty( $taxonomy['sort'] ) && false !== get_disp_boolean( $taxonomy['sort'] ) ) ? true : false;
+
 	$rest_base = null;
 	if ( ! empty( $taxonomy['rest_base'] ) ) {
 		$rest_base = $taxonomy['rest_base'];
@@ -745,6 +753,7 @@ function cptui_register_single_taxonomy( $taxonomy = [] ) {
 		'rest_base'             => $rest_base,
 		'rest_controller_class' => $rest_controller_class,
 		'show_in_quick_edit'    => $show_in_quick_edit,
+		'sort'                  => $sort,
 		'meta_box_cb'           => $meta_box_cb,
 		'default_term'          => $default_term,
 	];
