@@ -4,7 +4,7 @@ Tags: security, firewall, malware scanner, web application firewall, two factor 
 Requires at least: 3.9
 Requires PHP: 5.3
 Tested up to: 5.9
-Stable tag: 7.5.8
+Stable tag: 7.5.9
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -184,6 +184,16 @@ Secure your website with Wordfence.
 9. Logging in is easy with Wordfence 2FA.
 
 == Changelog ==
+
+= 7.5.9 - March 22, 2022 =
+* Improvement: Updated GeoIP database
+* Improvement: Removed blocking data update logic in order to reduce timeouts
+* Improvement: Increased timeout value for API calls in order to reduce timeouts
+* Improvement: Clarified notification count on Wordfence menu
+* Improvement: Improved scan compatibility with WooCommerce
+* Improvement: Added messaging when application passwords are disabled
+* Fix: Prevented warnings and errors when constants are defined based on the value of other constants in wp-config.php
+* Fix: Corrected redundant escaping that prevented viewing or repairing files in scan results
 
 = 7.5.8 - February 1, 2022 =
 * Launch of Wordfence Care and Wordfence Response

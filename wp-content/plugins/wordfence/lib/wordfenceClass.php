@@ -1251,6 +1251,8 @@ SQL
 		
 		if (wfConfig::get('loginSec_disableApplicationPasswords')) {
 			add_filter('wp_is_application_passwords_available', '__return_false');
+			add_action('edit_user_profile', 'wordfence::showDisabledApplicationPasswordsMessage', -1);
+			add_action('show_user_profile', 'wordfence::showDisabledApplicationPasswordsMessage', -1);
 
 			// Override the wp_die handler to let the user know app passwords were disabled by the Wordfence option.
 			if (!empty($_SERVER['SCRIPT_FILENAME']) && $_SERVER['SCRIPT_FILENAME'] === ABSPATH . 'wp-admin/authorize-application.php') {
@@ -1366,6 +1368,11 @@ SQL
 			}, 10, 3);
 		}
 	}
+
+	public static function showDisabledApplicationPasswordsMessage() {
+		echo wfView::create('user/disabled-application-passwords', array('isAdmin' => self::isCurrentUserAdmin()))->render();
+	}
+
 	public static function _pluginPageActionLinks($links) {
 		if (!wfConfig::get('isPaid')) {
 			$links = array_merge(array('aWordfencePluginCallout' => '<a href="https://www.wordfence.com/zz12/wordfence-signup/" target="_blank" rel="noopener noreferrer"><strong style="color: #11967A; display: inline;">' . esc_html__('Upgrade To Premium', 'wordfence') . '</strong><span class="screen-reader-text"> (' . esc_html__('opens in new tab', 'wordfence') . ')</span></a>'), $links);
@@ -2046,7 +2053,6 @@ SQL
 		}
 
 		// Sync the WAF data with the database.
-		$updateCountries = false;
 		if (!WFWAF_SUBDIRECTORY_INSTALL && $waf = wfWAF::getInstance()) {
 			$homeurl = wfUtils::wpHomeURL();
 			$siteurl = wfUtils::wpSiteURL();
@@ -2115,7 +2121,6 @@ SQL
 									}
 									
 									if (hash_equals($shash, $dhash)) {
-										$updateCountries = true;
 										wfConfig::remove('needsGeoIPSync');
 										delete_transient('wfSyncGeoIPActive');
 									}
@@ -2131,46 +2136,6 @@ SQL
 						}
 					}
 				}
-			}
-			
-			if (!$updateCountries && version_compare(phpversion(), '5.4.0', '>=')) {
-				$previousVersionHash = wfConfig::get('geoIPVersionHash', '');
-				$geoIPVersion = wfUtils::geoIPVersion();
-				if (is_array($geoIPVersion)) {
-					$geoIPVersion = implode(',', $geoIPVersion);
-				}
-				$geoIPVersionHash = hash('sha256', $geoIPVersion);
-				$updateCountries = ($geoIPVersion !== null && $previousVersionHash != $geoIPVersionHash);
-			}
-			
-			if ($updateCountries) { // Fix the data in the country column
-				$intervalSQL = 'FLOOR(UNIX_TIMESTAMP(DATE_SUB(NOW(), interval 7 day)) / 86400)';
-				switch (wfConfig::get('email_summary_interval', 'weekly')) {
-					case 'daily':
-						$intervalSQL = 'FLOOR(UNIX_TIMESTAMP(DATE_SUB(NOW(), interval 1 day)) / 86400)';
-						break;
-					case 'monthly':
-						$intervalSQL = 'FLOOR(UNIX_TIMESTAMP(DATE_SUB(NOW(), interval 1 month)) / 86400)';
-						break;
-				}
-				
-				$table_wfBlockedIPLog = wfDB::networkTable('wfBlockedIPLog');
-				$ip_results = $wpdb->get_results("SELECT DISTINCT countryCode, IP FROM `{$table_wfBlockedIPLog}` WHERE unixday >= {$intervalSQL} GROUP BY IP ORDER BY unixday DESC LIMIT 500");
-				if ($ip_results) {
-					foreach ($ip_results as $ip_row) {
-						$country = wfUtils::IP2Country(wfUtils::inet_ntop($ip_row->IP));
-						if ($country != $ip_row->countryCode) {
-							$wpdb->query($wpdb->prepare("UPDATE `{$table_wfBlockedIPLog}` SET countryCode = %s WHERE IP = %s", $country, $ip_row->IP));
-						}
-					}
-				}
-				
-				$geoIPVersion = wfUtils::geoIPVersion();
-				if (is_array($geoIPVersion)) {
-					$geoIPVersion = implode(',', $geoIPVersion);
-				}
-				$geoIPVersionHash = hash('sha256', $geoIPVersion);
-				wfConfig::set('geoIPVersionHash', $geoIPVersionHash);
 			}
 			
 			try {
@@ -3238,7 +3203,7 @@ SQL
 		
 		try {
 			$response = wp_remote_post(WORDFENCE_HACKATTEMPT_URL_SEC . 'multipleHackAttempts/?k=' . rawurlencode(wfConfig::get('apiKey')) . '&t=brute', array(
-				'timeout' => 1,
+				'timeout' => 2,
 				'user-agent' => "Wordfence.com UA " . (defined('WORDFENCE_VERSION') ? WORDFENCE_VERSION : '[Unknown version]'),
 				'body' => 'IPs=' . rawurlencode(json_encode($toSend)),
 				'headers' => array('Referer' => false),
@@ -3310,7 +3275,7 @@ SQL
 			
 			try {
 				$response = wp_remote_post(WORDFENCE_HACKATTEMPT_URL_SEC . 'multipleHackAttempts/?k=' . rawurlencode(wfConfig::get('apiKey')) . '&t=brute', array(
-					'timeout' => 1,
+					'timeout' => 2,
 					'user-agent' => "Wordfence.com UA " . (defined('WORDFENCE_VERSION') ? WORDFENCE_VERSION : '[Unknown version]'),
 					'body' => 'IPs=' . rawurlencode(json_encode($toSend)),
 					'headers' => array('Referer' => false),
@@ -5742,7 +5707,7 @@ HTML;
 			exit();
 		}
 
-		$result = self::getWPFileContent($_GET['file'], $_GET['cType'], $_GET['cName'], $_GET['cVersion']);
+		$result = self::getWPFileContent($_GET['file'], $_GET['cType'], wp_unslash($_GET['cName']), $_GET['cVersion']);
 		if( isset( $result['errorMsg'] ) && $result['errorMsg']){
 			echo wp_kses($result['errorMsg'], array());
 			exit(0);
@@ -6392,6 +6357,22 @@ HTML;
 		</div>
 <?php
 	}
+	public static function isWordfenceAdminPage() {
+		if (isset($_GET['page']) && is_string($_GET['page'])) {
+			foreach (array('Wordfence', 'WFLS') as $prefix) {
+				if (strpos($_GET['page'], $prefix) === 0)
+					return true;
+			}
+		}
+		return false;
+	}
+	public static function getDashboardNotificationCountIcon() {
+		$notificationCount = count(wfNotification::notifications());
+		$updatingNotifications = get_site_transient('wordfence_updating_notifications');
+		$hidden = ($notificationCount == 0 || $updatingNotifications ? ' wf-hidden' : '');
+		$formattedCount = number_format_i18n($notificationCount);
+		return " <span class=\"update-plugins wf-menu-badge wf-notification-count-container{$hidden}\" title=\"" . esc_attr($formattedCount) . '"><span class="update-count wf-notification-count-value">' . esc_html($formattedCount) . '</span></span>';
+	}
 	public static function admin_menus(){
 		if(! wfUtils::isAdmin()){ return; }
 		$warningAdded = false;
@@ -6596,18 +6577,19 @@ HTML;
 			}
 		}
 
-		$notificationCount = count(wfNotification::notifications());
-		$updatingNotifications = get_site_transient('wordfence_updating_notifications');
-		$hidden = ($notificationCount == 0 || $updatingNotifications ? ' wf-hidden' : '');
-		$formattedCount = number_format_i18n($notificationCount);
-		$dashboardExtra = " <span class='update-plugins wf-menu-badge wf-notification-count-container{$hidden}' title='{$notificationCount}'><span class='update-count wf-notification-count-value'>{$formattedCount}</span></span>";
-
+		if (self::isWordfenceAdminPage()) {
+			$dashboardExtra = '';
+		}
+		else {
+			$dashboardExtra = self::getDashboardNotificationCountIcon();
+		}
 		add_menu_page('Wordfence', "Wordfence{$dashboardExtra}", 'activate_plugins', 'Wordfence', 'wordfence::menu_dashboard', 'none');
 	}
 	
 	//These are split to allow our module plugins to insert their menu item(s) at any point in the hierarchy
 	public static function admin_menus_20() {
-		add_submenu_page("Wordfence", __("Wordfence Dashboard", 'wordfence'), __("Dashboard", 'wordfence'), "activate_plugins", "Wordfence", 'wordfence::menu_dashboard');
+		$dashboardExtra = self::getDashboardNotificationCountIcon();
+		add_submenu_page("Wordfence", __("Wordfence Dashboard", 'wordfence'), __("Dashboard", 'wordfence') . $dashboardExtra, "activate_plugins", "Wordfence", 'wordfence::menu_dashboard');
 	}
 	
 	public static function admin_menus_30() {
@@ -8998,6 +8980,10 @@ if (file_exists(__DIR__.%1$s)) {
 			var_export(wfUtils::relativePath(WORDFENCE_PATH . 'waf/bootstrap.php', $bootstrapPath, true), true),
 			var_export(wfUtils::relativePath((WFWAF_SUBDIRECTORY_INSTALL ? WP_CONTENT_DIR . '/wflogs/' : WFWAF_LOG_PATH), $bootstrapPath, true), true),
 			$currentAutoPrepend);
+	}
+
+	private static function isCurrentUserAdmin() {
+		return self::getCurrentUserRole() === 'administrator';
 	}
 
 	/**
