@@ -2,8 +2,8 @@
 Contributors: icyapril, manatarms, thillcf, deuill, epatryk, jacobbednarz
 Tags: cloudflare, seo, ssl, ddos, speed, security, cdn, performance, free
 Requires at least: 3.4
-Tested up to: 5.7
-Stable tag: 4.7.0
+Tested up to: 5.9
+Stable tag: 4.8.3
 Requires PHP: 7.2
 License: BSD-3-Clause
 
@@ -98,6 +98,24 @@ Yes, Cloudflare works with, and helps speed up your site even more, if you have 
 == Screenshots ==
 
 == Changelog ==
+
+= 4.8.3 - 2022-03-22 =
+
+* When a zone has "Always Use HTTPS" enabled, only send HTTPS based URLs. HTTP URLs will never be hit and never present in the cache.
+
+= 4.8.2 - 2022-03-18 =
+
+* Retag 4.8.1 with correct version in user agent
+
+= 4.8.1 - 2022-03-18 =
+
+* Loosen domain check for cache purge calls to allow subdomains
+
+= 4.8.0 - 2022-03-15 =
+
+* Updated supported WordPress version to 5.9
+* Replace Guzzle with wp_remote_request for remote calls
+* Update cache purge logic to improve efficiency of what we send to the remote service
 
 = 4.7.0 - 2021-10-28 =
 

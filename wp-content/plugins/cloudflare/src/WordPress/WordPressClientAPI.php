@@ -17,7 +17,7 @@ class WordPressClientAPI extends Client
     {
         $zone_name = idn_to_ascii($zone_name, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46);
 
-        $zone_tag = wp_cache_get('cloudflare/client-api/zone-tag/'.$zone_name);
+        $zone_tag = wp_cache_get('cloudflare/client-api/zone-tag/' . $zone_name);
         if (false !== $zone_tag) {
             return $zone_tag;
         }
@@ -35,7 +35,7 @@ class WordPressClientAPI extends Client
             }
         }
 
-        wp_cache_set('cloudflare/client-api/zone-tag/'.$zone_name, $zone_tag);
+        wp_cache_set('cloudflare/client-api/zone-tag/' . $zone_name, $zone_tag);
 
         return $zone_tag;
     }
@@ -47,7 +47,7 @@ class WordPressClientAPI extends Client
      */
     public function zonePurgeCache($zoneId)
     {
-        $request = new Request('DELETE', 'zones/'.$zoneId.'/purge_cache', array(), array('purge_everything' => true));
+        $request = new Request('DELETE', 'zones/' . $zoneId . '/purge_cache', array(), array('purge_everything' => true));
         $response = $this->callAPI($request);
 
         return $this->responseOk($response);
@@ -61,7 +61,7 @@ class WordPressClientAPI extends Client
      */
     public function zonePurgeFiles($zoneId, $files)
     {
-        $request = new Request('DELETE', 'zones/'.$zoneId.'/purge_cache', array(), array('files' => $files));
+        $request = new Request('DELETE', 'zones/' . $zoneId . '/purge_cache', array(), array('files' => $files));
         $response = $this->callAPI($request);
 
         return $this->responseOk($response);
@@ -76,10 +76,25 @@ class WordPressClientAPI extends Client
      */
     public function changeZoneSettings($zoneId, $settingName, $params)
     {
-        $request = new Request('PATCH', 'zones/'.$zoneId.'/settings/'.$settingName, array(), $params);
+        $request = new Request('PATCH', 'zones/' . $zoneId . '/settings/' . $settingName, array(), $params);
         $response = $this->callAPI($request);
 
         return $this->responseOk($response);
+    }
+
+    /**
+     * @param $zoneId
+     * @param $settingName
+     * @param $params
+     *
+     * @return bool
+     */
+    public function getZoneSetting($zoneId, $settingName)
+    {
+        $request = new Request('GET', 'zones/' . $zoneId . '/settings/' . $settingName, array(), null);
+        $response = $this->callAPI($request);
+
+        return $response["result"];
     }
 
     /**
@@ -89,10 +104,29 @@ class WordPressClientAPI extends Client
      */
     public function createPageRule($zoneId, $body)
     {
-        $request = new Request('POST', 'zones/'.$zoneId.'/pagerules/', array(), $body);
+        $request = new Request('POST', 'zones/' . $zoneId . '/pagerules/', array(), $body);
         $response = $this->callAPI($request);
 
         return $this->responseOk($response);
+    }
+
+    /**
+     * Returns all page rules in the desired state. Defaults to active.
+     *
+     * @param mixed $zoneId
+     * @param string $status
+     * @return array
+     */
+    public function getPageRules($zoneId, $status = "active")
+    {
+        $request = new Request('GET', 'zones/' . $zoneId . "/pagerules?status=$status", array(), null);
+        $response = $this->callAPI($request);
+
+        if ($this->responseOk($response)) {
+            return $response["result"];
+        }
+
+        return [];
     }
 
     /**
@@ -128,7 +162,7 @@ class WordPressClientAPI extends Client
         }
 
         // Construct URL
-        $url = add_query_arg($request->getParameters(), $this->getEndpoint().$request->getUrl());
+        $url = add_query_arg($request->getParameters(), $this->getEndpoint() . $request->getUrl());
 
         // Send Request
         $requestResponse = wp_remote_request($url, $requestParams);
