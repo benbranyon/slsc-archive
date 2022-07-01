@@ -16,14 +16,14 @@ class Image_Helper {
 	 *
 	 * @var array
 	 */
-	protected static $valid_image_types = [ 'image/jpeg', 'image/gif', 'image/png' ];
+	protected static $valid_image_types = [ 'image/jpeg', 'image/gif', 'image/png', 'image/webp' ];
 
 	/**
 	 * Image extensions that are supported by Open Graph.
 	 *
 	 * @var array
 	 */
-	protected static $valid_image_extensions = [ 'jpeg', 'jpg', 'gif', 'png' ];
+	protected static $valid_image_extensions = [ 'jpeg', 'jpg', 'gif', 'png', 'webp' ];
 
 	/**
 	 * Represents the indexables repository.
@@ -51,6 +51,7 @@ class Image_Helper {
 	 *
 	 * @param Indexable_Repository $indexable_repository The indexable repository.
 	 * @param Options_Helper       $options              The options helper.
+	 * @param Url_Helper           $url_helper           The URL helper.
 	 */
 	public function __construct(
 		Indexable_Repository $indexable_repository,
