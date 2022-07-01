@@ -137,7 +137,7 @@ class Hooks
         }
     }
 
-    public function purgeCacheByRelevantURLs($postId)
+    public function purgeCacheByRelevantURLs($postIds)
     {
         if ($this->isPluginSpecificCacheEnabled() || $this->isAutomaticPlatformOptimizationEnabled()) {
             $wpDomainList = $this->integrationAPI->getDomainList();
@@ -145,34 +145,31 @@ class Hooks
                 return;
             }
             $wpDomain = $wpDomainList[0];
-
-            // Do not purge for autosaves or updates to post revisions.
-            if (wp_is_post_autosave($postId) || wp_is_post_revision($postId)) {
-                return;
-            }
-
-            $postType = get_post_type_object(get_post_type($postId));
-            if (!$postType->public || !$postType->publicly_queryable) {
-                return;
-            }
-
-            $savedPost = get_post($postId);
-            if (!is_a($savedPost, 'WP_Post')) {
-                return;
-            }
-
-            $urls = $this->getPostRelatedLinks($postId);
-            $urls = apply_filters('cloudflare_purge_by_url', $urls, $postId);
-
             $zoneTag = $this->api->getZoneTag($wpDomain);
-            $activePageRules = $this->api->getPageRules($zoneTag, "active");
+            if (!isset($zoneTag)) {
+                return;
+            }
 
-            // Fetch the page rules and should we not have any hints of cache
-            // all behaviour or APO, filter out the non-cacheable URLs.
-            $hasCacheOverride = $this->pageRuleContains($activePageRules, "cache_level", "cache_everything");
-            if (!$hasCacheOverride && !$this->isAutomaticPlatformOptimizationEnabled()) {
-                $this->logger->debug("cache everything behaviour and APO not found, filtering URLs to only be those that are cacheable by default");
-                $urls = array_filter($urls, array($this, "pathHasCachableFileExtension"));
+            $postIds = (array) $postIds;
+            $urls = [];
+            foreach ($postIds as $postId) {
+                // Do not purge for autosaves or updates to post revisions.
+                if (wp_is_post_autosave($postId) || wp_is_post_revision($postId)) {
+                    continue;
+                }
+
+                $postType = get_post_type_object(get_post_type($postId));
+                if (!is_post_type_viewable($postType)) {
+                    continue;
+                }
+
+                $savedPost = get_post($postId);
+                if (!is_a($savedPost, 'WP_Post')) {
+                    continue;
+                }
+
+                $relatedUrls = apply_filters('cloudflare_purge_by_url', $this->getPostRelatedLinks($postId), $postId);
+                $urls = array_merge($urls, $relatedUrls);
             }
 
             // Don't attempt to purge anything outside of the provided zone.
@@ -182,13 +179,38 @@ class Hooks
                 }
             }
 
-            $hasAlwaysUseHTTPSOverrideDisabled = $this->pageRuleContains($activePageRules, "always_use_https", "off");
-            if ($this->zoneSettingAlwaysUseHTTPSEnabled($zoneTag) && !$hasAlwaysUseHTTPSOverrideDisabled) {
-                $this->logger->debug("always_use_https is enabled without page rule overrides present, removing HTTP based URLs");
+            if (empty($urls)) {
+                return;
+            }
+
+            // Filter by unique urls
+            $urls = array_values(array_filter(array_unique($urls)));
+
+            $activePageRules = $this->api->getPageRules($zoneTag, "active");
+            $hasCacheOverride = $this->pageRuleContains($activePageRules, "cache_level", "cache_everything");
+
+            // Should we not have a 'cache_everything' page rule override, feeds
+            // shouldn't be attempted to be purged as they are not cachable by
+            // default.
+            if (!$hasCacheOverride) {
+                $this->logger->debug("cache everything behaviour found, filtering out feeds URLs");
+                $urls = array_filter($urls, array($this, "pathIsNotForFeeds"));
+            }
+
+            // Fetch the page rules and should we not have any hints of cache
+            // all behaviour or APO, filter out the non-cacheable URLs.
+            if (!$hasCacheOverride && !$this->isAutomaticPlatformOptimizationEnabled()) {
+                $this->logger->debug("cache everything behaviour and APO not found, filtering URLs to only be those that are cacheable by default");
+                $urls = array_filter($urls, array($this, "pathHasCachableFileExtension"));
+            }
+
+            if ($this->zoneSettingAlwaysUseHTTPSEnabled($zoneTag)) {
+                $this->logger->debug("zone level always_use_https is enabled, removing HTTP based URLs");
                 $urls = array_filter($urls, array($this, "urlIsHTTPS"));
             }
 
-            if (isset($zoneTag) && !empty($urls)) {
+            if (!empty($urls)) {
+                do_action('cloudflare_purged_urls', $urls, $postIds);
                 $chunks = array_chunk($urls, 30);
 
                 foreach ($chunks as $chunk) {
@@ -322,9 +344,12 @@ class Hooks
             }
             $listofurls = array_merge(
                 $listofurls,
-                array_unique(array_filter($attachmentUrls))
+                $attachmentUrls
             );
         }
+
+        // Clean array and get unique values
+        $listofurls = array_values(array_filter(array_unique($listofurls)));
 
         // Purge https and http URLs
         if (function_exists('force_ssl_admin') && force_ssl_admin()) {
@@ -332,9 +357,6 @@ class Hooks
         } elseif (!is_ssl() && function_exists('force_ssl_content') && force_ssl_content()) {
             $listofurls = array_merge($listofurls, str_replace('http://', 'https://', $listofurls));
         }
-
-        // Clean array if row empty
-        $listofurls = array_filter($listofurls);
 
         return $listofurls;
     }
@@ -467,6 +489,17 @@ class Hooks
 
         foreach ($pagerules as $pagerule) {
             foreach ($pagerule["actions"] as $action) {
+                // always_use_https can only be toggled on for a URL but doesn't
+                // have a value so we merely check the presence of the key
+                // instead.
+                if ($action["id"] == "always_use_https" && $key == "always_use_https") {
+                    return true;
+                }
+
+                if (!array_key_exists("value", $action)) {
+                    continue;
+                }
+
                 if ($action["id"] == $key && $action["value"] == $value) {
                     return true;
                 }
@@ -502,6 +535,21 @@ class Hooks
         }
 
         return false;
+    }
+
+    /**
+     * pathIsNotForFeeds accepts a string URL and checks if the path doesn't matches any
+     * known feed paths such as "/feed", "/feed/", "/feed/rdf/", "/feed/rss/",
+     * "/feed/atom/", "/author/foo/feed", "/comments/feed", "/shop/feed",
+     * "/tag/.../feed/", etc.
+     *
+     * @param mixed $value
+     * @return bool
+     */
+    private function pathIsNotForFeeds($value)
+    {
+        $parsed_url = parse_url($value, PHP_URL_PATH);
+        return (bool) !preg_match('/\/feed(?:\/(?:atom\/?|r(?:df|ss)\/?)?)?$/', $parsed_url);
     }
 
     /**
