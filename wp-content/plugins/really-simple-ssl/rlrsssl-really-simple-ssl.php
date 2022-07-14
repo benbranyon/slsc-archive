@@ -3,14 +3,14 @@
  * Plugin Name: Really Simple SSL
  * Plugin URI: https://really-simple-ssl.com
  * Description: Lightweight plugin without any setup to make your site SSL proof
- * Version: 5.3.0
+ * Version: 5.3.2
  * Author: Really Simple Plugins
  * Author URI: https://really-simple-plugins.com
  * License: GPL2
  * Text Domain: really-simple-ssl
  * Domain Path: /languages
  */
-/*  Copyright 2020  Really Simple Plugins BV  (email : support@really-simple-ssl.com)
+/*  Copyright 2022  Really Simple Plugins BV  (email : support@really-simple-ssl.com)
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as
     published by the Free Software Foundation.
@@ -117,7 +117,7 @@ class REALLY_SIMPLE_SSL
             define('rsssl_file', __FILE__);
         }
 		$debug = defined('RSSSL_DEBUG') && RSSSL_DEBUG ? time() : '';
-		define('rsssl_version', '5.3.0'.$debug);
+		define('rsssl_version', '5.3.1'.$debug);
 		define('rsssl_le_cron_generation_renewal_check', 20);
 		define('rsssl_le_manual_generation_renewal_check', 15);
 	}
