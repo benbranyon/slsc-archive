@@ -1,36 +1,37 @@
 <?php
 namespace FileBird\Classes;
 
-defined('ABSPATH') || exit;
+defined( 'ABSPATH' ) || exit;
 
 class Schedule {
-  private static $_instance = null;
+	public function __construct() {
+		add_action( 'filebird_remove_zip_files', array( $this, 'actionRemoveZipFiles' ) );
+	}
 
-  public function __constructor() {
-    add_action( 'filebird_remove_zip_files', array($this, 'actionRemoveZipFiles') );
-  }
+	public static function registerSchedule() {
+		if ( ! wp_next_scheduled( 'filebird_remove_zip_files' ) ) {
+			wp_schedule_event( time(), 'daily', 'filebird_remove_zip_files' );
+		}
+	}
 
-  public static function registerShedule() {
-    if (! wp_next_scheduled ( 'filebird_remove_zip_files' )) {
-      wp_schedule_event( time(), 'daily', 'filebird_remove_zip_files' );
-    }
-  }
-  public static function clearSchedule() {
-    wp_clear_scheduled_hook( 'filebird_remove_zip_files' );
-  }
-  public function actionRemoveZipFiles() {
-    $root_folder = NJFB_UPLOAD_DIR;
-    $upload_folder = WP_CONTENT_DIR . DIRECTORY_SEPERATOR . $root_folder . DIRECTORY_SEPARATOR;
-    $files = scandir($upload_folder);
-    foreach($files as $k => $file) {
-      $created_at = filemtime($upload_folder . $file);
-      if((time() - $created_at) >= (24 * 60 * 60)) {
-        @unlink($upload_folder . $file);
-      }
-    }
-  }
-  public static function instance() {
-    if(is_null(self::$_instance)) self::$_instance = new self;
-    return self::$_instance;
-  }
+	public static function clearSchedule() {
+		wp_clear_scheduled_hook( 'filebird_remove_zip_files' );
+	}
+
+	public function actionRemoveZipFiles() {
+		$saved_downloads = get_option( 'filebird_saved_downloads', array() );
+		if( ! is_array($saved_downloads) ) {
+			$saved_downloads = array();
+		}
+		foreach($saved_downloads as $time => $path) {
+			if ( ( time() - $time ) >= ( 24 * 60 * 60 ) ) {
+				$wp_dir = wp_upload_dir();
+				if( file_exists( $wp_dir['basedir'] . $path ) ) {
+					unlink( $wp_dir['basedir'] . $path );
+				}
+				unset($saved_downloads[$time]);
+			}
+		}
+		update_option( 'filebird_saved_downloads', $saved_downloads );
+	}
 }

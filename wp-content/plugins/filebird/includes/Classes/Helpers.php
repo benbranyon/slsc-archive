@@ -37,7 +37,7 @@ class Helpers {
 	}
 	public static function foldersFromWpmlf( $parent = 0, $flat = false ) {
 		global $wpdb;
-		$table_name = $wpdb->base_prefix . 'mgmlp_folders';
+		$table_name = $wpdb->prefix . 'mgmlp_folders';
 		$query      = $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $table_name ) );
 		if ( ! $wpdb->get_var( $query ) == $table_name ) {
 			return array();
@@ -81,7 +81,7 @@ class Helpers {
 	}
 	public static function foldersFromRealMedia( $parent = 0, $flat = false ) {
 		global $wpdb;
-		$table_name = $wpdb->base_prefix . 'realmedialibrary';
+		$table_name = $wpdb->prefix . 'realmedialibrary';
 		$query      = $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $table_name ) );
 		if ( ! $wpdb->get_var( $query ) == $table_name ) {
 			return array();
@@ -165,25 +165,7 @@ class Helpers {
 		include_once NJFB_PLUGIN_PATH . 'views/' . $path . '.php';
 		return ob_get_clean();
 	}
-	public static function getDefaultSelectedFolder() {
-		$folder_id = get_user_meta( get_current_user_id(), '_njt_fbv_default_folder', true );
-		$folder_id = (int) $folder_id;
 
-		// if($folder_id == 0) {
-		//   $folder_id = -1;
-		// } else
-		if ( $folder_id > 0 ) {
-			if ( is_null( FolderModel::findById( $folder_id ) ) ) {
-				$folder_id = -1;
-			}
-		}
-		return $folder_id;
-	}
-	public static function setDefaultSelectedFolder( $value ) {
-		$value = (int) $value;
-		// if($value <= 0) $value = -1;
-		update_user_meta( get_current_user_id(), '_njt_fbv_default_folder', $value );
-	}
 	public static function isListMode() {
         if ( function_exists( 'get_current_screen' ) ) {
             $screen = get_current_screen();

@@ -1,30 +1,17 @@
 <?php
-namespace FileBird\Controller;
+namespace FileBird\Support;
 
 use FileBird\Model\Folder as FolderModel;
+use FileBird\Controller\Controller;
 
 defined( 'ABSPATH' ) || exit;
 
-class CompatiblePolylang extends Controller {
-
-	protected static $instance = null;
-
+class Polylang extends Controller {
 	private $active;
 	private $lang;
 	private $lang_id = null;
 
-	public static function getInstance() {
-		if ( null == self::$instance ) {
-			self::$instance = new self();
-			self::$instance->doHooks();
-		}
-		return self::$instance;
-	}
-
 	public function __construct() {
-	}
-
-	private function doHooks() {
 		global $polylang;
 
 		$this->active = function_exists( 'pll_get_post_translations' );
@@ -45,7 +32,7 @@ class CompatiblePolylang extends Controller {
 		}
 	}
 
-	public function get_preferred_language($lang) {
+	public function get_preferred_language( $lang ) {
 		$pll_lang = PLL()->model->get_language( $lang );
 		if ( $pll_lang ) {
 			return $pll_lang->term_id;
@@ -63,7 +50,7 @@ class CompatiblePolylang extends Controller {
 		$lang_id = $this->lang_id;
 
 		if ( $lang ) {
-			$lang_id = $this->get_preferred_language($lang);
+			$lang_id = $this->get_preferred_language( $lang );
 		}
 
 		global $wpdb;
@@ -104,13 +91,14 @@ class CompatiblePolylang extends Controller {
 			return $q;
 		}
 	}
+
 	public function all_folders_and_count_query( $query, $lang ) {
 		global $wpdb;
 
 		$lang_id = $this->lang_id;
 
 		if ( $lang ) {
-			$lang_id = $this->get_preferred_language($lang);
+			$lang_id = $this->get_preferred_language( $lang );
 		}
 
 		$select = '';
@@ -135,6 +123,7 @@ class CompatiblePolylang extends Controller {
 		$query = $select . $join . $where;
 		return $query;
 	}
+
 	public function duplicateAttachmentToFolder( $post_id, $tr_id, $lang_slug ) {
 		$folders_of_source = FolderModel::getFoldersOfPost( $post_id );
 		FolderModel::setFoldersForPosts( $tr_id, $folders_of_source );

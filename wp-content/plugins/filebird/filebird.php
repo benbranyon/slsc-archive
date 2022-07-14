@@ -3,7 +3,7 @@
  * Plugin Name: FileBird Lite
  * Plugin URI: https://ninjateam.org/wordpress-media-library-folders/
  * Description: Organize thousands of WordPress media files into folders/ categories at ease.
- * Version: 4.9.8
+ * Version: 5.0.1
  * Author: Ninja Team
  * Author URI: https://ninjateam.org
  * Text Domain: filebird
@@ -31,7 +31,7 @@ if ( ! defined( 'NJFB_PREFIX' ) ) {
 }
 
 if ( ! defined( 'NJFB_VERSION' ) ) {
-	define( 'NJFB_VERSION', '4.9.8' );
+	define( 'NJFB_VERSION', '5.0.1' );
 }
 
 if ( ! defined( 'NJFB_PLUGIN_FILE' ) ) {
@@ -88,31 +88,26 @@ spl_autoload_register(
 
 if ( ! function_exists( 'FileBird\\init' ) ) {
 	function init() {
-		Plugin::getInstance();
-		Plugin::activate();
-
+		Plugin::prepareRun();
 		I18n::loadPluginTextdomain();
 
-		Classes\ACF::getInstance();
-		Classes\Convert::getInstance();
-		Classes\PageBuilders::getInstance();
-		Classes\Feedback::getInstance();
-		Classes\Review::getInstance();
-		Classes\DocumentGallery::getInstance();
-
+		new Classes\Feedback();
+		new Classes\Review();
 		Page\Settings::getInstance();
-		Controller\Folder::getInstance();
-		Controller\FolderUser::getInstance();
-		Controller\CompatibleWpml::getInstance();
-		Controller\CompatiblePolylang::getInstance();
 
-		Controller\Api::getInstance();
+		Classes\Convert::getInstance();
+		Controller\Folder::getInstance();
+
+		new Support\SupportController();
+		new Classes\Schedule();
+		new Blocks\BlockController();
 
 		if ( function_exists( 'register_block_type' ) ) {
-			require plugin_dir_path( __FILE__ ) . 'blocks/filebird-gallery/src/init.php';
+			require plugin_dir_path( __FILE__ ) . 'blocks/filebird-gallery/dist/init.php';
 		}
 
 		require_once plugin_dir_path( __FILE__ ) . 'includes/YC.php';
+		require_once plugin_dir_path( __FILE__ ) . 'includes/Recommended/Recommended.php';
 	}
 }
 add_action( 'plugins_loaded', 'FileBird\\init' );

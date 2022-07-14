@@ -6,23 +6,17 @@ defined( 'ABSPATH' ) || exit;
  * I18n Logic
  */
 class I18n {
-
 	protected static $instance = null;
 
 	public static function getInstance() {
 		if ( null == self::$instance ) {
 			self::$instance = new self();
-			self::$instance->doHooks();
 		}
 
 		return self::$instance;
 	}
 
 	private function __construct() {
-	}
-
-	private function doHooks() {
-		add_action( 'plugins_loaded', array( $this, 'loadPluginTextdomain' ) );
 	}
 
 	public static function loadPluginTextdomain() {
@@ -32,7 +26,7 @@ class I18n {
 			$locale = is_admin() ? get_user_locale() : get_locale();
 		}
 		unload_textdomain( 'filebird' );
-		load_textdomain( 'filebird', NJFB_PLUGIN_PATH . '/i18n/languages/' . $locale . '.mo' );
+		load_textdomain( 'filebird', NJFB_PLUGIN_PATH . '/i18n/languages/filebird-' . $locale . '.mo' );
 		load_plugin_textdomain( 'filebird', false, NJFB_PLUGIN_PATH . '/i18n/languages/' );
 	}
 
@@ -47,7 +41,6 @@ class I18n {
 			'cut'                             => __( 'Cut', 'filebird' ),
 			'paste'                           => __( 'Paste', 'filebird' ),
 			'download'                        => __( 'Download', 'filebird' ),
-			'download_pro_version'            => __( 'Download (Pro version)', 'filebird' ),
 			'loading'                         => __( 'Loading', 'filebird' ),
 			'generate_download'               => __( 'Generating download link...', 'filebird' ),
 			'move_done'                       => __( 'Successfully moved', 'filebird' ),
@@ -155,10 +148,20 @@ class I18n {
 			'items'                           => __( 'items', 'filebird' ),
 			'import_folder_to_filebird'       => __( 'Import folders to FileBird', 'filebird' ),
 			'go_to_import'                    => __( 'Go to import', 'filebird' ),
-			'no_thanks'						  => __( 'No, thanks', 'filebird' ),
+			'no_thanks'                       => __( 'No, thanks', 'filebird' ),
 			'import_some_folders'             => __( 'You have some folders created by other media plugins. Would you like to import them?', 'filebird' ),
-			'default_tree_view'               => __( 'Default Tree View', 'filebird'),
-			'flat_tree_view'			 	  => __( 'Flat Tree View', 'filebird')
+			'default_tree_view'               => __( 'Default Tree View', 'filebird' ),
+			'flat_tree_view'                  => __( 'Flat Tree View', 'filebird' ),
+			'imported'                        => __( 'Imported!', 'filebird' ),
+			'please_try_again'                => __( 'Please try again.', 'filebird' ),
+			'successfully_exported'           => __( 'Successfully exported!', 'filebird' ),
+			'successfully_imported'           => __( 'Successfully imported!', 'filebird' ),
+			'active_to_use_feature'           => __( 'Please activate FileBird license to use this feature.', 'filebird' ),
+			'by_size'                         => __( 'By Size', 'filebird' ),
+			'size_ascending'                  => __( 'Size Ascending', 'filebird' ),
+			'size_descending'                 => __( 'Size Descending', 'filebird' ),
+			'PRO'                             => __( 'PRO', 'filebird' ),
+			'change_color'                    => __( 'Change Color', 'filebird' ),
 		);
 		return $translation;
 	}

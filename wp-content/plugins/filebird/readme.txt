@@ -2,8 +2,8 @@
 Contributors: ninjateam
 Tags: wordpress media library folders, media library folders, media folder, file manager, folders, wp media folder, wp media folders, wordpress media folders, wordpress media library, wordpress media manager, media manager, firebird
 Requires at least: 3.0
-Tested up to: 5.9
-Stable tag: trunk
+Tested up to: 6.0
+Stable tag: 5.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,14 +15,14 @@ Organize thousands of WordPress media files in folders / categories at ease.
 
 Let's organize WordPress media library folders using a drag and drop organizer.
 
-[TEST DRIVE](https://media-folder.ninjateam.org/create/) | [**GO PRO** (Lifetime Deal)](https://1.envato.market/FileBird-Premium) 💎
+[TEST DRIVE](https://media-folder.ninjateam.org/create/) | [**GO PRO (Lifetime License)**](https://1.envato.market/FileBird-Premium) 💎
 
 
-FileBird enhances your media library with clean UI, native icons, smooth drag & drop, advanced sort and organization. 
+FileBird enhances your media library with a clean user interface, native icons, smooth drag & drop, dynamic gallery, advanced sort options, and better organization. 
 
 The free version allows you to create **unlimited main folders** and **subfolders**.
 
-[Compare Free vs Pro](https://ninjateam.gitbook.io/filebird/compare-filebird-free-and-pro)
+📌 [Documentation](https://ninjateam.gitbook.io/filebird/) | [Compare FileBird Free vs Pro](https://ninjateam.gitbook.io/filebird/compare-filebird-free-and-pro)
 
 [youtube https://www.youtube.com/watch?v=NjeEbqmMVwU]
 
@@ -32,11 +32,11 @@ FileBird allows you to create virtual folders to categorize your WordPress media
 
 With FileBird Pro you can save time on WP media management, search for any files & folders, sort them out, add product image gallery, download/export media folders, etc. That’s a great way to boost your admin workflow and productivity.
 
+**NEW - Folder Tree Themes (PRO)**
+Instead of the traditional gray shade of folder icon, now you can transform your "Folderella" into **Dropbox** theme or **Windows 11** styling.
+
 **Download Media Folder (PRO)**
 Export an entire media folder including its subfolders and files in a single ZIP file. Keep the same folder structure. Backup categorized media files.
-
-**Multiple Tree View Styles (PRO)**
-Apart from hierarchical tree view, you have an option to hide levels from tree view, too. This flat tree view is very useful for those with a large number of folders.
 
 **Smart Startup Folder**
 Choose a specific folder or previously opened folder upon startup. Quickly get back to work. Save more time.
@@ -66,7 +66,16 @@ Enabling this mode allows admins and other users with access to create their own
 You can sort and search for file and folder name not only in Media library but also in page/post editor.
 
 **Various Sort Options (PRO)**
-Go advanced with 2 ways to sort folders and 8 ways to sort files. This is a great time-saver for all busy WordPress admins & webmasters.
+Go advanced with 2 ways to sort folders and 10 ways to sort files. This is a great time-saver for all busy WordPress admins & webmasters.
+
+**Sort Files by File Size (PRO)**
+Now you can calculate your attachment size in a single click and be able to sort files by filesize.
+
+**Custom Folder Color (PRO)**
+Right-click on a specific folder to pick a distinct color. This helps differentiate it between numerous folders.
+
+**Multiple Tree View Styles (PRO)**
+Apart from hierarchical tree view, you have an option to hide levels from tree view, too. This flat tree view is very useful for those with a large number of folders.
 
 **Customizable Default File Order**
 Set a way of sorting files ascending/descending alphabetically by the file name, title, date, modified, and author.
@@ -79,6 +88,10 @@ FileBird supports RTL languages including Hebrew, Arabic, etc.
 
 **Many Languages Supported**
 This plugin supports most popular languages such as English, Spanish, Italian, French, Germany, etc.
+
+###🙋‍♂️DID YOU KNOW?
+That FileBird now comes with an addon to help you create a standalone WordPress document gallery using Gutenberg and FileBird folders? 
+→ Be sure to check it out: [FileBird Document Library](https://wordpress.org/plugins/filebird-document-library/).
 
 ###👍 HOW DOES FILEBIRD WORK?
 Are you a WordPress website administrator?
@@ -178,6 +191,36 @@ Happy Organizing! 😍
 
 
 == Changelog ==
+
+= Jul 5, 2022 – Version 5.0.1 = 
+- Updated: Korean Language
+- Removed: All .DS_Store files
+- Fixed: Module build failed
+
+= Jun 30, 2022 - Version 5.0 = 
+- Added: FileBird Gallery Layouts (Flex | Manasory | Grid) and Lightbox
+- Added: New API method for Dev
+- Added: Some new settings
+- Added: Full Support Gutenberg Block Translation with new json file (you can generate by using wp i18n make-json which have been published by WP version 5)
+- Added: Support Korean Language
+- Added: Support Themify
+- Added: Recommended plugins
+- Optimized: Performance (FileBird 5 loads the previous versions, refactored code base, optimized query, removed some library, changed structure)
+- Improved: UI and notices
+- Updated: POT file
+- Fixed: CSS with LMS Plugin
+- Fixed: Minimize Upload Popup
+- Fixed: Warning in PHP 8 (Tested in PHP 8.1)
+- Fixed: Compatible with Enhanced Media plugin
+- Fixed: Some bugs
+
+= Feb 9, 2022 – Version 4.9.9.1 =
+- Optimized code
+
+= Jan 7, 2022 – Version 4.9.9 =
+- Fixed: Slow query 
+- Fixed: File permissions
+- Fixed: Hide tab Import/Export error
 
 = Dec 30, 2021 - Version 4.9.8 =
 - Added: Import/Export folder structure into CSV

@@ -2,16 +2,6 @@
 namespace FileBird\Controller;
 
 class Exclude {
-
-	protected static $instance = null;
-
-	public static function getInstance() {
-		if ( null == self::$instance ) {
-			self::$instance = new self();
-		}
-		return self::$instance;
-	}
-
 	public function __construct() {
 		add_filter( 'fbv_get_count_where_query', array( $this, 'exclude_get_count_where_query' ), 10, 1 );
 	}
