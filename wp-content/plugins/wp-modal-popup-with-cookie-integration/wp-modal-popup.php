@@ -6,7 +6,7 @@
  * Text Domain: wp-modal-popup-with-cookie-integration
  * Domain Path: /languages/
  * Author: Astoundify
- * Version: 2.2
+ * Version: 2.3
  * Author URI: https://astoundify.com/
  *
  * @package WordPress
@@ -23,7 +23,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
  * @since 1.0.0
  */
 if( !defined( 'WMPCI_VERSION' ) ) {
-	define( 'WMPCI_VERSION', '2.2' );	// Version of plugin
+	define( 'WMPCI_VERSION', '2.3' );	// Version of plugin
 }
 if( !defined( 'WMPCI_DIR' ) ) {
 	define( 'WMPCI_DIR', dirname( __FILE__ ) );	// Plugin dir

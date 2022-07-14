@@ -2,7 +2,7 @@
 Contributors: astoundify
 Tags: advertise, lightbox, marketing, pop over, pop-up, popover, popup, subsription popup, shortcode popup, promotion, cookie popup, age restriction popup, automatic popup, exit popup, fly-in, full screen popup, html popup, layer popup, lead, lightbox popup, Mailing list pop-up, modal, modal window, notification bar, optin, optinmonster, pop over, pop-up, popover, popup, popup builder, popup contact form, popup form, popup lock, popup subscription, Responsive Popup, simple popup, social popup, video popup, wordpress popup, youtube popup
 Requires at least: 4.0
-Tested up to: 5.8
+Tested up to: 5.9.3
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -77,7 +77,35 @@ View [PRO](https://astoundify.com/products/modalify/) for more details.
 2. Admin side setting-1
 3. Admin side setting-2
 
+== Our Products ==
+
+If you like this plugin, consider exploring our other themes and plugins:
+
+* [Appointify](https://wordpress.org/plugins/appointify/) Appointify App, is the first Appointments Planner for WordPress, for Busy Enterpreneurs and Founders. Appointify allows you to share your calendar and have your funnel start by others planning appointments on top of it – with their own calendar authorized.
+
+* [Contact Listing for WP Job Manager](https://wordpress.org/plugins/wp-job-manager-contact-listing/) Sites using the [WP Job Manager](http://wordpress.org/plugins/wp-job-manager/) plugin can use any of the supported plugins and allow visitors to contact the connected application email (or resume author) directly.
+
+* [Regions for WP Job Manager](https://wordpress.org/plugins/wp-job-manager-locations/) Adds a “Job Region” taxonomy so the site administrator can control a set of predefined regions listings can be assigned to.
+
+* [Job Colors for WP Job Manager](https://wordpress.org/plugins/wp-job-manager-colors/) Select the color of each existing job type in the Job Listings’ settings. Can set the color to be the background color, or text color.
+
+* [WP Job Manager – Company Profiles](https://wordpress.org/plugins/wp-job-manager-companies/) Outputs a list of all companies that have submitted jobs with links to their listings and profile.
+
+* [Simple Registration for WooCommerce](https://wordpress.org/plugins/woocommerce-simple-registration/) A simple plugin to add a [woocommerce_simple_registration] shortcode to display the registration form on a separate page.
+
+* [Elementify Visual Widgets](https://wordpress.org/plugins/elementify-visual-widgets/) Elementify Visual Widgets is a free plugin packed with stunning elements to extend Elementor Page Builder functionality and make your website look like it is designed by a Professional Web Designer.
+
+* [Easy Digital Downloads – Frontend Submissions Product Details](https://wordpress.org/plugins/easy-digital-downloads-frontend-submissions-product-details-widget/) Specify and display frontend submission data as “product details” in a widget.
+
+
+* [Simple Social Login](https://wordpress.org/plugins/simple-social-login/) Social login options for WordPress. Currently supports: Facebook, Twitter, Google.
+
+* [reCAPTCHA](https://wordpress.org/plugins/astoundify-recaptcha/) Google reCAPTCHA for WordPress. Currently supports: WordPress Login/Register, WooCommerce Login/Register, WP Job Manager (Submission Form), Claim Listing for WP Job Manager, Gravity Forms, Ninja Forms, Contact Form 7.
+
 == Changelog ==
+
+= 2.3 (10, May 2022) =
+* [*] Tested with WordPress 5.9.3
 
 = 2.2 (30, July 2021) =
 * [*] Tested with WordPress 5.8 and PHP 8
