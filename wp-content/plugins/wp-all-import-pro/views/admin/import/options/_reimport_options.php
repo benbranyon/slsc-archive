@@ -60,6 +60,7 @@
 			<input type="checkbox" id="set_missing_to_draft" name="set_missing_to_draft" value="1" <?php echo $post['set_missing_to_draft'] ? 'checked="checked"': '' ?> <?php if ( "new" != $post['wizard_type']): ?>disabled="disabled"<?php endif; ?>/>
 			<label for="set_missing_to_draft"><?php _e('Instead of deletion, change post status to Draft', 'wp_all_import_plugin') ?></label>					
 		</div>
+        <?php do_action('wp_all_import_delete_missing_options', $post_type, $post); ?>
 	</div>	
 </div>	
 <div class="input">
@@ -74,7 +75,7 @@
         <div class="input" style="margin-left: 4px;">
             <input type="hidden" name="is_selective_hashing" value="0" />
             <input type="checkbox" id="is_selective_hashing" name="is_selective_hashing" value="1" <?php echo $post['is_selective_hashing'] ? 'checked="checked"': '' ?> />
-            <label for="is_selective_hashing"><?php printf(__('Skip posts if their data in your file has not changed', 'wp_all_import_plugin'), $custom_type->labels->name); ?></label>
+            <label for="is_selective_hashing"><?php printf(__('Skip %s if their data in your file has not changed', 'wp_all_import_plugin'), strtolower($custom_type->labels->name)); ?></label>
             <a href="#help" class="wpallimport-help" style="position: relative; top: -2px;" title="<?php _e('When enabled, WP All Import will keep track of every post\'s data as it is imported. When the import is run again, posts will be skipped if their data in the import file has not changed since the last run.<br/><br/>Posts will not be skipped if the import template or settings change, or if you make changes to the custom code in the Function Editor.', 'wp_all_import_plugin') ?>">?</a>
         </div>
 
@@ -138,6 +139,13 @@
 				<input type="checkbox" id="is_update_post_type" name="is_update_post_type" value="1" <?php echo $post['is_update_post_type'] ? 'checked="checked"': '' ?> />
 				<label for="is_update_post_type"><?php _e('Post type', 'wp_all_import_plugin') ?></label>
 			</div>
+			<?php if ( current_theme_supports( 'post-formats' ) && post_type_supports( $post_type, 'post-formats' ) ): ?>
+            <div class="input">
+                <input type="hidden" name="is_update_post_format" value="0" />
+                <input type="checkbox" id="is_update_post_format" name="is_update_post_format" value="1" <?php echo $post['is_update_post_format'] ? 'checked="checked"': '' ?> />
+                <label for="is_update_post_format"><?php _e('Post format', 'wp_all_import_plugin') ?></label>
+            </div>
+            <?php endif; ?>
 			<div class="input">
 				<input type="hidden" name="is_update_comment_status" value="0" />
 				<input type="checkbox" id="is_update_comment_status" name="is_update_comment_status" value="1" <?php echo $post['is_update_comment_status'] ? 'checked="checked"': '' ?> />

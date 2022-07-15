@@ -43,15 +43,13 @@ class PMXI_Admin_Manage extends PMXI_Controller_Admin {
 		}
 		
 		$list = new PMXI_Import_List();
-		$post = new PMXI_Post_Record();
 		$by = array('parent_import_id' => 0);
 		if ('' != $s) {
 			$like = '%' . preg_replace('%\s+%', '%', preg_replace('/[%?]/', '\\\\$0', $s)) . '%';
 			$by[] = array(array('name LIKE' => $like, 'type LIKE' => $like, 'path LIKE' => $like, 'friendly_name LIKE' => $like), 'OR');
 		}
 		
-		$this->data['list'] = $list->join($post->getTable(), $list->getTable() . '.id = ' . $post->getTable() . '.import_id', 'LEFT')
-			->setColumns(
+		$this->data['list'] = $list->setColumns(
 				$list->getTable() . '.*'
 			)
 			->getBy($by, "$order_by $order", $pagenum, $perPage, $list->getTable() . '.id');
@@ -633,19 +631,19 @@ class PMXI_Admin_Manage extends PMXI_Controller_Admin {
 		if (empty($action) or ! in_array($action, array('delete')) or empty($ids) or $items->getBy('id', $ids)->isEmpty()) {
 			wp_redirect($this->baseUrl); die();
 		}
-		
+
 		if ($this->input->post('is_confirmed')) {
 			$is_delete_posts = $this->input->post('is_delete_posts', false);
 			$is_deleted_images = $this->input->post('is_delete_images');
 			$is_delete_attachments = $this->input->post('is_delete_attachments');
 
-            $scheduling = \Wpai\Scheduling\Scheduling::create();
+			$scheduling = \Wpai\Scheduling\Scheduling::create();
 
-            foreach($items->convertRecords() as $item) {
+			foreach($items->convertRecords() as $item) {
 				$item->delete( ! $is_delete_posts, $is_deleted_images, $is_delete_attachments );
-                $scheduling->deleteScheduleIfExists($item->id);
+				$scheduling->deleteScheduleIfExists($item->id);
 			}
-			
+
 			wp_redirect(add_query_arg('pmxi_nt', urlencode(sprintf(__('%d %s deleted', 'wp_all_import_plugin'), $items->count(), _n('import', 'imports', $items->count(), 'wp_all_import_plugin'))), $this->baseUrl)); die();
 		}
 		

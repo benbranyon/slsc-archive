@@ -31,7 +31,7 @@ switch ($post_type){
                         <tr>
                             <td>
                                 <div class="input">
-                                    <h4 style="margin-bottom:5px;"><?php _e('<b>Content</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?></h4>
+                                    <h4 style="margin-bottom:5px; margin-top: 0;"><?php _e('<b>Content</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?></h4>
                                     <textarea name="content" class="widefat rad4" style="width:100%;margin-bottom:5px;"><?php echo esc_attr($post['content']) ?></textarea>
                                 </div>
                             </td>
@@ -40,7 +40,7 @@ switch ($post_type){
                             <tr>
                                 <td>
                                     <div class="input">
-                                        <h4 style="margin-bottom:5px;"><?php _e('<b>Rating</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?><a href="#help" class="wpallimport-help" title="<?php _e('The number of stars, 1 through 5.', PMXI_Plugin::LANGUAGE_DOMAIN); ?>" style="top: -1px;">?</a></h4>
+                                        <h4 style="margin-bottom:5px; margin-top: 0;"><?php _e('<b>Rating</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?><a href="#help" class="wpallimport-help" title="<?php _e('The number of stars, 1 through 5.', PMXI_Plugin::LANGUAGE_DOMAIN); ?>" style="top: -1px;">?</a></h4>
                                         <input name="comment_rating" type="text" class="widefat rad4" style="width:100%;margin-bottom:5px;" value="<?php echo esc_attr($post['comment_rating']) ?>"/>
                                     </div>
                                 </td>
@@ -50,7 +50,7 @@ switch ($post_type){
                         <tr>
                             <td>
                                 <div class="input">
-                                    <h4 style="margin-bottom:5px;"><?php _e('<b>Parent Post</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?><a href="#help" class="wpallimport-help" title="<?php _e('Comments can be matched to their parent post by post ID, slug, or post title. Comments without a match will be skipped.', PMXI_Plugin::LANGUAGE_DOMAIN); ?>" style="top: -1px;">?</a></h4>
+                                    <h4 style="margin-bottom:5px; margin-top: 0;"><?php _e('<b>Parent Post</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?><a href="#help" class="wpallimport-help" title="<?php _e('Comments can be matched to their parent post by post ID, slug, or post title. Comments without a match will be skipped.', PMXI_Plugin::LANGUAGE_DOMAIN); ?>" style="top: -1px;">?</a></h4>
                                     <input name="comment_post" type="text" class="widefat rad4" style="width:100%;margin-bottom:5px;" value="<?php echo esc_attr($post['comment_post']) ?>"/>
                                 </div>
                             </td>
@@ -60,7 +60,7 @@ switch ($post_type){
                             <tr>
                                 <td>
                                     <div class="input">
-                                        <h4 style="margin-bottom:5px;"><?php _e('<b>WooCommerce Product</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?><a href="#help" class="wpallimport-help" title="<?php _e('Reviews can be matched to their parent WooCommerce Product by post ID, slug, or product title. Reviews without a match will be skipped.', PMXI_Plugin::LANGUAGE_DOMAIN); ?>" style="top: -1px;">?</a></h4>
+                                        <h4 style="margin-bottom:5px; margin-top: 0;"><?php _e('<b>WooCommerce Product</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?><a href="#help" class="wpallimport-help" title="<?php _e('Reviews can be matched to their parent WooCommerce Product by post ID, slug, or product title. Reviews without a match will be skipped.', PMXI_Plugin::LANGUAGE_DOMAIN); ?>" style="top: -1px;">?</a></h4>
                                         <input name="comment_post" type="text" class="widefat rad4" style="width:100%;margin-bottom:5px;" value="<?php echo esc_attr($post['comment_post']) ?>"/>
                                     </div>
                                 </td>
@@ -69,7 +69,7 @@ switch ($post_type){
                         <tr>
                             <td>
                                 <div class="input">
-                                    <h4 style="margin-bottom:5px;"><b><?php printf(__('%s Date', PMXI_Plugin::LANGUAGE_DOMAIN), $custom_type->labels->singular_name); ?></b><a href="#help" class="wpallimport-help" style="position:relative; top: -1px;" title="<?php _e('Import the date and time of the comment in GMT. Use any format supported by the PHP <b>strtotime</b> function. Pretty much any human-readable date and time will work.', PMXI_Plugin::LANGUAGE_DOMAIN) ?>">?</a></h4>
+                                    <h4 style="margin-bottom:5px; margin-top: 0;"><b><?php printf(__('%s Date', PMXI_Plugin::LANGUAGE_DOMAIN), $custom_type->labels->singular_name); ?></b><a href="#help" class="wpallimport-help" style="position:relative; top: -1px;" title="<?php _e('Import the date and time of the comment in GMT. Use any format supported by the PHP <b>strtotime</b> function. Pretty much any human-readable date and time will work.', PMXI_Plugin::LANGUAGE_DOMAIN) ?>">?</a></h4>
                                     <div class="input">
                                         <input type="radio" id="date_type_specific" class="switcher" name="date_type" value="specific" <?php echo 'random' != $post['date_type'] ? 'checked="checked"' : '' ?> />
                                         <label for="date_type_specific">
@@ -108,7 +108,7 @@ switch ($post_type){
                                     <tr>
                                         <td style="width: 48%; padding-right: 1%;">
                                             <div class="input">
-                                                <h4 style="margin-bottom:5px;"><?php _e('<b>Approval Status</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?></h4>
+                                                <h4 style="margin-bottom:5px; margin-top: 0;"><?php _e('<b>Approval Status</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?></h4>
                                                 <div class="input">
                                                     <input type="radio" id="comment_approved" name="comment_approved" value="1" <?php echo '1' === $post['comment_approved'] ? 'checked="checked"' : '' ?> class="switcher"/>
                                                     <label for="comment_approved"><?php printf(__('Approve all %s', PMXI_Plugin::LANGUAGE_DOMAIN), $custom_type->labels->plural_name); ?></label>
@@ -126,7 +126,7 @@ switch ($post_type){
                                             </div>
                                             <?php if ($post_type == 'woo_reviews'): ?>
                                                 <div class="input">
-                                                    <h4 style="margin-bottom:5px;"><?php _e('<b>Verified Status</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?></h4>
+                                                    <h4 style="margin-bottom:5px; margin-top: 0;"><?php _e('<b>Verified Status</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?></h4>
                                                     <div class="input">
                                                         <input type="radio" id="comment_verified" name="comment_verified" value="1" <?php echo '1' === $post['comment_verified'] ? 'checked="checked"' : '' ?> class="switcher"/>
                                                         <label for="comment_verified"><?php printf(__('Verify all %s', PMXI_Plugin::LANGUAGE_DOMAIN), $custom_type->labels->plural_name); ?></label>
@@ -145,7 +145,7 @@ switch ($post_type){
                                             <?php endif; ?>
                                             <?php if ($post_type == 'comments'): ?>
                                             <div class="input">
-                                                <h4 style="margin-bottom:5px;"><?php _e('<b>Comment Type</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?></h4>
+                                                <h4 style="margin-bottom:5px; margin-top: 0;"><?php _e('<b>Comment Type</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?></h4>
                                                 <div class="input">
                                                     <input type="radio" id="comment_type" name="comment_type" value="" <?php echo empty($post['comment_type']) ? 'checked="checked"' : '' ?> class="switcher"/>
                                                     <label for="comment_type"><?php _e('Standard comment', PMXI_Plugin::LANGUAGE_DOMAIN) ?></label>
@@ -164,15 +164,21 @@ switch ($post_type){
                                         </td>
                                         <td style="width: 48%; padding-left: 1%;">
                                             <div class="input">
-                                                <h4 style="margin-bottom:5px;"><?php _e('<b>Karma</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?></h4>
+                                                <h4 style="margin-bottom:5px; margin-top: 0;"><?php _e('<b>Karma</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?></h4>
                                                 <input name="comment_karma" type="text" class="widefat rad4" style="width:100%;margin-bottom:5px;" value="<?php echo esc_attr($post['comment_karma']) ?>"/>
                                             </div>
                                             <?php if ($post_type == 'comments'): ?>
                                             <div class="input">
-                                                <h4 style="margin-bottom:5px;"><?php _e('<b>Parent Comment</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?><a href="#help" class="wpallimport-help" title="<?php _e('Comments can be matched to their parent comment by comment ID or the date and time (GMT) of the parent comment. To match by comment date it must be an exact match down to the second.', PMXI_Plugin::LANGUAGE_DOMAIN); ?>" style="top:-1px;">?</a></h4>
+                                                <h4 style="margin-bottom:5px; margin-top: 0;"><?php _e('<b>Parent Comment</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?><a href="#help" class="wpallimport-help" title="<?php _e('Comments can be matched to their parent comment by comment ID or the date and time (GMT) of the parent comment. To match by comment date it must be an exact match down to the second.', PMXI_Plugin::LANGUAGE_DOMAIN); ?>" style="top:-1px;">?</a></h4>
                                                 <input name="comment_parent" type="text" class="widefat rad4" style="width:100%;margin-bottom:5px;" value="<?php echo esc_attr($post['comment_parent']) ?>"/>
                                             </div>
                                             <?php endif; ?>
+	                                        <?php if ($post_type == 'woo_reviews'): ?>
+                                                <div class="input">
+                                                    <h4 style="margin-bottom:5px; margin-top: 0;"><?php _e('<b>Parent Review</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?><a href="#help" class="wpallimport-help" title="<?php _e('Reviews can be matched to their parent review by review ID or the date and time (GMT) of the parent review. To match by review date it must be an exact match down to the second.', PMXI_Plugin::LANGUAGE_DOMAIN); ?>" style="top:-1px;">?</a></h4>
+                                                    <input name="comment_parent" type="text" class="widefat rad4" style="width:100%;margin-bottom:5px;" value="<?php echo esc_attr($post['comment_parent']) ?>"/>
+                                                </div>
+	                                        <?php endif; ?>
                                         </td>
                                     </tr>
                                 </table>
@@ -196,13 +202,13 @@ switch ($post_type){
                         <tr>
                             <td style="width: 48%; padding-right: 1%;">
                                 <div class="input">
-                                    <h4 style="margin-bottom:5px;"><?php _e('<b>Author Name</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?></h4>
+                                    <h4 style="margin-bottom:5px; margin-top: 0;"><?php _e('<b>Author Name</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?></h4>
                                     <input name="comment_author" type="text" class="widefat rad4" style="width:100%;margin-bottom:5px;" value="<?php echo esc_attr($post['comment_author']) ?>"/>
                                 </div>
                             </td>
                             <td style="width: 48%; padding-left: 1%;">
                                 <div class="input">
-                                    <h4 style="margin-bottom:5px;"><?php _e('<b>Author Email</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?></h4>
+                                    <h4 style="margin-bottom:5px; margin-top: 0;"><?php _e('<b>Author Email</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?></h4>
                                     <input name="comment_author_email" type="text" class="widefat rad4" style="width:100%;margin-bottom:5px;" value="<?php echo esc_attr($post['comment_author_email']) ?>"/>
                                 </div>
                             </td>
@@ -222,7 +228,7 @@ switch ($post_type){
                                     <tr>
                                         <td style="width: 48%; padding-right: 1%;">
                                             <div class="input">
-                                                <h4 style="margin-bottom:5px;"><?php _e('<b>Author User ID</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?></h4>
+                                                <h4 style="margin-bottom:5px; margin-top: 0;"><?php _e('<b>Author User ID</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?></h4>
                                                 <div class="input">
                                                     <input type="radio" id="comment_user_id_email" name="comment_user_id" value="email" <?php echo 'email' === $post['comment_user_id'] ? 'checked="checked"' : '' ?> class="switcher"/>
                                                     <label for="comment_user_id_email"><?php _e('Try to auto-detect User ID from Author Email', PMXI_Plugin::LANGUAGE_DOMAIN) ?></label>
@@ -245,7 +251,7 @@ switch ($post_type){
                                         </td>
                                         <td style="width: 48%; padding-left: 1%;">
                                             <div class="input">
-                                                <h4 style="margin-bottom:5px;"><?php _e('<b>Author URL</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?></h4>
+                                                <h4 style="margin-bottom:5px; margin-top: 0;"><?php _e('<b>Author URL</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?></h4>
                                                 <input name="comment_author_url" type="text" class="widefat rad4" style="width:100%;margin-bottom:5px;" value="<?php echo esc_attr($post['comment_author_url']) ?>"/>
                                             </div>
                                         </td>
@@ -253,13 +259,13 @@ switch ($post_type){
                                     <tr>
                                         <td style="width: 48%; padding-right: 1%;">
                                             <div class="input">
-                                                <h4 style="margin-bottom:5px;"><?php _e('<b>Author IP</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?></h4>
+                                                <h4 style="margin-bottom:5px; margin-top: 0;"><?php _e('<b>Author IP</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?></h4>
                                                 <input name="comment_author_IP" type="text" class="widefat rad4" style="width:100%;margin-bottom:5px;" value="<?php echo esc_attr($post['comment_author_IP']) ?>"/>
                                             </div>
                                         </td>
                                         <td style="width: 48%; padding-left: 1%;">
                                             <div class="input">
-                                                <h4 style="margin-bottom:5px;"><?php _e('<b>Comment Agent</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?></h4>
+                                                <h4 style="margin-bottom:5px; margin-top: 0;"><?php _e('<b>Comment Agent</b>', PMXI_Plugin::LANGUAGE_DOMAIN);?></h4>
                                                 <input name="comment_agent" type="text" class="widefat rad4" style="width:100%;margin-bottom:5px;" value="<?php echo esc_attr($post['comment_agent']) ?>"/>
                                             </div>
                                         </td>

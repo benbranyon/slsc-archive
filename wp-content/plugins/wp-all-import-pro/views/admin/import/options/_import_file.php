@@ -203,7 +203,7 @@
                                     <span class="wpallimport-input-icon wpallimport-ftp-path-icon"></span>
                                     <a class="wpallimport-help" href="#help"
                                        style="position: absolute;top: -32px;right: -30px;"
-                                       title="<?php _e( 'The path to the file you want to import. In case multiple files are found, only the first will be downloaded. Examples: /home/ftpuser/import.csv or import-files/*.csv', PMXI_Plugin::LANGUAGE_DOMAIN ); ?>">?</a>
+                                       title="<?php _e( 'The path to the file you want to import. In case multiple files are found, only the first will be downloaded. Examples: /home/ftpuser/import.csv or import-files/{newest.csv}', PMXI_Plugin::LANGUAGE_DOMAIN ); ?>">?</a>
                                 </div>
 
                                 <span class="wpallimport-ftp-builder-wrap">

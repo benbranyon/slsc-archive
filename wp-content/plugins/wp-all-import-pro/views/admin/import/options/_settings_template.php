@@ -119,14 +119,14 @@
 
 								?>	
 								<div class="wpallimport-change-custom-type">
-								<select name="custom_type_selector" id="custom_type_selector" class="wpallimport-post-types">
 
+								    <select name="custom_type_selector" id="custom_type_selector" class="wpallimport-post-types">
 
-                                <?php
-                                // *****************************************************
-                                // **************** START CPT LOOP *********************
-                                // *****************************************************
-                                ?>
+                                    <?php
+                                    // *****************************************************
+                                    // **************** START CPT LOOP *********************
+                                    // *****************************************************
+                                    ?>
 
                                     <?php
                                     $known_imgs     = array( 'post', 'page', 'product', 'import_users', 'shop_order', 'shop_coupon', 'shop_customer', 'users', 'comments', 'taxonomies', 'woo_reviews' );
@@ -220,6 +220,8 @@
 											<a href="https://www.wpallimport.com/checkout/?edd_action=add_to_cart&download_id=2707227&edd_options%5Bprice_id%5D=1" target="_blank" class="upgrade_link"><?php _e('Purchase the WooCommerce Add-On Pro', 'wp_all_import_plugin');?></a>
 										</div>
 									<?php endif; ?>
+
+									<?php do_action('wp_all_import_entity_type_bundle', $post, true); ?>
 
 								</div>
 								<?php endif; ?>

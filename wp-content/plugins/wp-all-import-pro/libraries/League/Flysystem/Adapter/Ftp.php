@@ -564,15 +564,24 @@ class Ftp extends AbstractFtpAdapter
         if ($this->isPureFtpd) {
             $path = str_replace(' ', '\ ', $path);
         }
-	    set_error_handler(function($errno, $errstr) {
-	    	$pasv_ip = $this->getIpFromPasvResponse((@ftp_raw($this->getConnection(), ('PASV')))[0]);
-	    	if(filter_var($pasv_ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)){
-	    		$pasv_details = 'The FTP server returned '.$pasv_ip.' for Passive IP address.';
-		    }else{
-	    		$pasv_details = 'The FTP server returned invalid passive IP: '. $pasv_ip.' <br/>Contact the FTP provider for assistance.';
+	    set_error_handler( function ( $errno, $errstr ) {
+	    	$pasvResponse = ( @ftp_raw( $this->getConnection(), ( 'PASV' ) ) );
+		    $pasv_ip = $this->getIpFromPasvResponse( $pasvResponse[0] );
+		    if ( filter_var( $pasv_ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) ) {
+			    $pasv_details = 'The FTP server returned ' . $pasv_ip . ' for Passive IP address.';
+		    } else {
+			    $pasv_details = 'The FTP server returned invalid passive IP: ' . $pasv_ip . ' <br/>Contact the FTP provider for assistance.';
 		    }
-	    	throw new ConnectionRuntimeException('Could not connect to host: ' . $this->getHost() . ', port:' . $this->getPort() . '<br/><br/>Reason:<br/>' .$errstr . '<br/><br/>Passive Mode Details:<br/>' . $pasv_details);
-	    });
+
+		    if ( str_replace( [
+				    'Undefined variable',
+				    'Undefined index',
+			    ], '', $errstr ) !== $errstr ) {
+			    return false;
+		    } else {
+			    throw new ConnectionRuntimeException( 'Could not connect to host: ' . $this->getHost() . ', port:' . $this->getPort() . '<br/><br/>Reason:<br/>' . $errstr . '<br/><br/>Passive Mode Details:<br/>' . $pasv_details );
+		    }
+	    } );
         $list = ftp_rawlist($connection, $options . ' ' . $path);
         restore_error_handler();
 

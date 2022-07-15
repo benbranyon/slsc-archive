@@ -4,10 +4,14 @@ if ( ! function_exists( 'wp_all_import_get_import_id' ) ) {
     function wp_all_import_get_import_id() {
         global $argv;
         $import_id = 'new';
-
+            
         if ( ! empty( $argv ) ) {
-            if ( isset( $argv[3] ) ) {
-                $import_id = $argv[3];
+            $import_id_arr = array_filter( $argv, function( $a ) {
+                return ( is_numeric( $a ) ) ? true : false;
+            });
+                
+            if ( ! empty( $import_id_arr ) ) {
+                $import_id = reset( $import_id_arr );
             }
         }
     

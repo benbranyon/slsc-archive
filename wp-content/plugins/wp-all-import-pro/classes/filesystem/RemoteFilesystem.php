@@ -24,7 +24,7 @@ class RemoteFilesystem {
 	// Should match list in classes/upload.php#56 - xml|gzip|zip|csv|tsv|gz|json|txt|dat|psv|sql|xls|xlsx
 	private $allowed_file_extensions = ['xml','gzip','zip','csv','tsv','gz','json','txt','dat','psv','sql','xls','xlsx'];
 	private $debug;
-	private $orig_root = false;
+	private $attempted_roots = [];
 
 	public function __construct( $options ) {
 
@@ -37,20 +37,26 @@ class RemoteFilesystem {
 		// Allowed file extensions filter.
 		$this->allowed_file_extensions = apply_filters('wpai_ftp_allowed_file_extensions', $this->allowed_file_extensions);
 
+		/*
+		 * INI default_socket_timeout should be higher than the 'timeout' parameter below.
+		 */
 		// Default options
 		$default_options = [
 			'root'                           => '/',
-			'timeout'                        => 10,
+			'timeout'                        => apply_filters('wpai_ftp_timeout', 10),
 			// FTP only options
-			'passive'                        => true,
-			'ignorePassiveAddress'           => false,
+			'passive'                        => apply_filters('wpai_ftp_passive_mode', true),
+			'ignorePassiveAddress'           => apply_filters('wpai_ftp_ignore_passive_address', false),
 			'enableTimestampsOnUnixListings' => true,
+			'ssl'                            => false,
 		];
 
 		$this->options = $this->option_merge( $default_options, $options );
 
 		// Root override
 		$this->options['root'] = apply_filters('wpai_ftp_root', $this->options['root'], PMXI_Plugin::getCurrentImportId());
+
+		$this->attempted_roots[] = $this->options['root'];
 
 		// Ensure no trailing slash or text after the URL exists.
 		$this->options['host'] = preg_replace( '@(?<![/:])/.*@', '', $this->options['host'] );
@@ -69,16 +75,16 @@ class RemoteFilesystem {
 	private function connect() {
 		if ( preg_match( '%^sftp://%i', trim( $this->options['host'] ) ) || !empty($this->options['privateKey']) ) {
 			$this->default_port    = [ 22, 2222 ];
-			$this->options['host'] = str_replace( 'sftp://', '', $this->options['host'] );
+			$this->options['host'] = preg_replace( '%^sftp://%i', '', trim($this->options['host'] ));
 			$this->buildFilesystem( 'sftp' );
 		} elseif ( preg_match( '%^ftp://%i', trim( $this->options['host'] ) ) ) {
 			$this->default_port    = [ 21 ];
-			$this->options['host'] = str_replace( 'ftp://', '', $this->options['host'] );
+			$this->options['host'] = preg_replace( '%^ftp://%i', '', trim( $this->options['host'] ));
 			$this->buildFilesystem( 'ftp' );
 		} elseif ( preg_match( '%^ftps://%i', trim( $this->options['host'] ) ) ) {
 			$this->default_port    = [ 21 ];
-			$this->options['host'] = str_replace( 'ftps://', '', $this->options['host'] );
-			$options['ssl']        = true;
+			$this->options['host'] = preg_replace( '%^ftps://%i', '', trim( $this->options['host'] ) );
+			$this->options['ssl']        = true;
 			$this->buildFilesystem( 'ftp' );
 		} elseif ( trim( $this->options['port'] ) == 21 ) {
 			$this->default_port    = [ 21 ];
@@ -144,22 +150,34 @@ class RemoteFilesystem {
 
 			if ( str_replace( [
 					'Root is invalid or does not exist:',
-				], '',$e->getMessage() ) !== $e->getMessage()  && $this->orig_root === false) {
+				], '', $e->getMessage() ) !== $e->getMessage() ) {
 
-				// Save the original root specified.
-				$this->orig_root = $this->options['root'];
+				$new_root = '/';
 
-				if( $this->options['root'] !== '/home') {
-					$this->options['root'] = '/home';
-					$this->error_stack[]   = $this->error;
-					$this->error           = false;
+
+				if ( ! in_array( '/home/', $this->attempted_roots ) ) {
+					$new_root = '/home/';
+				} elseif ( preg_match( '@\..{0,4}@', $this->options['root'] ) === 1 && ! in_array( dirname( $this->options['root'] ), $this->attempted_roots ) ) {
+					$new_root = dirname( $this->options['root'] );
+				} elseif ( ! in_array( $this->options['dir'], $this->attempted_roots ) ) {
+					$new_root = $this->options['dir'];
+				}
+
+				if ( ! in_array( $new_root, $this->attempted_roots ) ) {
+					// Remove the root from the directory path to ensure it's not doubled.
+					$this->options['dir'] = str_replace( $new_root, '', $this->options['dir']);
+					$this->options['root'] = $new_root;
+					$this->attempted_roots[] = $this->options['root'];
+					$this->error_stack[]     = $this->error;
+					$this->error             = false;
 					$this->buildFilesystem( $this->type );
 					$this->listContents( $recursive );
-				}
-				else
+				} else {
 					return $this->contents;
-
+				}
 			}
+
+
 			// Check if it was a login failure or connection failure.
 			// Don't retry if login failure or if host couldn't be found.
 			elseif ( str_replace( [ 'Could not login',
@@ -232,7 +250,31 @@ class RemoteFilesystem {
 		} catch ( \Exception $e ) {
 			$this->error = $e->getMessage();
 
-			return false;
+
+			// If FTP try via cURL as a last resort
+			if ( $this->type == 'ftp' ) {
+				try {
+					$curl     = curl_init();
+					$filename = $destination . '/' . basename( $this->options['dir'] );
+					$file     = fopen( $destination . '/' . basename( $this->options['dir'] ), 'w' );
+					curl_setopt( $curl, CURLOPT_URL, $this->options['ftp_host'] . '/' . $this->options['dir'] ); #input
+					curl_setopt( $curl, CURLOPT_RETURNTRANSFER, 1 );
+					curl_setopt( $curl, CURLOPT_FILE, $file ); #output
+					curl_setopt( $curl, CURLOPT_USERPWD, $this->options['ftp_username'] . ':' . $this->options['ftp_password'] );
+					curl_exec( $curl );
+					curl_close( $curl );
+					fclose( $file );
+					if ( ( is_file( $filename ) ) && ( 0 !== filesize( $filename ) ) ) {
+						return [ $filename ];
+					}
+				} catch ( \Exception $e ) {
+					$this->error = $e->getMessage();
+
+					return false;
+				}
+			} else {
+				return false;
+			}
 		}
 
 	}
@@ -277,7 +319,7 @@ class RemoteFilesystem {
 			// Check if a relative file reference was provided.
 			preg_match( '#{(.*)\.(.{0,4})}#', $this->options['dir'], $matches );
 
-			// Ensure all of the expected pieces were found or do nothing.
+			// Ensure all the expected pieces were found or do nothing.
 			if ( isset( $matches[0] ) && isset( $matches[1] ) && isset( $matches[2] ) ) {
 				$relative       = $matches[1]; // Relative reference such as oldest.
 				$this->rel_type = $matches[2]; // The file extension to find.
@@ -337,6 +379,13 @@ class RemoteFilesystem {
 						$file = array_pop( $contents );
 						isset( $file['path'] ) && $this->options['dir'] = $file['path'];
 						break;
+
+					case ( 'custom' ):
+
+						// Pass the current dir, found files, and target extension back to the user via filter.
+						// The full directory pointing to a single file must be returned.
+						$this->options['dir'] = apply_filters('wpai_ftp_custom_target_file_filter', $this->options['dir'], $contents, $this->rel_type);
+						break;
 				}
 			}
 		} catch ( \Exception $e ) {
@@ -350,6 +399,9 @@ class RemoteFilesystem {
 	}
 
 	public function get_protocol() {
+		if( $this->type == 'ftp' && $this->options['ssl'] == true )
+			$this->type = 'ftps';
+
 		return $this->type;
 	}
 
@@ -370,7 +422,7 @@ class RemoteFilesystem {
 
 			$this->contents = array_filter( $this->contents, function ( $var ) use ( $filter ) {
 
-				return ( preg_match( $filter, $var['basename'] ) !== 1 && ( $var['type'] === 'dir' || in_array( $var['extension'], $this->allowed_file_extensions ) ) );
+				return ( preg_match( $filter, $var['basename'] ) !== 1 && ( $var['type'] === 'dir' || in_array( strtolower($var['extension']), $this->allowed_file_extensions ) ) );
 
 			} );
 

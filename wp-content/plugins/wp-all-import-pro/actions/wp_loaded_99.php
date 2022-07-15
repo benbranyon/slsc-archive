@@ -49,8 +49,9 @@ function pmxi_wp_loaded_99() {
 		if ( ! empty( $cron_job_key ) && $_GET['import_key'] == $cron_job_key ) {
 
 			$logger = function ( $m ) {
-				print( "<p>[" . date( "H:i:s" ) . "] $m</p>\n" );
+				print( "<p>[" . date( "H:i:s" ) . "] ".wp_all_import_filter_html_kses($m)."</p>\n" );
 			};
+			$logger = apply_filters('wp_all_import_logger', $logger);
 
 			if ( empty( $_GET['import_id'] ) ) {
 				if ( $_GET['action'] == 'cleanup' ) {

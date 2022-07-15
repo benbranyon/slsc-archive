@@ -5,8 +5,7 @@
 	<div class="wpallimport-header">
 		<div class="wpallimport-logo"></div>
 		<div class="wpallimport-title">
-			<p><?php _e('WP All Import', 'wp_all_import_plugin'); ?></p>
-			<h2><?php _e('Import XML / CSV', 'wp_all_import_plugin'); ?></h2>					
+			<h2><?php _e('Confirm & Run', 'wp_all_import_plugin'); ?></h2>
 		</div>
 		<div class="wpallimport-links">
 			<a href="http://www.wpallimport.com/support/" target="_blank"><?php _e('Support', 'wp_all_import_plugin'); ?></a> | <a href="http://www.wpallimport.com/documentation/" target="_blank"><?php _e('Documentation', 'wp_all_import_plugin'); ?></a>
@@ -162,7 +161,6 @@
 			<a style="position: absolute; top: 35%; right: 10px; display: block; padding-top: 1px;" class="button button-primary button-hero wpallimport-large-button" href="http://www.wpallimport.com/documentation/troubleshooting/terminated-imports/" target="_blank"><?php _e('Read More', 'wp_all_import_plugin');?></a>		
 		</div>
 	</span>
-
 	<a href="http://soflyy.com/" target="_blank" class="wpallimport-created-by"><?php _e('Created by', 'wp_all_import_plugin'); ?> <span></span></a>
 	
 </div>
@@ -200,13 +198,13 @@
 		});	
 	}
 
-	$('.dismiss-speed-up-notify').click(function(e){
+	$('.dismiss-speed-up-notify').on('click', function(e){
 		e.preventDefault();
 		$.post('admin.php?page=pmxi-admin-settings&action=dismiss_speed_up', {dismiss: true}, function (data) {}, 'html');
 		$('.wpallimport-speed-up-notify').addClass('dont_show_again').slideUp();
 	});
 
-	$('.wpallimport-speed-up-notify-read-more').click(function(e){
+	$('.wpallimport-speed-up-notify-read-more').on('click', function(e){
 		e.preventDefault();
 		$.post('admin.php?page=pmxi-admin-settings&action=dismiss_speed_up', {dismiss: true}, function (data) {}, 'html');
 		$('.wpallimport-speed-up-notify').addClass('dont_show_again').slideUp();
@@ -451,7 +449,7 @@
 			});			
 		}		
 		
-		$('#wpallimport-try-again').click(function(e){
+		$('#wpallimport-try-again').on('click', function(e){
 			e.preventDefault();
 			parse_element(1);
 			$('.wpallimport-modal-message').hide();			

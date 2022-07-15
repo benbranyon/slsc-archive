@@ -62,7 +62,7 @@
         <div class="input" style="margin-left: 4px;">
             <input type="hidden" name="is_selective_hashing" value="0" />
             <input type="checkbox" id="is_selective_hashing" name="is_selective_hashing" value="1" <?php echo $post['is_selective_hashing'] ? 'checked="checked"': '' ?> />
-            <label for="is_selective_hashing"><?php printf(__('Skip posts if their data in your file has not changed', 'wp_all_import_plugin'), $custom_type->labels->name); ?></label>
+            <label for="is_selective_hashing"><?php printf(__('Skip %s if their data in your file has not changed', 'wp_all_import_plugin'), strtolower($custom_type->labels->name)); ?></label>
             <a href="#help" class="wpallimport-help" style="position: relative; top: -2px;" title="<?php _e('When enabled, WP All Import will keep track of every post\'s data as it is imported. When the import is run again, posts will be skipped if their data in the import file has not changed since the last run.<br/><br/>Posts will not be skipped if the import template or settings change, or if you make changes to the custom code in the Function Editor.', 'wp_all_import_plugin') ?>">?</a>
         </div>
 

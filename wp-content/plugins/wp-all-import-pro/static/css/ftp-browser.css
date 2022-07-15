@@ -25,7 +25,9 @@
 }
 .wpai-ftp-browser-file {
     font-weight: 600;
+
 }
+
 
 .wpai-ftp-browser-preloader-img {
     display: block;
@@ -50,12 +52,21 @@
     color: #7aff91;
 }
 
+.wpai-ftp-browser-document::before, .wpai-ftp-browser-folder::before{
+    font-size:20px;
+    vertical-align: middle;
+}
+
 .wpai-ftp-browser-document {
     font-size:20px !important;
+    display:inline;
+    vertical-align: middle;
 }
 
 .wpai-ftp-browser-folder {
     font-size:20px !important;
+    display:inline;
+    vertical-align: middle;
 }
 
 .wpai-ftp-browser-file-selected {

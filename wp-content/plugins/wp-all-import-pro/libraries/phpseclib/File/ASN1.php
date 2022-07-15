@@ -806,6 +806,7 @@ class ASN1
      * @param string $source
      * @param string $mapping
      * @param int $idx
+     *
      * @return string
      * @access private
      */

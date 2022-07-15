@@ -16,7 +16,7 @@
         '    </span>';
 
     // Dismiss error notice
-    $('.dismiss-wpai-ftp-connection-error').click(function(){
+    $('.dismiss-wpai-ftp-connection-error').on('click', function(){
         $(this).parent().hide();
     });
 
@@ -164,7 +164,7 @@
         $(".wpai-ftp-connection-error").hide();
 
         let nonce = $('#wpai-ftp-browser-nonce').val();
-        let target = location.origin + '/wp-load.php?_nonce=' + nonce;
+        let target = wpai_home_url + '/wp-load.php?_nonce=' + nonce;
         target += '&action=wpai_public_api&q=ftpbrowser/load';
 
         // Format path for display.

@@ -169,29 +169,29 @@ class MountManager implements FilesystemInterface
     }
 
     /**
-     * @param string $from
-     * @param string $to
+     * @param string $path
+     * @param string $newpath
      * @param array  $config
      *
-     * @throws InvalidArgumentException
-     * @throws FilesystemNotFoundException
+     * @return bool
+     *@throws FilesystemNotFoundException
      * @throws FileExistsException
      *
-     * @return bool
+     * @throws InvalidArgumentException
      */
-    public function copy($from, $to, array $config = [])
+    public function copy($path, $newpath, array $config = [])
     {
-        list($prefixFrom, $from) = $this->getPrefixAndPath($from);
+        list($prefixFrom, $path ) = $this->getPrefixAndPath($path );
 
-        $buffer = $this->getFilesystem($prefixFrom)->readStream($from);
+        $buffer = $this->getFilesystem($prefixFrom)->readStream($path );
 
         if ($buffer === false) {
             return false;
         }
 
-        list($prefixTo, $to) = $this->getPrefixAndPath($to);
+        list($prefixTo, $newpath) = $this->getPrefixAndPath($newpath);
 
-        $result = $this->getFilesystem($prefixTo)->writeStream($to, $buffer, $config);
+        $result = $this->getFilesystem($prefixTo)->writeStream($newpath, $buffer, $config);
 
         if (is_resource($buffer)) {
             fclose($buffer);

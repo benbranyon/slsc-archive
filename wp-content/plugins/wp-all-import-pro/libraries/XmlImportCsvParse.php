@@ -11,10 +11,11 @@ class PMXI_CsvParser
      * @access public
      */
     $settings = array(
-        'delimiter' => ',',
+        'delimiter' => ",",
         'eol' => '',
         'length' => 999999,
-        'escape' => '"'
+        'enclosure' => '"',
+        'escape' => "\\",
     ),
 
     $tmp_files = array(),
@@ -936,8 +937,9 @@ class PMXI_CsvParser
 
         $c = 0;
         $d = ( "" != $this->delimiter ) ? $this->delimiter : $this->settings['delimiter'];
+        $en = $this->settings['enclosure'];
         $e = $this->settings['escape'];
-        $l = $this->settings['length'];       
+        $l = $this->settings['length'];
 
         $this->is_csv = $d;          
 
@@ -969,7 +971,7 @@ class PMXI_CsvParser
         $create_new_headers = false;
         $skip_x_rows = apply_filters('wp_all_import_skip_x_csv_rows', false, $import_id);
         $headers = array();
-        while ($keys = fgetcsv($res, $l, $d, $e)) {
+        while ($keys = fgetcsv($res, $l, $d, $en, $e)) {
 
             if ($skip_x_rows !== false && $skip_x_rows > $c) {
                 $c++;

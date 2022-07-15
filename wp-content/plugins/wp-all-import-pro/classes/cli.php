@@ -40,9 +40,10 @@ class PMXI_Cli {
 
         foreach( $import_ids as $import_id) {
             try {
-                $logger = function($m) {
-                    print("<p>[". date("H:i:s") ."] $m</p>\n");
-                };
+            	$logger = function($m) {
+		            print("<p>[". date("H:i:s") ."] ".wp_all_import_filter_html_kses($m)."</p>\n");
+	            };
+                $logger = apply_filters('wp_all_import_logger', $logger);
                 if (array_key_exists('disable-log', $assoc_args)) {
                     $logger = NULL;
                 }
@@ -52,12 +53,13 @@ class PMXI_Cli {
                 if ($import->isEmpty()) {
                     WP_CLI::error(__('Import not found.', PMXI_Plugin::LANGUAGE_DOMAIN));
                 }
-	            if ($import->triggered && !array_key_exists('force-run', $assoc_args)) {
+	            if (($import->triggered || $import->executing) && !array_key_exists('force-run', $assoc_args)) {
 		            WP_CLI::error(__('Import already running.', PMXI_Plugin::LANGUAGE_DOMAIN));
 	            }
                 $import->set([
                     'triggered' => 1,
                     'imported' => 0,
+                    'canceled' => 0,
                     'created' => 0,
                     'updated' => 0,
                     'skipped' => 0,

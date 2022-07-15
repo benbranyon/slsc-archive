@@ -128,10 +128,10 @@ $custom_type = get_post_type_object( $post_type );
 					</tr>	
 					<tr>
 						<td>
-							<h4 style="float:left;"><?php _e('Download & Import Attachments', 'wp_all_import_plugin') ?></h4>
-							<div style="clear:both;">
-								<input type="text" name="attachments" style="width:87%;" value="<?php echo esc_attr($post['attachments']) ?>" />
-								<input type="text" class="small" name="atch_delim" value="<?php echo esc_attr($post['atch_delim']) ?>" style="width:5%; text-align:center; float:right;"/>
+							<h4><?php _e('Download & Import Attachments', 'wp_all_import_plugin') ?></h4>
+							<div class="delimiter-field">
+								<input type="text" name="attachments" value="<?php echo esc_attr($post['attachments']) ?>" />
+								<input type="text" class="small" name="atch_delim" value="<?php echo esc_attr($post['atch_delim']) ?>" />
 							</div>			
 							<div class="input" style="margin:3px;">
 								<input type="hidden" name="is_search_existing_attach" value="0" />

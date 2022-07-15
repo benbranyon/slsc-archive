@@ -75,7 +75,7 @@ function wpai_wp_enqueue_code_editor( $args ) {
 }
 
 	if ( ! function_exists('pmxi_if') ) {
-		function pmxi_if( $left_condition, $operand = '', $right_condition = '', $then, $else = '' ) {
+		function pmxi_if( $left_condition, $operand, $right_condition, $then, $else = '' ) {
 			$str = trim(implode(' ', array($left_condition, html_entity_decode($operand), $right_condition)));												
 			return (eval ("return ($str);")) ? $then : $else;
 		}		
@@ -273,7 +273,7 @@ function wpai_wp_enqueue_code_editor( $args ) {
     if ( ! function_exists('wp_all_import_update_post_count') ) {
         function wp_all_import_update_post_count() {
             global $wpdb;
-            update_option( 'post_count', (int) $wpdb->get_var( "SELECT COUNT(ID) FROM {$wpdb->posts} WHERE post_status = 'publish' and post_type = 'post'" ) );
+            update_option( 'post_count', (int) $wpdb->get_var( "SELECT COUNT(ID) FROM {$wpdb->posts} WHERE post_status = 'publish' and post_type = 'post'" ), false );
         }
     }
 
@@ -304,5 +304,30 @@ function wpai_wp_enqueue_code_editor( $args ) {
         }
     }
 
+    if (!function_exists('wp_all_import_is_update_custom_field')) {
+	    function wp_all_import_is_update_custom_field($meta_key, $options) {
+		    if ($options['update_all_data'] == 'yes') {
+			    return TRUE;
+		    }
+		    if (!$options['is_update_custom_fields']) {
+			    return FALSE;
+		    }
+		    if ($options['update_custom_fields_logic'] == "full_update") {
+			    return TRUE;
+		    }
+		    if ($options['update_custom_fields_logic'] == "only"
+		        && !empty($options['custom_fields_list'])
+		        && is_array($options['custom_fields_list'])
+		        && in_array($meta_key, $options['custom_fields_list'])
+		    ) {
+			    return TRUE;
+		    }
+		    if ($options['update_custom_fields_logic'] == "all_except"
+		        && (empty($options['custom_fields_list']) || !in_array($meta_key, $options['custom_fields_list']))
+		    ) {
+			    return TRUE;
+		    }
 
-
+		    return FALSE;
+	    }
+    }

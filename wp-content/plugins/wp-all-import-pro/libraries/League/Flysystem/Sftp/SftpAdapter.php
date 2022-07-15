@@ -306,7 +306,7 @@ class SftpAdapter extends AbstractFtpAdapter
         }
 
         if( $key->loadKey($this->privateKey) === false ){
-        	throw new \LogicException('Failed to decrypt private key. <br/>Did you provide the passphrase for the private key in the password field?');
+        	throw new \LogicException('Failed to decrypt private key. <br/>Did you provide the passphrase for the private key in the password field? <br/><br/><b>Note:</b> OpenSSH private keys are not supported due to PHP limitations. Use a different format such as PEM if applicable.');
         }
 
         return $key;
@@ -498,9 +498,9 @@ class SftpAdapter extends AbstractFtpAdapter
     /**
      * @inheritdoc
      */
-    public function updateStream($path, $contents, Config $config)
+    public function updateStream($path, $resource, Config $config)
     {
-        return $this->writeStream($path, $contents, $config);
+        return $this->writeStream($path, $resource, $config);
     }
 
     /**
