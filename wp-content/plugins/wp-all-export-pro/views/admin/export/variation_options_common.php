@@ -1,3 +1,8 @@
+<?php
+if(!defined('ABSPATH')) {
+    die();
+}
+?>
 <script type="text/javascript">
     (function ($) {
         $(function () {
@@ -38,5 +43,5 @@
     })(jQuery);
 </script>
 
-<input type="hidden" id="export_variations" name="export_variations" value="<?php echo XmlExportEngine::getProductVariationMode();?>" />
-<input type="hidden" id="export_variations_title" name="export_variations_title" value="<?php echo XmlExportEngine::getProductVariationTitleMode();?>" />
+<input type="hidden" id="export_variations" name="export_variations" value="<?php echo esc_attr(XmlExportEngine::getProductVariationMode());?>" />
+<input type="hidden" id="export_variations_title" name="export_variations_title" value="<?php echo esc_attr(XmlExportEngine::getProductVariationTitleMode());?>" />

@@ -3,6 +3,56 @@
  */
 (function($, EventService ){$(function () {
 
+    // Applies automatic formatting to the specified range
+    wp.CodeMirror.defineExtension("autoFormatRange", function (from, to) {
+        var cm = this;
+        var outer = cm.getMode(), text = cm.getRange(from, to).split("\n");
+        var state = CodeMirror.copyState(outer, cm.getTokenAt(from).state);
+        var tabSize = cm.getOption("tabSize");
+
+        var out = "", lines = 0, atSol = from.ch == 0;
+        function newline() {
+            out += "\n";
+            atSol = true;
+            ++lines;
+        }
+
+        for (var i = 0; i < text.length; ++i) {
+            var stream = new CodeMirror.StringStream(text[i], tabSize);
+            while (!stream.eol()) {
+                var inner = CodeMirror.innerMode(outer, state);
+                var style = outer.token(stream, state), cur = stream.current();
+                stream.start = stream.pos;
+                if (!atSol || /\S/.test(cur)) {
+                    out += cur;
+                    atSol = false;
+                }
+                if (!atSol && inner.mode.newlineAfterToken &&
+                    inner.mode.newlineAfterToken(style, cur, stream.string.slice(stream.pos) || text[i+1] || "", inner.state))
+                    newline();
+            }
+            if (!stream.pos && outer.blankLine) outer.blankLine(state);
+            if (!atSol) newline();
+        }
+
+        cm.operation(function () {
+            cm.replaceRange(out, from, to);
+            for (var cur = from.line + 1, end = from.line + lines; cur <= end; ++cur)
+                cm.indentLine(cur, "smart");
+            cm.setSelection(from, cm.getCursor(false));
+        });
+    });
+
+	// Applies automatic mode-aware indentation to the specified range
+    wp.CodeMirror.defineExtension("autoIndentRange", function (from, to) {
+        var cmInstance = this;
+        this.operation(function () {
+            for (var i = from.line; i <= to.line; i++) {
+                cmInstance.indentLine(i, "smart");
+            }
+        });
+    });
+
 	var vm = {
 		'preiviewText' :'',
 		'isGoogleMerchantsExport' : false,
@@ -56,7 +106,9 @@
 
 		$('input[name=export_to]').val('csv');
 
-		if ($('#export_to_sheet').val() !== 'csv') {
+        var isWooCommerceOrder = vm.isWoocommerceOrderExport();
+
+        if ($('#export_to_sheet').val() !== 'csv') {
 			if (isWooCommerceOrder || vm.isProductVariationsExport()) {
 				$('.csv_delimiter').hide();
 				$('.export_to_csv').show();
@@ -113,7 +165,7 @@
 
 		if ( exportType == 'custom' && isDraggingOverTextEditor(e))
 		{
-			xml_editor.focus();
+			xml_editor.codemirror.focus();
 
 			if ( ui.helper.find('.custom_column').length )
 			{
@@ -131,8 +183,8 @@
 				if ( ! ui.helper.find('.default_column').hasClass('wp-all-export-custom-xml-drag-over') ) ui.helper.find('.default_column').addClass('wp-all-export-custom-xml-drag-over');
 			}
 
-			var line = xml_editor.lineAtHeight(ui.position.top, 'page');
-			var ch   = xml_editor.coordsChar(ui.position, 'page');
+			var line = xml_editor.codemirror.lineAtHeight(ui.position.top, 'page');
+			var ch   = xml_editor.codemirror.coordsChar(ui.position, 'page');
 
 			if( line == currentLine ) {
 				return;
@@ -153,18 +205,18 @@
 
 	function isDraggingOverTextEditor(event) {
 		var e = event.originalEvent.originalEvent.target;
-		return $.contains(xml_editor.display.scroller, e)
+		return $.contains(xml_editor.codemirror.display.scroller, e)
 	}
 
 	function addLine(str, line, ch) {
 		if(typeof ch === 'undefined') {
 			ch = 0;
 		}
-		xml_editor.replaceRange(str, {line: line, ch:0}, {line:line, ch:0});
+		xml_editor.codemirror.replaceRange(str, {line: line, ch:0}, {line:line, ch:0});
 	}
 
 	function removeLine(line) {
-		xml_editor.removeLine(line);
+		xml_editor.codemirror.replaceRange("", {line: line, ch: 0}, {line: line + 1, ch: 0});
 	}
 
 	var initDraggable = function() {
@@ -223,6 +275,7 @@
 				$elementName = $elementName.replace('(per tax)','PerTax');
 				$elementName = $elementName.replace('(per coupon)','PerCoupon');
 				$elementName = $elementName.replace('(per surcharge)','PerSurcharge');
+				$elementName = $elementName.replace('/','');
 			}
 
 			return $elementName;
@@ -262,26 +315,21 @@
 	});
 
 	if ($('#wp_all_export_code').length){
-		var editor = CodeMirror.fromTextArea(document.getElementById("wp_all_export_code"), {
-	        lineNumbers: true,
-	        matchBrackets: true,
-	        mode: "application/x-httpd-php",
-	        indentUnit: 4,
-	        indentWithTabs: true,
-	        lineWrapping: true
-	    });
-	    editor.setCursor(1);
+
+        var editor = wp.codeEditor.initialize($('#wp_all_export_code'), wpae_cm_settings);
+        editor.codemirror.setCursor(1);
 
 	    $('.CodeMirror').resizable({
 		  resize: function() {
-		    editor.setSize("100%", $(this).height());
+		    editor.codemirror.setSize("100%", $(this).height());
 		  }
 		});
 	}
 
 	if ($('#wp_all_export_custom_xml_template').length)
 	{
-		var xml_editor = CodeMirror.fromTextArea(document.getElementById("wp_all_export_custom_xml_template"), {
+
+		var xml_editor = wp.codeEditor.initialize(document.getElementById("wp_all_export_custom_xml_template"), {
 	        lineNumbers: true,
 	        matchBrackets: true,
 	        mode: "xml",
@@ -289,34 +337,28 @@
 	        indentWithTabs: true,
 	        lineWrapping: true,
 	        autoRefresh: true
-	        // dragDrop: true,
-	        // handleMouseEvents: true
 	    });
 
-	    xml_editor.setCursor(1);
+	    xml_editor.codemirror.setCursor(1);
+
 	    $('.CodeMirror').resizable({
 		  resize: function() {
-		    xml_editor.setSize("100%", $(this).height());
+		    xml_editor.codemirror.setSize("100%", $(this).height());
 		  }
 		});
 
-		var xml_editor_doc = xml_editor.getDoc();
+		var xml_editor_doc = xml_editor.codemirror.getDoc();
 
 	}
 
 	if ($('#wp_all_export_main_code').length){
-		var main_editor = CodeMirror.fromTextArea(document.getElementById("wp_all_export_main_code"), {
-	        lineNumbers: true,
-	        matchBrackets: true,
-	        mode: "application/x-httpd-php",
-	        indentUnit: 4,
-	        indentWithTabs: true,
-	        lineWrapping: true
-	    });
-	    main_editor.setCursor(1);
+
+        var main_editor = wp.codeEditor.initialize($('#wp_all_export_main_code'), wpae_cm_settings);
+        main_editor.codemirror.setCursor(1);
+
 	    $('.CodeMirror').resizable({
 		  resize: function() {
-		    main_editor.setSize("100%", $(this).height());
+		    main_editor.codemirror.setSize("100%", $(this).height());
 		  }
 		});
 	}
@@ -343,7 +385,127 @@
 		}
 	}).change();
 
-	// swither show/hide logic
+
+	$('#enable_real_time_exports').change(function(e) {
+
+        if ($(this).is(':checked')) {
+
+            $('.wpallexport-scheduling').slideUp({queue: false});
+			$('.wpallexport_realtime_show_bom').slideDown(function() {
+
+			});
+			$('.wpallexport-no-realtime-options').slideUp();
+
+        } else {
+
+            $('.wpallexport-scheduling').slideDown(function() {
+
+            });
+			$('.wpallexport_realtime_show_bom').slideUp();
+			$('.wpallexport-no-realtime-options').slideDown({queue: false});
+
+        }
+
+	});
+
+	$('.wpae-switch-real-time').click(function() {
+
+		var $link = $(this);
+
+        var request = {
+            action: 'wpae_realtime_export_status',
+            data: $(this).data('item-id'),
+            security: wp_all_export_security
+        };
+
+        $.ajax({
+                type: 'POST',
+                url: get_valid_ajaxurl(),
+                data: request,
+                success: function (response) {
+                	if($link.html() === 'Enable Real Time Exporting') {
+						$link.html('Disable Real Time Exporting');
+                        $('.wpae-export-row-' + $link.data('item-id')).find('.wpae-rt-export-enabled').show();
+                        $('.wpae-export-row-' + $link.data('item-id')).find('.wpae-rt-export-disabled').hide();
+                    } else {
+                        $link.html('Enable Real Time Exporting');
+                        $('.wpae-export-row-' + $link.data('item-id')).find('.wpae-rt-export-enabled').hide();
+                        $('.wpae-export-row-' + $link.data('item-id')).find('.wpae-rt-export-disabled').show();
+					}
+
+                },
+                dataType: "json"
+		});
+
+        return false;
+	});
+
+	$('#wpae-generate-token').click(function(){
+
+
+		if($(this).find('span').html() === 'Generate' ) {
+            var currentToken = $('#wpae-secure-url').val();
+
+            if (currentToken) {
+                $('#wpae-secure-url').val('');
+            }
+
+            $(this).css('background-color', '#F0F0F1');
+            $(this).find('img').show();
+            $(this).find('span').hide();
+
+            var request = {
+                action: 'wpae_generate_token',
+                data: $(this).data('id'),
+                security: wp_all_export_security
+            };
+
+            setTimeout(function () {
+
+                $.ajax({
+                    type: 'POST',
+                    url: get_valid_ajaxurl(),
+                    data: request,
+                    success: function (response) {
+                        $('#wpae-generate-token').css('background-color', '#435F9A');
+                        $('#wpae-generate-token').find('img').hide();
+                        $('#wpae-generate-token').find('span').show();
+                        $('#wpae-secure-url').val(response);
+                        $('#wpae-generate-token span').html('Remove URL');
+
+                    }
+                });
+
+            }, 250);
+        } else {
+
+
+            var removeRequest = {
+                action: 'wpae_remove_token',
+                data: $(this).data('id'),
+                security: wp_all_export_security
+            };
+
+            setTimeout(function () {
+
+                $.ajax({
+                    type: 'POST',
+                    url: get_valid_ajaxurl(),
+                    data: removeRequest,
+                    success: function (response) {
+                        $('#wpae-secure-url').val('');
+                        $('#wpae-generate-token span').html('Generate');
+                    }
+                });
+
+            }, 250);
+
+		}
+
+	});
+
+
+    // swither show/hide logic
 	$('input.switcher-horizontal').change(function (e) {
 
 		if ($(this).is(':checked')) {
@@ -392,10 +554,10 @@
 			$parent.removeClass('closed');
 			$parent.find('.wpallexport-collapsed-content:first').slideDown(400, function(){
 				if ($('#wp_all_export_main_code').length) {
-					main_editor.setCursor(1);
+					main_editor.codemirror.setCursor(1);
 				}
 				if ($('#wp_all_export_custom_xml_template').length){
-					xml_editor.setCursor(1);
+					xml_editor.codemirror.setCursor(1);
 				}
 			});
 		}
@@ -491,7 +653,7 @@
 
             var is_dismiss_warnings = parseInt($('#dismiss_warnings').val());
 
-            if ( ! is_dismiss_warnings ) {
+            if ( ! is_dismiss_warnings && ! $('#pmxe_dismiss_import_warnings_by_default').length) {
                 $('.wp-all-export-warning').find('p').html(warning_template);
                 $('.wp-all-export-warning').show();
             }
@@ -507,8 +669,8 @@
 
 		var wp_all_export_rules_config = {
 	      '#wp_all_export_xml_element' : {width:"98%"},
-	      '#wp_all_export_rule' : {width:"98%"},
-	    }
+	      '#wp_all_export_rule' : {width:"98%"}
+	    };
 
 	    for (var selector in wp_all_export_rules_config) {
 
@@ -536,6 +698,7 @@
 						data: {'selected' : params.selected},
 						security: wp_all_export_security
 				    };
+
 				    $.ajax({
 						type: 'POST',
 						url: ajaxurl,
@@ -567,11 +730,16 @@
 		    }
 	    });
 
-	}
+	};
 
 	var is_first_load = true;
 
 	var filtering = function(postType){
+
+		// Allow add-ons to disable filters
+		if(window.wpaeFiltersDisabled) {
+			return false;
+		}
 
 		var is_preload = $('.wpallexport-preload-post-data').val();
 		var filter_rules_hierarhy = parseInt(is_preload) ? $('input[name=filter_rules_hierarhy]').val() : '';
@@ -580,7 +748,11 @@
 
 		var request = {
 			action: 'wpae_filtering',
-			data: {'cpt' : postType, 'export_type' : 'specific', 'filter_rules_hierarhy' : filter_rules_hierarhy, 'product_matching_mode' : 'strict', 'taxonomy_to_export' : $('input[name=taxonomy_to_export]').val()},
+			data: {'cpt' : postType, 'export_type' : 'specific', 'filter_rules_hierarhy' : filter_rules_hierarhy, 'product_matching_mode' : 'strict',
+				'taxonomy_to_export' : $('input[name=taxonomy_to_export]').val(),
+				'sub_post_type_to_export' : $('input[name=sub_post_type_to_export]').val(),
+
+			},
 			security: wp_all_export_security
 	    };
 
@@ -633,6 +805,8 @@
 
 	};
 
+	window.wpae_filtering = filtering;
+
 	var liveFiltering = function(first_load, after_filtering){
 
 		// serialize filters
@@ -674,6 +848,7 @@
                 'export_only_customers_that_made_purchases' : $export_only_customers_that_made_purchases,
 				'export_type' : $('input[name=export_type]').val(),
 				'taxonomy_to_export' : $('input[name=taxonomy_to_export]').val(),
+				'sub_post_type_to_export' : $('input[name=sub_post_type_to_export]').val(),
 				'wpml_lang' : $('input[name=wpml_lang]').val(),
 				'export_variations' : $('#export_variations').val()
 			},
@@ -692,7 +867,7 @@
                 $('.wpae-record-count').val(response.found_records);
 
                 vm.hasVariations = response.hasVariations;
-				if(vm.hasVariations) {
+				if(vm.hasVariations || $('#pmxe_woocommerce_product_addon_installed').length) {
 
 					if($('#export_to_sheet').val() == 'xls' || $('#export_to_sheet').val() == 'xlsx') {
 						$('.csv_delimiter').hide();
@@ -728,7 +903,7 @@
 	    			if (response.found_records)
 	    			{
 	    				$('.wp_all_export_confirm_and_run').show();
-	    				$('.confirm_and_run_bottom').val(wp_all_export_L10n.confirm_and_run);
+	    				$('.confirm_and_run_bottom').val(wp_all_export_L10n.confirm_and_run.replace('&amp;', '&'));
 	    				$('#filtering_result').removeClass('nothing_to_export');
 	    			}
 	    			else
@@ -803,10 +978,11 @@
                         $('.wpallexport-choose-file').find('.wpallexport-upload-resource-step-two').slideDown();
                         $('.wpallexport-filtering-wrapper').show();
                         if (postType == 'taxonomies') {
+
                             $('.taxonomy_to_export_wrapper').slideDown();
                         }
 
-                        if ((postType == 'users' || postType == 'shop_customer') && !$('#pmxe_user_addon_installed').length) {
+                        if ((postType == 'users' || postType == 'shop_customer') && !($('#pmxe_user_addon_installed').length || $('#pmxe_user_addon_free_installed').length)) {
                             $('.wp_all_export_continue_step_two span.wp_all_export_btn_with_note').slideUp();
 
                             $('.wpallexport-free-edition-notice').slideUp();
@@ -819,7 +995,8 @@
                             $('.wpallexport-filtering-wrapper').slideUp();
                             $('.wpallexport-submit-buttons .wp_all_export_btn_with_note').slideUp();
                             $('.wpallexport-upload-resource-step-two').slideUp();
-                        } else {
+                        }
+                        else {
                             $('.wp_all_export_continue_step_two span.wp_all_export_btn_with_note').slideDown();
                             $('.wpallexport-free-edition-notice').slideUp();
                         }
@@ -830,7 +1007,7 @@
 					break;
 				case 'advanced_type':
 
-                    if($('#wp_query_selector .dd-selected-value').val() == 'wp_user_query' && !$('#pmxe_user_addon_installed').length) {
+                    if($('#wp_query_selector .dd-selected-value').val() == 'wp_user_query' && !($('#pmxe_user_addon_installed').length || $('#pmxe_user_addon_free_installed').length)) {
                         $('.wp_all_export_continue_step_two span.wp_all_export_btn_with_note').slideUp();
                         $('.wpallexport-user-export-notice').slideDown();
                     } else {
@@ -863,9 +1040,30 @@
 
 		$('.wpallexport-import-from.selected').click();
 
-		$('#file_selector').ddslick({
+		window.wpaeFiltersDisabled = false;
+
+		window.wpaeDisableFiltering = function() {
+			window.wpaeFiltersDisabled = true;
+		};
+
+		window.wpaeEnableFiltering = function() {
+            window.wpaeFiltersDisabled = false;
+		};
+
+
+        $('#file_selector').ddslick({
 			width: 600,
 			onSelected: function(selectedData){
+
+				function showNotice(notice)
+				{
+                    $('.wpallexport-free-edition-notice').slideUp();
+                    $('.taxonomy_to_export_wrapper').slideUp();
+                    $(notice).slideDown();
+                    $('.wpallexport-filtering-wrapper').slideUp();
+                    $('.wpallexport-submit-buttons .wp_all_export_btn_with_note').slideUp();
+                    $('.wpallexport-upload-resource-step-two').slideUp();
+				}
 
 		    	if (selectedData.selectedData.value != ""){
 
@@ -879,9 +1077,12 @@
 					});
 
 					$('.wpallexport-choose-file').find('input[name=cpt]').val(postType);
+                    $('.wpallexport-choose-file').find('input[name=cpt]').trigger("change");
 
 					if (postType == 'taxonomies'){
-						$('.taxonomy_to_export_wrapper').slideDown();
+                        $('.wpallexport-free-edition-notice').slideUp();
+
+                        $('.taxonomy_to_export_wrapper').slideDown();
 						if ($('input[name=taxonomy_to_export]').val() != ''){
 							filtering(postType);
 						}
@@ -890,21 +1091,23 @@
 							$('.wpallexport-choose-file').find('.wpallexport-upload-resource-step-two').slideUp();
 							$('.wpallexport-choose-file').find('.wpallexport-submit-buttons').hide();
 						}
-					} else if((postType == 'users')  && !$('#pmxe_user_addon_installed').length) {
-                        $('.wpallexport-free-edition-notice').slideUp();
-                        $('.taxonomy_to_export_wrapper').slideUp();
-						$('.wpallexport-user-export-notice').slideDown();
-						$('.wpallexport-filtering-wrapper').slideUp();
-                        $('.wpallexport-submit-buttons .wp_all_export_btn_with_note').slideUp();
-                        $('.wpallexport-upload-resource-step-two').slideUp();
+					} else if((postType == 'users') && !($('#pmxe_user_addon_installed').length || $('#pmxe_user_addon_free_installed'))) {
+                    	showNotice('.wpallexport-user-export-notice');
+						return;
+					}  else if((postType == 'shop_customer') && !$('#pmxe_user_addon_installed').length) {
+                        showNotice('.wpallexport-customer-export-notice');
                         return;
-					}  else if((postType == 'shop_customer')  && !$('#pmxe_user_addon_installed').length) {
-                        $('.wpallexport-free-edition-notice').slideUp();
-                        $('.taxonomy_to_export_wrapper').slideUp();
-                        $('.wpallexport-customer-export-notice').slideDown();
-                        $('.wpallexport-filtering-wrapper').slideUp();
-                        $('.wpallexport-submit-buttons .wp_all_export_btn_with_note').slideUp();
-                        $('.wpallexport-upload-resource-step-two').slideUp();
+                    } else if (postType == 'product' && !$('#pmxe_woocommerce_addon_installed').length && !$('#pmxe_woocommerce_product_addon_installed').length  && $('#WooCommerce_Installed').length) {
+						showNotice('.wpallexport-product-export-notice');
+						return;
+                    } else if (postType == 'shop_order' && !$('#pmxe_woocommerce_addon_installed').length && !$('#pmxe_woocommerce_order_addon_installed').length) {
+                        showNotice('.wpallexport-order-export-notice');
+                        return;
+                    } else if (postType == 'shop_coupon' && !$('#pmxe_woocommerce_addon_installed').length) {
+                        showNotice('.wpallexport-coupon-export-notice');
+                        return;
+                    } else if (postType == 'shop_review' && !$('#pmxe_woocommerce_addon_installed').length) {
+                        showNotice('.wpallexport-review-export-notice');
                         return;
                     }
 					else{
@@ -934,7 +1137,49 @@
 		    }
 		});
 
+        $(document).on('keyup','.wp_query', function(){
+
+        	var value = $(this).val();
+
+        	if(!$('#pmxe_woocommerce_addon_installed').length) {
+
+        		if(value.indexOf('shop_order') === -1 && value.indexOf('product') === -1 && value.indexOf('shop_coupon') === -1) {
+                    $('.wpallexport-free-edition-notice').hide();
+                    $('.wpallexport-submit-buttons').show();
+                    return;
+				}
+
+                if (value.indexOf('shop_order') !== -1 && !$('#pmxe_woocommerce_order_addon_installed').length) {
+                    $('.wpallexport-order-export-notice').show();
+                    $('.wpallexport-submit-buttons').hide();
+                }
+
+        		if (value.indexOf('product') !== -1 && !$('#pmxe_woocommerce_product_addon_installed').length && $('#WooCommerce_Installed').length) {
+                    $('.wpallexport-product-export-notice').show();
+                    $('.wpallexport-submit-buttons').hide();
+                }
+
+                if (value.indexOf('shop_coupon') !== -1) {
+                    $('.wpallexport-coupon-export-notice').show();
+                    $('.wpallexport-submit-buttons').hide();
+                }
+            }
+        });
+
 		$(document).on('click', 'a.auto-generate-template', function(){
+
+			var export_type = $('input[name="cpt"]').val();
+
+			if (export_type == 'shop_order' && !$('#woocommerce_add_on_pro_installed').length) {
+				$('#migrate-orders-notice').slideDown();
+				return false;
+			}
+
+			if (export_type == 'product' && !$('#woocommerce_add_on_pro_installed').length) {
+				$('#migrate-products-notice').slideDown();
+				return false;
+			}
+
 			$('input[name^=auto_generate]').val('1');
 
 			$('.hierarhy-output').each(function(){
@@ -976,7 +1221,8 @@
 
                     }
 		    		else{
-		    			if(queryType == 'wp_user_query' && !$('#pmxe_user_addon_installed').length) {
+
+		    			if(queryType == 'wp_user_query' && !($('#pmxe_user_addon_free_installed').length || $('#pmxe_user_addon_installed').length)) {
 		    				$('.wp_all_export_continue_step_two span.wp_all_export_btn_with_note').slideUp();
 		    				$('.wpallexport-user-export-notice').slideDown();
 						} else {
@@ -1165,13 +1411,13 @@
 					addLine( content, currentLine, currentLine);
 					currentLine = -1;
 
-					var totalLines = xml_editor.lineCount();
-					xml_editor.autoIndentRange({line:0, ch:0}, {line:totalLines,ch:100});
+					var totalLines = xml_editor.codemirror.lineCount();
+					xml_editor.codemirror.autoIndentRange({line:0, ch:0}, {line:totalLines,ch:100});
 				}
 
-				if (ui.draggable.find('input[name^=rules]').length){
+				if ($('#available_data').find(ui.draggable.find('input[name^=rules]')).length){
 					var content = "";
-					$('li.' + ui.draggable.find('input[name^=rules]').val()).each(function(){
+					$($('#available_data').find('li.' + ui.draggable.find('input[name^=rules]').val())).each(function(){
 						var $elementName = $(this).find('input[name^=cc_name]').val();
 						$elementName = processElementName($(this),$elementName);
 						content = content + getCodeToPlace($elementName);
@@ -1232,7 +1478,7 @@
 			});
 
 			$('.wp-all-export-chosen-select').trigger('chosen:updated');
-			$('.wp_all_export_saving_status').html('');
+			$('.wp_all_export_saving_status').removeClass('error updated').html('');
 
 			$('.wpallexport-overlay').show();
 			$addAnotherForm.find('input.switcher').change();
@@ -1666,7 +1912,7 @@
             var request = {
                 action: 'wpae_preview',
                 data: $('form.wpallexport-step-3').serialize(),
-                custom_xml: xml_editor.getValue(),
+                custom_xml: xml_editor.codemirror.getValue(),
                 tagno: tagno,
                 security: wp_all_export_security
             };
@@ -1924,7 +2170,7 @@
 					var request = {
 						action: 'wpae_preview',
 						data: $('form.wpallexport-step-3').serialize(),
-						custom_xml: xml_editor.getValue(),
+						custom_xml: xml_editor.codemirror.getValue(),
 						security: wp_all_export_security
 					};
 
@@ -2206,7 +2452,7 @@
     $('.wp_all_export_save_functions').click(function(){
 
 
-    	var data = $(this).hasClass('wp_all_export_save_main_code') ? main_editor.getValue() : editor.getValue();
+    	var data = $(this).hasClass('wp_all_export_save_main_code') ? main_editor.codemirror.getValue() : editor.codemirror.getValue();
 
     	var request = {
 			action: 'save_functions',
@@ -2214,7 +2460,7 @@
 			security: wp_all_export_security
 	    };
 	    $('.wp_all_export_functions_preloader').show();
-	    $('.wp_all_export_saving_status').html('');
+	    $('.wp_all_export_saving_status').removeClass('error updated').html('');
 
 		$.ajax({
 			type: 'POST',
@@ -2225,14 +2471,14 @@
 
 				if (response.result)
 				{
-					$('.wp_all_export_saving_status').css({'color':'green'});
+					$('.wp_all_export_saving_status').addClass('updated');
 					setTimeout(function() {
-						$('.wp_all_export_saving_status').html('').fadeOut();
+						$('.wp_all_export_saving_status').removeClass('error updated').html('').fadeOut();
 					}, 3000);
 				}
 				else
 				{
-					$('.wp_all_export_saving_status').css({'color':'red'});
+					$('.wp_all_export_saving_status').addClass('error');
 				}
 
 				$('.wp_all_export_saving_status').html(response.msg).show();
@@ -2296,7 +2542,7 @@
 				}
 
                 break;
-			case 'custom':
+            case 'custom':
 				if(angular.element(document.getElementById('googleMerchants')).injector()){
 					resetDraggable();
 					angular.element(document.getElementById('googleMerchants')).injector().get('$rootScope').$broadcast('googleMerchantsDeselected');
@@ -2317,27 +2563,29 @@
 				}
 
     			$('.wpallexport-custom-xml-template').slideDown(400, function(){
-    				xml_editor.setCursor(1);
+                    setTimeout(function() {
+                        xml_editor.codemirror.setCursor(1);
+					},1000);
     			});
     			$('.pmxe_product_data').find(".wpallexport-xml-element:contains('Attributes')").parents('li:first').hide();
 
                 if ( $(this).find('option:selected').val() == 'XmlGoogleMerchants' ){
                     if ( ! $xml_template_first_load ) {
-                        $tmp_xml_template = xml_editor.getValue();
+                        $tmp_xml_template = xml_editor.codemirror.getValue();
                         // Get all necessary data according to the spec
                         var request = {
                             action: 'get_xml_spec',
                             security: wp_all_export_security,
                             spec_class: $(this).find('option:selected').val()
                         };
-                        xml_editor.setValue("Loading...");
+                        xml_editor.codemirror.setValue("Loading...");
                         $.ajax({
                             type: 'POST',
                             url: get_valid_ajaxurl(),
                             data: request,
                             success: function (response) {
                                 if (response.result) {
-                                    xml_editor.setValue(response.fields);
+                                    xml_editor.codemirror.setValue(response.fields);
                                 }
                             },
                             error: function (jqXHR, textStatus) {
@@ -2349,30 +2597,59 @@
                 }
                 else{
                     if ( $tmp_xml_template != '' ){
-                        xml_editor.setValue($tmp_xml_template);
+                        xml_editor.codemirror.setValue($tmp_xml_template);
+
                         $tmp_xml_template = '';
                     }
                 }
     			break;
 			case 'XmlGoogleMerchants':
-				$('.simple_xml_template_options').slideUp();
-				if(!vm.isCSVExport()) {
-					$('.wpallexport-simple-xml-template').slideUp();
-				}
-				$('.wpallexport-custom-xml-template').slideUp();
-				$('.wpallexport-function-editor').slideDown();
 
-				if(!angular.isUndefined(e.originalEvent)) {
-					if ( ! $('.wpallexport-file-options').hasClass('closed')) $('.wpallexport-file-options').find('.wpallexport-collapsed-header').click();
-				}
-				$('.pmxe_product_data').find(".wpallexport-xml-element:contains('Attributes')").parents('li:first').show();
+				if($('#pmxe_woocommerce_addon_installed').length) {
+                    $('.simple_xml_template_options').slideUp();
+                    if (!vm.isCSVExport()) {
+                        $('.wpallexport-simple-xml-template').slideUp();
+                    }
+                    $('.wpallexport-custom-xml-template').slideUp();
+                    $('.wpallexport-function-editor').slideDown();
 
-				if(angular.element(document.getElementById('googleMerchants')).injector()){
-					resetDraggable();
-					angular.element(document.getElementById('googleMerchants')).injector().get('$rootScope').$broadcast('googleMerchantsSelected', vm.isProductVariationsExport());
-				}
-				vm.isGoogleMerchantsExport = true;
-                break;
+                    if (!angular.isUndefined(e.originalEvent)) {
+                        if (!$('.wpallexport-file-options').hasClass('closed')) $('.wpallexport-file-options').find('.wpallexport-collapsed-header').click();
+                    }
+                    $('.pmxe_product_data').find(".wpallexport-xml-element:contains('Attributes')").parents('li:first').show();
+
+                    if (angular.element(document.getElementById('googleMerchants')).injector()) {
+                        resetDraggable();
+                        angular.element(document.getElementById('googleMerchants')).injector().get('$rootScope').$broadcast('googleMerchantsSelected', vm.isProductVariationsExport());
+                    }
+                    vm.isGoogleMerchantsExport = true;
+                } else {
+                    $('.wpallexport-submit-buttons').hide();
+                    $('.simple_xml_template_options').slideUp();
+                    $('.wpallexport-simple-xml-template').slideUp();
+                    $('.wpallexport-custom-xml-template').slideUp();
+
+                    $('.wpallexport-google-merchants-template').slideDown();
+
+                    if ( ! $('.wpallexport-file-options').hasClass('closed')) {
+                        $('.wpallexport-file-options').find('.wpallexport-collapsed-header').click();
+                    }
+
+                    $('.pmxe_product_data').find(".wpallexport-xml-element:contains('Attributes')").parents('li:first').show();
+
+                    if(angular.element(document.getElementById('googleMerchants')).injector()){
+                        resetDraggable();
+                        angular.element(document.getElementById('googleMerchants')).injector().get('$rootScope').$broadcast('googleMerchantsSelected', vm.isProductVariationsExport());
+                    }
+                    vm.isGoogleMerchantsExport = true;
+                    $('.wpallexport-submit-template').attr('disabled', 'disabled');
+
+                    setTimeout(function(){
+                        $('.wpallexport-google-merchants-template').show();
+                    }, 100);
+
+                }
+				break;
 			default:
 				resetDraggable();
 				angular.element(document.getElementById('googleMerchants')).injector().get('$rootScope').$broadcast('googleMerchantsDeselected');
@@ -2559,7 +2836,6 @@
 				'security' : wp_all_export_security
 			},
 			success: function (data) {
-
                 $('.wpallexport-loader').hide();
                 $(this).pointer({
 					content: '<div id="scheduling-popup">' + data + '</div>',
@@ -2573,9 +2849,10 @@
 						$('.timepicker').timepicker();
 
 						var $leftOffset = ($(window).width() - 715) / 2;
+						var $topOffset = $(document).scrollTop() + 100;
 
 						var $pointer = $('.wp-pointer').last();
-						$pointer.css({'position': 'absolute', 'top': '50px', 'left': $leftOffset + 'px'});
+						$pointer.css({'position': 'absolute', 'top': $topOffset + 'px', 'left': $leftOffset + 'px'});
 
 						$pointer.find('a.close').remove();
 						$pointer.find('.wp-pointer-buttons').append('<button class="save-changes button button-primary button-hero wpallexport-large-button" style="float: right; background-image: none;">Save</button>');

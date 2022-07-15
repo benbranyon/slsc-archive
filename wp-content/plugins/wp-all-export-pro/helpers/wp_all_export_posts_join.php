@@ -8,7 +8,7 @@ function wp_all_export_posts_join($join){
 		$customJoin = PMXE_Plugin::$session->get('joinClause');
 		if ( ! empty( $customJoin ) ) {
 			$join .= implode( ' ', array_unique( $customJoin ) );		
-		}			
+		}
 	}
 	else
 	{

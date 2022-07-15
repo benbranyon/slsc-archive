@@ -4,7 +4,7 @@
  * and can be changed by corresponding WordPress function calls
  */
 $config = array(
-    "info_api_url" => "http://www.wpallimport.com",
+    "info_api_url" => "https://www.wpallimport.com",
     "dismiss" => 0,
 	"dismiss_manage_top" => 0,
 	"dismiss_manage_bottom" => 0,

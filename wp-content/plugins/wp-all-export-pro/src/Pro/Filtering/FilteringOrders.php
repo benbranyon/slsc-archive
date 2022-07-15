@@ -2,11 +2,12 @@
 
 namespace Wpae\Pro\Filtering;
 
+
 /**
  * Class FilteringOrders
- * @package Wpae\Pro\Filtering
+ * @package Pmwe\Pro\Filtering
  */
-class FilteringOrders extends FilteringCPT
+class FilteringOrders extends \Wpae\Pro\Filtering\FilteringCPT
 {
 
     /**
@@ -128,7 +129,7 @@ class FilteringOrders extends FilteringCPT
             'taxonomy_to_export' => ''
         );
 
-        $productsFilter = new FilteringCPT();
+        $productsFilter = new \Wpae\Pro\Filtering\FilteringCPT();
         $productsFilter->init($filter_args);
         $productsFilter->parse();
 

@@ -212,6 +212,15 @@ class Scheduling
         return $times;
     }
 
+    public function updateApiKey($elementId, $newKey) {
+
+        $remoteSchedule = $this->getSchedule($elementId);
+
+        if ($remoteSchedule) {
+            $this->schedulingApi->updateScheduleKey($remoteSchedule->id, $newKey);
+        }
+    }
+
     /**
      * TODO: Uglier but simpler method, if this gets in the way, extract to a class
      * 

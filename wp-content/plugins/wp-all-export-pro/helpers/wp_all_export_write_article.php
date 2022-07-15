@@ -2,7 +2,7 @@
 
 function wp_all_export_write_article( &$article, &$element_name, $element_value ) 
 {
-	$base_name = $element_name;
+ 	$base_name = $element_name;
 
 	if ( ! isset($article[$element_name]) ) 
 	{

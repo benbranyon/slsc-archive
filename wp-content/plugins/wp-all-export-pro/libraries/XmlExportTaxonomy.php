@@ -28,6 +28,11 @@ if (!class_exists('XmlExportTaxonomy')) {
                 'type' => 'term_id'
             ),
             array(
+                'label' => 'term_permalink',
+                'name' => 'Term Permalink',
+                'type' => 'term_permalink'
+            ),
+            array(
                 'label' => 'term_name',
                 'name' => 'Term Name',
                 'type' => 'term_name'
@@ -170,7 +175,7 @@ if (!class_exists('XmlExportTaxonomy')) {
             }
         }
 
-        public static function prepare_data($term, $exportOptions, $xmlWriter = false, &$acfs, $implode_delimiter, $preview)
+        public static function prepare_data($term, $exportOptions, $xmlWriter, &$acfs, $implode_delimiter, $preview)
         {
             $article = array();
 
@@ -258,6 +263,9 @@ if (!class_exists('XmlExportTaxonomy')) {
                             break;
                         case 'term_name':
                             wp_all_export_write_article($article, $element_name, apply_filters('pmxe_term_name', pmxe_filter($term->name, $fieldSnipped), $term->term_id));
+                            break;
+                        case 'term_permalink':
+                            wp_all_export_write_article($article, $element_name, apply_filters('pmxe_term_permalink', pmxe_filter(get_term_link($term->term_id), $fieldSnipped, $term->term_id ) ) );
                             break;
                         case 'term_slug':
                             wp_all_export_write_article($article, $element_name, apply_filters('pmxe_term_slug', pmxe_filter($term->slug, $fieldSnipped), $term->term_id));

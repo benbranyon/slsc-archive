@@ -4,9 +4,9 @@ namespace Wpae\Pro\Filtering;
 
 /**
  * Class FilteringReviews
- * @package Wpae\Pro\Filtering
+ * @package Pmwe\Pro\Filtering
  */
-class FilteringReviews extends FilteringBase
+class FilteringReviews extends \Wpae\Pro\Filtering\FilteringBase
 {
     /**
      * @return bool

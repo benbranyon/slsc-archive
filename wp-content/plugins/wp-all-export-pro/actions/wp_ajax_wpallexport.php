@@ -6,11 +6,11 @@ function pmxe_wp_ajax_wpallexport()
 {
 
     if (!check_ajax_referer('wp_all_export_secure', 'security', false)) {
-        exit(__('Security check', 'wp_all_export_plugin'));
+        exit(esc_html__('Security check', 'wp_all_export_plugin'));
     }
 
     if (!current_user_can(PMXE_Plugin::$capabilities) && ! current_user_can(PMXE_Plugin::CLIENT_MODE_CAP)) {
-        exit(__('Security check', 'wp_all_export_plugin'));
+        exit(esc_html__('Security check', 'wp_all_export_plugin'));
     }
 
     $input = new PMXE_Input();
@@ -26,7 +26,7 @@ function pmxe_wp_ajax_wpallexport()
     $export->getById($export_id);
 
     if ($export->isEmpty()) {
-        exit(__('Export is not defined.', 'wp_all_export_plugin'));
+        exit(esc_html__('Export is not defined.', 'wp_all_export_plugin'));
     }
 
     if(!current_user_can(PMXE_Plugin::$capabilities) && !(current_user_can(PMXE_Plugin::CLIENT_MODE_CAP) && $export['client_mode_enabled'])) {
@@ -55,6 +55,11 @@ function pmxe_wp_ajax_wpallexport()
 
     $posts_per_page = $exportOptions['records_per_iteration'];
 
+    if($exportOptions['enable_real_time_exports']) {
+        // Only export one record the first time a real-time export runs
+        $posts_per_page = 1;
+    }
+
     if ($exportOptions['export_type'] == 'advanced') {
         if (XmlExportEngine::$is_user_export) {
             add_action('pre_user_query', 'wp_all_export_pre_user_query', 10, 1);
@@ -79,9 +84,8 @@ function pmxe_wp_ajax_wpallexport()
             remove_filter('posts_join', 'wp_all_export_posts_join');
         }
     } else {
-        XmlExportEngine::$post_types = $exportOptions['cpt'];
 
-        // $is_products_export = ($exportOptions['cpt'] == 'product' and class_exists('WooCommerce'));
+        XmlExportEngine::$post_types = $exportOptions['cpt'];
 
         if (in_array('users', $exportOptions['cpt']) or in_array('shop_customer', $exportOptions['cpt'])) {
             add_action('pre_user_query', 'wp_all_export_pre_user_query', 10, 1);
@@ -122,16 +126,34 @@ function pmxe_wp_ajax_wpallexport()
             remove_action('comments_clauses', 'wp_all_export_comments_clauses');
         }
         else {
-            remove_all_actions('parse_query');
-            remove_all_filters('posts_clauses');
-            remove_all_filters('posts_orderby');
-            wp_all_export_remove_before_post_except_toolset_actions();
+            if(strpos($exportOptions['cpt'][0], 'custom_') === 0) {
 
-            add_filter('posts_join', 'wp_all_export_posts_join', 10, 1);
-            add_filter('posts_where', 'wp_all_export_posts_where', 10, 1);
-            $exportQuery = new WP_Query(array('post_type' => $exportOptions['cpt'], 'post_status' => 'any', 'orderby' => 'ID', 'order' => 'ASC', 'offset' => $export->exported, 'posts_per_page' => $posts_per_page));
-            remove_filter('posts_where', 'wp_all_export_posts_where');
-            remove_filter('posts_join', 'wp_all_export_posts_join');
+                $addon = GF_Export_Add_On::get_instance();
+
+                $filter_args = array(
+                    'filter_rules_hierarhy' => empty($exportOptions['filter_rules_hierarhy']) ? array() : $exportOptions['filter_rules_hierarhy'],
+                    'product_matching_mode' => empty($exportOptions['product_matching_mode']) ? 'strict' : $exportOptions['product_matching_mode'],
+                    'taxonomy_to_export' => empty($exportOptions['taxonomy_to_export']) ? '' : $exportOptions['taxonomy_to_export'],
+                    'sub_post_type_to_export' => empty($exportOptions['sub_post_type_to_export']) ? '' : $exportOptions['sub_post_type_to_export']
+                );
+
+                $exportQuery = $addon->add_on->get_query($export->exported, $posts_per_page, $filter_args );
+
+            } else {
+
+                remove_all_actions('parse_query');
+                remove_all_filters('posts_clauses');
+                remove_all_filters('posts_orderby');
+                wp_all_export_remove_before_post_except_toolset_actions();
+
+                add_filter('posts_join', 'wp_all_export_posts_join', 10, 1);
+                add_filter('posts_where', 'wp_all_export_posts_where', 10, 1);
+
+                $exportQuery = new WP_Query(array('post_type' => $exportOptions['cpt'], 'post_status' => 'any', 'orderby' => 'ID', 'order' => 'ASC', 'offset' => $export->exported, 'posts_per_page' => $posts_per_page));
+
+                remove_filter('posts_where', 'wp_all_export_posts_where');
+                remove_filter('posts_join', 'wp_all_export_posts_join');
+            }
         }
     }
 
@@ -185,17 +207,45 @@ function pmxe_wp_ajax_wpallexport()
         remove_filter('terms_clauses', 'wp_all_export_terms_clauses');
     } else {
 
-        if(XmlExportEngine::$is_user_export || XmlExportEngine::$is_woo_customer_export ) {
-            $foundPosts = $exportQuery->get_total();
-            $postCount = count($exportQuery->get_results());
+        if(strpos($exportOptions['cpt'][0], 'custom_') === 0) {
+
+            $addon = GF_Export_Add_On::get_instance();
+
+            $filter_args = array(
+                'filter_rules_hierarhy' => empty($exportOptions['filter_rules_hierarhy']) ? array() : $exportOptions['filter_rules_hierarhy'],
+                'product_matching_mode' => empty($exportOptions['product_matching_mode']) ? 'strict' : $exportOptions['product_matching_mode'],
+                'taxonomy_to_export' => empty($exportOptions['taxonomy_to_export']) ? '' : $exportOptions['taxonomy_to_export'],
+                'sub_post_type_to_export' => empty($exportOptions['sub_post_type_to_export']) ? '' : $exportOptions['sub_post_type_to_export']
+            );
+
+            $totalQuery = $addon->add_on->get_query( 0, 0, $filter_args);
+            $exportQuery = $addon->add_on->get_query($export->exported, $exportOptions['records_per_iteration'] , $filter_args );
+            $foundPosts = count($totalQuery->results);
+            $postCount = count($exportQuery->results);
+
+            XmlExportEngine::$exportQuery = $exportQuery;
+
         } else {
-            $foundPosts = $exportQuery->found_posts;
-            $postCount = $exportQuery->post_count;
+            if (XmlExportEngine::$is_user_export || XmlExportEngine::$is_woo_customer_export) {
+                $foundPosts = $exportQuery->get_total();
+                $postCount = count($exportQuery->get_results());
+            } else {
+
+                $foundPosts = $exportQuery->found_posts;
+                $postCount = $exportQuery->post_count;
+            }
         }
     }
     // [ \get total founded records ]
 
+    if($exportOptions['enable_real_time_exports']) {
+        // Only export one post when first running a real-time export
+        $foundPosts = 1;
+        $postCount = 1;
+    }
+
     if (!$export->exported) {
+
         $attachment_list = $export->options['attachment_list'];
         if (!empty($attachment_list)) {
             foreach ($attachment_list as $attachment) {
@@ -264,12 +314,18 @@ function pmxe_wp_ajax_wpallexport()
                         file_put_contents(PMXE_Plugin::$session->file, PMXE_XMLWriter::preprocess_xml(XmlExportEngine::$exportOptions['custom_xml_template_footer']), FILE_APPEND);
                         break;
                     default:
-
                         break;
                 }
 
                 if (!in_array(XmlExportEngine::$exportOptions['xml_template_type'], array('custom', 'XmlGoogleMerchants'))) {
+
                     $main_xml_tag = apply_filters('wp_all_export_main_xml_tag', $exportOptions['main_xml_tag'], $export->id);
+
+                    // Add an opening tag also if the file is empty
+                    $content = file_get_contents(PMXE_Plugin::$session->file);
+                    if(strpos($content, $main_xml_tag) === false) {
+                        file_put_contents(PMXE_Plugin::$session->file, '<' . $main_xml_tag . '>', FILE_APPEND);
+                    }
 
                     file_put_contents(PMXE_Plugin::$session->file, '</' . $main_xml_tag . '>', FILE_APPEND);
 
@@ -355,6 +411,7 @@ function pmxe_wp_ajax_wpallexport()
         } else {
             update_option('wp_all_export_queue_' . (empty($export->parent_id) ? $export->id : $export->parent_id), $queue_exports);
         }
+
 
         wp_send_json(array(
             'export_id' => $export->id,

@@ -3,11 +3,11 @@
 function pmxe_wp_ajax_get_xml_spec(){
 
 	if ( ! check_ajax_referer( 'wp_all_export_secure', 'security', false )){
-		exit( json_encode(array('html' => __('Security check', 'wp_all_export_plugin'))) );
+		exit( json_encode(array('html' => esc_html__('Security check', 'wp_all_export_plugin'))) );
 	}
 
 	if ( ! current_user_can( PMXE_Plugin::$capabilities ) ){
-		exit( json_encode(array('html' => __('Security check', 'wp_all_export_plugin'))) );
+		exit( json_encode(array('html' => esc_html__('Security check', 'wp_all_export_plugin'))) );
 	}
 
     require_once PMXE_ROOT_DIR . '/libraries/XmlSpec.php';
@@ -31,5 +31,5 @@ function pmxe_wp_ajax_get_xml_spec(){
       exit(json_encode(array('result' => true, 'fields' => $fields))); die;
     }
 
-	exit(json_encode(array('result' => false, 'msg' => __('Specification not found.', 'wp_all_export_plugin')))); die;
+	exit(json_encode(array('result' => false, 'msg' => esc_html__('Specification not found.', 'wp_all_export_plugin')))); die;
 }

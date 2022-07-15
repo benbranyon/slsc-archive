@@ -4,11 +4,11 @@
 function wpae_api() {
 
     if ( ! check_ajax_referer( 'wp_all_export_secure', 'security', false )){
-        exit( json_encode(array('html' => __('Security check', 'wp_all_export_plugin'))) );
+        exit( json_encode(array('html' => esc_html__('Security check', 'wp_all_export_plugin'))) );
     }
 
     if ( ! current_user_can( \PMXE_Plugin::$capabilities ) ){
-        exit( json_encode(array('html' => __('Security check', 'wp_all_export_plugin'))) );
+        exit( json_encode(array('html' => esc_html__('Security check', 'wp_all_export_plugin'))) );
     }
 
     $container = new \Wpae\Di\WpaeDi(array());

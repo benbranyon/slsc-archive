@@ -107,7 +107,16 @@ final Class XmlCsvExport
                 $articles = apply_filters('wp_all_export_csv_rows', $articles, XmlExportEngine::$exportOptions, XmlExportEngine::$exportID);
                 if (!$preview) do_action('pmxe_exported_post', $term->term_id, XmlExportEngine::$exportRecord);
             }
-        } else { // exporting custom post types
+        } elseif (XmlExportEngine::$is_custom_addon_export) {
+
+            foreach (XmlExportEngine::$exportQuery->results as $record) {
+
+                $articles[] = XmlExportCustomRecord::prepare_data($record, XmlExportEngine::$exportOptions, false, $acfs, XmlExportEngine::$implode, $preview);
+                $articles = apply_filters('wp_all_export_csv_rows', $articles, XmlExportEngine::$exportOptions, XmlExportEngine::$exportID);
+                if (!$preview) do_action('pmxe_exported_post', $record->id, XmlExportEngine::$exportRecord);
+            }
+        }
+        else { // exporting custom post types
 
             // Get custom field snippets
             $snippets = array();
@@ -300,10 +309,6 @@ final Class XmlCsvExport
 
         self::$main_xml_tag = apply_filters('wp_all_export_main_xml_tag', XmlExportEngine::$exportOptions['main_xml_tag'], XmlExportEngine::$exportID);
         self::$node_xml_tag = apply_filters('wp_all_export_record_xml_tag', XmlExportEngine::$exportOptions['record_xml_tag'], XmlExportEngine::$exportID);
-
-//        self::$implode = (XmlExportEngine::$exportOptions['delimiter'] == ',') ? '|' : ',';
-//
-//        if ( $is_custom_xml ) self::$implode = '#delimiter#';
 
         $xmlWriter = new PMXE_XMLWriter();
 
@@ -502,6 +507,38 @@ final Class XmlCsvExport
 
             }
         }
+        elseif (XmlExportEngine::$is_custom_addon_export) {
+
+            foreach (XmlExportEngine::$exportQuery->results as $record) {
+
+                $is_export_record = apply_filters('wp_all_export_xml_rows', true, $record, XmlExportEngine::$exportOptions, XmlExportEngine::$exportID);
+
+                if (!$is_export_record) continue;
+
+                if (!$is_custom_xml) {
+                    // add additional information before each node
+                    self::before_xml_node($xmlWriter, $record->id);
+                    $xmlWriter->startElement(self::$node_xml_tag);
+
+                    XmlExportCustomRecord::prepare_data($record, XmlExportEngine::$exportOptions, $xmlWriter, XmlExportEngine::$implode, $preview);
+
+                    $xmlWriter->closeElement(); // end post
+
+                    // add additional information after each node
+                    self::after_xml_node($xmlWriter, $record->id);
+                } else {
+                    $articles = array();
+                    $articles[] = XmlExportCustomRecord::prepare_data($record, XmlExportEngine::$exportOptions, $xmlWriter, XmlExportEngine::$implode, $preview);
+                    $articles = apply_filters('wp_all_export_csv_rows', $articles, XmlExportEngine::$exportOptions, XmlExportEngine::$exportID);
+
+                    $xmlWriter->writeArticle($articles);
+                }
+
+                if (!$preview) {
+                    do_action('pmxe_exported_post', $record->id, XmlExportEngine::$exportRecord);
+                }
+            }
+        }
         else {// exporting custom post types
             while (XmlExportEngine::$exportQuery->have_posts()) {
                 XmlExportEngine::$exportQuery->the_post();
@@ -515,6 +552,7 @@ final Class XmlCsvExport
                     // add additional information before each node
                     self::before_xml_node($xmlWriter, $record->ID);
                     $xmlWriter->startElement(self::$node_xml_tag);
+
                     XmlExportCpt::prepare_data($record, XmlExportEngine::$exportOptions, $xmlWriter, $acfs, $woo, $woo_order, XmlExportEngine::$implode, $preview);
 
                     $xmlWriter->closeElement(); // end post
@@ -611,6 +649,7 @@ final Class XmlCsvExport
                 $xml = (!$exported_by_cron) ? PMXE_XMLWriter::preprocess_xml($xml_header) . $xmlWriter->wpae_flush() : $xmlWriter->wpae_flush();
             }
 
+
             if (!$exported_by_cron) {
                 if (!$is_custom_xml) $xml = substr($xml, 0, (strlen(self::$main_xml_tag) + 4) * (-1));
 
@@ -657,9 +696,13 @@ final Class XmlCsvExport
                 PMXE_Plugin::$session->save_data();
 
             } else {
+
                 $xml = (!$is_custom_xml) ? substr(substr($xmlWriter->wpae_flush(), 41 + strlen(self::$main_xml_tag)), 0, (strlen(self::$main_xml_tag) + 4) * (-1)) : $xmlWriter->wpae_flush();
 
-                file_put_contents(PMXE_Plugin::$session->file, $xml, FILE_APPEND);
+                // Don't write empty lines to file
+	            if(!empty(trim($xml, " \n"))) {
+		            file_put_contents( PMXE_Plugin::$session->file, $xml, FILE_APPEND );
+	            }
             }
 
             return true;
@@ -675,7 +718,9 @@ final Class XmlCsvExport
         $element_name = apply_filters('wp_all_export_field_name', wp_all_export_parse_field_name($element_name), XmlExportEngine::$exportID);
 
         if (strpos(XmlExportEngine::$exportOptions['cc_label'][$ID], "item_data__") !== false) {
-            XmlExportEngine::$woo_order_export->get_element_header($headers, XmlExportEngine::$exportOptions, $ID);
+            if(XmlExportEngine::$woo_order_export) {
+                XmlExportEngine::$woo_order_export->get_element_header($headers, XmlExportEngine::$exportOptions, $ID);
+            }
             return;
         }
 
@@ -685,7 +730,9 @@ final Class XmlCsvExport
                 break;
 
             case 'woo_order':
-                XmlExportEngine::$woo_order_export->get_element_header($headers, XmlExportEngine::$exportOptions, $ID);
+                if(XmlExportEngine::$woo_order_export) {
+                    XmlExportEngine::$woo_order_export->get_element_header($headers, XmlExportEngine::$exportOptions, $ID);
+                }
                 break;
 
             case 'acf':
@@ -726,9 +773,6 @@ final Class XmlCsvExport
                     } while (!$is_added);
                 }
 
-//				if ( XmlExportEngine::$exportOptions['cc_label'][$ID] == 'product_type' and ! in_array('parent_id', $headers)) {
-//					$headers[] = 'parent_id';
-//				}
 
                 break;
         }
@@ -756,6 +800,12 @@ final Class XmlCsvExport
     // Add missing ACF headers
     public static function merge_headers($file, &$headers)
     {
+        if(isset(XmlExportEngine::$exportOptions['enable_real_time_exports'])
+            && XmlExportEngine::$exportOptions['enable_real_time_exports'])
+        {
+            // Don't merge headers when realtime exporting
+            return;
+        }
 
         $in = fopen($file, 'r');
 
@@ -934,7 +984,7 @@ final Class XmlCsvExport
         foreach ($available_sections as $slug => $section) {
             if (!empty($section['content']) and !empty($available_data[$section['content']])) {
                 foreach ($available_data[$section['content']] as $field) {
-                    if (isset($field['auto']) or 'product' != $post['cpt'] or ( is_array($post['cpt']) && !in_array('product', $post['cpt']))) {
+                    if (isset($field['auto']) or !\class_exists('WooCommerce') || 'product' != $post['cpt'] or ( is_array($post['cpt']) && !in_array('product', $post['cpt']))) {
                         $auto_generate['ids'][] = 1;
                         $auto_generate['cc_label'][] = is_array($field) ? $field['label'] : $field;
                         $auto_generate['cc_php'][] = 0;
@@ -962,7 +1012,12 @@ final Class XmlCsvExport
                                 $field_name = 'Attachment ' . $field['name'];
                                 break;
                             default:
-                                $field_name = $field['name'];
+                                if(isset($field['name'])) {
+                                    $field_name = $field['name'];
+                                } else {
+                                    $field_name = '';
+                                }
+
                                 break;
                         }
 
@@ -983,7 +1038,7 @@ final Class XmlCsvExport
             }
         }
 
-        if (XmlExportWooCommerceOrder::$is_active) {
+        if (XmlExportEngine::get_addons_service()->isWooCommerceAddonActive() || XmlExportEngine::get_addons_service()->isWooCommerceOrderAddonActive() && XmlExportWooCommerceOrder::$is_active) {
             foreach (XmlExportWooCommerceOrder::$order_sections as $slug => $section) {
                 if (!empty($section['meta'])) {
                     foreach ($section['meta'] as $cur_meta_key => $field) {
@@ -1002,7 +1057,32 @@ final Class XmlCsvExport
             }
         }
 
-        if (!XmlExportEngine::$is_comment_export && !XmlExportEngine::$is_woo_review_export) XmlExportEngine::$acf_export->auto_generate_export_fields($auto_generate);
+        if (XmlExportEngine::get_addons_service()->isAcfAddonActive() && !XmlExportEngine::$is_comment_export && !XmlExportEngine::$is_woo_review_export) XmlExportEngine::$acf_export->auto_generate_export_fields($auto_generate);
+
+        if(XmlExportEngine::$is_custom_addon_export) {
+
+            $auto_generate = [];
+
+            $addon = GF_Export_Add_On::get_instance();
+            $addon->run();
+            $available_data = $addon->add_on->init_available_data([]);
+
+            foreach($available_data as $section) {
+                foreach($section as $field) {
+                    if($field['auto']) {
+                        $auto_generate['ids'][] = 1;
+                        $auto_generate['cc_label'][] = $field['label'];
+                        $auto_generate['cc_php'][] = 0;
+                        $auto_generate['cc_code'][] = '';
+                        $auto_generate['cc_sql'][] = '';
+                        $auto_generate['cc_settings'][] = '';
+                        $auto_generate['cc_type'][] = $field['type'];
+                        $auto_generate['cc_value'][] = $field['label'];
+                        $auto_generate['cc_name'][] = $field['name'];
+                    }
+                }
+            }
+        }
 
         return $auto_generate;
     }

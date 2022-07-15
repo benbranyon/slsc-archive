@@ -1,4 +1,9 @@
 <?php
+if(!defined('ABSPATH')) {
+    die();
+}
+?>
+<?php
 
 if(getenv('WPAE_DEV')) {
     // Livereload in dev mode

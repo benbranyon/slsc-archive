@@ -15,28 +15,28 @@ class FilteringCPT extends FilteringBase
     /**
      * @return bool
      */
-    public function parse(){
+    public function parse()
+    {
 
-        if ( $this->isFilteringAllowed()){
+        if ($this->isFilteringAllowed()) {
 
             $this->checkNewStuff();
 
             // No Filtering Rules defined
-            if ( empty($this->filterRules)) return FALSE;
+            if (empty($this->filterRules)) return FALSE;
 
             $this->queryWhere = ($this->isExportNewStuff() || $this->isExportModifiedStuff()) ? $this->queryWhere . " AND (" : " AND (";
 
             // Apply Filtering Rules
             foreach ($this->filterRules as $rule) {
-                if ( is_null($rule->parent_id) ) {
+                if (is_null($rule->parent_id)) {
                     $this->parse_single_rule($rule);
                 }
             }
 
             if ($this->meta_query || $this->tax_query) {
                 $this->queryWhere .= " ) GROUP BY {$this->wpdb->posts}.ID";
-            }
-            else {
+            } else {
                 $this->queryWhere .= ")";
             }
         }
@@ -46,7 +46,8 @@ class FilteringCPT extends FilteringBase
     /**
      *
      */
-    public function getExcludeQueryWhere($postsToExclude){
+    public function getExcludeQueryWhere($postsToExclude)
+    {
 
         return " AND ({$this->wpdb->posts}.ID NOT IN (" . implode(',', $postsToExclude) . "))";
 
@@ -61,10 +62,18 @@ class FilteringCPT extends FilteringBase
      * @param $rule
      * @return mixed|void
      */
-    public function parse_single_rule($rule){
+    public function parse_single_rule($rule)
+    {
 
         apply_filters('wp_all_export_single_filter_rule', $rule);
-        
+
+        // If WooCommerce Prdoducts are exported, alter the way featured meta is filtered
+        if ( ! empty(\XmlExportEngine::$post_types) and class_exists('WooCommerce')){
+            if (@in_array("product", \XmlExportEngine::$post_types)){
+                $this->fixRuleForFeaturedProduct($rule);
+            }
+        }
+
         switch ($rule->element) {
             case 'ID':
             case 'post_parent':
@@ -96,7 +105,7 @@ class FilteringCPT extends FilteringBase
             case 'wp_capabilities':
 
                 $this->userWhere = " AND (";
-                $this->userJoin  = array();
+                $this->userJoin = array();
                 $meta_query = false;
 
                 switch ($rule->element) {
@@ -107,7 +116,7 @@ class FilteringCPT extends FilteringBase
                         $this->userWhere .= "{$this->wpdb->usermeta}.meta_key = '$cap_key' AND {$this->wpdb->usermeta}.meta_value " . $this->parse_condition($rule);
                         break;
                     case 'user_registered':
-                        $this->parse_date_field( $rule );
+                        $this->parse_date_field($rule);
                         $this->userWhere .= "{$this->wpdb->users}.$rule->element " . $this->parse_condition($rule);
                         break;
                     case 'user_login':
@@ -119,26 +128,25 @@ class FilteringCPT extends FilteringBase
                         break;
                     default:
 
-                        if (strpos($rule->element, "cf_") === 0)
-                        {
+                        if (strpos($rule->element, "cf_") === 0) {
+
                             $meta_key = str_replace("cf_", "", $rule->element);
 
                             if ($rule->condition == 'is_empty') {
                                 $this->userJoin[] = " LEFT JOIN {$this->wpdb->usermeta} ON ({$this->wpdb->usermeta}.user_id = {$this->wpdb->users}.ID AND {$this->wpdb->usermeta}.meta_key = '$meta_key') ";
                                 $this->userWhere .= "{$this->wpdb->usermeta}.umeta_id " . $this->parse_condition($rule);
-                            }
-                            else {
+                            } else {
                                 $this->userJoin[] = " INNER JOIN {$this->wpdb->usermeta} ON ({$this->wpdb->usermeta}.user_id = {$this->wpdb->users}.ID) ";
                                 $this->userWhere .= "{$this->wpdb->usermeta}.meta_key = '$meta_key' AND {$this->wpdb->usermeta}.meta_value " . $this->parse_condition($rule);
                             }
                         } else {
 
                             $meta_key = $rule->element;
+
                             if ($rule->condition == 'is_empty') {
                                 $this->userJoin[] = " LEFT JOIN {$this->wpdb->usermeta} ON ({$this->wpdb->usermeta}.user_id = {$this->wpdb->users}.ID AND {$this->wpdb->usermeta}.meta_key = '$meta_key') ";
                                 $this->userWhere .= "{$this->wpdb->usermeta}.umeta_id " . $this->parse_condition($rule);
-                            }
-                            else {
+                            } else {
                                 $this->userJoin[] = " INNER JOIN {$this->wpdb->usermeta} ON ({$this->wpdb->usermeta}.user_id = {$this->wpdb->users}.ID) ";
                                 $this->userWhere .= "{$this->wpdb->usermeta}.meta_key = '$meta_key' AND {$this->wpdb->usermeta}.meta_value " . $this->parse_condition($rule);
                             }
@@ -149,25 +157,25 @@ class FilteringCPT extends FilteringBase
                 $this->userWhere .= $meta_query ? " ) GROUP BY {$this->wpdb->users}.ID" : ")";
 
                 add_action('pre_user_query', array(&$this, 'pre_user_query'), 10, 1);
-                $userQuery = new \WP_User_Query( array( 'orderby' => 'ID', 'order' => 'ASC') );
+                $userQuery = new \WP_User_Query(array('orderby' => 'ID', 'order' => 'ASC'));
                 remove_action('pre_user_query', array(&$this, 'pre_user_query'));
 
                 $userIDs = array();
 
-                foreach ( $userQuery->results as $user ) :
+                foreach ($userQuery->results as $user) :
                     $userIDs[] = $user->ID;
                 endforeach;
 
-                if ( ! empty($userIDs)) {
+                if (!empty($userIDs)) {
                     $users_str = implode(",", $userIDs);
                     $this->queryWhere .= "{$this->wpdb->posts}.post_author IN ($users_str)";
-                    if ( ! empty($rule->clause)) $this->queryWhere .= " " . $rule->clause . " ";
+                    if (!empty($rule->clause)) $this->queryWhere .= " " . $rule->clause . " ";
                 }
 
                 break;
             case 'post_date':
             case 'post_modified':
-                $this->parse_date_field( $rule );
+                $this->parse_date_field($rule);
                 $this->queryWhere .= "{$this->wpdb->posts}.$rule->element " . $this->parse_condition($rule);
                 break;
             default:
@@ -195,7 +203,7 @@ class FilteringCPT extends FilteringBase
                         }
                         $table_alias = (count($this->queryJoin) > 0) ? 'meta' . count($this->queryJoin) : 'meta';
 
-                        if(empty(self::$variationWhere)) {
+                        if (empty(self::$variationWhere)) {
                             self::$variationWhere = $this->queryWhere;
                         }
 
@@ -210,10 +218,9 @@ class FilteringCPT extends FilteringBase
 
                     }
 
-                }
-                elseif (strpos($rule->element, "tx_") === 0){
+                } elseif (strpos($rule->element, "tx_") === 0) {
 
-                    if ( ! empty($rule->value) ){
+                    if (!empty($rule->value)) {
                         $this->tax_query = true;
                         $tx_name = str_replace("tx_", "", $rule->element);
 
@@ -221,18 +228,17 @@ class FilteringCPT extends FilteringBase
                         $txs = explode(",", $rule->value);
 
                         foreach ($txs as $tx) {
-                            if (is_numeric($tx)){
+                            if (is_numeric($tx)) {
                                 $terms[] = $tx;
-                            }
-                            else{
+                            } else {
                                 $term = term_exists($tx, $tx_name);
-                                if (!is_wp_error($term)){
+                                if (!is_wp_error($term)) {
                                     $terms[] = $term['term_taxonomy_id'];
                                 }
                             }
                         }
 
-                        if ( ! empty($terms) ){
+                        if (!empty($terms)) {
 
                             $terms_str = implode(",", $terms);
 
@@ -241,7 +247,7 @@ class FilteringCPT extends FilteringBase
                                     $table_alias = (count($this->queryJoin) > 0) ? 'tr' . count($this->queryJoin) : 'tr';
                                     $this->queryJoin[] = " LEFT JOIN {$this->wpdb->term_relationships} AS $table_alias ON ({$this->wpdb->posts}.ID = $table_alias.object_id)";
                                     $this->queryWhere .= "$table_alias.term_taxonomy_id IN ($terms_str)";
-                                    if ( ! empty($rule->clause)) $this->queryWhere .= " " . $rule->clause . " ";
+                                    if (!empty($rule->clause)) $this->queryWhere .= " " . $rule->clause . " ";
                                     break;
                                 case 'not_in':
 
@@ -250,17 +256,17 @@ class FilteringCPT extends FilteringBase
                                       FROM {$this->wpdb->term_relationships}
                                       WHERE term_taxonomy_id IN ($terms_str)
                                     )";
-                                    if ( ! empty(\XmlExportEngine::$post_types) and class_exists('WooCommerce')) {
-                                      if (@in_array("product", \XmlExportEngine::$post_types) || @in_array("shop_order", \XmlExportEngine::$post_types)) {
-                                        $this->queryWhere .= " AND {$this->wpdb->posts}.post_parent NOT IN (
+                                    if (!empty(\XmlExportEngine::$post_types) and class_exists('WooCommerce')) {
+                                        if (@in_array("product", \XmlExportEngine::$post_types) || @in_array("shop_order", \XmlExportEngine::$post_types)) {
+                                            $this->queryWhere .= " AND {$this->wpdb->posts}.post_parent NOT IN (
                                           SELECT object_id
                                           FROM {$this->wpdb->term_relationships}
                                           WHERE term_taxonomy_id IN ($terms_str)
                                         )";
-                                      }
+                                        }
                                     }
 
-                                    if ( ! empty($rule->clause)) $this->queryWhere .= " " . $rule->clause . " ";
+                                    if (!empty($rule->clause)) $this->queryWhere .= " " . $rule->clause . " ";
                                     break;
                                 default:
                                     # code...
@@ -277,11 +283,12 @@ class FilteringCPT extends FilteringBase
     /**
      * @param $obj
      */
-    public function pre_user_query($obj ) {
+    public function pre_user_query($obj)
+    {
         $obj->query_where .= $this->userWhere;
 
-        if ( ! empty( $this->userJoin ) ) {
-            $obj->query_from .= implode( ' ', array_unique( $this->userJoin ) );
+        if (!empty($this->userJoin)) {
+            $obj->query_from .= implode(' ', array_unique($this->userJoin));
         }
     }
 
@@ -297,5 +304,24 @@ class FilteringCPT extends FilteringBase
             return $str;
         }
         return $str;
+    }
+
+    /**
+     * @param $rule
+     */
+    private function fixRuleForFeaturedProduct($rule)
+    {
+        if ($rule->element == 'cf__featured') {
+
+            $rule->element = 'tx_product_visibility';
+
+            $rule->value = 'featured';
+
+            if ($rule->condition == 'equals') {
+                $rule->condition = 'in';
+            } else {
+                $rule->condition = 'not_in';
+            }
+        }
     }
 }

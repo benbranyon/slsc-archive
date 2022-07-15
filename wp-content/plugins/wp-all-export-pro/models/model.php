@@ -172,7 +172,7 @@ abstract class PMXE_Model extends ArrayObject {
 	 * @return bool
 	 */
 	public function isEmpty() {
-		return $this->count() == 0;
+	    return $this->count() == 0;
 	}
 	
 	/**

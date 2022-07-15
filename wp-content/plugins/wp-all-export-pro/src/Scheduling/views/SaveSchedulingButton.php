@@ -1,3 +1,8 @@
+<?php
+if(!defined('ABSPATH')) {
+    die();
+}
+?>
 <div class="wpae-save-button button button-primary button-hero wpallexport-large-button"
      style="position: relative; width: 285px; margin-left: 5px;">
     <svg width="30" height="30" viewBox="0 0 1792 1792"
@@ -14,9 +19,9 @@
     <div class="save-text"
          style="display: block; position:absolute; <?php if($this->isWizard) {?> left: 70px; <?php } else { ?> left: 60px; <?php } ?> top:0; user-select: none;">
         <?php if($this->isWizard) {?>
-            <?php _e('Confirm & Run Export', 'wp_all_export_plugin'); ?>
+            <?php esc_html_e('Confirm & Run Export', 'wp_all_export_plugin'); ?>
         <?php } else { ?>
-            <?php _e('Save Export Configuration', 'wp_all_export_plugin'); ?>
+            <?php esc_html_e('Save Export Configuration', 'wp_all_export_plugin'); ?>
         <?php } ?>
     </div>
 </div>

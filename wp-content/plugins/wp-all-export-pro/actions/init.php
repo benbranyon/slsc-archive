@@ -16,16 +16,16 @@ function pmxe_init()
 			else
 			{
 				http_response_code(401);
-				exit(json_encode(array('status' => __('Error. Incorrect API key, check the WP All Export Pro settings page.', 'wp_all_export_plugin'))));
+				exit(json_encode(array('status' => esc_html__('Error. Incorrect API key, check the WP All Export Pro settings page.', 'wp_all_export_plugin'))));
 			}						
 		}
 		else
 		{
 			http_response_code(401);
-			exit(json_encode(array('status' => __('Error. Incorrect API key, check the WP All Export Pro settings page.', 'wp_all_export_plugin'))));
+			exit(json_encode(array('status' => esc_html__('Error. Incorrect API key, check the WP All Export Pro settings page.', 'wp_all_export_plugin'))));
 		}		
 	}
 	if(!empty($_GET['check_connection'])) {
-	    exit(json_encode(array('success' => true)));
+        exit(json_encode(array('success' => true)));
     }
 }

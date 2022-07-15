@@ -20,7 +20,7 @@ class PMXE_Installer
 
     private function error($message){
 
-        $message = __($message);
+        $message = wp_kses_post(__($message));
         $error = <<<EOT
 <style type="text/css">
     body, html {

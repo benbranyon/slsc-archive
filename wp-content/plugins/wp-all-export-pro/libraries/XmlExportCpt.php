@@ -8,7 +8,7 @@ final class XmlExportCpt
 	private static $userData = array();
 
 	public static function prepare_data( $entry, $exportOptions,
-                                         $xmlWriter = false, &$acfs, &$woo, &$woo_order, $implode_delimiter, $preview, $is_item_data = false, $subID = false )
+                                         $xmlWriter, &$acfs, &$woo, &$woo_order, $implode_delimiter, $preview, $is_item_data = false, $subID = false )
 	{
 		$variationOptionsFactory = new  VariationOptionsFactory();
 		$variationOptions = $variationOptionsFactory->createVariationOptions(PMXE_EDITION);
@@ -17,7 +17,9 @@ final class XmlExportCpt
 		$article = array();
 
 		// associate exported post with import
-		if ( ! $is_item_data and wp_all_export_is_compatible() && isset($exportOptions['is_generate_import']) && isset($exportOptions['import_id']))
+		if ( ! $is_item_data and wp_all_export_is_compatible() && isset($exportOptions['is_generate_import']) && isset($exportOptions['import_id']) &&
+            (!isset($exportOptions['enable_real_time_exports'])
+                || !$exportOptions['enable_real_time_exports']))
 		{
 			$postRecord = new PMXI_Post_Record();
 			$postRecord->clear();
@@ -75,13 +77,20 @@ final class XmlExportCpt
 				$element_name_ns = '';
 
 				if ($is_xml_export) {
-					$element_name = (!empty($fieldName)) ? preg_replace('/[^a-z0-9_:-]/i', '', $fieldName) : 'untitled_' . $ID;
+
+					// XML 1.0 Fifth Edition allowed characters
+					$startCharRegEx = '~^[^:A-Z_a-z\\xC0-\\xD6\\xD8-\\xF6\\xF8-\\x{2FF}\\x{370}-\\x{37D}\\x{37F}-\\x{1FFF}\\x{200C}-\\x{200D}\\x{2070}-\\x{218F}\\x{2C00}-\\x{2FEF}\\x{3001}-\\x{D7FF}\\x{F900}-\\x{FDCF}\\x{FDF0}-\\x{FFFD}\\x{10000}-\\x{EFFFF}]+~u';
+					$charRegEx = '~[^:A-Z_a-z\\xC0-\\xD6\\xD8-\\xF6\\xF8-\\x{2FF}\\x{370}-\\x{37D}\\x{37F}-\\x{1FFF}\\x{200C}-\\x{200D}\\x{2070}-\\x{218F}\\x{2C00}-\\x{2FEF}\\x{3001}-\\x{D7FF}\\x{F900}-\\x{FDCF}\\x{FDF0}-\\x{FFFD}\\x{10000}-\\x{EFFFF}.\\-0-9\\xB7\\x{0300}-\\x{036F}\\x{203F}-\\x{2040}]+~u';
+
+					$element_name = (!empty($fieldName)) ? preg_replace($charRegEx, '', preg_replace($startCharRegEx, '', $fieldName)) : 'untitled_' . $ID;
 
 					if (strpos($element_name, ":") !== false) {
 						$element_name_parts = explode(":", $element_name);
 						$element_name_ns = (empty($element_name_parts[0])) ? '' : $element_name_parts[0];
 						$element_name = (empty($element_name_parts[1])) ? 'untitled_' . $ID : preg_replace('/[^a-z0-9_-]/i', '', $element_name_parts[1]);
 					}
+
+					$element_name = empty($element_name) ? 'untitled_' . $ID : $element_name;
 				}
 
 				// Use this in simple xml feed
@@ -99,7 +108,7 @@ final class XmlExportCpt
 
                     $snippets['order_item_per_row'] = isset($exportOptions['order_items_per_row']) ? $exportOptions['order_items_per_row'] : 1;
                     $snippets['xml_template_type'] = $exportOptions['xml_template_type'];
-					$articleData = self::prepare_data($entry, $snippets, $acfs, $woo, $woo_order, $implode_delimiter, false, false);
+					$articleData = self::prepare_data($entry, $snippets, false, $acfs, $woo, $woo_order, $implode_delimiter, false);
 
 					$wpaeString = new WpaeString();
 
@@ -363,74 +372,84 @@ final class XmlExportCpt
 
 						case 'acf':
 
-							if (!empty($fieldLabel) and class_exists('acf')) {
+						    if(XmlExportEngine::get_addons_service()->isAcfAddonActive()) {
+                                if (!empty($fieldLabel) and class_exists('acf')) {
 
-							    $blocks = parse_blocks($entry->post_content);
+                                    $blocks = parse_blocks($entry->post_content);
 
-								global $acf;
+                                    global $acf;
 
-								$field_options = unserialize($fieldOptions);
+                                    $field_options = unserialize($fieldOptions);
 
-								if (!$is_xml_export) {
-									switch ($field_options['type']) {
-										case 'textarea':
-										case 'oembed':
-										case 'wysiwyg':
-										case 'wp_wysiwyg':
-										case 'date_time_picker':
-										case 'date_picker':
+                                    if (!$is_xml_export) {
+                                        switch ($field_options['type']) {
+                                            case 'textarea':
+                                            case 'oembed':
+                                            case 'wysiwyg':
+                                            case 'wp_wysiwyg':
+                                            case 'date_time_picker':
+                                            case 'date_picker':
 
-											$field_value = get_field($fieldLabel, $entry->ID, false);
+                                                $field_value = get_field($fieldLabel, $entry->ID, false);
 
-											break;
+                                                break;
 
-										default:
+                                            default:
 
-											$field_value = get_field($fieldLabel, $entry->ID);
+                                                $field_value = get_field($fieldLabel, $entry->ID);
 
-											break;
-									}
-								} else {
-									$field_value = get_field($fieldLabel, $entry->ID);
-								}
+                                                break;
+                                        }
+                                    } else {
+                                        $field_value = get_field($fieldLabel, $entry->ID);
+                                    }
 
-                                if($blocks) {
-								    foreach ($blocks as $block) {
-								        if($block['attrs']['id'] == $field_options['key']) {
-								            $field_value = $block['data'][$fieldLabel];
+                                    if ($blocks) {
+                                        foreach ($blocks as $block) {
+                                            if ($block['attrs']['id'] == $field_options['key']) {
+                                                $field_value = $block['data'][$fieldLabel];
+                                            }
                                         }
                                     }
+
+                                    if (!$field_value) {
+                                        if (XmlExportEngine::get_addons_service()->isAcfAddonActive()) {
+                                            $field_value = XmlExportACF::get_acf_block_value($entry, $field_options['name']);
+                                        }
+                                    }
+
+
+                                    if (XmlExportEngine::get_addons_service()->isAcfAddonActive()) {
+                                        XmlExportACF::export_acf_field(
+                                            $field_value,
+                                            $exportOptions,
+                                            $ID,
+                                            $entry->ID,
+                                            $article,
+                                            $xmlWriter,
+                                            $acfs,
+                                            $element_name,
+                                            $element_name_ns,
+                                            $fieldSnippet,
+                                            $field_options['group_id'],
+                                            $preview
+                                        );
+                                    }
                                 }
-
-                                  if(!$field_value) {
-                                        $field_value = XmlExportACF::get_acf_block_value($entry, $field_options['name']);
-                                  }
-                                
-
-								XmlExportACF::export_acf_field(
-									$field_value,
-									$exportOptions,
-									$ID,
-									$entry->ID,
-									$article,
-									$xmlWriter,
-									$acfs,
-									$element_name,
-									$element_name_ns,
-									$fieldSnippet,
-									$field_options['group_id'],
-									$preview
-								);
-							}
+                            }
 
 							break;
 
 						case 'woo':
 
 						if ($is_xml_export) {
-							XmlExportEngine::$woo_export->export_xml($xmlWriter, $entry, $exportOptions, $ID);
-						} else {
-							XmlExportEngine::$woo_export->export_csv($article, $woo, $entry, $exportOptions, $ID);
+						    if(XmlExportEngine::get_addons_service()->isWooCommerceAddonActive() || XmlExportEngine::get_addons_service()->isWooCommerceProductAddonActive()) {
+                                XmlExportEngine::$woo_export->export_xml($xmlWriter, $entry, $exportOptions, $ID);
+                            }
+                        } else {
+                            if(XmlExportEngine::get_addons_service()->isWooCommerceAddonActive() || XmlExportEngine::get_addons_service()->isWooCommerceProductAddonActive()) {
+                                XmlExportEngine::$woo_export->export_csv($article, $woo, $entry, $exportOptions, $ID);
+                            }
 						}
 
 							break;
@@ -438,9 +457,13 @@ final class XmlExportCpt
 						case 'woo_order':
 
 							if ($is_xml_export) {
-								XmlExportEngine::$woo_order_export->export_xml($xmlWriter, $entry, $exportOptions, $ID, $preview);
+                                if(XmlExportEngine::get_addons_service()->isWooCommerceAddonActive() || XmlExportEngine::get_addons_service()->isWooCommerceOrderAddonActive()) {
+                                    XmlExportEngine::$woo_order_export->export_xml($xmlWriter, $entry, $exportOptions, $ID, $preview);
+                                }
 							} else {
-								XmlExportEngine::$woo_order_export->export_csv($article, $woo_order, $entry, $exportOptions, $ID, $preview);
+                                if(XmlExportEngine::get_addons_service()->isWooCommerceAddonActive() || XmlExportEngine::get_addons_service()->isWooCommerceOrderAddonActive()) {
+                                    XmlExportEngine::$woo_order_export->export_csv($article, $woo_order, $entry, $exportOptions, $ID, $preview);
+                                }
 							}
 
 							break;
@@ -479,7 +502,7 @@ final class XmlExportCpt
 
 						case 'cats':
 
-						    if($fieldLabel == 'product_visibility') {
+						    if( $fieldLabel == 'product_visibility' ) {
                                 $product = wc_get_product( $entry->ID );
                                 $value = $product->get_catalog_visibility();
                                 $value = apply_filters('pmxe_woo_field', $value, $element_name, $entry->ID);
@@ -534,7 +557,12 @@ final class XmlExportCpt
                                                         }
                                                     }
                                                     $hierarchy_group[] = $t->name;
-                                                    $hierarchy_groups[] = implode('>', $hierarchy_group);
+
+                                                    if(isset(XmlExportEngine::$exportOptions['xml_template_type']) && XmlExportEngine::$exportOptions['xml_template_type'] == \XmlExportEngine::EXPORT_TYPE_GOOLE_MERCHANTS) {
+                                                        $hierarchy_groups[] = implode(' > ', $hierarchy_group);
+                                                    } else {
+                                                        $hierarchy_groups[] = implode('>', $hierarchy_group);
+                                                    }
                                                 } else {
                                                     $hierarchy_groups[] = $t->name;
                                                 }

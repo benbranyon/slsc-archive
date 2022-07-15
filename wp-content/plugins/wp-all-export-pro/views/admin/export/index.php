@@ -1,19 +1,23 @@
 <?php
+if(!defined('ABSPATH')) {
+    die();
+}
+?>
+<?php
 do_action('pmxe_addons_html');
 ?>
 <table class="wpallexport-layout wpallexport-step-1">
 	<tr>
 		<td class="left">
-			<div class="wpallexport-wrapper">	
+			<div class="wpallexport-wrapper">
 				<h2 class="wpallexport-wp-notices"></h2>
 				<div class="wpallexport-header">
 					<div class="wpallexport-logo"></div>
 					<div class="wpallexport-title">
-						<p><?php _e('WP All Export', 'wp_all_export_plugin'); ?></p>
-						<h2><?php _e('Export to XML / CSV', 'wp_all_export_plugin'); ?></h2>					
+						<h2><?php esc_html_e('New Export', 'wp_all_export_plugin'); ?></h2>
 					</div>
 					<div class="wpallexport-links">
-						<a href="http://www.wpallimport.com/support/" target="_blank"><?php _e('Support', 'wp_all_export_plugin'); ?></a> | <a href="http://www.wpallimport.com/documentation/" target="_blank"><?php _e('Documentation', 'wp_all_export_plugin'); ?></a>
+						<a href="http://www.wpallimport.com/support/" target="_blank"><?php esc_html_e('Support', 'wp_all_export_plugin'); ?></a> | <a href="http://www.wpallimport.com/documentation/" target="_blank"><?php esc_html_e('Documentation', 'wp_all_export_plugin'); ?></a>
 					</div>
 				</div>			
 
@@ -30,20 +34,23 @@ do_action('pmxe_addons_html');
 						<div class="clear"></div>											
 						
 						<div class="wpallexport-import-types">
-							<h2><?php _e('First, choose what to export.', 'wp_all_export_plugin'); ?></h2>							
+							<h2><?php esc_html_e('First, choose what to export.', 'wp_all_export_plugin'); ?></h2>
 							<a class="wpallexport-import-from wpallexport-url-type <?php echo 'advanced' != $post['export_type'] ? 'selected' : '' ?>" rel="specific_type" href="javascript:void(0);">
 								<span class="wpallexport-icon"></span>
-								<span class="wpallexport-icon-label"><?php _e('Specific Post Type', 'wp_all_export_plugin'); ?></span>
+								<span class="wpallexport-icon-label"><?php esc_html_e('Specific Post Type', 'wp_all_export_plugin'); ?></span>
 							</a>
 							<a class="wpallexport-import-from wpallexport-file-type <?php echo 'advanced' == $post['export_type'] ? 'selected' : '' ?>" rel="advanced_type" href="javascript:void(0);">
 								<span class="wpallexport-icon"></span>
-								<span class="wpallexport-icon-label"><?php _e('WP_Query Results', 'wp_all_export_plugin'); ?></span>
+								<span class="wpallexport-icon-label"><?php esc_html_e('WP_Query Results', 'wp_all_export_plugin'); ?></span>
 							</a>
 						</div>
 
 
-						<input type="hidden" value="<?php echo $post['export_type']; ?>" name="export_type"/>
-						
+						<input type="hidden" value="<?php echo esc_attr($post['export_type']); ?>" name="export_type"/>
+				        <?php if (\class_exists('WooCommerce')): ?>
+                        <input type="hidden" value="1" id="WooCommerce_Installed">
+						<?php endif; ?>
+
 						<div class="wpallexport-upload-type-container" rel="specific_type">			
 							
 							<div class="wpallexport-file-type-options">
@@ -65,15 +72,15 @@ do_action('pmxe_addons_html');
 
 											$sorted_cpt['taxonomies'] = new stdClass();
 											$sorted_cpt['taxonomies']->labels = new stdClass();
-											$sorted_cpt['taxonomies']->labels->name = __('Taxonomies','wp_all_export_plugin');
+											$sorted_cpt['taxonomies']->labels->name = esc_html__('Taxonomies','wp_all_export_plugin');
 
 											$sorted_cpt['comments'] = new stdClass();
 											$sorted_cpt['comments']->labels = new stdClass();
-											$sorted_cpt['comments']->labels->name = __('Comments','wp_all_export_plugin');
+											$sorted_cpt['comments']->labels->name = esc_html__('Comments','wp_all_export_plugin');
 
 											$sorted_cpt['users'] = new stdClass();
 											$sorted_cpt['users']->labels = new stdClass();
-											$sorted_cpt['users']->labels->name = __('Users','wp_all_export_plugin');
+											$sorted_cpt['users']->labels->name = esc_html__('Users','wp_all_export_plugin');
 											break;
 										}
 									}
@@ -93,7 +100,7 @@ do_action('pmxe_addons_html');
                                 if (  class_exists('WooCommerce') ){
                                     $reviewElement = new stdClass();
                                     $reviewElement->labels = new stdClass();
-                                    $reviewElement->labels->name = __('WooCommerce Reviews', PMXE_Plugin::LANGUAGE_DOMAIN);
+                                    $reviewElement->labels->name = esc_html__('WooCommerce Reviews', PMXE_Plugin::LANGUAGE_DOMAIN);
 
                                     $sorted_cpt = $this->insertAfter($sorted_cpt, 'product', 'shop_review', $reviewElement);
                                 }
@@ -101,56 +108,70 @@ do_action('pmxe_addons_html');
 								?>								
 
 								<select id="file_selector">
-									<option value=""><?php _e('Choose a post type...', 'wp_all_export_plugin'); ?></option>									
-					            	<?php if (count($sorted_cpt)): $unknown_cpt = array(); ?>
-										<?php foreach ($sorted_cpt as $key => $ct):?>
-											<?php
+									<option value=""><?php esc_html_e('Choose a post type...', 'wp_all_export_plugin'); ?></option>
+					            	<?php if (count($sorted_cpt)) {
+					            	    $unknown_cpt = array();
+										foreach ($sorted_cpt as $key => $ct) {
 
-                        // Remove unused post types
-                        if( in_array($key, array('wp_block', 'customize_changeset', 'custom_css', 'scheduled_action', 'scheduled-action', 'user_request', 'oembed_cache'))) {
-                           continue;
-                        }
-												$image_src = 'dashicon-cpt';																								
-												$cpt_label = $ct->labels->name;												
+                                                // Remove unused post types
+                                                if( in_array($key, array('wp_block', 'customize_changeset', 'custom_css', 'scheduled_action', 'scheduled-action', 'user_request', 'oembed_cache'))) {
+                                                   continue;
+                                                }
 
-												if (  in_array($key, array('post', 'page', 'product', 'import_users', 'shop_order', 'shop_coupon', 'shop_customer', 'users', 'comments', 'taxonomies') ) )
-												{
-													$image_src = 'dashicon-' . $key;	 
-												}
-												else if($key == 'shop_review') {
+												$image_src = 'dashicon-cpt';
+
+                                                if(isset($ct->icon)) {
+                                                    $image_src = $ct->icon;
+                                                }
+												$cpt_label = $ct->labels->name;
+
+                                                if (in_array($key, array('post', 'page', 'product', 'import_users', 'shop_order', 'shop_coupon', 'shop_customer', 'users', 'comments', 'taxonomies', 'custom_wpae-gf-addon'))) {
+                                                    $image_src = 'dashicon-' . $key;
+                                                } else if ($key == 'shop_review') {
                                                     $image_src = 'dashicon-review';
                                                 }
-												else
-												{
-													$unknown_cpt[$key] = $ct;
-													continue;
-												}
-																				
+                                                else {
+                                                    $unknown_cpt[$key] = $ct;
+                                                    continue;
+                                                }
+
 											?>
 											<option value="<?php echo $key;?>" data-imagesrc="dashicon <?php echo $image_src; ?>" <?php if ($key == $post['cpt']) echo 'selected="selected"'; ?>><?php echo $cpt_label; ?></option>
-										<?php endforeach ?>
-									<?php endif ?>
-									<?php if ( ! empty($unknown_cpt)):  ?>
-										<?php foreach ($unknown_cpt as $key => $ct):?>
+										<?php
+										}
+									 } ?>
+									<?php if ( ! empty($unknown_cpt)){  ?>
+										<?php foreach ($unknown_cpt as $key => $ct) {?>
 											<?php
-											$image_src = 'dashicon-cpt';																								
-											$cpt_label = $ct->labels->name;												
+											$image_src = 'dashicon-cpt';
+											$cpt_label = $ct->labels->name;
+
+											if(isset($ct->custom_icon)) {
+											    $image_src = $ct->custom_icon;
+											}
 											?>
 											<option value="<?php echo $key;?>" data-imagesrc="dashicon <?php echo $image_src; ?>" <?php if ($key == $post['cpt']) echo 'selected="selected"'; ?>><?php echo $cpt_label; ?></option>
-										<?php endforeach ?>
-									<?php endif;?>
-								</select>								
+										<?php
+										}
+									}
+									?>
+								</select>
 								<input type="hidden" name="cpt" value="<?php echo $post['cpt']; ?>"/>									
 								<div class="taxonomy_to_export_wrapper">
 									<input type="hidden" name="taxonomy_to_export" value="<?php echo $post['taxonomy_to_export'];?>">
 									<select id="taxonomy_to_export">
-										<option value=""><?php _e('Select taxonomy', 'wp_all_export_plugin'); ?></option>
+										<option value=""><?php esc_html_e('Select taxonomy', 'wp_all_export_plugin'); ?></option>
 										<?php $options = wp_all_export_get_taxonomies(); ?>
 										<?php foreach ($options as $slug => $name):?>
 											<option value="<?php echo $slug;?>" <?php if ($post['taxonomy_to_export'] == $slug):?>selected="selected"<?php endif;?>><?php echo $name;?></option>
 										<?php endforeach;?>
 									</select>
 								</div>
+                                <div class="sub_post_type_to_export_wrapper">
+                                    <input type="hidden" name="sub_post_type_to_export" value="<?php echo $post['taxonomy_to_export'];?>">
+                                    <select id="sub_post_to_export">
+                                    </select>
+                                </div>
 							</div>
 						</div>	
 
@@ -158,13 +179,13 @@ do_action('pmxe_addons_html');
 							<div class="wpallexport-file-type-options">
 								
 								<select id="wp_query_selector">
-									<option value="wp_query" <?php if ('wp_query' == $post['wp_query_selector']) echo 'selected="selected"'; ?>><?php _e('Post Type Query', 'wp_all_export_plugin'); ?></option>
-									<option value="wp_user_query" <?php if ('wp_user_query' == $post['wp_query_selector']) echo 'selected="selected"'; ?>><?php _e('User Query', 'wp_all_export_plugin'); ?></option>
+									<option value="wp_query" <?php if ('wp_query' == $post['wp_query_selector']) echo 'selected="selected"'; ?>><?php esc_html_e('Post Type Query', 'wp_all_export_plugin'); ?></option>
+									<option value="wp_user_query" <?php if ('wp_user_query' == $post['wp_query_selector']) echo 'selected="selected"'; ?>><?php esc_html_e('User Query', 'wp_all_export_plugin'); ?></option>
 									<?php 
 									global $wp_version;					
 									if ( version_compare($wp_version, '4.2.0', '>=') ):										
 									?>
-									<option value="wp_comment_query" <?php if ('wp_comment_query' == $post['wp_query_selector']) echo 'selected="selected"'; ?>><?php _e('Comment Query', 'wp_all_export_plugin'); ?></option>
+									<option value="wp_comment_query" <?php if ('wp_comment_query' == $post['wp_query_selector']) echo 'selected="selected"'; ?>><?php esc_html_e('Comment Query', 'wp_all_export_plugin'); ?></option>
 									<?php 
 									endif;
 									?>
@@ -178,26 +199,59 @@ do_action('pmxe_addons_html');
 
                         <div class="wpallexport-free-edition-notice wpallexport-user-export-notice" >
                             <p>
-                                <?php _e('The User Export Add-On Pro is required to Export Users', PMXE_Plugin::LANGUAGE_DOMAIN); ?>
+                                <?php esc_html_e('The User Export Add-On Pro is required to Export Users', PMXE_Plugin::LANGUAGE_DOMAIN); ?>
                             </p>
 
-                            <a href="http://www.wpallimport.com/portal/" target="_blank" class="upgrade_link"><?php _e('Click here to download the User Export Add-On', PMXE_Plugin::LANGUAGE_DOMAIN);?></a>
-
+                            <a href="http://www.wpallimport.com/portal/discounts/?utm_source=export-plugin-pro&utm_medium=upgrade-notice&utm_campaign=export-users" target="_blank" class="upgrade_link"><?php esc_html_e('Click here to purchase the User Export Add-On', PMXE_Plugin::LANGUAGE_DOMAIN);?></a>
                         </div>
 
                         <div class="wpallexport-free-edition-notice wpallexport-customer-export-notice" >
                             <p>
-                                <?php _e('The User Export Add-On Pro is required to Export WooCommerce Customers', PMXE_Plugin::LANGUAGE_DOMAIN); ?>
+                                <?php esc_html_e('The User Export Add-On Pro is required to Export WooCommerce Customers', PMXE_Plugin::LANGUAGE_DOMAIN); ?>
+                            </p>
+                            <a href="http://www.wpallimport.com/portal/discounts/?utm_source=export-plugin-pro&utm_medium=upgrade-notice&utm_campaign=export-customers" target="_blank" class="upgrade_link"><?php esc_html_e('Click here to purchase the User Export Add-On', PMXE_Plugin::LANGUAGE_DOMAIN);?></a>
+                        </div>
+
+                        <div class="wpallexport-free-edition-notice wpallexport-product-export-notice" >
+                            <p>
+                                <?php esc_html_e('The WooCommerce Export Add-On Pro is required to Export WooCommerce Products', PMXE_Plugin::LANGUAGE_DOMAIN); ?>
+                            </p>
+                            <a href="http://www.wpallimport.com/portal/discounts/?utm_source=export-plugin-pro&utm_medium=upgrade-notice&utm_campaign=export-products" target="_blank" class="upgrade_link"><?php esc_html_e('Click here to purchase the WooCommerce Export Add-On', PMXE_Plugin::LANGUAGE_DOMAIN);?></a>
+                        </div>
+
+                        <div class="wpallexport-free-edition-notice wpallexport-order-export-notice" >
+                            <p>
+                                <?php esc_html_e('The WooCommerce Export Add-On Pro is required to Export WooCommerce Orders', PMXE_Plugin::LANGUAGE_DOMAIN); ?>
                             </p>
 
-                            <a href="http://www.wpallimport.com/portal/" target="_blank" class="upgrade_link"><?php _e('Click here to download the User Export Add-On', PMXE_Plugin::LANGUAGE_DOMAIN);?></a>
+                                <a href="http://www.wpallimport.com/portal/discounts/?utm_source=export-plugin-pro&utm_medium=upgrade-notice&utm_campaign=export-orders" target="_blank" class="upgrade_link"><?php esc_html_e('Click here to purchase the WooCommerce Export Add-On', PMXE_Plugin::LANGUAGE_DOMAIN);?></a>
 
                         </div>
 
-						<div class="wp_all_export_preloader"></div>							
+                        <div class="wpallexport-free-edition-notice wpallexport-coupon-export-notice" >
+                            <p>
+                                <?php esc_html_e('The WooCommerce Export Add-On Pro is required to Export WooCommerce Coupons', PMXE_Plugin::LANGUAGE_DOMAIN); ?>
+                            </p>
+
+                            <a href="http://www.wpallimport.com/portal/discounts/?utm_source=export-plugin-pro&utm_medium=upgrade-notice&utm_campaign=export-coupons" target="_blank" class="upgrade_link"><?php esc_html_e('Click here to purchase the WooCommerce Export Add-On', PMXE_Plugin::LANGUAGE_DOMAIN);?></a>
+
+                        </div>
+
+                        <div class="wpallexport-free-edition-notice wpallexport-review-export-notice" >
+                            <p>
+                                <?php esc_html_e('The WooCommerce Export Add-On Pro is required to Export WooCommerce Reviews', PMXE_Plugin::LANGUAGE_DOMAIN); ?>
+                            </p>
+
+                            <a href="http://www.wpallimport.com/portal/discounts/?utm_source=export-plugin-pro&utm_medium=upgrade-notice&utm_campaign=export-reviews" target="_blank" class="upgrade_link"><?php esc_html_e('Click here to purchase the WooCommerce Export Add-On', PMXE_Plugin::LANGUAGE_DOMAIN);?></a>
+
+                        </div>
+                        
+                        <?php do_action('pmxe_after_notices_html'); ?>
+
+                        <div class="wp_all_export_preloader"></div>
 
 						<input type="hidden" class="hierarhy-output" name="filter_rules_hierarhy" value="<?php echo esc_html($post['filter_rules_hierarhy']);?>"/>
-						<input type="hidden" class="wpallexport-preload-post-data" value="<?php echo $preload;?>">
+						<input type="hidden" class="wpallexport-preload-post-data" value="<?php echo esc_attr($preload);?>">
 					</div>			
 
 					<div class="wpallexport-filtering-wrapper rad4">
@@ -223,8 +277,7 @@ do_action('pmxe_addons_html');
 					
 					<table><tr><td class="wpallexport-note"></td></tr></table>
 				</form>
-				
-				<a href="http://soflyy.com/" target="_blank" class="wpallexport-created-by"><?php _e('Created by', 'wp_all_export_plugin'); ?> <span></span></a>
+				<a href="http://soflyy.com/" target="_blank" class="wpallexport-created-by"><?php esc_html_e('Created by', 'wp_all_export_plugin'); ?> <span></span></a>
 				
 			</div>
 		</td>		

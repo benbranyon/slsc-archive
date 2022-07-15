@@ -1,4 +1,9 @@
-<h2><?php _e('WP All Export Support', 'PMXE_plugin') ?></h2>
+<?php
+if(!defined('ABSPATH')) {
+    die();
+}
+?>
+<h2><?php esc_html_e('WP All Export Support', 'PMXE_plugin') ?></h2>
 
 <table class="layout">
 	<tr>

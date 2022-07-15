@@ -17,8 +17,13 @@ class Title extends Field
             } else {
                 $value = $this->entry->post_title;
             }
+
+            $value = str_replace("[","**OPENSHORTCODE**", $value);
+            $value = str_replace("]","**CLOSESHORTCODE**", $value);
+
         } else if($basicInformationData['itemTitle'] == self::CUSTOM_VALUE_TEXT) {
-            $value = $this->replaceSnippetsInValue($basicInformationData['itemTitleCV'], $snippetData);
+            $customValue = $basicInformationData['itemTitleCV'];
+            $value = $this->replaceSnippetsInValue($customValue, $snippetData);
         } else {
             throw new \Exception('Unknown field value');
         }

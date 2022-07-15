@@ -97,7 +97,7 @@ function pmxe_wp_loaded() {
 						'export_name' => $child_export->friendly_name,
 						'file_name' => basename($filepath),
 						'file_type' => $child_export->options['export_to'],
-						'post_types_exported' => empty($child_export->options['cpt']) ? $child_export->options['wp_query'] : implode($child_export->options['cpt'], ','),
+						'post_types_exported' => empty($child_export->options['cpt']) ? $child_export->options['wp_query'] : implode(',', $child_export->options['cpt']),
 						'export_created_date' => $child_export->registered_on,
 						'export_last_run_date' => date('Y-m-d H:i:s'),
 						'export_trigger_type' => 'manual',
@@ -169,7 +169,41 @@ function pmxe_wp_loaded() {
                     ||
                     ($export->options['export_type'] == 'advanced' && $export->options['wp_query_selector'] == 'wp_user_query' && !$addons->isUserAddonActive())
                 ) {
-                    die(\__('The User Export Add-On Pro is required to run this export. You can download the add-on here: <a href="http://www.wpallimport.com/portal/" target="_blank">http://www.wpallimport.com/portal/</a>', \PMXE_Plugin::LANGUAGE_DOMAIN));
+                    die(wp_kses_post(\__('The User Export Add-On Pro is required to run this export. If you already own it, you can download the add-on here: <a href="https://www.wpallimport.com/portal/downloads" target="_blank">https://www.wpallimport.com/portal/downloads</a>', \PMXE_Plugin::LANGUAGE_DOMAIN)));
+                }
+
+                if(
+                    (!$addons->isWooCommerceAddonActive() && !$addons->isWooCommerceProductAddonActive() && strpos($export->options['wp_query'], 'product') !== false && \class_exists('WooCommerce')) ||
+                    (!$addons->isWooCommerceAddonActive() && !$addons->isWooCommerceOrderAddonActive() && strpos($export->options['wp_query'], 'shop_order') !== false) ||
+                    (!$addons->isWooCommerceAddonActive() && strpos($export->options['wp_query'], 'shop_coupon') !== false)
+
+                ) {
+                    die(wp_kses_post(\__('The WooCommerce Export Add-On Pro is required to run this expor t. If you already own it, you can download the add-on here: <a href="https://www.wpallimport.com/portal/downloads" target="_blank">https://www.wpallimport.com/portal/downloads</a>', \PMXE_Plugin::LANGUAGE_DOMAIN)));
+                }
+
+                if (((in_array('product', $cpt) && in_array('product_variation', $cpt) ) ||
+                     (in_array('shop_order', $cpt) && !$addons->isWooCommerceOrderAddonActive()) ||
+                     in_array('shop_coupon', $cpt) ||
+                     in_array('shop_review', $cpt) ) &&
+                    !$addons->isWooCommerceAddonActive()) {
+					die(wp_kses_post(\__('The WooCommerce Export Add-On Pro is required to run this export. If you already own it, you can download the add-on here: <a href="https://www.wpallimport.com/portal/downloads" target="_blank">https://www.wpallimport.com/portal/downloads</a>', \PMXE_Plugin::LANGUAGE_DOMAIN)));
+				}
+
+                // Block Google Merchant Exports if the supporting add-on isn't active.
+				if(isset($export->options['xml_template_type']) && $export->options['xml_template_type'] == \XmlExportEngine::EXPORT_TYPE_GOOLE_MERCHANTS && !$addons->isWooCommerceAddonActive()) {
+
+					die(wp_kses_post(\__('The WooCommerce Export Add-On Pro is required to run this export. If you already own it, you can download the add-on here: <a href="https://www.wpallimport.com/portal/downloads" target="_blank">https://www.wpallimport.com/portal/downloads</a>', \PMXE_Plugin::LANGUAGE_DOMAIN)));
+
+				}
+
+                if((in_array('acf', $export->options['cc_type']) || $export->options['xml_template_type'] == 'custom' && in_array('acf', $export->options['custom_xml_template_options']['cc_type'])) && !$addons->isAcfAddonActive()) {
+					die(wp_kses_post(\__('The ACF Export Add-On Pro is required to run this export. If you already own it, you can download the add-on here: <a href="https://www.wpallimport.com/portal/downloads" target="_blank">https://www.wpallimport.com/portal/downloads</a>', \PMXE_Plugin::LANGUAGE_DOMAIN)));
+				}
+
+                $cpt_string = reset($cpt);
+
+                if(strpos($cpt_string, 'custom_') === 0 && !class_exists('GF_Export_Add_On')) {
+                    die('The Gravity Forms Export Add-On Pro is required for this export. If you already own it, you can download the add-on here: <a href="https://www.wpallimport.com/portal/downloads" target="_blank">https://www.wpallimport.com/portal/downloads</a>');
                 }
 
 				if ( ! $export->isEmpty() ){
@@ -182,7 +216,7 @@ function pmxe_wp_loaded() {
 							{
 								wp_send_json(array(
 									'status'     => 403,
-									'message'    => sprintf(__('Export #%s is currently in manually process. Request skipped.', 'wp_all_export_plugin'), $id)
+									'message'    => sprintf(esc_html__('Export #%s is currently in manually process. Request skipped.', 'wp_all_export_plugin'), $id)
 								));
 							}
 							elseif ( ! $export->processing and ! $export->triggered )
@@ -191,21 +225,21 @@ function pmxe_wp_loaded() {
 
 								wp_send_json(array(
 									'status'     => 200,
-									'message'    => sprintf(__('#%s Cron job triggered.', 'wp_all_export_plugin'), $id)
+									'message'    => sprintf(esc_html__('#%s Cron job triggered.', 'wp_all_export_plugin'), $id)
 								));
 							}
 							elseif( $export->processing and ! $export->triggered)
 							{
 								wp_send_json(array(
 									'status'     => 403,
-									'message'    => sprintf(__('Export #%s currently in process. Request skipped.', 'wp_all_export_plugin'), $id)
+									'message'    => sprintf(esc_html__('Export #%s currently in process. Request skipped.', 'wp_all_export_plugin'), $id)
 								));
 							}
 							elseif( ! $export->processing and $export->triggered)
 							{
 								wp_send_json(array(
 									'status'     => 403,
-									'message'    => sprintf(__('Export #%s already triggered. Request skipped.', 'wp_all_export_plugin'), $id)
+									'message'    => sprintf(esc_html__('Export #%s already triggered. Request skipped.', 'wp_all_export_plugin'), $id)
 								));
 							}
 
@@ -226,7 +260,7 @@ function pmxe_wp_loaded() {
 								{
 									wp_send_json(array(
 										'status'     => 403,
-										'message'    => sprintf(__('Export #%s is not triggered. Request skipped.', 'wp_all_export_plugin'), $id)
+										'message'    => sprintf(esc_html__('Export #%s is not triggered. Request skipped.', 'wp_all_export_plugin'), $id)
 									));
 								}
 							}
@@ -234,7 +268,7 @@ function pmxe_wp_loaded() {
 							{
 								wp_send_json(array(
 									'status'     => 403,
-									'message'    => sprintf(__('Export #%s is currently in manually process. Request skipped.', 'wp_all_export_plugin'), $id)
+									'message'    => sprintf(esc_html__('Export #%s is currently in manually process. Request skipped.', 'wp_all_export_plugin'), $id)
 								));
 							}
 							elseif ( (int) $export->triggered and ! (int) $export->processing )
@@ -250,14 +284,14 @@ function pmxe_wp_loaded() {
 
                                     wp_send_json(array(
 										'status'     => 200,
-										'message'    => sprintf(__('Export #%s complete', 'wp_all_export_plugin'), $export->id)
+										'message'    => sprintf(esc_html__('Export #%s complete', 'wp_all_export_plugin'), $export->id)
 									));
 								}
 								else
 								{
 									wp_send_json(array(
 										'status'     => 200,
-										'message'    => sprintf(__('Records Processed %s.', 'wp_all_export_plugin'), (int) $export->exported)
+										'message'    => sprintf(esc_html__('Records Processed %s.', 'wp_all_export_plugin'), (int) $export->exported)
 									));
 								}
 
@@ -266,7 +300,7 @@ function pmxe_wp_loaded() {
 							{
 								wp_send_json(array(
 									'status'     => 403,
-									'message'    => sprintf(__('Export #%s already processing. Request skipped.', 'wp_all_export_plugin'), $id)
+									'message'    => sprintf(esc_html__('Export #%s already processing. Request skipped.', 'wp_all_export_plugin'), $id)
 								));
 							}
 
@@ -277,17 +311,17 @@ function pmxe_wp_loaded() {
 		}
 	}
 
-	if ( ! empty($_GET['action']) && ! empty($_GET['export_id']) && (!empty($_GET['export_hash']) || !empty($_GET['security_token'])))
+	if ( ! empty($_GET['action']) && ! empty($_GET['export_id']) && (!empty($_GET['export_hash']) || !empty($_GET['security_token']) || !empty($_GET['security_key'])))
 	{
         pmxe_set_max_execution_time();
-		$securityToken = '';
-		if(empty($_GET['export_hash'])) {
-			$securityToken = $_GET['security_token'];
-		} else {
-			$securityToken = $_GET['export_hash'];
-		}
 
-		if ( $securityToken == substr(md5($cron_job_key . $_GET['export_id']), 0, 16) )
+        if(isset($_GET['security_key'])) {
+
+            $export = new PMXE_Export_Record();
+            $export->getById(intval($_GET['export_id']));
+        }
+
+		if ( (isset($_GET['security_token']) && $_GET['security_token'] == substr(md5($cron_job_key . $_GET['export_id']), 0, 16)) || (isset($_GET['security_key']) && $_GET['security_key'] === $export->options['security_token']) )
 		{
 			$export = new PMXE_Export_Record();
 
@@ -342,6 +376,9 @@ function pmxe_wp_loaded() {
 						// If we are doing a google merchants export, send the file as a download.
 						header("Content-type: text/plain");
 						header("Content-Disposition: attachment; filename=".basename($filepath));
+						header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+						header("Cache-Control: post-check=0, pre-check=0", false);
+						header("Pragma: no-cache");
 						if ( ob_get_length() !== false ) {
 							ob_end_clean();
 						}
@@ -364,13 +401,21 @@ function pmxe_wp_loaded() {
                     }
 
                     $fileurl = str_replace("\\", "/", $fileurl);
+
+					// Add random parameter to avoid caching
+					if( strpos( $fileurl, '?' ) !== false ){
+						$fileurl .= '&wpae_nocache=' . mt_rand();
+					}else{
+						$fileurl .= '?wpae_nocache=' . mt_rand();
+				    }
+
                     wp_redirect($fileurl);
 				}
 				else
 				{
 					wp_send_json(array(
 						'status'     => 403,
-						'message'    => __('File doesn\'t exist', 'wp_all_export_plugin')
+						'message'    => esc_html__('File doesn\'t exist', 'wp_all_export_plugin')
 					));
 				}
 			}
@@ -379,7 +424,7 @@ function pmxe_wp_loaded() {
 		{
 			wp_send_json(array(
 				'status'     => 403,
-				'message'    => __('Export hash is not valid.', 'wp_all_export_plugin')
+				'message'    => esc_html__('Export hash is not valid.', 'wp_all_export_plugin')
 			));
 		}
 	}

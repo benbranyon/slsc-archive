@@ -1,5 +1,10 @@
+<?php
+if(!defined('ABSPATH')) {
+    die();
+}
+?>
 <div class="google-merchants-success">
-    <input type="hidden" id="wpae_wp_hidden_field" class="<?php echo wp_create_nonce( '_wpnonce-download_feed' ); ?>" />
+    <input type="hidden" id="wpae_wp_hidden_field" class="<?php echo esc_attr(wp_create_nonce( '_wpnonce-download_feed' )); ?>" />
     <div class="wpae-container">
         <h3>What's next?</h3>
 
@@ -15,6 +20,6 @@
         Export Feed URL
     </p>
     <p class="feed-url">
-        <a href="<?php echo $urlToExport;?>" <?php if(php_sapi_name() != 'cli-server') { ?> target="_blank" <?php } ?> class="feed-url"><?php echo $urlToExport;  ?></a>
+        <a href="<?php echo esc_url($urlToExport);?>" <?php if(php_sapi_name() != 'cli-server') { ?> target="_blank" <?php } ?> class="feed-url"><?php echo esc_url($urlToExport);  ?></a>
     </p>
 </div>

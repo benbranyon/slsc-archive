@@ -1,5 +1,7 @@
 <?php
+
 namespace Wpae\App\Field;
+
 use Wpae\App\Feed\Feed;
 use Wpae\App\Service\WooCommerceVersion;
 use Wpae\WordPress\Filters;
@@ -22,6 +24,10 @@ abstract class Field
      */
     protected $wooCommerceVersion;
     /**
+     * @var boolean $isCustomValue
+     */
+
+    /**
      * Field constructor.
      * @param $entry
      * @param Filters $filters
@@ -40,20 +46,22 @@ abstract class Field
     {
         $value = strip_tags($this->getValue($snippetData));
 
+
         $functions = array();
         preg_match_all('%(\[[^\]\[]*\])%', $value, $functions);
-        if(is_array($functions) && isset($functions[0]) && !empty($functions[0])) {
-            foreach($functions[0] as $function) {
-                if(!empty($function)) {
+
+        if (is_array($functions) && isset($functions[0]) && !empty($functions[0])) {
+            foreach ($functions[0] as $function) {
+                if (!empty($function)) {
 
                     $functionSnippet = $function;
 
-                    $function = str_replace(array('[',']'), '', $function);
+                    $function = str_replace(array('[', ']'), '', $function);
                     $function = str_replace("('", "(\"", $function);
                     $function = str_replace("( '", "(\"", $function);
                     $function = str_replace("')", "\")", $function);
                     $function = str_replace("' )", "\")", $function);
-                    $function = str_replace(array("','","', '", "' ,'", "',\"", "\",'"), "\",\"", $function);
+                    $function = str_replace(array("','", "', '", "' ,'", "',\"", "\",'"), "\",\"", $function);
 
                     $function = $this->quoteParams($function);
                     $functionName = explode("(", $function);
@@ -62,8 +70,8 @@ abstract class Field
                     global $wpaeGoogleMerchantsFieldName;
                     $wpaeGoogleMerchantsFieldName = $this->getFieldName();
 
-                    if(function_exists($functionName)) {
-                        $functionValue = eval('return '.$function.';');
+                    if (function_exists($functionName)) {
+                        $functionValue = eval('return ' . $function . ';');
                     } else {
                         $functionValue = "";
                     }
@@ -72,23 +80,26 @@ abstract class Field
             }
         }
 
-        if($this->getFieldName() == 'sale_price') {
+        if ($this->getFieldName() == 'sale_price') {
             $availabilityPriceData = $this->feed->getSectionFeedData(SalePrice::SECTION);
-            if($value == ' '.$availabilityPriceData['currency']) {
+            if ($value == ' ' . $availabilityPriceData['currency']) {
                 $value = "";
             }
 
         }
 
+        $value = str_replace("**OPENSHORTCODE**", "[", $value);
+        $value = str_replace("**CLOSESHORTCODE**", "]", $value);
+
         $value = str_replace("**DOUBLEQUOT**", "\"", $value);
-        $value = str_replace("**SINGLEQUOT**","'", $value);
+        $value = str_replace("**SINGLEQUOT**", "'", $value);
 
         return $value;
     }
 
     public function getFieldFilter()
     {
-        return 'pmxe_'.$this->getFieldName();
+        return 'pmxe_' . $this->getFieldName();
     }
 
     protected function isCustomValue($value)
@@ -98,17 +109,16 @@ abstract class Field
 
     protected function replaceSnippetsInValue($value, $snippets)
     {
-        foreach ($snippets as $key => $fieldValue) {
-            if($key == 'id') {
-                $key = 'ID';
-            }
-            $fieldKey = '{' . $key . '}';
-            $value = str_replace($fieldKey, $fieldValue, $value);
-        }
+
         // Replace strong tags used on the frontend
         $value = str_replace(array('<strong>', '</strong>'), '', $value);
-        foreach(\XmlExportEngine::$exportOptions['snippets'] as $snippet) {
-            $value = str_replace('{' . $snippet . '}','', $value);
+
+        foreach ($snippets as $key => $snippet) {
+
+            $snippet = str_replace("[", "**OPENSHORTCODE**", $snippet);
+            $snippet = str_replace("]", "**CLOSESHORTCODE**", $snippet);
+
+            $value = str_replace('{' . $key . '}', $snippet, $value);
         }
 
         return $value;
@@ -148,7 +158,7 @@ abstract class Field
         $function = str_replace("**AFTERPARAMS**", '")', $function);
 
         $function = str_replace("**DOUBLEQUOT**", "\\\"", $function);
-        $function = str_replace("**SINGLEQUOT**","'", $function);
+        $function = str_replace("**SINGLEQUOT**", "'", $function);
 
         return $function;
     }

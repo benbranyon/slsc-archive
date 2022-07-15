@@ -3,9 +3,6 @@
 namespace Wpae\App\Service\VariationOptions;
 
 
-use Wpae\Pro\Filtering\FilteringCPT;
-use Wpae\Pro\Filtering\FilteringProducts;
-
 class VariationOptions implements VariationOptionsInterface
 {
     public function getQueryWhere($wpdb, $where, $join, $closeBracket = false)
@@ -32,7 +29,7 @@ class VariationOptions implements VariationOptionsInterface
         $langQuery = '';
 
         if($this->isLanguageFilterEnabled()) {
-            $langQuery .= " AND ".FilteringProducts::getWpmlAlias().".language_code = '".\XmlExportEngine::$exportOptions['wpml_lang']."' ";
+            $langQuery .= $wpdb->prepare(" AND t.language_code = %s ", \XmlExportEngine::$exportOptions['wpml_lang']);
         }
 
         if($closeBracket) {
@@ -102,5 +99,17 @@ class VariationOptions implements VariationOptionsInterface
                             WHERE $where )";
 
         return $result;
+    }
+
+    private function getWpmlAlias()
+    {
+        if(!class_exists('SitePress')) {
+            return '';
+        }
+        if(version_compare(ICL_SITEPRESS_VERSION, '4.1.1') >= 0) {
+            return 'wpml_translations';
+        } else {
+            return 't';
+        }
     }
 }

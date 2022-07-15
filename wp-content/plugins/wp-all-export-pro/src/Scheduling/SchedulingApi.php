@@ -147,6 +147,19 @@ class SchedulingApi
         return $response;
     }
 
+    public function updateScheduleKey($remoteScheduleId, $newKey)
+    {
+        wp_remote_request(
+            $this->getApiUrl('schedules/' . $remoteScheduleId . '/key'),
+            array(
+                'method' => 'POST',
+                'headers' => $this->getHeaders(),
+                'body' => json_encode(['key' => $newKey])
+
+            )
+        );
+    }
+
     private function getHeaders()
     {
 

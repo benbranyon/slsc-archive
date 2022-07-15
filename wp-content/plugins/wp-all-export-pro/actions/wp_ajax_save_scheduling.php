@@ -10,11 +10,11 @@ function pmxe_wp_ajax_save_scheduling()
 {
 
     if (!check_ajax_referer('wp_all_export_secure', 'security', false)) {
-        exit(__('Security check', 'wp_all_export_plugin'));
+        exit(esc_html__('Security check', 'wp_all_export_plugin'));
     }
 
     if (!current_user_can(PMXE_Plugin::$capabilities)) {
-        exit(__('Security check', 'wp_all_export_plugin'));
+        exit(esc_html__('Security check', 'wp_all_export_plugin'));
     }
 
     $elementId = $_POST['element_id'];

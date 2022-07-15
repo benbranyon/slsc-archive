@@ -2,7 +2,6 @@
 
 namespace Wpae\Pro\Filtering;
 
-
 /**
  * Class FilteringProducts
  * @package Wpae\Filtering
@@ -13,7 +12,7 @@ use Wpae\App\Service\VariationOptions\VariationOptionsFactory;
  * Class FilteringProducts
  * @package Wpae\Pro\Filtering
  */
-class FilteringProducts extends FilteringCPT
+class FilteringProducts extends \Wpae\Pro\Filtering\FilteringCPT
 {
     /**
      *

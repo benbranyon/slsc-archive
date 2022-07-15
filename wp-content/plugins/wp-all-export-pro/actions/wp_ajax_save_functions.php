@@ -3,11 +3,11 @@
 function pmxe_wp_ajax_save_functions(){
 
 	if ( ! check_ajax_referer( 'wp_all_export_secure', 'security', false )){
-		exit( json_encode(array('html' => __('Security check', 'wp_all_export_plugin'))) );
+		exit( json_encode(array('html' => esc_html__('Security check', 'wp_all_export_plugin'))) );
 	}
 
 	if ( ! current_user_can( PMXE_Plugin::$capabilities ) ){
-		exit( json_encode(array('html' => __('Security check', 'wp_all_export_plugin'))) );
+		exit( json_encode(array('html' => esc_html__('Security check', 'wp_all_export_plugin'))) );
 	}
 
 	$uploads   = wp_upload_dir();
@@ -17,7 +17,7 @@ function pmxe_wp_ajax_save_functions(){
 	
 	$post = $input->post('data', '');
 
-	$response = wp_remote_post('http://phpcodechecker.com/api', array(
+	$response = wp_remote_post('https://phpcodechecker.com/api', array(
 		'body' => array(
 			'code' => $post
 		)

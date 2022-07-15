@@ -184,16 +184,30 @@ function pmxe_wp_ajax_wpae_preview(){
         }
 		else
 		{
-			remove_all_actions('parse_query');
-			remove_all_filters('posts_clauses');
-            wp_all_export_remove_before_post_except_toolset_actions();
+		    if(strpos($exportOptions['cpt'][0], 'custom_') === 0) {
+                $addon = GF_Export_Add_On::get_instance();
 
-            add_filter('posts_join', 'wp_all_export_posts_join', 10, 1);
-			add_filter('posts_where', 'wp_all_export_posts_where', 10, 1);
-			$exportQuery = new WP_Query( array( 'post_type' => $exportOptions['cpt'], 'post_status' => 'any', 'orderby' => 'title', 'order' => 'ASC', 'posts_per_page' => 10 ));
-			
-			remove_filter('posts_where', 'wp_all_export_posts_where');
-			remove_filter('posts_join', 'wp_all_export_posts_join');
+                $filter_args = array(
+                    'filter_rules_hierarhy' => empty($exportOptions['filter_rules_hierarhy']) ? array() : $exportOptions['filter_rules_hierarhy'],
+                    'product_matching_mode' => empty($exportOptions['product_matching_mode']) ? 'strict' : $exportOptions['product_matching_mode'],
+                    'taxonomy_to_export' => empty($exportOptions['taxonomy_to_export']) ? '' : $exportOptions['taxonomy_to_export'],
+                    'sub_post_type_to_export' => empty($exportOptions['sub_post_type_to_export']) ? '' : $exportOptions['sub_post_type_to_export']
+                );
+
+                $exportQuery = $addon->add_on->get_query(0, 0, $filter_args);
+            } else {
+
+                remove_all_actions('parse_query');
+                remove_all_filters('posts_clauses');
+                wp_all_export_remove_before_post_except_toolset_actions();
+
+                add_filter('posts_join', 'wp_all_export_posts_join', 10, 1);
+                add_filter('posts_where', 'wp_all_export_posts_where', 10, 1);
+                $exportQuery = new WP_Query(array('post_type' => $exportOptions['cpt'], 'post_status' => 'any', 'orderby' => 'title', 'order' => 'ASC', 'posts_per_page' => 10));
+
+                remove_filter('posts_where', 'wp_all_export_posts_where');
+                remove_filter('posts_join', 'wp_all_export_posts_join');
+            }
 		}
 	}
 
@@ -254,7 +268,7 @@ function pmxe_wp_ajax_wpae_preview(){
 						}
 					}
 
-					$error_msg = '<span class="error">'.__($errorMessage, 'wp_all_import_plugin').'</span>';
+					$error_msg = '<span class="error">'.wp_kses_post(__($errorMessage, 'wp_all_import_plugin')).'</span>';
 					echo $error_msg;
 					exit( json_encode(array('html' => ob_get_clean())) );
 				} catch (WpaeInvalidStringException $e) {
@@ -367,9 +381,9 @@ function pmxe_wp_ajax_wpae_preview(){
 						$error_msg = '<strong class="error">' . __('Invalid XML', 'wp_all_import_plugin') . '</strong><ul  class="error">';
 						foreach($preview_xml_errors as $error) {
 							$error_msg .= '<li>';
-							$error_msg .= __('Line', 'wp_all_import_plugin') . ' ' . $error->line . ', ';
-							$error_msg .= __('Column', 'wp_all_import_plugin') . ' ' . $error->column . ', ';
-							$error_msg .= __('Code', 'wp_all_import_plugin') . ' ' . $error->code . ': ';
+							$error_msg .= esc_html__('Line', 'wp_all_import_plugin') . ' ' . esc_html($error->line) . ', ';
+							$error_msg .= esc_html__('Column', 'wp_all_import_plugin') . ' ' . esc_html($error->column) . ', ';
+							$error_msg .= esc_html__('Code', 'wp_all_import_plugin') . ' ' . esc_html($error->code) . ': ';
 							$error_msg .= '<em>' . trim(esc_html($error->message)) . '</em>';
 							$error_msg .= '</li>';
 						}
@@ -383,9 +397,9 @@ function pmxe_wp_ajax_wpae_preview(){
 							pmxe_render_xml_element($elements->item( 0 ), true);
 						}
 						else{
-							$error_msg = '<strong>' . __('Can\'t preview the document. Root element is not detected.', 'wp_all_import_plugin') . '</strong><ul>';
+							$error_msg = '<strong>' . esc_html__('Can\'t preview the document. Root element is not detected.', 'wp_all_import_plugin') . '</strong><ul>';
 							$error_msg .= '<li>';
-							$error_msg .= __('You can continue export or try to use &lt;data&gt; tag as root element.', 'wp_all_import_plugin');
+							$error_msg .= esc_html__('You can continue export or try to use &lt;data&gt; tag as root element.', 'wp_all_import_plugin');
 							$error_msg .= '</li>';
 							$error_msg .= '</ul>';
 							echo $error_msg;
@@ -435,7 +449,7 @@ function pmxe_wp_ajax_wpae_preview(){
 						}
 					}
 					else{
-						_e('Data not found.', 'wp_all_export_plugin');
+						esc_html_e('Data not found.', 'wp_all_export_plugin');
 					}
 				?>
 				</small>
@@ -444,7 +458,7 @@ function pmxe_wp_ajax_wpae_preview(){
 
 			default:
 
-				_e('This format is not supported.', 'wp_all_export_plugin');
+				esc_html_e('This format is not supported.', 'wp_all_export_plugin');
 
 				break;
 		}

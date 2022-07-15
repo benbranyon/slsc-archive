@@ -126,7 +126,7 @@ class PMXE_Admin_Settings extends PMXE_Controller_Admin
                 $post['scheduling_license_status'] = $this->check_scheduling_license();
                 if ($post['scheduling_license_status'] == 'valid') {
 
-                    $this->data['scheduling_license_message'] = __('License activated.', 'wp_all_import_plugin');
+                    $this->data['scheduling_license_message'] = esc_html__('License activated.', 'wp_all_import_plugin');
                 }
 
                 PMXE_Plugin::getInstance()->updateOption($post);
@@ -169,7 +169,7 @@ class PMXE_Admin_Settings extends PMXE_Controller_Admin
                     $extension = strtolower(pmxe_getExtension($filename));
 
                     if (($extension != "txt")) {
-                        $this->errors->add('form-validation', __('Unknown File extension. Only txt files are permitted', 'wp_all_export_plugin'));
+                        $this->errors->add('form-validation', esc_html__('Unknown File extension. Only txt files are permitted', 'wp_all_export_plugin'));
                     } else {
                         $import_data = @file_get_contents($tmp_name);
                         if (!empty($import_data)) {
@@ -178,30 +178,30 @@ class PMXE_Admin_Settings extends PMXE_Controller_Admin
                             if (!empty($templates_data)) {
                                 $templateOptions = empty($templates_data[0]['options']) ? false : unserialize($templates_data[0]['options']);
                                 if (empty($templateOptions)) {
-                                    $this->errors->add('form-validation', __('The template is invalid. Options are missing.', 'wp_all_export_plugin'));
+                                    $this->errors->add('form-validation', esc_html__('The template is invalid. Options are missing.', 'wp_all_export_plugin'));
                                 } else {
                                     if (!isset($templateOptions['is_user_export'])) {
-                                        $this->errors->add('form-validation', __('The template you\'ve uploaded is intended to be used with WP All Import plugin.', 'wp_all_export_plugin'));
+                                        $this->errors->add('form-validation', esc_html__('The template you\'ve uploaded is intended to be used with WP All Import plugin.', 'wp_all_export_plugin'));
                                     } else {
                                         $template = new PMXE_Template_Record();
                                         foreach ($templates_data as $template_data) {
                                             unset($template_data['id']);
                                             $template->clear()->set($template_data)->insert();
                                         }
-                                        wp_redirect(add_query_arg('pmxe_nt', urlencode(sprintf(_n('%d template imported', '%d templates imported', count($templates_data), 'wp_all_export_plugin'), count($templates_data))), $this->baseUrl));
+                                        wp_redirect(esc_url_raw(add_query_arg('pmxe_nt', urlencode(sprintf(_n('%d template imported', '%d templates imported', count($templates_data), 'wp_all_export_plugin'), count($templates_data))), $this->baseUrl)));
                                         die();
                                     }
                                 }
-                            } else $this->errors->add('form-validation', __('Wrong imported data format', 'wp_all_export_plugin'));
-                        } else $this->errors->add('form-validation', __('File is empty or doesn\'t exests', 'wp_all_export_plugin'));
+                            } else $this->errors->add('form-validation', esc_html__('Wrong imported data format', 'wp_all_export_plugin'));
+                        } else $this->errors->add('form-validation', esc_html__('File is empty or doesn\'t exests', 'wp_all_export_plugin'));
                     }
-                } else $this->errors->add('form-validation', __('Undefined entry!', 'wp_all_export_plugin'));
-            } else $this->errors->add('form-validation', __('Please select file.', 'wp_all_export_plugin'));
+                } else $this->errors->add('form-validation', esc_html__('Undefined entry!', 'wp_all_export_plugin'));
+            } else $this->errors->add('form-validation', esc_html__('Please select file.', 'wp_all_export_plugin'));
 
         } else {
             $templates_ids = $this->input->post('templates', array());
             if (empty($templates_ids)) {
-                $this->errors->add('form-validation', __('Templates must be selected', 'wp_all_export_plugin'));
+                $this->errors->add('form-validation', esc_html__('Templates must be selected', 'wp_all_export_plugin'));
             }
 
             if (!$this->errors->get_error_codes()) { // no validation errors detected
@@ -210,7 +210,7 @@ class PMXE_Admin_Settings extends PMXE_Controller_Admin
                     foreach ($templates_ids as $template_id) {
                         $template->clear()->set('id', $template_id)->delete();
                     }
-                    wp_redirect(add_query_arg('pmxe_nt', urlencode(sprintf(_n('%d template deleted', '%d templates deleted', count($templates_ids), 'wp_all_export_plugin'), count($templates_ids))), $this->baseUrl));
+                    wp_redirect(esc_url_raw(add_query_arg('pmxe_nt', urlencode(sprintf(_n('%d template deleted', '%d templates deleted', count($templates_ids), 'wp_all_export_plugin'), count($templates_ids))), $this->baseUrl)));
                     die();
                 }
                 if ($this->input->post('export_templates')) {
@@ -247,7 +247,7 @@ class PMXE_Admin_Settings extends PMXE_Controller_Admin
             if (empty($_POST['pmxe_license_activate']) and empty($_POST['pmxe_license_deactivate'])) {
                 $post['license_status'] = $this->check_license();
                 if ($post['license_status'] == 'valid') {
-                    $this->data['license_message'] = __('License activated.', 'wp_all_import_plugin');
+                    $this->data['license_message'] = esc_html__('License activated.', 'wp_all_import_plugin');
                 }
                 PMXE_Plugin::getInstance()->updateOption($post);
 
@@ -268,7 +268,26 @@ class PMXE_Admin_Settings extends PMXE_Controller_Admin
 
         if (!$this->errors->get_error_codes()) { // no validation errors detected
 
+
+            $current_cron_job_key = PMXE_Plugin::getInstance()->getOption('cron_job_key');
+            $new_cron_job_key = $post['cron_job_key'];
+
+            if($new_cron_job_key !== $current_cron_job_key) {
+
+                // Cron job key changed
+                $scheduling_service = \Wpae\Scheduling\Scheduling::create();
+                $exports = new PMXE_Export_List();
+                $exports = $exports->getBy('parent_id', 0)->convertRecords();
+
+                foreach ($exports as $export) {
+                    if($export->options['scheduling_enable'] === "1") {
+                        $scheduling_service->updateApiKey($export->id, $new_cron_job_key);
+                    }
+                }
+            }
+
             PMXE_Plugin::getInstance()->updateOption($post);
+
 
             if (empty($_POST['pmxe_license_activate']) and empty($_POST['pmxe_license_deactivate'])) {
 
@@ -278,7 +297,7 @@ class PMXE_Admin_Settings extends PMXE_Controller_Admin
 
             isset($_POST['pmxe_license_activate']) and $this->activate_licenses();
 
-            wp_redirect(add_query_arg('pmxe_nt', urlencode(__('Settings saved', 'wp_all_export_plugin')), $this->baseUrl));
+            wp_redirect(esc_url_raw(add_query_arg('pmxe_nt', urlencode(__('Settings saved', 'wp_all_export_plugin')), $this->baseUrl)));
             die();
         }
     }
@@ -293,7 +312,7 @@ class PMXE_Admin_Settings extends PMXE_Controller_Admin
 
             $all_roles = array_keys($wp_roles->roles);
 
-            $client_mode_roles = $this->input->post('client_mode_roles');
+            $client_mode_roles = is_array($this->input->post('client_mode_roles')) ? $this->input->post('client_mode_roles') : [];
 
             foreach ($all_roles as $role_id) {
 
@@ -313,7 +332,7 @@ class PMXE_Admin_Settings extends PMXE_Controller_Admin
 
             PMXE_Plugin::getInstance()->updateOption(array('client_mode_roles' => $client_mode_roles));
 
-            wp_redirect(add_query_arg('pmxe_nt', urlencode(__('Settings saved', 'wp_all_export_plugin')), $this->baseUrl));
+            wp_redirect(esc_url_raw(add_query_arg('pmxe_nt', urlencode(__('Settings saved', 'wp_all_export_plugin')), $this->baseUrl)));
 
             die();
         }

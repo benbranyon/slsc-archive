@@ -1,4 +1,9 @@
 <?php
+if(!defined('ABSPATH')) {
+    die();
+}
+?>
+<?php
 $isGoogleFeed = false;
 
 if ($update_previous->options['export_to'] == XmlExportEngine::EXPORT_TYPE_XML && $update_previous->options['xml_template_type'] === XmlExportEngine::EXPORT_TYPE_GOOLE_MERCHANTS) {
@@ -12,14 +17,13 @@ if ($update_previous->options['export_to'] == XmlExportEngine::EXPORT_TYPE_XML &
     <div class="wpallexport-header">
         <div class="wpallexport-logo"></div>
         <div class="wpallexport-title">
-            <p><?php _e('WP All Export', 'wp_all_export_plugin'); ?></p>
-            <h2><?php _e('Export to XML / CSV', 'wp_all_export_plugin'); ?></h2>
+            <h2><?php esc_html_e('Confirm & Run', 'wp_all_export_plugin'); ?></h2>
         </div>
         <div class="wpallexport-links">
             <a href="http://www.wpallimport.com/support/"
-               target="_blank"><?php _e('Support', 'wp_all_export_plugin'); ?></a> | <a
+               target="_blank"><?php esc_html_e('Support', 'wp_all_export_plugin'); ?></a> | <a
                 href="http://www.wpallimport.com/documentation/"
-                target="_blank"><?php _e('Documentation', 'wp_all_export_plugin'); ?></a>
+                target="_blank"><?php esc_html_e('Documentation', 'wp_all_export_plugin'); ?></a>
         </div>
 
         <div class="clear"></div>
@@ -28,23 +32,24 @@ if ($update_previous->options['export_to'] == XmlExportEngine::EXPORT_TYPE_XML &
             <div class="clear"></div>
 
             <div class="step_description">
-                <h2><?php _e('Export <span id="status">in Progress...</span>', 'wp_all_export_plugin') ?></h2>
-                <h3 id="process_notice"><?php _e('Exporting may take some time. Please do not close your browser or refresh the page until the process is complete.', 'wp_all_export_plugin'); ?></h3>
+                <h2><?php echo wp_kses_post(__('Export <span id="status">in Progress...</span>', 'wp_all_export_plugin')); ?></h2>
+                <h3 id="process_notice"><?php esc_html_e('Exporting may take some time. Please do not close your browser or refresh the page until the process is complete.', 'wp_all_export_plugin'); ?></h3>
             </div>
             <div
-                class="wpallexport_process_wrapper_<?php echo $update_previous->id; ?> wpallexport_process_parent_wrapper">
+                class="wpallexport_process_wrapper_<?php echo intval($update_previous->id); ?> wpallexport_process_parent_wrapper">
                 <div class="wpallexport_processbar rad14">
                     <div class="rad14"></div>
                 </div>
                 <div class="export_progress">
-                    <span class="left_progress"><?php _e('Time Elapsed', 'wp_all_export_plugin'); ?> <span id="then">00:00:00</span></span>
+                    <span class="left_progress"><?php esc_html_e('Time Elapsed', 'wp_all_export_plugin'); ?> <span id="then">00:00:00</span></span>
                     <span class="center_progress"><span class="percents_count">0</span>%</span>
-                    <span class="right_progress"><?php _e('Exported', 'wp_all_export_plugin'); ?> <span
-                            class="created_count"><?php echo $update_previous->exported; ?></span></span>
+                    <span class="right_progress"><?php esc_html_e('Exported', 'wp_all_export_plugin'); ?> <span
+                            class="created_count"><?php echo intval($update_previous->exported); ?></span></span>
                 </div>
             </div>
             <?php
-            if (XmlExportWooCommerceOrder::$is_active && $update_previous->options['export_type'] == 'specific') {
+
+            if (XmlExportEngine::get_addons_service()->isWooCommerceAddonActive() && XmlExportWooCommerceOrder::$is_active && $update_previous->options['export_type'] == 'specific') {
 
                 $exportList = new PMXE_Export_List();
                 foreach ($exportList->getBy('parent_id', $update_previous->id)->convertRecords() as $child_export) {
@@ -66,16 +71,16 @@ if ($update_previous->options['export_to'] == XmlExportEngine::EXPORT_TYPE_XML &
                     ?>
                     <div class="clear"></div>
                     <div
-                        class="wpallexport_process_wrapper_<?php echo $child_export->id; ?> wpallexport_process_child_wrapper">
+                        class="wpallexport_process_wrapper_<?php echo intval($child_export->id); ?> wpallexport_process_child_wrapper">
                         <div class="wpallexport_processbar rad14">
                             <div class="rad14"></div>
                         </div>
                         <div class="export_progress">
-							<span class="left_progress">
-								<span class="center_progress">
-									<span
-                                        class="percents_count">0</span>%</span> <?php printf(__("Export %ss", "wp_all_export_plugin"), ucwords(str_replace("_", " ", str_replace("shop", "", $child_export->export_post_type)))); ?></span>
-							<span class="right_progress"><?php _e('Exported', 'wp_all_export_plugin'); ?> <span
+                            <span class="left_progress">
+                                <span class="center_progress">
+                                    <span
+                                        class="percents_count">0</span>%</span> <?php printf(esc_html__("Export %ss", "wp_all_export_plugin"), ucwords(str_replace("_", " ", str_replace("shop", "", $child_export->export_post_type)))); ?></span>
+                            <span class="right_progress"><?php esc_html_e('Exported', 'wp_all_export_plugin'); ?> <span
                                     class="created_count">0</span></span>
                         </div>
                     </div>
@@ -84,22 +89,26 @@ if ($update_previous->options['export_to'] == XmlExportEngine::EXPORT_TYPE_XML &
             }
             ?>
         </div>
-	    <span id="wpallexport-error-terminated" style="display: none;">
-			<div class="wpallexport-content-section" style="display:block; position: relative;">
-				<div class="wpallexport-notify-wrapper">
-					<div class="found_records terminated" style="background-position: 0 50% !important;">
-						<h3><?php _e('Your server terminated the export process', 'wp_all_export_plugin'); ?></h3>
-						<h4 style="width: 78%; line-height: 25px;"><?php _e("Ask your host to check your server's error log. They will be able to determine why your server is terminating the export process.", "wp_all_export_plugin"); ?></h4>
-					</div>
-				</div>
-			</div>
-		</span>
-        <?php include ('success_page.php'); ?>
+        <span id="wpallexport-error-terminated" style="display: none;">
+            <div class="wpallexport-content-section" style="display:block; position: relative;">
+                <div class="wpallexport-notify-wrapper">
+                    <div class="found_records terminated" style="background-position: 0 50% !important;">
+                        <h3><?php esc_html_e('Your server terminated the export process', 'wp_all_export_plugin'); ?></h3>
+                        <h4 style="width: 78%; line-height: 25px;"><?php esc_html_e("Ask your host to check your server's error log. They will be able to determine why your server is terminating the export process.", "wp_all_export_plugin"); ?></h4>
+                    </div>
+                </div>
+            </div>
+        </span>
+        <?php if($update_previous->options['enable_real_time_exports']) { ?>
+            <?php include ('success_page_realtime.php'); ?>
+        <?php } else { ?>
+            <?php include ('success_page.php'); ?>
+        <?php } ?>
 
     </div>
 
     <a href="http://soflyy.com/" target="_blank"
-       class="wpallexport-created-by"><?php _e('Created by', 'wp_all_export_plugin'); ?> <span></span></a>
+       class="wpallexport-created-by"><?php esc_html_e('Created by', 'wp_all_export_plugin'); ?> <span></span></a>
 
 </div>
 
@@ -234,7 +243,7 @@ if ($update_previous->options['export_to'] == XmlExportEngine::EXPORT_TYPE_XML &
                 });
             };
 
-            wp_all_export_process(<?php echo $update_previous->id; ?>);
+            wp_all_export_process(<?php echo intval($update_previous->id); ?>);
 
             window.onbeforeunload = function () {
                 return 'WARNING:\nExport process in under way, leaving the page will interrupt\nthe operation and most likely to cause leftovers in posts.';
