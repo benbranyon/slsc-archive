@@ -5,6 +5,8 @@ class FacetWP_Facet_Checkboxes extends FacetWP_Facet
 
     function __construct() {
         $this->label = __( 'Checkboxes', 'fwp' );
+        $this->fields = [ 'parent_term', 'modifiers', 'hierarchical', 'show_expanded',
+            'ghosts', 'operator', 'orderby', 'count', 'soft_limit' ];
     }
 
 
@@ -105,7 +107,6 @@ class FacetWP_Facet_Checkboxes extends FacetWP_Facet
      * Generate the facet HTML
      */
     function render( $params ) {
-
         $facet = $params['facet'];
 
         if ( FWP()->helper->facet_is( $facet, 'hierarchical', 'yes' ) ) {
@@ -185,12 +186,14 @@ class FacetWP_Facet_Checkboxes extends FacetWP_Facet
         $selected = in_array( $row['facet_value'], $selected_values ) ? ' checked' : '';
         $selected .= ( '' != $row['counter'] && 0 == $row['counter'] && '' == $selected ) ? ' disabled' : '';
         $output .= '<div class="facetwp-checkbox' . $selected . '" data-value="' . esc_attr( $row['facet_value'] ) . '">';
+        $output .= '<span class="facetwp-display-value">';
         $output .= apply_filters( 'facetwp_facet_display_value', $label, [
             'selected' => ( '' !== $selected ),
             'facet' => $params['facet'],
             'row' => $row
         ]);
-        $output .= ' <span class="facetwp-counter">(' . $row['counter'] . ')</span>';
+        $output .= '</span>';
+        $output .= '<span class="facetwp-counter">(' . $row['counter'] . ')</span>';
         $output .= '</div>';
         return $output;
     }
@@ -239,22 +242,6 @@ class FacetWP_Facet_Checkboxes extends FacetWP_Facet
     function front_scripts() {
         FWP()->display->json['expand'] = '[+]';
         FWP()->display->json['collapse'] = '[-]';
-    }
-
-
-    /**
-     * Output admin settings HTML
-     */
-    function settings_html() {
-        $this->render_setting( 'parent_term' );
-        $this->render_setting( 'modifiers' );
-        $this->render_setting( 'hierarchical' );
-        $this->render_setting( 'show_expanded' );
-        $this->render_setting( 'ghosts' );
-        $this->render_setting( 'operator' );
-        $this->render_setting( 'orderby' );
-        $this->render_setting( 'count' );
-        $this->render_setting( 'soft_limit' );
     }
 
 

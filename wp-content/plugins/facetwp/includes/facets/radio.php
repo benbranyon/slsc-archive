@@ -5,6 +5,7 @@ class FacetWP_Facet_Radio_Core extends FacetWP_Facet
 
     function __construct() {
         $this->label = __( 'Radio', 'fwp' );
+        $this->fields = [ 'label_any', 'parent_term', 'modifiers', 'ghosts', 'orderby', 'count' ];
     }
 
 
@@ -12,6 +13,7 @@ class FacetWP_Facet_Radio_Core extends FacetWP_Facet
      * Load the available choices
      */
     function load_values( $params ) {
+        $params['facet']['operator'] = 'or';
         return FWP()->helper->facet_types['checkboxes']->load_values( $params );
     }
 
@@ -37,12 +39,14 @@ class FacetWP_Facet_Radio_Core extends FacetWP_Facet
             $selected = in_array( $row['facet_value'], $selected_values ) ? ' checked' : '';
             $selected .= ( 0 == $row['counter'] && '' == $selected ) ? ' disabled' : '';
             $output .= '<div class="facetwp-radio' . $selected . '" data-value="' . esc_attr( $row['facet_value'] ) . '">';
+            $output .= '<span class="facetwp-display-value">';
             $output .= apply_filters( 'facetwp_facet_display_value', $label, [
                 'selected' => ( '' !== $selected ),
                 'facet' => $facet,
                 'row' => $row
             ]);
-            $output .= ' <span class="facetwp-counter">(' . $row['counter'] . ')</span>';
+            $output .= '</span>';
+            $output .= '<span class="facetwp-counter">(' . $row['counter'] . ')</span>';
             $output .= '</div>';
         }
 
@@ -54,22 +58,7 @@ class FacetWP_Facet_Radio_Core extends FacetWP_Facet
      * Filter the query based on selected values
      */
     function filter_posts( $params ) {
+        $params['facet']['operator'] = 'or';
         return FWP()->helper->facet_types['checkboxes']->filter_posts( $params );
-    }
-
-
-    /**
-     * Output admin settings HTML
-     */
-    function settings_html() {
-        $this->render_setting( 'label_any' );
-        $this->render_setting( 'parent_term' );
-        $this->render_setting( 'modifiers' );
-        $this->render_setting( 'ghosts' );
-        $this->render_setting( 'orderby' );
-        $this->render_setting( 'count' );
-?>
-        <div><input type="hidden" class="facet-operator" value="or" /></div>
-<?php
     }
 }

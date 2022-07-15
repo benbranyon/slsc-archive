@@ -8,6 +8,7 @@ class FacetWP_Facet_Autocomplete extends FacetWP_Facet
 
     function __construct() {
         $this->label = __( 'Autocomplete', 'fwp' );
+        $this->fields = [ 'placeholder' ];
 
         // ajax
         add_action( 'facetwp_autocomplete_load', [ $this, 'ajax_load' ] );
@@ -15,6 +16,9 @@ class FacetWP_Facet_Autocomplete extends FacetWP_Facet
         // css-based template
         add_action( 'facetwp_init', [ $this, 'maybe_buffer_output' ] );
         add_action( 'facetwp_found_main_query', [ $this, 'template_handler' ] );
+
+        // result limit
+        $this->limit = (int) apply_filters( 'facetwp_facet_autocomplete_limit', 10 );
     }
 
 
@@ -54,7 +58,7 @@ class FacetWP_Facet_Autocomplete extends FacetWP_Facet
         $output = '';
         $value = (array) $params['selected_values'];
         $value = empty( $value ) ? '' : stripslashes( $value[0] );
-        $placeholder = isset( $params['facet']['placeholder'] ) ? $params['facet']['placeholder'] : __( 'Start typing', 'fwp-front' ) + '...';
+        $placeholder = $params['facet']['placeholder'] ?? __( 'Start typing', 'fwp-front' ) . '...';
         $placeholder = facetwp_i18n( $placeholder );
         $output .= '<input type="text" class="facetwp-autocomplete" value="' . esc_attr( $value ) . '" placeholder="' . esc_attr( $placeholder ) . '" autocomplete="off" />';
         $output .= '<input type="button" class="facetwp-autocomplete-update" value="' . __( 'Go', 'fwp-front' ) . '" />';
@@ -128,7 +132,7 @@ class FacetWP_Facet_Autocomplete extends FacetWP_Facet
                 facet_display_value LIKE '%$query%'
                 $where_clause
             ORDER BY facet_display_value ASC
-            LIMIT 10";
+            LIMIT $this->limit";
 
             $results = $wpdb->get_results( $sql );
 
@@ -145,26 +149,14 @@ class FacetWP_Facet_Autocomplete extends FacetWP_Facet
 
 
     /**
-     * Output admin settings HTML
-     */
-    function settings_html() {
-?>
-        <div class="facetwp-row">
-            <div><?php _e( 'Placeholder text', 'fwp' ); ?>:</div>
-            <div><input type="text" class="facet-placeholder" /></div>
-        </div>
-<?php
-    }
-
-
-    /**
      * (Front-end) Attach settings to the AJAX response
      */
     function settings_js( $params ) {
         return [
             'loadingText' => __( 'Loading', 'fwp-front' ) . '...',
             'minCharsText' => __( 'Enter {n} or more characters', 'fwp-front' ),
-            'noResultsText' => __( 'No results', 'fwp-front' )
+            'noResultsText' => __( 'No results', 'fwp-front' ),
+            'maxResults' => $this->limit
         ];
     }
 }

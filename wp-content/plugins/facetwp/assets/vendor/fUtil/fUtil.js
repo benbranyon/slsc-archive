@@ -6,7 +6,10 @@ window.fUtil = (() => {
             if (typeof selector === 'string' || selector instanceof String) { // string
                 var selector = selector.replace(':selected', ':checked');
 
-                if (this.isValidSelector(selector)) {
+                if ('' === selector) {
+                    this.nodes = [];
+                }
+                else if (this.isValidSelector(selector)) {
                     this.nodes = Array.from(document.querySelectorAll(selector));
                 }
                 else {
@@ -111,7 +114,7 @@ window.fUtil = (() => {
             try {
                 document.createDocumentFragment().querySelector(string);
             }
-            catch {
+            catch(err) {
                 return false;
             }
             return true;
@@ -174,10 +177,14 @@ window.fUtil = (() => {
 
         find(selector) {
             var selector = selector.replace(':selected', ':checked');
+            let nodes = [];
             let clone = this.clone();
-            if (clone.len()) {
-                clone.nodes = Array.from(clone.nodes[0].querySelectorAll(selector));
-            }
+
+            clone.each(node => {
+                nodes = nodes.concat(Array.from(node.querySelectorAll(selector)));
+            });
+
+            clone.nodes = nodes;
             return clone;
         }
 
@@ -198,32 +205,44 @@ window.fUtil = (() => {
         }
 
         prev(selector) {
+            let nodes = [];
             let clone = this.clone();
-            var sibling = (clone.len()) ? clone.nodes[0].previousElementSibling : null;
 
-            if (selector) {
+            clone.each(node => {
+                let sibling = node.previousElementSibling;
+
                 while (sibling) {
-                    if (sibling.matches(selector)) break;
+                    if (!$.isset(selector) || sibling.matches(selector)) break;
                     sibling = sibling.previousElementSibling;
                 }
-            }
 
-            clone.nodes = (null !== sibling) ? [sibling] : [];
+                if (sibling) {
+                    nodes.push(sibling);
+                }
+            });
+
+            clone.nodes = nodes;
             return clone;
         }
 
         next(selector) {
+            let nodes = [];
             let clone = this.clone();
-            let sibling = (clone.len()) ? clone.nodes[0].nextElementSibling : null;
 
-            if (selector) {
+            clone.each(node => {
+                let sibling = node.nextElementSibling;
+
                 while (sibling) {
-                    if (sibling.matches(selector)) break;
+                    if (!$.isset(selector) || sibling.matches(selector)) break;
                     sibling = sibling.nextElementSibling;
                 }
-            }
 
-            clone.nodes = (null !== sibling) ? [sibling] : [];
+                if (sibling) {
+                    nodes.push(sibling);
+                }
+            });
+
+            clone.nodes = nodes;
             return clone;
         }
 
@@ -249,9 +268,18 @@ window.fUtil = (() => {
         }
 
         closest(selector) {
+            let nodes = [];
             let clone = this.clone();
-            let nodes = (clone.len()) ? clone.nodes[0].closest(selector) : null;
-            clone.nodes = (null !== nodes) ? [nodes] : [];
+
+            clone.each(node => {
+                let closest = node.closest(selector);
+
+                if (closest) {
+                    nodes.push(closest);
+                }
+            });
+
+            clone.nodes = nodes;
             return clone;
         }
 

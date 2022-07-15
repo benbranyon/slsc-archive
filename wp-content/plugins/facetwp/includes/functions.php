@@ -5,11 +5,18 @@
 
 /**
  * An alternate to using do_shortcode()
+ * 
+ * facetwp_display( 'pager' );
+ * facetwp_display( 'template', 'cars' );
+ * facetwp_display( 'template', 'cars', [ 'static' => true ] );
+ * 
  * @since 1.7.5
  */
 function facetwp_display() {
-    $args = func_get_args();
-    $atts = isset( $args[1] ) ? [ $args[0] => $args[1] ] : [ $args[0] => true ];
+    $args = array_replace( [ 'pager', true, [] ], func_get_args() );
+
+    $atts = (array) $args[2];
+    $atts[ $args[0] ] = $args[1];
 
     return FWP()->display->shortcode( $atts );
 }

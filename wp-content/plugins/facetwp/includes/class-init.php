@@ -32,7 +32,7 @@ class FacetWP_Init
             'class-display',
             'class-builder',
             'class-overrides',
-            'class-settings-admin',
+            'class-settings',
             'class-upgrade',
             'functions'
         ];
@@ -47,6 +47,7 @@ class FacetWP_Init
         FWP()->api          = new FacetWP_API_Fetch();
         FWP()->helper       = new FacetWP_Helper();
         FWP()->facet        = new FacetWP_Renderer();
+        FWP()->settings     = new FacetWP_Settings();
         FWP()->diff         = new FacetWP_Diff();
         FWP()->indexer      = new FacetWP_Indexer();
         FWP()->display      = new FacetWP_Display();
@@ -60,6 +61,7 @@ class FacetWP_Init
         include( FACETWP_DIR . '/includes/integrations/edd/edd.php' );
         include( FACETWP_DIR . '/includes/integrations/acf/acf.php' );
         include( FACETWP_DIR . '/includes/integrations/wp-cli/wp-cli.php' );
+        include( FACETWP_DIR . '/includes/integrations/wp-rocket/wp-rocket.php' );
 
         // update checks
         include( FACETWP_DIR . '/includes/class-updater.php' );

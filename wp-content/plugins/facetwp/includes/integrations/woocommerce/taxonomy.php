@@ -54,12 +54,7 @@ class FacetWP_Integration_WooCommerce_Taxonomy
                     }
         
                     foreach ( $terms as $term ) {
-                        if ( isset( $term_counts[ $term->term_id ] ) ) {
-                            $term->count = $term_counts[ $term->term_id ];
-                        }
-                        else {
-                            $term->count = 0;
-                        }
+                        $term->count = $term_counts[ $term->term_id ] ?? 0;
                     }
                 }
             }

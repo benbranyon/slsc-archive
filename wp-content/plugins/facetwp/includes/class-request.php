@@ -213,8 +213,8 @@ class FacetWP_Request
     function process_post_data() {
         $data = stripslashes_deep( $_POST['data'] );
         $facets = $data['facets'];
-        $extras = isset( $data['extras'] ) ? $data['extras'] : [];
-        $frozen_facets = isset( $data['frozen_facets'] ) ? $data['frozen_facets'] : [];
+        $extras = $data['extras'] ?? [];
+        $frozen_facets = $data['frozen_facets'] ?? [];
 
         $params = [
             'facets'            => [],
@@ -251,7 +251,7 @@ class FacetWP_Request
     function process_preload_data( $template_name = false, $overrides = [] ) {
 
         if ( false === $template_name ) {
-            $template_name = isset( $this->template_name ) ? $this->template_name : 'wp';
+            $template_name = $this->template_name ?? 'wp';
         }
 
         $this->template_name = $template_name;
@@ -285,11 +285,8 @@ class FacetWP_Request
             if ( 'paged' == $key ) {
                 $params['paged'] = $val;
             }
-            elseif ( 'per_page' == $key ) {
-                $params['extras']['per_page'] = $val;
-            }
-            elseif ( 'sort' == $key ) {
-                $params['extras']['sort'] = $val;
+            elseif ( 'per_page' == $key || 'sort' == $key ) {
+                $params['extras'][ $key ] = $val;
             }
             else {
                 $params['facets'][] = [
@@ -321,11 +318,9 @@ class FacetWP_Request
         $url_vars = FWP()->request->url_vars;
 
         foreach ( $items['facets'] as $name ) {
-            $selected_values = isset( $url_vars[ $name ] ) ? $url_vars[ $name ] : [];
-
             $overrides['facets'][] = [
                 'facet_name' => $name,
-                'selected_values' => $selected_values,
+                'selected_values' => $url_vars[ $name ] ?? [],
             ];
         }
 
@@ -336,12 +331,10 @@ class FacetWP_Request
             $overrides['extras']['pager'] = true;
         }
         if ( isset( $items['extras']['per_page'] ) ) {
-            $per_page = isset( $url_vars['per_page'] ) ? $url_vars['per_page'] : 'default';
-            $overrides['extras']['per_page'] = $per_page;
+            $overrides['extras']['per_page'] = $url_vars['per_page'] ?? 'default';
         }
         if ( isset( $items['extras']['sort'] ) ) {
-            $sort = isset( $url_vars['sort'] ) ? $url_vars['sort'] : 'default';
-            $overrides['extras']['sort'] = $sort;
+            $overrides['extras']['sort'] = $url_vars['sort'] ?? 'default';
         }
 
         $overrides['soft_refresh'] = 0; // load the facets

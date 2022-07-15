@@ -12,11 +12,6 @@ class FacetWP_Diff
         $s1 = FWP()->helper->load_settings();
         $s2 = FWP()->helper->load_settings( true );
 
-        // The facet count is different
-        if ( count( $s1['facets'] ) !== count( $s2['facets'] ) ) {
-            return true;
-        }
-
         // Compare settings
         $to_check = [ 'thousands_separator', 'decimal_separator', 'wc_enable_variations', 'wc_index_all' ];
 
@@ -28,8 +23,14 @@ class FacetWP_Diff
             }
         }
 
-        $f1 = $s1['facets'];
-        $f2 = $s2['facets'];
+        // Get facets, removing non-indexable ones
+        $f1 = array_filter( $s1['facets'], [ $this, 'is_indexable' ] );
+        $f2 = array_filter( $s2['facets'], [ $this, 'is_indexable' ] );
+
+        // The facet count is different
+        if ( count( $f1 ) !== count( $f2 ) ) {
+            return true;
+        }
 
         // Sort the facets alphabetically
         usort( $f1, function( $a, $b ) {
@@ -57,15 +58,16 @@ class FacetWP_Diff
     }
 
 
+    function is_indexable( $facet ) {
+        return ! in_array( $facet['type'], [ 'search', 'pager', 'reset', 'sort' ] );
+    }
+
+
     /**
      * Get an array element
      * @since 3.0.9
      */
     function get_attr( $name, $collection ) {
-        if ( isset( $collection[ $name ] ) ) {
-            return $collection[ $name ];
-        }
-
-        return false;
+        return $collection[ $name ] ?? false;
     }
 }

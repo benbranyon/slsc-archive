@@ -274,6 +274,7 @@ window.fDate = (() => {
             let firstDayOfWeek = i18n.firstDayOfWeek; // 0 = Sunday
             let firstDayNum = new Date(year, month).getDay(); // between 0 and 6
             let offset = firstDayNum - firstDayOfWeek;
+            offset = (offset < 0) ? 7 + offset : offset; // negative offset (e.g. August 2021)
             let num_days = new Date(year, month + 1, 0).getDate();
             let today = ymd();
 

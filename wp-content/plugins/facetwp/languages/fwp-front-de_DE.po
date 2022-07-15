@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: FacetWP (front)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-02-21 14:01+0000\n"
-"PO-Revision-Date: 2020-12-20 21:00+0000\n"
+"PO-Revision-Date: 2021-10-19 12:17+0000\n"
 "Last-Translator: Matt Gibbs <hello@facetwp.com>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -15,60 +15,88 @@ msgstr ""
 "X-Loco-Version: 2.5.0; wp-5.6\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: includes/class-renderer.php:542
-msgid "of"
-msgstr "von"
+#: includes/facets/rating.php:110
+msgid "& up"
+msgstr "& up"
 
-#: includes/class-renderer.php:576
-msgid "Sort by"
-msgstr "Sortieren nach"
-
-#: includes/class-renderer.php:580
-msgid "Title (A-Z)"
-msgstr "Titel (A-Z)"
-
-#: includes/class-renderer.php:587
-msgid "Title (Z-A)"
-msgstr "Titel (Z-A)"
-
-#: includes/class-renderer.php:594
-msgid "Date (Newest)"
-msgstr "Datum (Neueste)"
-
-#: includes/class-renderer.php:601
-msgid "Date (Oldest)"
-msgstr "Datum (älteste)"
-
-#: includes/class-renderer.php:666
-msgid "Per page"
-msgstr "Pro Seite"
-
-#: includes/facets/slider.php:20
-msgid "Reset"
-msgstr "Zurücksetzen"
-
-#: includes/facets/checkboxes.php:131
-msgid "See {num} more"
-msgstr "{num} weitere anzeigen"
-
-#: includes/facets/checkboxes.php:132 includes/facets/hierarchy.php:152
-msgid "See less"
-msgstr "Weniger sehen"
-
-#: includes/facets/fselect.php:119 includes/facets/fselect.php:188
-#: includes/facets/dropdown.php:59 includes/facets/hierarchy.php:67
+#: includes/facets/fselect.php:34 includes/facets/fselect.php:71
+#: includes/facets/dropdown.php:33 includes/facets/hierarchy.php:25
 msgid "Any"
 msgstr "Alle"
 
-#: includes/facets/fselect.php:193
-msgid "{n} selected"
-msgstr "{n} ausgewählt"
+#: includes/facets/date_range.php:303
+msgid "Clear"
+msgstr "Zurücksetzen"
 
-#: includes/facets/fselect.php:194
-msgid "Search"
-msgstr "Suche"
+#: includes/facets/proximity.php:180
+msgid "Clear location"
+msgstr "Location löschen"
 
-#: includes/facets/fselect.php:195
+#: includes/facets/date_range.php:22
+msgid "Date"
+msgstr "Datum"
+
+#: includes/class-renderer.php:588
+msgid "Date (Newest)"
+msgstr "Datum (Neueste)"
+
+#: includes/class-renderer.php:595
+msgid "Date (Oldest)"
+msgstr "Datum (älteste)"
+
+#: includes/facets/proximity.php:309
+msgid "Distance"
+msgstr "Entfernung"
+
+#: includes/facets/date_range.php:28
+msgid "End Date"
+msgstr "Enddatum"
+
+#: includes/facets/search.php:19
+msgid "Enter keywords"
+msgstr "Suchbegriff eingeben"
+
+#: includes/facets/proximity.php:66
+msgid "Enter location"
+msgstr "Geben Sie den Ort an"
+
+#: includes/facets/autocomplete.php:169
+msgid "Enter {n} or more characters"
+msgstr ""
+
+#: includes/integrations/woocommerce/woocommerce.php:466
+msgid "Featured"
+msgstr ""
+
+#: includes/facets/number_range.php:31 includes/facets/autocomplete.php:60
+msgid "Go"
+msgstr "Los"
+
+#: includes/integrations/woocommerce/woocommerce.php:449
+msgid "In Stock"
+msgstr "Auf Lager"
+
+#: includes/facets/autocomplete.php:168
+msgid "Loading"
+msgstr ""
+
+#: includes/facets/number_range.php:28
+msgid "Max"
+msgstr "Max"
+
+#: includes/facets/number_range.php:25
+msgid "Min"
+msgstr "Min"
+
+#: includes/integrations/acf/acf.php:290
+msgid "No"
+msgstr "Nein"
+
+#: includes/facets/autocomplete.php:93 includes/facets/autocomplete.php:170
+msgid "No results"
+msgstr "Keine Ergebnisse"
+
+#: includes/class-display.php:151 includes/facets/fselect.php:78
 msgid "No results found"
 msgstr "Keine Ergebnisse gefunden"
 
@@ -76,98 +104,70 @@ msgstr "Keine Ergebnisse gefunden"
 msgid "Number"
 msgstr "Nummer"
 
-#: includes/facets/number_range.php:25
-msgid "Min"
-msgstr "Min"
+#: includes/class-renderer.php:536
+msgid "of"
+msgstr "von"
 
-#: includes/facets/number_range.php:28
-msgid "Max"
-msgstr "Max"
+#: includes/integrations/woocommerce/woocommerce.php:457
+msgid "On Sale"
+msgstr "Im Angebot"
 
-#: includes/facets/number_range.php:31 includes/facets/autocomplete.php:60
-msgid "Go"
-msgstr "Los"
+#: includes/integrations/woocommerce/woocommerce.php:449
+msgid "Out of Stock"
+msgstr "Ausverkauft"
 
-#: includes/facets/search.php:19
-msgid "Enter keywords"
-msgstr "Suchbegriff eingeben"
+#: includes/class-renderer.php:661
+msgid "Per page"
+msgstr "Pro Seite"
 
-#: includes/facets/date_range.php:22
-msgid "Date"
-msgstr "Datum"
+#: includes/facets/slider.php:20
+msgid "Reset"
+msgstr "Zurücksetzen"
+
+#: includes/facets/fselect.php:77
+msgid "Search"
+msgstr "Suche"
+
+#: includes/facets/checkboxes.php:130 includes/facets/hierarchy.php:160
+msgid "See less"
+msgstr "Weniger sehen"
+
+#: includes/facets/hierarchy.php:159
+msgid "See more"
+msgstr "Mehr anzeigen"
+
+#: includes/facets/checkboxes.php:129
+msgid "See {num} more"
+msgstr "{num} weitere anzeigen"
+
+#: includes/class-renderer.php:570
+msgid "Sort by"
+msgstr "Sortieren nach"
 
 #: includes/facets/date_range.php:25
 msgid "Start Date"
 msgstr "Startdatum"
 
-#: includes/facets/date_range.php:28
-msgid "End Date"
-msgstr "Enddatum"
-
-#: includes/facets/date_range.php:112
-msgid "Clear"
-msgstr "Zurücksetzen"
-
-#: includes/facets/date_range.php:113
-msgid "from"
-msgstr "von"
-
-#: includes/facets/date_range.php:114
-msgid "to"
-msgstr "bis"
-
-#: includes/facets/proximity.php:63
-msgid "Enter location"
-msgstr "Geben Sie den Ort an"
-
-#: includes/facets/proximity.php:177
-msgid "Clear location"
-msgstr "Location löschen"
-
-#: includes/facets/proximity.php:315
-msgid "Distance"
-msgstr "Entfernung"
-
-#: includes/facets/hierarchy.php:151
-msgid "See more"
-msgstr "Mehr anzeigen"
-
 #: includes/facets/autocomplete.php:57
 msgid "Start typing"
 msgstr "Adresse eingeben"
 
-#: includes/facets/autocomplete.php:93
-msgid "No results"
-msgstr "Keine Ergebnisse"
+#: includes/class-renderer.php:574
+msgid "Title (A-Z)"
+msgstr "Titel (A-Z)"
 
-#: includes/facets/rating.php:110
-msgid "& up"
-msgstr "& up"
+#: includes/class-renderer.php:581
+msgid "Title (Z-A)"
+msgstr "Titel (Z-A)"
 
 #: includes/facets/rating.php:111
 msgid "Undo"
 msgstr "Rückgängig"
 
-#: includes/integrations/woocommerce/woocommerce.php:443
-msgid "In Stock"
-msgstr "Auf Lager"
-
-#: includes/integrations/woocommerce/woocommerce.php:443
-msgid "Out of Stock"
-msgstr "Ausverkauft"
-
-#: includes/integrations/woocommerce/woocommerce.php:451
-msgid "On Sale"
-msgstr "Im Angebot"
-
-#: includes/integrations/woocommerce/woocommerce.php:460
-msgid "Featured"
-msgstr ""
-
-#: includes/integrations/acf/acf.php:267
+#: includes/integrations/acf/acf.php:290
 msgid "Yes"
 msgstr "Ja"
 
-#: includes/integrations/acf/acf.php:267
-msgid "No"
-msgstr "Nein"
+#: includes/facets/fselect.php:76
+msgid "{n} selected"
+msgstr "{n} ausgewählt"

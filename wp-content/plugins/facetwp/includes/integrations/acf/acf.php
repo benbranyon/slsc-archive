@@ -23,21 +23,24 @@ class FacetWP_Integration_ACF
      */
     function facet_sources( $sources ) {
         $fields = $this->get_fields();
-
-        $sources['acf'] = [
-            'label' => 'Advanced Custom Fields',
-            'choices' => [],
-            'weight' => 5
-        ];
+        $choices = [];
 
         foreach ( $fields as $field ) {
             $field_id = $field['hierarchy'];
             $field_name = $field['name'];
             $field_label = '[' . $field['group_title'] . '] ' . $field['parents'] . $field['label'];
-            $sources['acf']['choices'][ "acf/$field_id" ] = $field_label;
+            $choices[ "acf/$field_id" ] = $field_label;
 
             // remove "hidden" ACF fields
             unset( $sources['custom_fields']['choices'][ "cf/_$field_name" ] );
+        }
+
+        if ( ! empty( $choices ) ) {
+            $sources['acf'] = [
+                'label' => 'ACF',
+                'choices' => $choices,
+                'weight' => 5
+            ];
         }
 
         return $sources;
@@ -438,8 +441,8 @@ class FacetWP_Integration_ACF
         $field = get_field_object( $hierarchy[0], $object_id, false, false );
 
         $type = $field['type'];
-        $format = isset( $field['return_format'] ) ? $field['return_format'] : '';
-        $is_multiple = isset( $field['multiple'] ) ? (bool) $field['multiple'] : false;
+        $format = $field['return_format'] ?? '';
+        $is_multiple = (bool) ( $field['multiple'] ?? false );
 
         if ( ( 'post_object' == $type || 'relationship' == $type ) && 'object' == $format ) {
             $output = [];
@@ -464,7 +467,7 @@ class FacetWP_Integration_ACF
         }
 
         if ( ( 'select' == $type || 'checkbox' == $type || 'radio' == $type || 'button_group' == $type ) && 'array' == $format ) {
-            $value = isset( $value['label'] ) ? $value['label'] : wp_list_pluck( $value, 'label' );
+            $value = $value['label'] ?? wp_list_pluck( $value, 'label' );
         }
 
         if ( ( 'image' == $type || 'gallery' == $type ) && 'array' == $format ) {

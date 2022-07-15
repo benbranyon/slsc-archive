@@ -5,6 +5,7 @@ class FacetWP_Facet_Rating extends FacetWP_Facet
 
     function __construct() {
         $this->label = __( 'Star Rating', 'fwp' );
+        $this->fields = [];
     }
 
 
@@ -21,11 +22,11 @@ class FacetWP_Facet_Rating extends FacetWP_Facet
         $where_clause = $this->get_where_clause( $facet );
 
         $output = [
-            1 => 0,
-            2 => 0,
-            3 => 0,
-            4 => 0,
-            5 => 0
+            1 => [ 'counter' => 0 ],
+            2 => [ 'counter' => 0 ],
+            3 => [ 'counter' => 0 ],
+            4 => [ 'counter' => 0 ],
+            5 => [ 'counter' => 0 ]
         ];
 
         $sql = "
@@ -37,15 +38,15 @@ class FacetWP_Facet_Rating extends FacetWP_Facet
         $results = $wpdb->get_results( $sql );
 
         foreach ( $results as $result ) {
-            $output[ $result->rating ] = $result->count;
+            $output[ $result->rating ]['counter'] = $result->count;
         }
 
         $total = 0;
 
         // The lower rating should include higher rating counts
         for ( $i = 5; $i > 0; $i-- ) {
-            $output[ $i ] += $total;
-            $total = $output[ $i ];
+            $output[ $i ]['counter'] += $total;
+            $total = $output[ $i ]['counter'];
         }
 
         return $output;
@@ -63,8 +64,8 @@ class FacetWP_Facet_Rating extends FacetWP_Facet
         $selected_values = (array) $params['selected_values'];
 
         $num_stars = 0;
-        foreach ( $values as $star_count ) {
-            if ( 0 < $star_count ) {
+        foreach ( $values as $val ) {
+            if ( 0 < $val['counter'] ) {
                 $num_stars++;
             }
         }
@@ -74,7 +75,7 @@ class FacetWP_Facet_Rating extends FacetWP_Facet
 
             for ( $i = $num_stars; $i >= 1; $i-- ) {
                 $class = in_array( $i, $selected_values ) ? ' selected' : '';
-                $output .= '<span class="facetwp-star' . $class . '" data-value="' . $i . '" data-counter="' . $values[ $i ] . '">&#9733;</span>';
+                $output .= '<span class="facetwp-star' . $class . '" data-value="' . $i . '" data-counter="' . $values[ $i ]['counter'] . '">&#9733;</span>';
             }
 
             $output .= '</span>';

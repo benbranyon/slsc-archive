@@ -39,7 +39,7 @@ final class FacetWP_Helper
         }
 
         $uri = parse_url( $_SERVER['REQUEST_URI'] );
-        return trim( $uri['path'], '/' );
+        return isset( $uri['path'] ) ? trim( $uri['path'], '/' ) : '';
     }
 
 
@@ -56,17 +56,19 @@ final class FacetWP_Helper
         $types = [
             'checkboxes'    => 'Facetwp_Facet_Checkboxes',
             'dropdown'      => 'Facetwp_Facet_Dropdown',
+            'radio'         => 'Facetwp_Facet_Radio_Core',
             'fselect'       => 'Facetwp_Facet_fSelect',
             'hierarchy'     => 'Facetwp_Facet_Hierarchy',
+            'slider'        => 'Facetwp_Facet_Slider',
             'search'        => 'Facetwp_Facet_Search',
             'autocomplete'  => 'Facetwp_Facet_Autocomplete',
-            'slider'        => 'Facetwp_Facet_Slider',
             'date_range'    => 'Facetwp_Facet_Date_Range',
             'number_range'  => 'Facetwp_Facet_Number_Range',
-            'proximity'     => 'Facetwp_Facet_Proximity_Core',
-            'radio'         => 'Facetwp_Facet_Radio_Core',
             'rating'        => 'FacetWP_Facet_Rating',
-            'pager'         => 'FacetWP_Facet_Pager'
+            'proximity'     => 'Facetwp_Facet_Proximity_Core',
+            'pager'         => 'FacetWP_Facet_Pager',
+            'reset'         => 'FacetWP_Facet_Reset',
+            'sort'          => 'FacetWP_Facet_Sort'
         ];
 
         $facet_types = [];
@@ -169,11 +171,7 @@ final class FacetWP_Helper
      * @since 1.9
      */
     function get_setting( $name, $default = '' ) {
-        if ( isset( $this->settings['settings'][ $name ] ) ) {
-            return $this->settings['settings'][ $name ];
-        }
-
-        return $default;
+        return $this->settings['settings'][ $name ] ?? $default;
     }
 
 
@@ -523,8 +521,8 @@ final class FacetWP_Helper
      * @since 2.7.5
      */
     function sort_by_weight( $a, $b ) {
-        $a['weight'] = isset( $a['weight'] ) ? $a['weight'] : 10;
-        $b['weight'] = isset( $b['weight'] ) ? $b['weight'] : 10;
+        $a['weight'] = $a['weight'] ?? 10;
+        $b['weight'] = $b['weight'] ?? 10;
 
         if ( $a['weight'] == $b['weight'] ) {
             return 0;

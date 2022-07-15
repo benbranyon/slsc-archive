@@ -5,6 +5,7 @@ class FacetWP_Facet_Date_Range extends FacetWP_Facet
 
     function __construct() {
         $this->label = __( 'Date Range', 'fwp' );
+        $this->fields = [ 'source_other', 'compare_type', 'date_fields', 'date_format' ];
     }
 
 
@@ -45,7 +46,7 @@ class FacetWP_Facet_Date_Range extends FacetWP_Facet
         $min = empty( $values[0] ) ? false : $values[0];
         $max = empty( $values[1] ) ? false : $values[1];
 
-        $fields = isset( $facet['fields'] ) ? $facet['fields'] : 'both';
+        $fields = $facet['fields'] ?? 'both';
         $compare_type = empty( $facet['compare_type'] ) ? 'basic' : $facet['compare_type'];
         $is_dual = ! empty( $facet['source_other'] );
 
@@ -108,56 +109,34 @@ class FacetWP_Facet_Date_Range extends FacetWP_Facet
     }
 
 
-    /**
-     * Output admin settings HTML
-     */
-    function settings_html() {
-?>
-        <div class="facetwp-row">
-            <div>
-                <div class="facetwp-tooltip">
-                    <?php _e('Other data source', 'fwp'); ?>:
-                    <div class="facetwp-tooltip-content"><?php _e( 'Use a separate value for the upper limit?', 'fwp' ); ?></div>
-                </div>
-            </div>
-            <div>
-                <data-sources
-                    :facet="facet"
-                    settingName="source_other">
-                </data-sources>
-            </div>
-        </div>
-        <div class="facetwp-row" v-show="facet.source_other">
-            <div><?php _e('Compare type', 'fwp'); ?>:</div>
-            <div>
-                <select class="facet-compare-type">
-                    <option value=""><?php _e( 'Basic', 'fwp' ); ?></option>
-                    <option value="enclose"><?php _e( 'Enclose', 'fwp' ); ?></option>
-                    <option value="intersect"><?php _e( 'Intersect', 'fwp' ); ?></option>
-                </select>
-            </div>
-        </div>
-        <div class="facetwp-row">
-            <div><?php _e('Fields to show', 'fwp'); ?>:</div>
-            <div>
-                <select class="facet-fields">
-                    <option value="both"><?php _e( 'Start + End Dates', 'fwp' ); ?></option>
-                    <option value="exact"><?php _e( 'Exact Date', 'fwp' ); ?></option>
-                    <option value="start_date"><?php _e( 'Start Date', 'fwp' ); ?></option>
-                    <option value="end_date"><?php _e( 'End Date', 'fwp' ); ?></option>
-                </select>
-            </div>
-        </div>
-        <div class="facetwp-row">
-            <div>
-                <div class="facetwp-tooltip">
-                    <?php _e('Display format', 'fwp'); ?>:
-                    <div class="facetwp-tooltip-content">See available <a href="https://chmln.github.io/flatpickr/formatting/" target="_blank">formatting tokens</a></div>
-                </div>
-            </div>
-            <div><input type="text" class="facet-format" placeholder="Y-m-d" /></div>
-        </div>
-<?php
+    function register_fields() {
+        return [
+            'date_fields' => [
+                'type' => 'alias',
+                'items' => [
+                    'fields' => [
+                        'type' => 'select',
+                        'label' => __( 'Fields to show', 'fwp' ),
+                        'choices' => [
+                            'both' => __( 'Start + End Dates', 'fwp' ),
+                            'exact' => __( 'Exact Date', 'fwp' ),
+                            'start_date' => __( 'Start Date', 'fwp' ),
+                            'end_date' => __( 'End Date', 'fwp' )
+                        ]
+                    ]
+                ]
+            ],
+            'date_format' => [
+                'type' => 'alias',
+                'items' => [
+                    'format' => [
+                        'label' => __( 'Display format', 'fwp' ),
+                        'notes' => 'See available <a href="https://facetwp.com/help-center/facets/facet-types/date-range/#tokens" target="_blank">formatting tokens</a>',
+                        'placeholder' => 'Y-m-d'
+                    ]
+                ]
+            ]
+        ];
     }
 
 

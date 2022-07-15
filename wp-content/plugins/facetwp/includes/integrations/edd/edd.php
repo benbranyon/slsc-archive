@@ -3,9 +3,6 @@
 class FacetWP_Integration_EDD
 {
 
-    public $query_found = false;
-
-
     function __construct() {
         add_filter( 'facetwp_facet_sources', [ $this, 'exclude_data_sources' ] );
         add_filter( 'edd_downloads_query', [ $this, 'edd_downloads_query' ] );
@@ -24,15 +21,11 @@ class FacetWP_Integration_EDD
 
 
     /**
-     * Intercept EDD's [downloads] shortcode
+     * Help FacetWP auto-detect the [downloads] shortcode
      * @since 2.0.4
      */
     function edd_downloads_query( $query ) {
-        if ( ! empty( FWP()->facet->query_args ) && 'wp' == FWP()->facet->template['name'] && ! $this->query_found ) {
-            $query = array_merge( $query, FWP()->facet->query_args );
-            $this->query_found = true;
-        }
-
+        $query['facetwp'] = true;
         return $query;
     }
 

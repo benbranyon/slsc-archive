@@ -4,7 +4,7 @@ class FacetWP_Ajax
 {
 
     function __construct() {
-        add_action( 'facetwp_init', [ $this, 'switchboard' ] );
+        add_action( 'init', [ $this, 'switchboard' ], 1000 );
     }
 
 

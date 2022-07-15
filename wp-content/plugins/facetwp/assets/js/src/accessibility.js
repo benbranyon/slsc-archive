@@ -3,27 +3,68 @@
 
     if ('undefined' !== typeof FWP.hooks) {
         FWP.hooks.addAction('facetwp/loaded', function() {
-            $('.facetwp-checkbox, .facetwp-radio').each(function() {
-                $(this).attr('role', 'checkbox');
-                $(this).attr('aria-checked', $(this).hasClass('checked') ? 'true' : 'false');
-                $(this).attr('aria-label', $(this).text());
-                $(this).attr('tabindex', 0);
+
+            // checkbox, radio, fselect
+            $('.facetwp-checkbox, .facetwp-radio, .fs-option').each(function() {
+                let $el = $(this);
+                if (! $el.hasClass('disabled')) {
+                    $el.attr('role', 'checkbox');
+                    $el.attr('aria-checked', $el.hasClass('checked') ? 'true' : 'false');
+                    $el.attr('aria-label', $el.text());
+                    $el.attr('tabindex', 0);
+                }
             });
 
+            // pager, show more, user selections, hierarchy
             $('.facetwp-page, .facetwp-toggle, .facetwp-selection-value, .facetwp-link').each(function() {
-                $(this).attr('role', 'link');
-                $(this).attr('aria-label', $(this).text());
-                $(this).attr('tabindex', 0);
+                let $el = $(this);
+                let label = $el.text();
+
+                if ($el.hasClass('facetwp-page')) {
+                    label = 'Go to page ' + label;
+
+                    if ($el.hasClass('prev')) {
+                        label = 'Go to previous page';
+                    }
+                    else if ($el.hasClass('next')) {
+                        label = 'Go to next page';
+                    }
+                }
+
+                $el.attr('role', 'link');
+                $el.attr('aria-label', label);
+                $el.attr('tabindex', 0);
             });
 
-            $('.facetwp-dropdown').each(function() {
+            // dropdown, sort facet, old sort feature
+            $('.facetwp-type-dropdown select, .facetwp-type-sort select, .facetwp-sort-select select').each(function() {
                 $(this).attr('aria-label', $(this).find('option:selected').text());
             });
 
+            // search
             $('.facetwp-search').each(function() {
                 $(this).attr('aria-label', $(this).attr('placeholder'));
             });
 
+            // checkbox group
+            $('.facetwp-type-checkboxes').each(function() {
+                let facet_name = $(this).attr('data-name');
+                $(this).attr('aria-label', FWP.settings.labels[facet_name]);
+                $(this).attr('role', 'group');
+            });
+
+            // fselect
+            $('.fs-wrap').each(function() {
+                $(this).attr('role', 'button');
+                $(this).attr('aria-haspopup', 'true');
+                $(this).attr('aria-expanded', $(this).hasClass('fs-open') ? 'true' : 'false');
+            });
+
+            // pager
+            $('.facetwp-pager').attr('role', 'navigation');
+            $('.facetwp-page.active').attr('aria-current', 'true');
+
+            // focus on selection
             if (null != last_checked) {
                 var $el = $('.facetwp-facet [data-value="' + last_checked + '"]');
                 if ($el.len()) {
@@ -34,6 +75,7 @@
         }, 999);
     }
 
+    // keyboard support
     $().on('keydown', '.facetwp-checkbox, .facetwp-radio, .facetwp-link', function(e) {
         if (32 == e.keyCode || 13 == e.keyCode) {
             last_checked = $(this).attr('data-value');
@@ -48,4 +90,13 @@
             this.click();
         }
     });
+
+    // fselect - determine "aria-expanded"
+    function toggleExpanded(e) {
+        var $fs = $(e.detail[0]);
+        $fs.attr('aria-expanded', $fs.hasClass('fs-open') ? 'true' : 'false');
+    }
+
+    $().on('fs:opened', toggleExpanded);
+    $().on('fs:closed', toggleExpanded);
 })(fUtil);

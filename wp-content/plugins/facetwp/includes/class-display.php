@@ -45,9 +45,27 @@ class FacetWP_Display
 
 
     /**
+     * Set default values for atts
+     * 
+     * Old: [facetwp template="foo" static]
+     * New: [facetwp template="foo" static="true"]
+     */
+    function normalize_atts( $atts ) {
+        foreach ( $atts as $key => $val ) {
+            if ( is_int( $key ) ) {
+                $atts[ $val ] = true;
+                unset( $atts[ $key ] );
+            }
+        }
+        return $atts;
+    }
+
+
+    /**
      * Register shortcodes
      */
     function shortcode( $atts ) {
+        $atts = $this->normalize_atts( $atts );
         $this->shortcode_atts[] = $atts;
 
         $output = '';
@@ -55,7 +73,9 @@ class FacetWP_Display
             $facet = FWP()->helper->get_facet_by_name( $atts['facet'] );
 
             if ( $facet ) {
-                $output = '<div class="facetwp-facet facetwp-facet-' . $facet['name'] . ' facetwp-type-' . $facet['type'] . '" data-name="' . $facet['name'] . '" data-type="' . $facet['type'] . '"></div>';
+                $ui = empty( $facet['ui_type'] ) ? $facet['type'] : $facet['ui_type'];
+                $ui_attr = empty( $facet['ui_type'] ) ? '' : ' data-ui="' . $ui . '"';
+                $output = '<div class="facetwp-facet facetwp-facet-' . $facet['name'] . ' facetwp-type-' . $ui . '" data-name="' . $facet['name'] . '" data-type="' . $facet['type'] . '"' . $ui_attr . '></div>';
 
                 // Build list of active facet types
                 $this->active_types[ $facet['type'] ] = $facet['type'];
@@ -67,17 +87,32 @@ class FacetWP_Display
             $template = FWP()->helper->get_template_by_name( $atts['template'] );
 
             if ( $template ) {
-                global $wp_query;
+                $class_name = 'facetwp-template';
 
-                // Preload the template (search engine visible)
-                $temp_query = $wp_query;
-                $args = FWP()->request->process_preload_data( $template['name'] );
-                $preload_data = FWP()->facet->render( $args );
-                $wp_query = $temp_query;
+                // Static template
+                if ( isset( $atts['static'] ) ) {
+                    $renderer = new FacetWP_Renderer();
+                    $renderer->template = $template;
+                    $renderer->query_args = $renderer->get_query_args();
+                    $renderer->query = new WP_Query( $renderer->query_args );
+                    $html = $renderer->get_template_html();
+                    $class_name .= '-static';
+                }
+                // Preload template (search engine visible)
+                else {
+                    global $wp_query;
 
-                $output = '<div class="facetwp-template" data-name="' . $atts['template'] . '">';
-                $output .= $preload_data['template'];
-                $output .= '</div>';
+                    $temp_query = $wp_query;
+                    $args = FWP()->request->process_preload_data( $template['name'] );
+                    $preload_data = FWP()->facet->render( $args );
+                    $html = $preload_data['template'];
+                    $wp_query = $temp_query;
+                }
+
+                $output = '<div class="{class}" data-name="{name}">{html}</div>';
+                $output = str_replace( '{class}', $class_name, $output );
+                $output = str_replace( '{name}', $atts['template'], $output );
+                $output = str_replace( '{html}', $html, $output );
 
                 $this->load_assets = true;
             }
@@ -125,12 +160,15 @@ class FacetWP_Display
             $this->assets['front.js'] = FACETWP_URL . '/assets/js/dist/front.min.js';
 
             // Backwards compat?
-            if ( apply_filters( 'facetwp_load_deprecated', true ) ) {
+            if ( apply_filters( 'facetwp_load_deprecated', false ) ) {
                 $this->assets['front-deprecated.js'] = FACETWP_URL . '/assets/js/src/deprecated.js';
             }
 
             // Load a11y?
-            if ( apply_filters( 'facetwp_load_a11y', false ) ) {
+            $a11y = FWP()->helper->get_setting( 'load_a11y', 'no' );
+            $a11y_hook = apply_filters( 'facetwp_load_a11y', false );
+
+            if ( 'yes' == $a11y || $a11y_hook ) {
                 $this->assets['accessibility.js'] = FACETWP_URL . '/assets/js/src/accessibility.js';
             }
 

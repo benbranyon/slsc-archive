@@ -13,6 +13,7 @@ class FacetWP_Integration_WooCommerce
     function __construct() {
         add_action( 'facetwp_assets', [ $this, 'assets' ] );
         add_filter( 'facetwp_facet_sources', [ $this, 'facet_sources' ] );
+        add_filter( 'facetwp_facet_display_value', [ $this, 'translate_hardcoded_choices' ], 10, 2 );
         add_filter( 'facetwp_indexer_post_facet', [ $this, 'index_woo_values' ], 10, 2 );
 
         // Support WooCommerce product variations
@@ -247,27 +248,6 @@ class FacetWP_Integration_WooCommerce
 
 
     /**
-     * Efficiently grab the product type without wc_get_product()
-     * @since 3.3.8
-     */
-    function get_product_type( $post_id ) {
-        global $wpdb;
-
-        $sql = "
-        SELECT t.name
-        FROM $wpdb->terms t
-        INNER JOIN $wpdb->term_taxonomy tt ON tt.term_id = t.term_id AND tt.taxonomy = 'product_type'
-        INNER JOIN $wpdb->term_relationships tr ON tr.term_taxonomy_id = tt.term_taxonomy_id AND tr.object_id = %d";
-
-        $type = $wpdb->get_var(
-            $wpdb->prepare( $sql, $post_id )
-        );
-
-        return ( null !== $type ) ? $type : 'simple';
-    }
-
-
-    /**
      * Determine valid variation IDs
      * @since 2.7
      */
@@ -276,7 +256,7 @@ class FacetWP_Integration_WooCommerce
             return $post_ids;
         }
 
-        $this->lookup = $this->generate_lookup_array( $post_ids );
+        $this->lookup = $this->generate_lookup_array( FWP()->unfiltered_post_ids );
 
         // Loop through each facet's data
         foreach ( $this->cache as $facet_name => $groups ) {
@@ -376,6 +356,27 @@ class FacetWP_Integration_WooCommerce
 
 
     /**
+     * Efficiently grab the product type without wc_get_product()
+     * @since 3.3.8
+     */
+    function get_product_type( $post_id ) {
+        global $wpdb;
+
+        $sql = "
+        SELECT t.name
+        FROM $wpdb->terms t
+        INNER JOIN $wpdb->term_taxonomy tt ON tt.term_id = t.term_id AND tt.taxonomy = 'product_type'
+        INNER JOIN $wpdb->term_relationships tr ON tr.term_taxonomy_id = tt.term_taxonomy_id AND tr.object_id = %d";
+
+        $type = $wpdb->get_var(
+            $wpdb->prepare( $sql, $post_id )
+        );
+
+        return ( null !== $type ) ? $type : 'simple';
+    }
+
+
+    /**
      * Index WooCommerce-specific values
      * @since 2.1.4
      */
@@ -446,7 +447,7 @@ class FacetWP_Integration_WooCommerce
             elseif ( 'stock_status' == $source ) {
                 $in_stock = $product->is_in_stock();
                 $defaults['facet_value'] = (int) $in_stock;
-                $defaults['facet_display_value'] = $in_stock ? __( 'In Stock', 'fwp-front' ) : __( 'Out of Stock', 'fwp-front' );
+                $defaults['facet_display_value'] = $in_stock ? 'In Stock' : 'Out of Stock';
                 FWP()->indexer->index_row( $defaults );
             }
 
@@ -454,7 +455,7 @@ class FacetWP_Integration_WooCommerce
             elseif ( 'on_sale' == $source ) {
                 if ( $product->is_on_sale() ) {
                     $defaults['facet_value'] = 1;
-                    $defaults['facet_display_value'] = __( 'On Sale', 'fwp-front' );
+                    $defaults['facet_display_value'] = 'On Sale';
                     FWP()->indexer->index_row( $defaults );
                 }
             }
@@ -463,7 +464,7 @@ class FacetWP_Integration_WooCommerce
             elseif ( 'featured' == $source ) {
                 if ( $product->is_featured() ) {
                     $defaults['facet_value'] = 1;
-                    $defaults['facet_display_value'] = __( 'Featured', 'fwp-front' );
+                    $defaults['facet_display_value'] = 'Featured';
                     FWP()->indexer->index_row( $defaults );
                 }
             }
@@ -480,6 +481,28 @@ class FacetWP_Integration_WooCommerce
         }
 
         return $return;
+    }
+
+
+    /**
+     * Allow certain hard-coded choices to be translated dynamically
+     * instead of stored as translated in the index table
+     * @since 3.9.6
+     */
+    function translate_hardcoded_choices( $label, $params ) {
+        $source = $params['facet']['source'];
+
+        if ( 'woo/stock_status' == $source ) {
+            $label = ( 'In Stock' == $label ) ? __( 'In Stock', 'fwp-front' ) : __( 'Out of Stock', 'fwp-front' );
+        }
+        elseif ( 'woo/on_sale' == $source ) {
+            $label = __( 'On Sale', 'fwp-front' );
+        }
+        elseif ( 'woo/featured' == $source ) {
+            $label = __( 'Featured', 'fwp-front' );
+        }
+
+        return $label;
     }
 
 

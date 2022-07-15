@@ -207,8 +207,8 @@ class FacetWP_Indexer
         }
 
         // Resume indexing?
-        $offset = isset( $_POST['offset'] ) ? (int) $_POST['offset'] : 0;
-        $attempt = isset( $_POST['retries'] ) ? (int) $_POST['retries'] : 0;
+        $offset = (int) ( $_POST['offset'] ?? 0 );
+        $attempt = (int) ( $_POST['retries'] ?? 0 );
 
         if ( 0 < $offset ) {
             $post_ids = json_decode( get_option( 'facetwp_indexing' ), true );
@@ -337,7 +337,7 @@ class FacetWP_Indexer
             }
 
             $this->facet = $facet;
-            $source = isset( $facet['source'] ) ? $facet['source'] : '';
+            $source = $facet['source'] ?? '';
 
             // Set default index_row() params
             $defaults = [
@@ -480,7 +480,7 @@ class FacetWP_Indexer
             $display_value = $value;
             if ( 'post_author' == $source ) {
                 $user = get_user_by( 'id', $value );
-                $display_value = $user->display_name;
+                $display_value = ( $user instanceof WP_User ) ? $user->display_name : $value;
             }
             elseif ( 'post_type' == $source ) {
                 $post_type = get_post_type_object( $value );
@@ -607,7 +607,7 @@ class FacetWP_Indexer
         if ( ! empty( $transients ) ) {
             $transients = json_decode( $transients, true );
             if ( $name ) {
-                return isset( $transients[ $name ] ) ? $transients[ $name ] : false;
+                return $transients[ $name ] ?? false;
             }
 
             return $transients;
@@ -664,9 +664,18 @@ class FacetWP_Indexer
             $type = empty( $facet['modifier_type'] ) ? 'off' : $facet['modifier_type'];
 
             if ( 'include' == $type || 'exclude' == $type ) {
-                $values = preg_split( '/\r\n|\r|\n/', trim( $facet['modifier_values'] ) );
-                $values = array_map( 'trim', $values );
-                $output[ $name ] = [ 'type' => $type, 'values' => $values ];
+                $temp = preg_split( '/\r\n|\r|\n/', trim( $facet['modifier_values'] ) );
+                $values = [];
+
+                // Compare using both original and decoded values
+                foreach ( $temp as $val ) {
+                    $val = trim( $val );
+                    $val_decoded = html_entity_decode( $val );
+                    $values[ $val ] = true;
+                    $values[ $val_decoded ] = true;
+                }
+
+                $output[ $name ] = [ 'type' => $type, 'values' => array_keys( $values ) ];
             }
         }
 

@@ -5,6 +5,7 @@ class FacetWP_Facet_Search extends FacetWP_Facet
 
     function __construct() {
         $this->label = __( 'Search', 'fwp' );
+        $this->fields = [ 'search_engine', 'placeholder', 'auto_refresh' ];
     }
 
 
@@ -16,11 +17,11 @@ class FacetWP_Facet_Search extends FacetWP_Facet
         $output = '';
         $value = (array) $params['selected_values'];
         $value = empty( $value ) ? '' : stripslashes( $value[0] );
-        $placeholder = isset( $params['facet']['placeholder'] ) ? $params['facet']['placeholder'] : __( 'Enter keywords', 'fwp-front' );
+        $placeholder = $params['facet']['placeholder'] ?? __( 'Enter keywords', 'fwp-front' );
         $placeholder = facetwp_i18n( $placeholder );
         $output .= '<span class="facetwp-input-wrap">';
         $output .= '<i class="facetwp-icon"></i>';
-        $output .= '<input type="text" class="facetwp-search" value="' . esc_attr( $value ) . '" placeholder="' . esc_attr( $placeholder ) . '" />';
+        $output .= '<input type="text" class="facetwp-search" value="' . esc_attr( $value ) . '" placeholder="' . esc_attr( $placeholder ) . '" autocomplete="off" />';
         $output .= '</span>';
         return $output;
     }
@@ -54,42 +55,26 @@ class FacetWP_Facet_Search extends FacetWP_Facet
     }
 
 
-    /**
-     * Output admin settings HTML
-     */
-    function settings_html() {
+    function register_fields() {
         $engines = apply_filters( 'facetwp_facet_search_engines', [] );
-?>
-        <div class="facetwp-row">
-            <div><?php _e('Search engine', 'fwp'); ?>:</div>
-            <div>
-                <select class="facet-search-engine">
-                    <option value=""><?php _e( 'WP Default', 'fwp' ); ?></option>
-                    <?php foreach ( $engines as $key => $label ) : ?>
-                    <option value="<?php echo $key; ?>"><?php echo $label; ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-        </div>
-        <div class="facetwp-row">
-            <div><?php _e( 'Placeholder text', 'fwp' ); ?>:</div>
-            <div><input type="text" class="facet-placeholder" /></div>
-        </div>
-        <div class="facetwp-row">
-            <div>
-                <div class="facetwp-tooltip">
-                    <?php _e('Auto refresh', 'fwp'); ?>:
-                    <div class="facetwp-tooltip-content"><?php _e( 'Automatically refresh the results while typing?', 'fwp' ); ?></div>
-                </div>
-            </div>
-            <div>
-                <label class="facetwp-switch">
-                    <input type="checkbox" class="facet-auto-refresh" true-value="yes" false-value="no" />
-                    <span class="facetwp-slider"></span>
-                </label>
-            </div>
-        </div>
-<?php
+        $choices = [ '' => __( 'WP Default', 'fwp' ) ];
+
+        foreach ( $engines as $key => $label ) {
+            $choices[ $key ] = $label;
+        }
+
+        return [
+            'search_engine' => [
+                'type' => 'select',
+                'label' => __( 'Search engine', 'fwp' ),
+                'choices' => $choices
+            ],
+            'auto_refresh' => [
+                'type' => 'toggle',
+                'label' => __( 'Auto refresh', 'fwp' ),
+                'notes' => 'Automatically refresh the results while typing?'
+            ]
+        ];
     }
 
 

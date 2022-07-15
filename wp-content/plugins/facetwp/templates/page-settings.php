@@ -6,10 +6,9 @@ $support_html = new FacetWP_Support();
 $support_html = $support_html->get_html();
 
 // Settings
-$settings_admin = new FacetWP_Settings_Admin();
-$settings_array = $settings_admin->get_settings();
-$i18n = $settings_admin->get_i18n_strings();
-$image_sizes = $settings_admin->get_image_size_labels();
+$settings = FWP()->settings->get_registered_settings();
+$i18n = FWP()->settings->get_i18n_strings();
+$image_sizes = FWP()->settings->get_image_size_labels();
 
 // Useful data
 $data = FWP()->helper->settings;
@@ -18,29 +17,37 @@ $data_sources = FWP()->helper->get_data_sources();
 $layout_data = FWP()->builder->get_layout_data();
 $query_data = FWP()->builder->get_query_data();
 
-// Get SVG icons
-$svg_icons = $settings_admin->get_svg();
-foreach ( $svg_icons as $name => $atts ) {
-    $svg_icons[ $name ] = $settings_admin->get_svg( $name );
+// Generate fields and handle aliases
+$facet_fields = [];
+$fields = FWP()->settings->get_registered_facet_fields();
+
+foreach ( $fields as $name => $field ) {
+    $output = FWP()->settings->get_facet_field_html( $name );
+    $output = preg_replace( '/[ ]+/s', ' ', $output );
+    $facet_fields[ $name ] = [
+        'names' => isset( $field['items'] ) ? array_keys( $field['items'] ) : [ $name ],
+        'html' => trim( $output )
+    ];
 }
+
+// Get SVG icons
+$svg_icons = FWP()->settings->get_svg();
 
 // Clone facet settings HTML
 $facet_clone = [];
-$admin_scripts = [];
+$admin_scripts = '';
 
 foreach ( $facet_types as $name => $class ) {
-    $facet_clone[ $name ] = '<div>' . __( 'This facet type has no additional settings.', 'fwp' ) . '</div>';
-    if ( method_exists( $class, 'settings_html' ) ) {
-        ob_start();
-        $class->settings_html();
-        $output = ob_get_clean();
-        $facet_clone[ $name ] = trim( $output );
-    }
-
     if (method_exists( $class, 'admin_scripts' ) ) {
         ob_start();
         $class->admin_scripts();
-        $admin_scripts[] = ob_get_clean();
+        $admin_scripts .= ob_get_clean();
+    }
+
+    if ( method_exists( $class, 'settings_html' ) ) {
+        ob_start();
+        $class->settings_html();
+        $facet_clone[ $name ] = trim( ob_get_clean() );
     }
 }
 
@@ -49,7 +56,6 @@ foreach ( $facet_types as $name => $class ) {
 <script src="<?php echo FACETWP_URL; ?>/assets/vendor/vue/vue.min.js"></script>
 <script src="<?php echo FACETWP_URL; ?>/assets/vendor/vue/Sortable.min.js"></script>
 <script src="<?php echo FACETWP_URL; ?>/assets/vendor/vue/vuedraggable.min.js"></script>
-<script src="<?php echo FACETWP_URL; ?>/assets/vendor/vue/vue-clickaway.min.js"></script>
 <script src="<?php echo FACETWP_URL; ?>/assets/vendor/vue/vue-select/vue-select.js"></script>
 <script src="<?php echo FACETWP_URL; ?>/assets/js/src/event-manager.js?ver=<?php echo FACETWP_VERSION; ?>"></script>
 <script src="<?php echo FACETWP_URL; ?>/assets/vendor/fUtil/fUtil.js?ver=<?php echo FACETWP_VERSION; ?>"></script>
@@ -59,7 +65,7 @@ foreach ( $facet_types as $name => $class ) {
 <?php
 
 // Let add-ons register custom Vue components
-echo implode( '', $admin_scripts );
+echo $admin_scripts;
 
 ?>
 <script src="<?php echo FACETWP_URL; ?>/assets/js/dist/admin.min.js?ver=<?php echo FACETWP_VERSION; ?>"></script>
@@ -74,6 +80,7 @@ window.FWP = {
     svg: <?php echo json_encode( $svg_icons ); ?>,
     image_sizes: <?php echo json_encode( $image_sizes ); ?>,
     clone: <?php echo json_encode( $facet_clone ); ?>,
+    facet_fields: <?php echo json_encode( $facet_fields ); ?>,
     facet_types: <?php echo json_encode( $facet_types ); ?>,
     data_sources: <?php echo json_encode( $data_sources ); ?>,
     layout_data: <?php echo json_encode( $layout_data ); ?>,
@@ -99,7 +106,7 @@ FWP.data.settings = FWP.hooks.applyFilters('facetwp/load_settings', FWP.data.set
 
         <span class="facetwp-header-nav">
             <a class="facetwp-tab" :class="{ active: active_tab == 'facets' }" @click="tabClick('facets')"><?php _e( 'Facets', 'fwp' ); ?></a>
-            <a class="facetwp-tab" :class="{ active: active_tab == 'templates' }" @click="tabClick('templates')"><?php _e( 'Templates', 'fwp' ); ?></a>
+            <a class="facetwp-tab" :class="{ active: active_tab == 'templates' }" @click="tabClick('templates')"><?php _e( 'Listings', 'fwp' ); ?></a>
             <a class="facetwp-tab" :class="{ active: active_tab == 'settings' }" @click="tabClick('settings')"><?php _e( 'Settings', 'fwp' ); ?></a>
             <a class="facetwp-tab" :class="{ active: active_tab == 'support' }" @click="tabClick('support')"><?php _e( 'Support', 'fwp' ); ?></a>
         </span>
@@ -149,11 +156,12 @@ FWP.data.settings = FWP.hooks.applyFilters('facetwp/load_settings', FWP.data.set
             <div class="content-facets" v-show="!isEditing">
                 <div class="facetwp-table-header">
                     <div></div>
-                    <div><?php _e( 'Facet', 'fwp' ); ?></div>
-                    <div></div>
+                    <div><?php _e( 'Label', 'fwp' ); ?></div>
+                    <div><?php _e( 'Name', 'fwp' ); ?></div>
                     <div><?php _e( 'Type', 'fwp' ); ?></div>
                     <div><?php _e( 'Source', 'fwp' ); ?></div>
                     <div><?php _e( 'Rows', 'fwp' ); ?></div>
+                    <div></div>
                 </div>
                 <facets :facets="app.facets"></facets>
             </div>
@@ -161,25 +169,26 @@ FWP.data.settings = FWP.hooks.applyFilters('facetwp/load_settings', FWP.data.set
             <facet-edit v-if="editing_facet"></facet-edit>
         </div>
 
-        <!-- Templates tab -->
+        <!-- Listings tab -->
 
         <div class="facetwp-region facetwp-region-templates" :class="{ active: active_tab == 'templates' }">
             <h3 v-show="isEditing">
-                <a @click="doneEditing"><?php _e( 'Templates', 'fwp' ); ?></a> &nbsp;&raquo;&nbsp;
+                <a @click="doneEditing"><?php _e( 'Listings', 'fwp' ); ?></a> &nbsp;&raquo;&nbsp;
                 <span>{{ getItemLabel() }}</span>
             </h3>
             <h3 v-show="!isEditing">
-                <?php _e( 'Templates', 'fwp' ); ?>
+                <?php _e( 'Listings', 'fwp' ); ?>
                 <span class="facetwp-btn facetwp-add" @click="addItem('template')"><?php _e( 'Add new', 'fwp' ); ?></span>
             </h3>
 
             <div class="content-templates" v-show="!isEditing">
                 <div class="facetwp-table-header">
                     <div></div>
-                    <div><?php _e( 'Template', 'fwp' ); ?></div>
-                    <div></div>
+                    <div><?php _e( 'Label', 'fwp' ); ?></div>
+                    <div><?php _e( 'Name', 'fwp' ); ?></div>
                     <div><?php _e( 'Display mode', 'fwp' ); ?></div>
                     <div><?php _e( 'Post types', 'fwp' ); ?></div>
+                    <div></div>
                 </div>
                 <templates :templates="app.templates"></templates>
             </div>
@@ -191,12 +200,12 @@ FWP.data.settings = FWP.hooks.applyFilters('facetwp/load_settings', FWP.data.set
 
         <div class="facetwp-region facetwp-region-settings" :class="{ active: active_tab == 'settings' }">
             <div class="facetwp-subnav">
-                <?php foreach ( $settings_array as $key => $tab ) : ?>
+                <?php foreach ( $settings as $key => $tab ) : ?>
                 <a :class="{ active: active_subnav == '<?php echo $key; ?>' }" @click="active_subnav = '<?php echo $key; ?>'"><?php echo $tab['label']; ?></a>
                 <?php endforeach; ?>
             </div>
 
-            <?php foreach ( $settings_array as $key => $tab ) : ?>
+            <?php foreach ( $settings as $key => $tab ) : ?>
             <div class="facetwp-settings-section" :class="{ active: active_subnav == '<?php echo $key; ?>' }">
                 <?php foreach ( $tab['fields'] as $field_data ) : ?>
                 <div class="facetwp-row">

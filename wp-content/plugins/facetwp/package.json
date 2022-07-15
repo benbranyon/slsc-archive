@@ -2,8 +2,8 @@
   "name": "facetwp",
   "devDependencies": {
     "@rollup/plugin-buble": "^0.21.3",
-    "@rollup/plugin-multi-entry": "^4.0.0",
-    "rollup": "^2.48.0",
+    "@rollup/plugin-multi-entry": "^4.1.0",
+    "rollup": "^2.72.0",
     "rollup-plugin-terser": "^7.0.2"
   },
   "scripts": {

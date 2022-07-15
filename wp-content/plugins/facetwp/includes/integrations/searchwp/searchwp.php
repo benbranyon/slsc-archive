@@ -23,13 +23,38 @@ class FacetWP_Integration_SearchWP
      */
     function is_main_query( $is_main_query, $query ) {
         if ( $is_main_query && $query->is_search() && ! empty( $query->get( 's' ) ) ) {
+            $args = $this->get_valid_args( $query );
             $this->keywords = $query->get( 's' );
-            $this->swp_query = $this->run_query( $this->keywords );
+            $this->swp_query = $this->run_query( $args );
             $query->set( 'using_searchwp', true );
             $query->set( 'searchwp', false );
         }
 
         return $is_main_query;
+    }
+
+
+    /**
+     * Whitelist supported SWP_Query arguments
+     * 
+     * @link https://searchwp.com/documentation/classes/swp_query/#arguments
+     */
+    function get_valid_args( $query ) {
+        $output = [];
+
+        $valid = [
+            's', 'engine', 'post__in', 'post__not_in', 'post_type', 'post_status',
+            'tax_query', 'meta_query', 'date_query', 'order', 'orderby'
+        ];
+
+        foreach ( $valid as $arg ) {
+            $val = $query->get( $arg );
+            if ( ! empty( $val ) ) {
+                $output[ $arg ] = $val;
+            }
+        }
+
+        return $output;
     }
 
 
@@ -109,7 +134,7 @@ class FacetWP_Integration_SearchWP
                 if ( isset( $this->swp_query->query ) ) {
                     foreach ( $posts as $index => $post ) {
                         $source = \SearchWP\Utils::get_post_type_source_name( $post->post_type );
-                        $entry = new \SearchWP\Entry( $source, $post->ID );
+                        $entry = new \SearchWP\Entry( $source, $post->ID, false );
                         $posts[ $index ] = $entry->native( $this->swp_query->query );
                     }
                 }
@@ -127,16 +152,20 @@ class FacetWP_Integration_SearchWP
         $facet = $params['facet'];
         $selected_values = $params['selected_values'];
         $selected_values = is_array( $selected_values ) ? $selected_values[0] : $selected_values;
-        $search_engine = isset( $facet['search_engine'] ) ? $facet['search_engine'] : '';
+        $engine = $facet['search_engine'] ?? '';
 
-        if ( 'search' == $facet['type'] && 0 === strpos( $search_engine, 'swp_' ) ) {
+        if ( 'search' == $facet['type'] && 0 === strpos( $engine, 'swp_' ) ) {
             $return = [];
 
             if ( empty( $selected_values ) ) {
                 $return = 'continue';
             }
             elseif ( ! empty( FWP()->unfiltered_post_ids ) ) {
-                $swp_query = $this->run_query( $selected_values, substr( $search_engine, 4 ), FWP()->unfiltered_post_ids );
+                $swp_query = $this->run_query([
+                    's' => $selected_values,
+                    'engine' => substr( $engine, 4 ),
+                    'post__in' => FWP()->unfiltered_post_ids
+                ]);
                 $return = $swp_query->posts;
             }
         }
@@ -148,15 +177,10 @@ class FacetWP_Integration_SearchWP
     /**
      * Run a search and return the \SWP_Query object
      */
-    function run_query( $keywords, $engine = 'default', $post__in = [] ) {
-        return new \SWP_Query( [
-            's'                 => $keywords,
-            'engine'            => $engine,
-            'post__in'          => $post__in,
-            'posts_per_page'    => 200,
-            'fields'            => 'ids',
-            'facetwp'           => true,
-        ] );
+    function run_query( $args ) {
+        $overrides = [ 'posts_per_page' => 200, 'fields' => 'ids', 'facetwp' => true ];
+        $args = array_merge( $args, $overrides );
+        return new \SWP_Query( $args );
     }
 
 
@@ -176,7 +200,7 @@ class FacetWP_Integration_SearchWP
             $settings = get_option( SEARCHWP_PREFIX . 'settings' );
 
             foreach ( $settings['engines'] as $key => $info ) {
-                $label = isset( $info['searchwp_engine_label'] ) ? $info['searchwp_engine_label'] : __( 'Default', 'fwp' );
+                $label = $info['searchwp_engine_label'] ?? __( 'Default', 'fwp' );
                 $engines[ 'swp_' . $key ] = 'SearchWP - ' . $label;
             }
         }
@@ -186,6 +210,6 @@ class FacetWP_Integration_SearchWP
 }
 
 
-if ( defined( 'SEARCHWP_VERSION' ) && version_compare( SEARCHWP_VERSION, '2.6', '>=' ) ) {
+if ( defined( 'SEARCHWP_VERSION' ) ) {
     new FacetWP_Integration_SearchWP();
 }
