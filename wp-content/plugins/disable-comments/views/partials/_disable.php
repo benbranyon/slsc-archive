@@ -64,6 +64,33 @@
             <p class="subtitle"><span class="danger"><?php _e('Note:', 'disable-comments'); ?></span> <?php _e('Disabling comments will also disable trackbacks and pingbacks. All comment-related fields will also be hidden from the edit/quick-edit screens of the affected posts. These settings cannot be overridden for individual posts. Comments will be visible on all other post types.', 'disable-comments'); ?></p>
         </div>
         <?php if(!is_network_admin()):?>
+        <div id="exclude_by_role_wrapper" class="disable_option dc-text__block mb30 mt30">
+            <div class="dissable__switch__item">
+                <input type="hidden" name="enable_exclude_by_role"value="0">
+                <input type="checkbox" name="enable_exclude_by_role" id="enable_exclude_by_role" value="1" <?php checked(isset($this->options['enable_exclude_by_role']) ? $this->options['enable_exclude_by_role'] : false); ?> >
+                <label for="enable_exclude_by_role">
+                <span class="switch">
+                    <span class="switch__text on"><?php _e('On', 'disable-comments'); ?></span>
+                    <span class="switch__text off"><?php _e('Off', 'disable-comments'); ?></span>
+                </span>
+                    Exclude Disable Comments Settings Based On User Roles
+                </label>
+            </div>
+            <div id="exclude_by_role_select_description_wrapper">
+                <div id="exclude_by_role_select_wrapper" class="mb10" style="display: none;">
+                    <?php
+                    $selected_roles = isset($this->options['exclude_by_role']) ? $this->options['exclude_by_role'] : [];
+                    $roles = $this->get_roles($selected_roles);
+                    ?>
+                    <select class="dc-select2" name="exclude_by_role[]" data-options='<?php echo json_encode($roles);?>'>
+                    </select>
+                </div>
+                <p class="disable__option__description description__roles excluded-roles" style="display: none;"></p>
+                <p class="disable__option__description description__roles included-roles" style="display: none;"></p>
+            </div>
+            <p class="disable__option__description mt10"><span class="danger"><?php _e('Note:', 'disable-comments'); ?></span> <?php _e('This will exclude all the above settings for the selected user roles.', 'disable-comments'); ?></p>
+        </div>
+
         <div class="disable_option dc-text__block mt30">
             <div class="disable__switchs">
                 <div class="dissable__switch__item">
