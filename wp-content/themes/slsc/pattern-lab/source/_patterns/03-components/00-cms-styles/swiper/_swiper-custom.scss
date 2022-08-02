@@ -48,6 +48,9 @@
 .swiper-slide__image {
   position: relative;
   width: 100%;
+  img {
+    width: 100%;
+  }
   &::before {
     content: '';
     height: 100%;

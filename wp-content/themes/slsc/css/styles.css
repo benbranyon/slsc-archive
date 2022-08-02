@@ -1340,6 +1340,8 @@ h1, h2, h3, h4, h5, h6 {
 .swiper-slide__image {
   position: relative;
   width: 100%; }
+  .swiper-slide__image img {
+    width: 100%; }
   .swiper-slide__image::before {
     content: '';
     height: 100%;
