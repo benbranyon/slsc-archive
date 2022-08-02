@@ -4,13 +4,8 @@
   <!-- Provided by templates/page.twig -->
   {% embed '@layouts/regions/content/content.twig' %}
     {% block content %}
-      {% embed '@components/article/article.twig' with {
-        'article_page_title': post.title
-      } %}
-        {% block main %}
-          {{ post.content }}
-        {% endblock %}
-      {% endembed %}
+      <h1>{{ post.title }}</h1>
+      {{ post.content }}
     {% endblock %}
   {% endembed %}
 {% endblock %}
