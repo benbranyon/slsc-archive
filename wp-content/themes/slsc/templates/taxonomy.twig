@@ -8,14 +8,14 @@
 	        <h1>{{ title }}</h1>
 	        <div class="story-link">
 	       		{% for item in story %}
-	        	<img src="{{ item.thumbnail.src }}" alt="{{ item.thumbnail.alt }}"/>
-	        	<a href="{{ item.link }}" class="button story-collection-link">View Story</a>
+	        		<img src="{{ item.thumbnail.src }}" alt="{{ item.thumbnail.alt }}"/>
+	        		<a href="{{ item.link }}" class="button story-collection-link">View Story</a>
 	       		{% endfor %}
 	        </div>
 	        <div class="collection-summary">
 	        	<label class="form-item__label">Collection Overview</label>
-	        	{% if term.collection_description %}
-	        	  <p><span>Description: </span>{{ term.collection_description }}</p>
+	        	{% if collection_description %}
+	        	  <p><span>Description: </span>{{ collection_description }}</p>
 	        	{% endif %}
 	        	<p><span>Number of items: </span>{{ post_count }}</p>
 	        </div>

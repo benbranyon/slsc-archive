@@ -32,6 +32,7 @@ if ( is_day() ) {
 } else if ( is_tax() ) {
 	$context['title'] = single_term_title( null, false );
 	$term = get_queried_object();
+	$collection_description = get_field('collection_description', $term);
 	$args = array(
 	    // Get post type project
 	    'post_type' => 'story',
@@ -51,6 +52,7 @@ if ( is_day() ) {
 	$context['story'] = Timber::get_posts($args);
 	$context['post_count'] = $GLOBALS['wp_query']->found_posts;
 	$context['term'] = $term;
+	$context['collection_description'] = $collection_description;
 	array_unshift( $templates, 'taxonomy.twig' );
 } else if ( is_post_type_archive() ) {
 	$context['title'] = post_type_archive_title( '', false );
