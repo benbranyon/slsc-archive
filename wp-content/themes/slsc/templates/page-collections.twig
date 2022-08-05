@@ -6,12 +6,16 @@
     <div class="l-constrain--medium">
         <h1>{{ post.title }}</h1>
         {{ post.content }}
+        <ul>
         {% for collection in collections %}
-        	<div>
-        		<h2><a href="/collection/{{ collection.slug }}">{{ collection.name }}</a></h2>
-        		<p>{{ collection.collection_description }}</p>
-        	</div>
+        	<li>
+	        	<div>
+	        		<h2><a href="/collection/{{ collection.slug }}">{{ collection.name }}</a></h2>
+	        		<p>{{ collection.collection_description }}</p>
+	        	</div>
+        	</li>
         {% endfor %}
+        </ul>
     </div>
   </div>
 {% endblock %}
