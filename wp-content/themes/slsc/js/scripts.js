@@ -25,7 +25,7 @@ jQuery( document ).ready(function( $ ) {
     loop: false,
     preloadImages: true,
     slidesPerView: 1,
-    spaceBetween: 10,
+    spaceBetween: 40,
 
 
     // If we need pagination
