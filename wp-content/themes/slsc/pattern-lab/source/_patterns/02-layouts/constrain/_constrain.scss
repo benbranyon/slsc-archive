@@ -5,6 +5,11 @@
   @include layout-constrain;
 }
 
+.l-constrain--medium {
+  @include layout-constrain;
+  max-width: 800px;
+}
+
 .l-constrain--no-padding {
   padding-left: 0;
   padding-right: 0;

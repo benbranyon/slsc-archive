@@ -466,6 +466,17 @@ h1, h2, h3, h4, h5, h6 {
     padding-left: 0;
     padding-right: 0; }
 
+.l-constrain--medium {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 80rem;
+  padding-left: 1em;
+  padding-right: 1em;
+  max-width: 800px; }
+  .l-constrain--medium .l-constrain--medium {
+    padding-left: 0;
+    padding-right: 0; }
+
 .l-constrain--no-padding {
   padding-left: 0;
   padding-right: 0; }

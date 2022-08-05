@@ -2,10 +2,10 @@
 
 {% block content %}
   <!-- Provided by templates/page.twig -->
-  {% embed '@layouts/regions/content/content.twig' %}
-    {% block content %}
-      <h1>{{ post.title }}</h1>
-      {{ post.content }}
-    {% endblock %}
-  {% endembed %}
+  <div class="l-content">
+    <div class="l-constrain--medium">
+        <h1>{{ post.title }}</h1>
+        {{ post.content }}
+    </div>
+  </div>
 {% endblock %}
