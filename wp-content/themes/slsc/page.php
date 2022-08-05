@@ -61,6 +61,10 @@ if ( is_front_page() ) {
 	$context['related'] = $terms;
 	array_unshift( $templates, 'front-page.twig' );
 } 
+if ( is_page('collections') ) {
+	$collections = Timber::get_terms('collection');
+	$context['collections'] = $collections;
+}
 // Render twig template.
 if ( post_password_required( $post->ID ) ) {
 	Timber::render( 'components/password-form.twig', $context );

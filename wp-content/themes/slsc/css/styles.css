@@ -827,7 +827,8 @@ h1, h2, h3, h4, h5, h6 {
 .l-content {
   background-color: #dcd2c7;
   padding-bottom: 40px;
-  padding-top: 40px; }
+  padding-top: 40px;
+  min-height: calc(100vh - 70px); }
 
 .l-header {
   background-color: #330000; }

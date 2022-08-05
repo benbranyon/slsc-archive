@@ -1,0 +1,16 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+  <!-- Provided by templates/page.twig -->
+  <div class="l-content">
+    <div class="l-constrain--medium">
+        <h1>{{ post.title }}</h1>
+        {{ post.content }}
+        <ul>
+        {% for collection in collections %}
+        	<li><a href="/collection/{{ collection.slug }}">{{ collection.name }}</a></li>
+        {% endfor %}
+        </ul>
+    </div>
+  </div>
+{% endblock %}
