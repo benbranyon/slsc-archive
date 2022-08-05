@@ -24,6 +24,9 @@ jQuery( document ).ready(function( $ ) {
     direction: 'horizontal',
     loop: false,
     preloadImages: true,
+    slidesPerView: 1,
+    spaceBetween: 10,
+
 
     // If we need pagination
     pagination: {

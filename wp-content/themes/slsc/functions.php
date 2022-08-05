@@ -50,10 +50,10 @@ function has_visible_widgets( $sidebar_id ) {
 
 function gesso_scripts() {
 
-  wp_register_script('swiper-js', 'https://unpkg.com/swiper/swiper-bundle.min.js');
+  wp_register_script('swiper-js', 'https://unpkg.com/swiper@6.0.0/swiper-bundle.min.js');
   wp_enqueue_script('swiper-js');
 
-  wp_enqueue_style('swiper-styles', 'https://unpkg.com/swiper/swiper-bundle.min.css');
+  wp_enqueue_style('swiper-styles', 'https://unpkg.com/swiper@6.0.0/swiper-bundle.min.css');
 
   wp_register_script('gessomodernizr', get_template_directory_uri() . '/js/lib/modernizr.min.js', array('jquery') ); // Modernizr
   wp_enqueue_script('gessomodernizr');
