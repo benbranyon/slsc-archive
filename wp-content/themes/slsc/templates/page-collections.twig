@@ -3,15 +3,21 @@
 {% block content %}
   <!-- Provided by templates/page.twig -->
   <div class="l-content">
-    <div class="l-constrain--medium">
+    <div class="l-constrain">
         <h1>{{ post.title }}</h1>
         {{ post.content }}
-        {% for collection in collections %}
-          {% include '@components/card/card.twig' with {
-            'title': collection.name,
-            'url': '/collection/' ~ collection.slug,
-          } %}
-        {% endfor %}
+        {% embed '@layouts/grid/grid.twig' with {
+           'modifier_classes' : 'l-grid--3col'
+        } %}
+          {% block content %}
+            {% for collection in collections %}
+              {% include '@components/card/card.twig' with {
+                'title': collection.name,
+                'url': '/collection/' ~ collection.slug,
+              } %}
+            {% endfor %}
+          {% endblock %}
+        {% endembed %}
     </div>
   </div>
 {% endblock %}
