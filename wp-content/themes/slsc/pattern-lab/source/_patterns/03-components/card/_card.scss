@@ -3,6 +3,7 @@
 $card_padding: 1rem;
 
 .card {
+  background-color: #fff;
   display: flex;
   flex-direction: column;
 }
@@ -21,6 +22,12 @@ $card_padding: 1rem;
   order: -1;
   img {
     width: 100%;
+  }
+}
+
+.card__title {
+  a {
+    text-decoration: none;
   }
 }
 
