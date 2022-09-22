@@ -1564,12 +1564,8 @@ h1, h2, h3, h4, h5, h6 {
 .card__content {
   margin-bottom: 0.5rem; }
 
-.card__media {
-  -webkit-box-ordinal-group: 0;
-      -ms-flex-order: -1;
-          order: -1; }
-  .card__media img {
-    width: 100%; }
+.card__media img {
+  width: 100%; }
 
 .card__title a {
   text-decoration: none; }
