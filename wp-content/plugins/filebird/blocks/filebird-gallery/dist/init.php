@@ -23,7 +23,7 @@ function filebird_gallery_block_assets() {
 		array(
 			'editor_script'   => 'filebird_gallery-block-js',
 			'render_callback' => 'filebird_gallery_render',
-			'style'           => 'filebird_gallery-block-css',
+			'editor_style'    => 'filebird_gallery-block-css',
 			'attributes'      => array(
 				'selectedFolder' => array(
 					'type'    => 'array',
@@ -156,7 +156,7 @@ function filebird_gallery_render( $attributes ) {
 		}
 
 		$img  = '<img src="' . esc_attr( $imageSrc ) . '"' . ' alt="' . $imageAlt . '"';
-		$img .= 'class="' . "wp-image-{$post->ID}" . '"/>';
+		$img .= ' class="' . "wp-image-{$post->ID}" . '"/>';
 
 		$li  = '<li class="blocks-gallery-item">';
 		$li .= '<figure>';
@@ -174,6 +174,8 @@ function filebird_gallery_render( $attributes ) {
 	}
 
 	$html .= '</ul>';
+
+	wp_enqueue_style( 'filebird_gallery-block-css' );
 
 	return $html;
 }

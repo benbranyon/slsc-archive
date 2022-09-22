@@ -37,6 +37,7 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 					'icon'              => 'https://ps.w.org/filebird/assets/icon-128x128.gif?rev=2299145',
 					'download_link'     => 'https://downloads.wordpress.org/plugin/filebird.zip',
 					'type'              => array( 'featured' ),
+					'version'           => 0,
 				),
 				'yaymail'           => array(
 					'slug'              => 'yaymail',
@@ -45,6 +46,7 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 					'icon'              => 'https://ps.w.org/yaymail/assets/icon-256x256.gif?rev=2599198',
 					'download_link'     => 'https://downloads.wordpress.org/plugin/yaymail.zip',
 					'type'              => array( 'featured', 'woocommerce' ),
+					'version'           => 0,
 				),
 				'yaycurrency'       => array(
 					'slug'              => 'yaycurrency',
@@ -53,6 +55,7 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 					'icon'              => 'https://ps.w.org/yaycurrency/assets/icon-256x256.png?rev=2550570',
 					'download_link'     => 'https://downloads.wordpress.org/plugin/yaycurrency.zip',
 					'type'              => array( 'featured', 'woocommerce' ),
+					'version'           => 0,
 				),
 				'yaysmtp'           => array(
 					'slug'              => 'yaysmtp',
@@ -61,6 +64,7 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 					'icon'              => 'https://ps.w.org/yaysmtp/assets/icon-256x256.png?rev=2437984',
 					'download_link'     => 'https://downloads.wordpress.org/plugin/yaysmtp.zip',
 					'type'              => array( 'featured', 'marketing' ),
+					'version'           => 0,
 				),
 				'wp-whatsapp'       => array(
 					'slug'              => 'wp-whatsapp',
@@ -69,6 +73,7 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 					'icon'              => 'https://ps.w.org/wp-whatsapp/assets/icon-256x256.png?rev=2725670',
 					'download_link'     => 'https://downloads.wordpress.org/plugin/wp-whatsapp.zip',
 					'type'              => array( 'featured' ),
+					'version'           => 0,
 				),
 				'filester'          => array(
 					'slug'              => 'filester',
@@ -77,6 +82,7 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 					'icon'              => 'https://ps.w.org/filester/assets/icon-256x256.gif?rev=2305540',
 					'download_link'     => 'https://downloads.wordpress.org/plugin/filester.zip',
 					'type'              => array( 'management' ),
+					'version'           => 0,
 				),
 				'cf7-multi-step'    => array(
 					'slug'              => 'cf7-multi-step',
@@ -85,6 +91,7 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 					'icon'              => 'https://ps.w.org/cf7-multi-step/assets/icon-256x256.png?rev=1994366',
 					'download_link'     => 'https://downloads.wordpress.org/plugin/cf7-multi-step.zip',
 					'type'              => array( 'management' ),
+					'version'           => 0,
 				),
 				'cf7-database'      => array(
 					'slug'              => 'cf7-database',
@@ -93,6 +100,7 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 					'icon'              => 'https://ps.w.org/cf7-database/assets/icon-128x128.png?rev=1614091',
 					'download_link'     => 'https://downloads.wordpress.org/plugin/cf7-database.zip',
 					'type'              => array( 'management' ),
+					'version'           => 0,
 				),
 				'wp-duplicate-page' => array(
 					'slug'              => 'wp-duplicate-page',
@@ -101,6 +109,7 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 					'icon'              => 'https://ps.w.org/wp-duplicate-page/assets/icon-256x256.gif?rev=2432962',
 					'download_link'     => 'https://downloads.wordpress.org/plugin/wp-duplicate-page.zip',
 					'type'              => array( 'management' ),
+					'version'           => 0,
 				),
 				'notibar'           => array(
 					'slug'              => 'notibar',
@@ -109,6 +118,7 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 					'icon'              => 'https://ps.w.org/notibar/assets/icon-256x256.png?rev=2387855',
 					'download_link'     => 'https://downloads.wordpress.org/plugin/notibar.zip',
 					'type'              => array( 'marketing' ),
+					'version'           => 0,
 				),
 			);
 			return $recommendedPlugins;

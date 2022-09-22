@@ -76,17 +76,21 @@ class Folder {
 	}
 	public static function getFolderFromPostId( $post_id ) {
 		global $wpdb;
-		global $wpdb;
 
+		$created = 0;
+		$user_has_own_folder = get_option( 'njt_fbv_folder_per_user', '0' ) === '1';
+		if ( $user_has_own_folder ) {
+			$created = get_current_user_id();
+		}
 		return $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT `folder_id`,`name` FROM {$wpdb->prefix}fbv as fbv
+            $wpdb->prepare(
+                "SELECT `folder_id`,`name` FROM {$wpdb->prefix}fbv as fbv
 				JOIN {$wpdb->prefix}fbv_attachment_folder as fbva ON fbv.id = fbva.folder_id
-				WHERE `attachment_id` = %d GROUP BY `folder_id`",
-				$post_id
+				WHERE `attachment_id` = %d AND `created_by` = %d GROUP BY `folder_id`",
+			$post_id, $created
 			),
-			OBJECT
-		);
+            OBJECT
+            );
 	}
 	public static function setFoldersForPosts( $post_ids, $folder_ids, $has_action = true ) {
 		global $wpdb;
@@ -114,6 +118,9 @@ class Folder {
 					do_action( 'fbv_after_set_folder', $post_id, $folder_id );
 				}
 			}
+		}
+		if(count($post_ids) > 0) {
+			clean_post_cache( $post_ids[0] );
 		}
 	}
 	public static function detail( $name, $parent ) {

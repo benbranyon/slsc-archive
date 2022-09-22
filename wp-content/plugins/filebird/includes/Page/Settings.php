@@ -81,8 +81,10 @@ class Settings {
 		}
 
 		if ( 'go_filebird_pro' === $_GET['page'] ) {
-			wp_redirect( 'https://1.envato.market/GoPro-FileBird-Premium' );
-			die;
+			// wp_redirect( 'https://1.envato.market/GoPro-FileBird-Premium' );
+			?>
+				<script>window.location.href = "https://1.envato.market/GoPro-FileBird-Premium"</script>
+			<?php
 		}
 	}
 
