@@ -6,7 +6,7 @@
             "key": "field_5f5fce8e0a593",
             "label": "Collection Description",
             "name": "collection_description",
-            "type": "text",
+            "type": "wysiwyg",
             "instructions": "",
             "required": 0,
             "conditional_logic": 0,
@@ -15,11 +15,11 @@
                 "class": "",
                 "id": ""
             },
+            "tabs": "all",
+            "toolbar": "full",
+            "media_upload": 1,
             "default_value": "",
-            "placeholder": "",
-            "prepend": "",
-            "append": "",
-            "maxlength": ""
+            "delay": 0
         }
     ],
     "location": [
@@ -39,5 +39,6 @@
     "hide_on_screen": "",
     "active": true,
     "description": "",
-    "modified": 1600114340
+    "show_in_rest": 0,
+    "modified": 1659723647
 }
