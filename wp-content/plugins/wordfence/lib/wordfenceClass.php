@@ -1680,7 +1680,7 @@ SQL
 		}
 		
 		if ($enforceStrongPasswds && !wordfence::isStrongPasswd($password, $username)) {
-			$errors->add('pass', __('Please choose a stronger password. Try including numbers, symbols, and a mix of upper and lowercase letters and remove common words.', 'wordfence'));
+			$errors->add('pass', __('Please choose a stronger password. Use at least 12 characters, and include numbers, symbols, and a mix of upper and lowercase letters. Do not use common words or sequences of letters or numbers.', 'wordfence'));
 			return $errors;
 		}
 		
@@ -1713,28 +1713,53 @@ SQL
 		return $errors;
 	}
 	public static function isStrongPasswd($passwd, $username ) {
-		$strength = 0;
-		if(strlen( trim( $passwd ) ) < 5)
+		$passwd = trim($passwd);
+		$lowerPasswd = strtolower($passwd);
+		$passwdLength = strlen($lowerPasswd);
+		if ($passwdLength < 12)
 			return false;
-		if(strtolower( $passwd ) == strtolower( $username ) )
+		if ($lowerPasswd == strtolower( $username ) )
 			return false;
-		if(preg_match('/(?:password|passwd|mypass|wordpress)/i', $passwd)){
+		if (preg_match('/(?:password|passwd|mypass|wordpress)/i', $passwd))
 			return false;
+		if (preg_match('/(.)\1{2,}/', $lowerPasswd)) //Disallow any character repeated 3 or more times
+			return false;
+		/*
+		 * Check for ordered sequences of at least 4 characters for alphabetic sequences and 3 characters for other sequences, ignoring case
+		 * Examples:
+		 *	- 321
+		 *	- abcd
+		 *	- abab
+		 */
+		$last = null;
+		$sequenceLength = 1;
+		$alphabetic = true;
+		for ($i = 0; $i < $passwdLength; $i++) {
+			$current = ord($lowerPasswd[$i]);
+			if ($last !== null) {
+				if (abs($current - $last) === 1) {
+					$alphabetic &= ctype_alpha($lowerPasswd[$i]);
+					if (++$sequenceLength > ($alphabetic ? 3 : 2))
+						return false;
+				}
+				else {
+					$sequenceLength = 1;
+					$alphabetic = true;
+				}
+			}
+			$last = $current;
 		}
-		if($num = preg_match_all( "/\d/", $passwd, $matches) ){
-			$strength += ((int)$num * 10);
+		$characterTypes = array(
+			'/[a-z]/',
+			'/[A-Z]/',
+			'/[0-9]/',
+			'/[^a-zA-Z0-9]/'
+		);
+		foreach ($characterTypes as $type) {
+			if (!preg_match($type, $passwd))
+				return false;
 		}
-		if ( preg_match( "/[a-z]/", $passwd ) )
-			$strength += 26;
-		if ( preg_match( "/[A-Z]/", $passwd ) )
-			$strength += 26;
-		if ($num = preg_match_all( "/[^a-zA-Z0-9]/", $passwd, $matches)){
-			$strength += (31 * (int)$num);
-
-		}
-		if($strength > 60){
-			return true;
-		}
+		return true;
 	}
 	public static function lostPasswordPost($errors = null, $user = null) {
 		$IP = wfUtils::getIP();
@@ -4623,7 +4648,7 @@ SQL
 			$sitePath = trim($components['path'], '/');
 		}
 		
-		$homePath = get_home_path();
+		$homePath = wfUtils::getHomePath();
 		$file = $issue['data']['file'];
 		$localFile = ABSPATH . '/' . $file; //The scanner uses ABSPATH as its base rather than get_home_path()
 		$localFile = realpath($localFile);
@@ -4692,10 +4717,15 @@ HTACCESS;
 		$val = trim($_POST['val']);
 		$val = preg_replace('/[^a-zA-Z0-9\.\-:]+/', '', $val);
 		$api = new wfAPI(wfConfig::get('apiKey'), wfUtils::getWPVersion());
-		$result = $api->call('whois', array(), array(
-			'val' => $val,
-			));
-		return array('ok' => 1, 'result' => $result['result']);
+		try {
+			$result = $api->call('whois', array(), array(
+				'val' => $val,
+				));
+			return array('ok' => 1, 'result' => $result['result']);
+		}
+		catch (wfAPICallErrorResponseException $e) {
+			return array('ok' => 0);
+		}
 	}
 	public static function ajax_recentTraffic_callback(){
 		$ip = trim($_POST['ip']);
@@ -8019,7 +8049,7 @@ SQL
 		
 		$currentAutoPrependFile = ini_get('auto_prepend_file');
 		$currentAutoPrepend = null;
-		if (isset($_POST['currentAutoPrepend']) && !WF_IS_WP_ENGINE && !WF_IS_PRESSABLE) {
+		if (isset($_POST['currentAutoPrepend']) && !WF_IS_WP_ENGINE && !WF_IS_PRESSABLE && !WF_IS_FLYWHEEL) {
 			$currentAutoPrepend = $_POST['currentAutoPrepend'];
 		}
 		
@@ -9031,7 +9061,7 @@ SQL
 	}
 
 	public static function getWAFBootstrapPath() {
-		if (WF_IS_PRESSABLE) {
+		if (WF_IS_PRESSABLE || WF_IS_FLYWHEEL) {
 			return WP_CONTENT_DIR . '/wordfence-waf.php';
 		}
 		return ABSPATH . 'wordfence-waf.php';
@@ -9131,7 +9161,7 @@ if (file_exists(__DIR__.%1$s)) {
 	 */
 	public static function requestFilesystemCredentials($adminURL, $homePath = null, $relaxedFileOwnership = true, $output = true) {
 		if ($homePath === null) {
-			$homePath = get_home_path();
+			$homePath = wfUtils::getHomePath();
 		}
 
 		if (!$output) { ob_start(); }
@@ -9468,7 +9498,7 @@ class wfWAFAutoPrependHelper {
 			return true;
 		}
 		
-		$htaccessPath = get_home_path() . '.htaccess';
+		$htaccessPath = wfUtils::getHomePath() . '.htaccess';
 		if (file_exists($htaccessPath)) {
 			$htaccessContent = file_get_contents($htaccessPath);
 			$regex = '/# Wordfence WAF.*?# END Wordfence WAF/is';
@@ -9492,7 +9522,7 @@ class wfWAFAutoPrependHelper {
 	 * @return bool
 	 */
 	public static function fixHtaccessMod_php() {
-		$htaccessPath = get_home_path() . '.htaccess';
+		$htaccessPath = wfUtils::getHomePath() . '.htaccess';
 		if (file_exists($htaccessPath)) {
 			$htaccessContent = file_get_contents($htaccessPath);
 			$regex = '/# Wordfence WAF.*?# END Wordfence WAF/is';
@@ -9800,13 +9830,13 @@ auto_prepend_file = '%s'
 	}
 
 	public function getHtaccessPath() {
-		return get_home_path() . '.htaccess';
+		return wfUtils::getHomePath() . '.htaccess';
 	}
 
 	public function getUserIniPath() {
 		$userIni = ini_get('user_ini.filename');
 		if ($userIni) {
-			return get_home_path() . $userIni;
+			return wfUtils::getHomePath() . $userIni;
 		}
 		return false;
 	}
