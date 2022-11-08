@@ -19,8 +19,12 @@ $card_padding: 1rem;
 }
 
 .card__media {
+  max-height: 317px;
   img {
     width: 100%;
+    max-height: 317px;
+    object-fit: cover;
+    object-position: 0% 0%;
   }
 }
 

@@ -1564,8 +1564,15 @@ h1, h2, h3, h4, h5, h6 {
 .card__content {
   margin-bottom: 0.5rem; }
 
-.card__media img {
-  width: 100%; }
+.card__media {
+  max-height: 317px; }
+  .card__media img {
+    width: 100%;
+    max-height: 317px;
+    -o-object-fit: cover;
+       object-fit: cover;
+    -o-object-position: 0% 0%;
+       object-position: 0% 0%; }
 
 .card__title a {
   text-decoration: none; }
