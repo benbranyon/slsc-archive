@@ -9,6 +9,11 @@ function pmxi_pmxi_custom_types($custom_types) {
         $custom_types['woo_reviews']->labels = new stdClass();
         $custom_types['woo_reviews']->labels->name = __('WooCommerce Reviews', PMXI_Plugin::LANGUAGE_DOMAIN);
     }
+    if ( class_exists('GFForms') && ! class_exists('PMGI_Plugin') ) {
+        $custom_types['gf_entries'] = new stdClass();
+        $custom_types['gf_entries']->labels = new stdClass();
+        $custom_types['gf_entries']->labels->name = __('Gravity Forms Entries', PMXI_Plugin::LANGUAGE_DOMAIN);
+    }
 	if ( class_exists('WooCommerce') && ! class_exists('PMWI_Plugin') ) {
 		if ( ! empty($custom_types['product']) ) $custom_types['product']->labels->name = __('WooCommerce Products','wp_all_import_plugin');
 		if ( ! empty($custom_types['shop_order']) ) $custom_types['shop_order']->labels->name = __('WooCommerce Orders','wp_all_import_plugin');
@@ -29,7 +34,7 @@ function pmxi_pmxi_custom_types($custom_types) {
 				} else {
 					$ordered_custom_types[$key] = $custom_type;
 				}
-			}			
+			}
 		}
         return $ordered_custom_types;
 	}

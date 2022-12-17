@@ -6,7 +6,7 @@
  */
 class PMXI_Admin_Addons extends PMXI_Controller_Admin {
 
-    public static $addons = array('PMWI_Plugin' => 0, 'PMAI_Plugin' => 0, 'PMWITabs_Plugin' => 0, 'PMLI_Plugin' => 0, 'PMLCA_Plugin' => 0, 'PMUI_Plugin' => 0, 'PMTI_Plugin' => 0); // inactive by default
+    public static $addons = array('PMWI_Plugin' => 0, 'PMAI_Plugin' => 0, 'PMWITabs_Plugin' => 0, 'PMLI_Plugin' => 0, 'PMLCA_Plugin' => 0, 'PMUI_Plugin' => 0, 'PMTI_Plugin' => 0, 'PMGI_Plugin' => 0, 'PMMI_Plugin' => 0); // inactive by default
 
     public static $premium = array();
 
@@ -69,6 +69,28 @@ class PMXI_Admin_Addons extends PMXI_Controller_Admin {
             'free_installed' => (class_exists('PMUI_Plugin') and defined('PMUI_EDITION') and PMUI_EDITION == 'free'),
             'required_plugins' => false,
             'url' => 'http://www.wpallimport.com/add-ons/user-import/'
+        );
+
+        // Gravity Forms add-on
+        self::$premium['PMGI_Plugin'] = array(
+            'title' => __("Gravity Forms Addon",'wp_all_import_plugin'),
+            'description' => __("Import Gravity Forms Entries",'wp_all_import_plugin'),
+            'thumbnail' => 'http://placehold.it/220x220',
+            'active' => (class_exists('PMGI_Plugin') and defined('PMGI_EDITION') and PMGI_EDITION == 'paid'),
+            'free_installed' => (class_exists('PMGI_Plugin') and defined('PMGI_EDITION') and PMGI_EDITION == 'free'),
+            'required_plugins' => array('Gravity Forms' => class_exists('GFForms')),
+            'url' => ''
+        );
+
+        // Meta Box add-on
+        self::$premium['PMMI_Plugin'] = array(
+            'title' => __("Meta Box Addon",'wp_all_import_plugin'),
+            'description' => __("Import Meta Box Custom Fields",'wp_all_import_plugin'),
+            'thumbnail' => 'http://placehold.it/220x220',
+            'active' => (class_exists('PMMI_Plugin') and defined('PMMI_EDITION') and PMMI_EDITION == 'paid'),
+            'free_installed' => (class_exists('PMMI_Plugin') and defined('PMMI_EDITION') and PMMI_EDITION == 'free'),
+            'required_plugins' => array('Meta Box' => class_exists('RWMB_Loader')),
+            'url' => ''
         );
 
         // Affiliate link cloaking add-on

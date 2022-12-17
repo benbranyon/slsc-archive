@@ -57,14 +57,14 @@ function pmxi_wp_loaded_99() {
 				if ( $_GET['action'] == 'cleanup' ) {
 					$settings = new PMXI_Admin_Settings();
 					$settings->cleanup( true );
-					wp_send_json( array(
+					pmxi_send_json( array(
 						'status'  => 200,
 						'message' => __( 'Cleanup completed.', 'wp_all_import_plugin' )
 					) );
 
 					return;
 				}
-				wp_send_json( array(
+				pmxi_send_json( array(
 					'status'  => 403,
 					'message' => __( 'Missing import ID.', 'wp_all_import_plugin' )
 				) );
@@ -94,7 +94,7 @@ function pmxi_wp_loaded_99() {
 								foreach ( $imports as $imp ) {
 									$processing_ids[] = $imp['id'];
 								}
-								wp_send_json( array(
+								pmxi_send_json( array(
 									'status'  => 403,
 									'message' => sprintf( __( 'Other imports are currently in process [%s].', 'wp_all_import_plugin' ), implode( ",", $processing_ids ) )
 								) );
@@ -103,7 +103,7 @@ function pmxi_wp_loaded_99() {
 						}
 
 						if ( ! in_array( $import->type, array( 'url', 'ftp', 'file' ) ) ) {
-							wp_send_json( array(
+							pmxi_send_json( array(
 								'status'  => 500,
 								'message' => sprintf( __( 'Scheduling update is not working with "upload" import type. Import #%s.', 'wp_all_import_plugin' ), $id )
 							) );
@@ -115,7 +115,7 @@ function pmxi_wp_loaded_99() {
 
 								if ( (int) $import->executing ) {
 
-									wp_send_json( array(
+									pmxi_send_json( array(
 										'status'  => 403,
 										'message' => sprintf( __( 'Import #%s is currently in manually process. Request skipped.', 'wp_all_import_plugin' ), $id )
 									) );
@@ -125,19 +125,19 @@ function pmxi_wp_loaded_99() {
 
 									$history_log = $scheduledImport->trigger( $import );
 
-									wp_send_json( array(
+									pmxi_send_json( array(
 										'status'  => 200,
 										'message' => sprintf( __( '#%s Cron job triggered.', 'wp_all_import_plugin' ), $id )
 									) );
 
 								} elseif ( $import->processing and ! $import->triggered ) {
-									wp_send_json( array(
+									pmxi_send_json( array(
 										'status'  => 403,
 										'message' => sprintf( __( 'Import #%s currently in process. Request skipped.', 'wp_all_import_plugin' ), $id )
 									) );
 								} elseif ( ! $import->processing and $import->triggered ) {
 
-									wp_send_json( array(
+									pmxi_send_json( array(
 										'status'  => 403,
 										'message' => sprintf( __( 'Import #%s already triggered. Request skipped.', 'wp_all_import_plugin' ), $id )
 									) );
@@ -160,12 +160,12 @@ function pmxi_wp_loaded_99() {
 
 								// start execution imports that is in the cron process
 								if ( ! (int) $import->triggered ) {
-									wp_send_json( array(
+									pmxi_send_json( array(
 										'status'  => 403,
 										'message' => sprintf( __( 'Import #%s is not triggered. Request skipped.', 'wp_all_import_plugin' ), $id )
 									) );
 								} elseif ( (int) $import->executing ) {
-									wp_send_json( array(
+									pmxi_send_json( array(
 										'status'  => 403,
 										'message' => sprintf( __( 'Import #%s is currently in manually process. Request skipped.', 'wp_all_import_plugin' ), $id )
 									) );
@@ -176,22 +176,22 @@ function pmxi_wp_loaded_99() {
 									$response = $scheduledImport->process( $import, $logger );
 
 									if ( ! empty( $response ) and is_array( $response ) ) {
-										wp_send_json( $response );
+										pmxi_send_json( $response );
 									} elseif ( ! (int) $import->queue_chunk_number ) {
 
-										wp_send_json( array(
+										pmxi_send_json( array(
 											'status'  => 200,
 											'message' => sprintf( __( 'Import #%s complete', 'wp_all_import_plugin' ), $import->id )
 										) );
 									} else {
-										wp_send_json( array(
+										pmxi_send_json( array(
 											'status'  => 200,
 											'message' => sprintf( __( 'Records Processed %s. Records Count %s.', 'wp_all_import_plugin' ), (int) $import->queue_chunk_number, (int) $import->count )
 										) );
 									}
 
 								} else {
-									wp_send_json( array(
+									pmxi_send_json( array(
 										'status'  => 403,
 										'message' => sprintf( __( 'Import #%s already processing. Request skipped.', 'wp_all_import_plugin' ), $id )
 									) );
@@ -214,7 +214,7 @@ function pmxi_wp_loaded_99() {
 									'canceled_on' => date( 'Y-m-d H:i:s' )
 								) )->update();
 
-								wp_send_json( array(
+								pmxi_send_json( array(
 									'status'  => 200,
 									'message' => sprintf( __( 'Import #%s canceled', 'wp_all_import_plugin' ), $import->id )
 								) );
@@ -227,4 +227,31 @@ function pmxi_wp_loaded_99() {
 		}
 	}
 
+}
+
+function pmxi_send_json($response, $status_code = null, $options = 0){
+	header("Content-Type: application/json; charset=" . get_option( 'blog_charset' ));
+	header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0, s-maxage=0, no-transform");
+	header("CDN-Cache-Control: no-store, no-cache, must-revalidate, max-age=0, s-maxage=0, no-transform");
+	header("Cloudflare-CDN-Cache-Control: no-store, no-cache, must-revalidate, max-age=0, s-maxage=0, no-transform");
+	header("Cache-Control: post-check=0, pre-check=0", false);
+	header("Pragma: no-cache");
+
+	if ( null !== $status_code ) {
+		status_header( $status_code );
+	}
+
+	echo wp_json_encode($response, $options);
+
+	if ( wp_doing_ajax() ) {
+		wp_die(
+			'',
+			'',
+			array(
+				'response' => null,
+			)
+		);
+	} else {
+		die;
+	}
 }

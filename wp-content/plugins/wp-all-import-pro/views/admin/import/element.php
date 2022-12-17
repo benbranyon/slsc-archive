@@ -225,7 +225,7 @@
 	<hr>
 
 	<p class="wpallimport-submit-buttons" style="text-align:center;">
-		<a href="<?php echo add_query_arg('action', 'index', $this->baseUrl); ?>" class="back rad3"><?php _e('Back to Step 1','wp_all_import_plugin');?></a>
+		<a href="<?php echo esc_url(add_query_arg('action', 'index', $this->baseUrl)); ?>" class="back rad3"><?php _e('Back to Step 1','wp_all_import_plugin');?></a>
 		&nbsp;
 		<input type="hidden" name="is_submitted" value="1" />
 		<?php wp_nonce_field('choose-elements', '_wpnonce_choose-elements') ?>

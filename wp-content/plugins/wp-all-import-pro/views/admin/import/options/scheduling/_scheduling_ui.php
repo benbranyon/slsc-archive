@@ -38,7 +38,7 @@
                         						var lastPart = parts[parts.length-1];
 
                         						var opt = $('#timezone').find("option:contains('"+ lastPart +"')");
-                        						
+
                         						$('#timezone').val(opt.val());
                         						$('#timezone').trigger("chosen:updated");
 
@@ -249,6 +249,12 @@
 								<?php include_once('_manual_scheduling.php'); ?>
 
 								<div style="clear: both;"></div>
+
+                                <?php $delete_missing_notice = wp_all_import_delete_missing_notice($post); ?>
+                                <?php if (!empty($delete_missing_notice)): ?>
+                                    <p class="exclamation"><?php echo $delete_missing_notice; ?></p>
+                                <?php endif; ?>
+
 							</div>
 
 							<div class="wpallimport-overlay"></div>
@@ -265,6 +271,6 @@
 					</tr>
 				</table>
 			</div>
-		</div>		
+		</div>
 	</div>
 </div>

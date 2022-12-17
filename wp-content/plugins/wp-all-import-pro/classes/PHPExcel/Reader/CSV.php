@@ -226,8 +226,10 @@ class PHPExcel_Reader_CSV extends PHPExcel_Reader_Abstract implements PHPExcel_R
      */
     public function loadIntoExisting($pFilename, PHPExcel $objPHPExcel)
     {
-        $lineEnding = ini_get('auto_detect_line_endings');
-        ini_set('auto_detect_line_endings', true);
+        if (version_compare(phpversion(), '8.1', '<')) {
+            $lineEnding = ini_get( 'auto_detect_line_endings' );
+            ini_set( 'auto_detect_line_endings', true );
+        }
 
         // Open file
         $this->openFile($pFilename);
@@ -284,7 +286,9 @@ class PHPExcel_Reader_CSV extends PHPExcel_Reader_Abstract implements PHPExcel_R
             $this->contiguousRow = $currentRow;
         }
 
-        ini_set('auto_detect_line_endings', $lineEnding);
+        if (version_compare(phpversion(), '8.1', '<')) {
+            ini_set( 'auto_detect_line_endings', $lineEnding );
+        }
 
         // Return
         return $objPHPExcel;

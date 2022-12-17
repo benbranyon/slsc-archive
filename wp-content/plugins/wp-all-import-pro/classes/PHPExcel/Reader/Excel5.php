@@ -5180,6 +5180,9 @@ class PHPExcel_Reader_Excel5 extends PHPExcel_Reader_Abstract implements PHPExce
                 }
                 //imagepng($ih, 'image.png');
 
+                if(!isset($filename))
+                	$filename = null;
+
                 $drawing = new PHPExcel_Worksheet_Drawing();
                 $drawing->setPath($filename);
                 $drawing->setWorksheet($this->phpSheet);

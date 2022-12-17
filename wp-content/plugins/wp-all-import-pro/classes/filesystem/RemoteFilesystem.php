@@ -257,10 +257,15 @@ class RemoteFilesystem {
 					$curl     = curl_init();
 					$filename = $destination . '/' . basename( $this->options['dir'] );
 					$file     = fopen( $destination . '/' . basename( $this->options['dir'] ), 'w' );
-					curl_setopt( $curl, CURLOPT_URL, $this->options['ftp_host'] . '/' . $this->options['dir'] ); #input
+                    curl_setopt( $curl, CURLOPT_URL, 'ftp://' . str_replace(array('ftps://', 'ftp://'), '', $this->options['ftp_host']) . '/' . $this->options['dir'] ); #input
 					curl_setopt( $curl, CURLOPT_RETURNTRANSFER, 1 );
 					curl_setopt( $curl, CURLOPT_FILE, $file ); #output
 					curl_setopt( $curl, CURLOPT_USERPWD, $this->options['ftp_username'] . ':' . $this->options['ftp_password'] );
+                    curl_setopt($curl, CURLOPT_FTP_SSL, CURLFTPSSL_TRY);
+                    curl_setopt($curl, CURLOPT_FTPSSLAUTH, CURLFTPAUTH_DEFAULT);
+                    curl_setopt($curl, CURLOPT_PORT, $this->options['port']);
+                    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+                    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
 					curl_exec( $curl );
 					curl_close( $curl );
 					fclose( $file );
@@ -421,6 +426,10 @@ class RemoteFilesystem {
 			$filter = '@' . implode( '|', $filters ) . '@';
 
 			$this->contents = array_filter( $this->contents, function ( $var ) use ( $filter ) {
+
+				// Ensure that $var has an extension element in all cases.
+				if( !isset($var['extension']))
+					$var['extension'] = '';
 
 				return ( preg_match( $filter, $var['basename'] ) !== 1 && ( $var['type'] === 'dir' || in_array( strtolower($var['extension']), $this->allowed_file_extensions ) ) );
 

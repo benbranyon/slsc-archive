@@ -57,8 +57,8 @@ function pmxi_findDuplicates($articleData, $custom_duplicate_name = '', $custom_
                     ] : [$articleData['post_type']];
 
                     // We should search for the product ID to update using the native WooCommerce function.
-                    if (trim($custom_duplicate_name) == '_sku' && function_exists('wc_get_product_id_by_sku')) {
-                        $id = wc_get_product_id_by_sku(trim($custom_duplicate_value));
+                    if (trim($custom_duplicate_name) == '_sku' && function_exists('wp_all_import_get_product_id_by_sku')) {
+                        $id = wp_all_import_get_product_id_by_sku(trim($custom_duplicate_value));
                     } else {
                         $id = $wpdb->get_var(
                             $wpdb->prepare(

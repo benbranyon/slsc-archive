@@ -1,7 +1,7 @@
 <?php
 /**
  * Class to load config files
- * 
+ *
  * @author Pavel Kulbakin <p.kulbakin@gmail.com>
  */
 class PMXI_Config implements IteratorAggregate {
@@ -15,7 +15,7 @@ class PMXI_Config implements IteratorAggregate {
 	 * @var array
 	 */
 	protected $loaded = array();
-	
+
 	/**
 	 * Static method to create config instance from file on disc
 	 * @param string $filePath
@@ -26,7 +26,7 @@ class PMXI_Config implements IteratorAggregate {
 		$config = new self();
 		return $config->loadFromFile($filePath, $section);
 	}
-	
+
 	/**
 	 * Load config file
 	 * @param string $filePath
@@ -39,7 +39,7 @@ class PMXI_Config implements IteratorAggregate {
 		} else {
 			$filePath = realpath($filePath);
 			if ($filePath and ! in_array($filePath, $this->loaded)) {
-				require $filePath;				
+				require $filePath;
 				$config = (!isset($config)) ? array() : $config;
 				$this->loaded[] = $filePath;
 				$this->config = array_merge($this->config, $config);
@@ -56,7 +56,7 @@ class PMXI_Config implements IteratorAggregate {
 	public function get($field, $section = NULL) {
 		return ! is_null($section) ? $this->config[$section]->get($field) : $this->config[$field];
 	}
-	
+
 	/**
 	 * Magic method for checking whether some config option are set
 	 * @param string $field
@@ -73,7 +73,7 @@ class PMXI_Config implements IteratorAggregate {
 	public function __get($field) {
 		return $this->config[$field];
 	}
-	
+
 	/**
 	 * Return all config options as array
 	 * @return array
@@ -81,9 +81,10 @@ class PMXI_Config implements IteratorAggregate {
 	public function toArray($section = NULL) {
 		return ! is_null($section) ? $this->config[$section]->toArray() : $this->config;
 	}
-	
+
+    #[\ReturnTypeWillChange]
 	public function getIterator() {
 		return new ArrayIterator($this->config);
 	}
-	
+
 }

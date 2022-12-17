@@ -62,7 +62,7 @@ if ( ! function_exists('wp_all_import_get_gz')){
 	    }
 	    @fclose($fp);	    	    	    
 
-	    if (strpos($headers['Content-Disposition'], 'tar.gz') !== false && class_exists('PharData'))
+	    if (isset($headers['Content-Disposition']) && strpos($headers['Content-Disposition'], 'tar.gz') !== false && class_exists('PharData'))
 		{
 			rename($localPath, $localPath . '.tar');
 			$phar = new PharData($localPath . '.tar');

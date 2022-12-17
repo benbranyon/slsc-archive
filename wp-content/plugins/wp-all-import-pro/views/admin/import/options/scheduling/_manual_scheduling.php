@@ -18,7 +18,6 @@
             <?php echo site_url() . '/wp-load.php?import_key=' . $cron_job_key . '&import_id=' . $import_id . '&action=processing'; ?>
         </code>
         </p>
-        <p style="margin:0; padding-left: 0;"><?php _e('Read more about manual scheduling'); ?>: <a target="_blank" href="http://www.wpallimport.com/documentation/recurring/cron/">http://www.wpallimport.com/documentation/recurring/cron/</a>
-        </p>
+        <p style="margin:0; padding-left: 0;"><?php _e('Read more about manual scheduling'); ?>: <a target="_blank" href="http://www.wpallimport.com/documentation/cron/">http://www.wpallimport.com/documentation/cron/</a></p>
     </div>
 </div>

@@ -885,6 +885,12 @@ function pmxi_wp_ajax_wpai_scheduling_dialog_content()
 
             </form>
             <?php require __DIR__ . '/../views/admin/import/options/scheduling/_manual_scheduling.php'; ?>
+
+            <?php $delete_missing_notice = wp_all_import_delete_missing_notice($post); ?>
+            <?php if (!empty($delete_missing_notice)): ?>
+                <p class="exclamation"><?php echo $delete_missing_notice; ?></p>
+            <?php endif; ?>
+
         </div>
     </div>
     <?php

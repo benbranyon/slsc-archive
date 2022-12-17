@@ -8,16 +8,16 @@
 	var hasActiveLicense = false;
 
 		// Main accordion logic
-	$('input[name="scheduling_enable"]').change(function () {
-
-		if ($('input[name="scheduling_enable"]:checked').val() == 1) {
+	$(document).on('change', 'input[name="scheduling_enable"]', function () {
+		var schedulingEnable = $('input[name="scheduling_enable"]:checked').val();
+		if (schedulingEnable == 1) {
 			$('#automatic-scheduling').slideDown();
 			$('.manual-scheduling').slideUp();
 			setTimeout(function () {
 				$('.timezone-select').slideDown(275);
 			}, 200);
 		}
-		else if ($('input[name="scheduling_enable"]:checked').val() == 2) {
+		else if (schedulingEnable == 2) {
 			$('.timezone-select').slideUp(275);
 			$('#automatic-scheduling').slideUp();
 			$('.manual-scheduling').slideDown();
@@ -25,6 +25,11 @@
 			$('.timezone-select').hide();
 			$('#automatic-scheduling').slideUp();
 			$('.manual-scheduling').slideUp();
+		}
+		if(!window.pmxiHasSchedulingSubscription && parseInt(schedulingEnable) == 1) {
+			$('.save-changes').addClass('disabled');
+		} else {
+			$('.save-changes').removeClass('disabled');
 		}
 	});
 
@@ -121,11 +126,13 @@
                             $self.pointer('destroy');
                         });
 
-                        if(!window.pmxiHasSchedulingSubscription) {
-                            $('.save-changes ').addClass('disabled');
+                        if(!window.pmxiHasSchedulingSubscription && $('input[name="scheduling_enable"]:checked').val() == 1) {
+                            $('.save-changes').addClass('disabled');
                         }
 
                         $(".save-changes").unbind('click').on('click', function () {
+							var schedulingEnable = $('input[name="scheduling_enable"]:checked').val();
+
                             if($(this).hasClass('disabled')) {
                                 return false;
                             }
@@ -133,8 +140,6 @@
                             var formValid = pmxeValidateSchedulingForm();
 
                             if (formValid.isValid) {
-
-                                var schedulingEnable = $('input[name="scheduling_enable"]:checked').val();
 
                                 var formData = $('#scheduling-form').serializeArray();
                                 formData.push({name: 'security', value: wp_all_import_security});
@@ -287,7 +292,7 @@
 		$('#monthly_days').val($(this).data('day'));
 	});
 
-	$('input[name="scheduling_run_on"]').change(function () {
+	$('input[name="scheduling_run_on"]').on('change', function () {
 		var val = $('input[name="scheduling_run_on"]:checked').val();
 		if (val == "weekly") {
 
@@ -349,10 +354,6 @@
 			return false;
 		}
 
-		$(this).find('.easing-spinner').toggle();
-
-		var $button = $(this);
-
 		var formData = $('#scheduling-form :input').serializeArray();
 
 		formData.push({name: 'security', value: wp_all_import_security});
@@ -365,15 +366,10 @@
 			url: ajaxurl,
 			data: formData,
 			success: function (response) {
-				$button.find('.easing-spinner').toggle();
-				$button.find('.save-text').html(initialValue);
-				$button.find('svg').show();
-				$button.find('svg').fadeOut(3000);
-
+				var submitEvent = $.Event('wpae-scheduling-options-form:submit');
+				$(document).trigger(submitEvent);
 			},
 			error: function () {
-				$button.find('.easing-spinner').toggle();
-				$button.find('.save-text').html(initialValue);
 			}
 		});
 	});
@@ -437,96 +433,199 @@
 		}
 	});
 
-    $('.wpai-save-scheduling-button, .wpai-save-scheduling-button-blue').on('click', function (e) {
+	function get_delete_missing_notice_type() {
+		if (!$('input[name="is_delete_missing"]').is(':checked')) {
+			return 0;
+		}
+		if ($('input[name="delete_missing_logic"]:checked').val() == 'import' && $('input[name="delete_missing_action"]:checked').val() == 'keep' && $('input[name="is_send_removed_to_trash"]').is(':checked')) {
+			return 1;
+		}
+		if ($('input[name="delete_missing_logic"]:checked').val() == 'import' && $('input[name="delete_missing_action"]:checked').val() == 'keep' && $('input[name="is_change_post_status_of_removed"]').is(':checked')) {
+			return 2;
+		}
+		if ($('input[name="delete_missing_logic"]:checked').val() == 'import' && $('input[name="delete_missing_action"]:checked').val() == 'remove') {
+			return 3;
+		}
+		if ($('input[name="delete_missing_logic"]:checked').val() == 'all' && $('input[name="delete_missing_action"]:checked').val() == 'keep' && $('input[name="is_send_removed_to_trash"]').is(':checked')) {
+			return 4;
+		}
+		if ($('input[name="delete_missing_logic"]:checked').val() == 'all' && $('input[name="delete_missing_action"]:checked').val() == 'keep' && $('input[name="is_change_post_status_of_removed"]').is(':checked')) {
+			return 5;
+		}
+		if ($('input[name="delete_missing_logic"]:checked').val() == 'all' && $('input[name="delete_missing_action"]:checked').val() == 'remove') {
+			return 6;
+		}
+		return 0;
+	}
 
-    	var saveOnly = $(this).hasClass('save_only');
+	function is_valid_delete_missing_options() {
+		let is_valid = true;
+		if ( $('input[name="is_delete_missing"]').is(':checked') && $('input[name="delete_missing_action"]:checked').val() == 'keep' ) {
+			if ( ! $('input[name="is_send_removed_to_trash"]').is(':checked')
+				&& ! $('input[name="is_change_post_status_of_removed"]').is(':checked')
+				&& ! $('input[name="is_update_missing_cf"]').is(':checked')
+				&& ! $('input[name="missing_records_stock_status"]').is(':checked')
+			) {
+				is_valid = false;
+			}
+		}
+		return is_valid;
+	}
 
-    	var hasActiveLicense = $('#scheduling_has_license').val();
+	let submit_import_settings = function($button) {
 
-    	if(hasActiveLicense === '1') {
-    		hasActiveLicense = true;
+		var saveOnly = $button.hasClass('save_only');
+
+		var hasActiveLicense = $('#scheduling_has_license').val();
+
+		if(hasActiveLicense === '1') {
+			hasActiveLicense = true;
 		} else {
-    		hasActiveLicense = false;
+			hasActiveLicense = false;
 		}
 
-        var initialValue = $(this).find('.save-text').html();
-        var schedulingEnable = $('input[name="scheduling_enable"]:checked').val() == 1;
-        if(!hasActiveLicense) {
-            if (!$(this).data('iunderstand') && schedulingEnable) {
-                $('#no-subscription').slideDown();
-                $(this).find('.save-text').html('I Understand');
-                $(this).find('.save-text').addClass('wpai-iunderstand');
-                $(this).find('.save-text').css('left', '100px');
-                $(this).data('iunderstand', 1);
+		var initialValue = $button.find('.save-text').html();
+		var schedulingEnable = $('input[name="scheduling_enable"]:checked').val() == 1;
+		if(!hasActiveLicense) {
+			if (!$button.data('iunderstand') && schedulingEnable) {
+				$('#no-subscription').slideDown();
+				$button.find('.save-text').html('I Understand');
+				$button.find('.save-text').addClass('wpai-iunderstand');
+				$button.find('.save-text').css('left', '100px');
+				$button.data('iunderstand', 1);
 
-                openSchedulingAccordeonIfClosed();
-                e.preventDefault();
-                return;
-            } else {
-            	if(saveOnly) {
-            		$('#save_only_field').prop('disabled', false);
+				openSchedulingAccordeonIfClosed();
+				e.preventDefault();
+				return;
+			} else {
+				if(saveOnly) {
+					$('#save_only_field').prop('disabled', false);
 				}
-                $('#wpai-submit-confirm-form').submit();
-                return;
-            }
-        }
+				$('#wpai-submit-confirm-form').submit();
+				return;
+			}
+		}
 
-        // Don't process scheduling
-        if (!hasActiveLicense) {
-            if(saveOnly) {
-                $('#save_only_field').prop('disabled', false);
-            }
-            $('#wpai-submit-confirm-form').submit();
+		// Don't process scheduling
+		if (!hasActiveLicense) {
+			if(saveOnly) {
+				$('#save_only_field').prop('disabled', false);
+			}
+			$('#wpai-submit-confirm-form').submit();
 
-            return;
-        }
+			return;
+		}
 
-        var validationResponse = pmxiValidateSchedulingForm();
-        if (!validationResponse.isValid) {
+		var validationResponse = pmxiValidateSchedulingForm();
+		if (!validationResponse.isValid) {
 
-            openSchedulingAccordeonIfClosed();
-            $('html, body').animate({
-                scrollTop: $("#scheduling-title").offset().top-100
-            }, 500);
-            e.preventDefault();
-            return false;
-        }
+			openSchedulingAccordeonIfClosed();
+			$('html, body').animate({
+				scrollTop: $("#scheduling-title").offset().top-100
+			}, 500);
+			e.preventDefault();
+			return false;
+		}
 
-        var $button = $(this);
+		var formData = $('#scheduling-form :input').serializeArray();
 
-        var formData = $('#scheduling-form :input').serializeArray();
+		formData.push({name: 'security', value: wp_all_import_security});
+		formData.push({name: 'action', value: 'save_import_scheduling'});
+		formData.push({name: 'element_id', value: $('#scheduling_import_id').val()});
+		formData.push({name: 'scheduling_enable', value: $('input[name="scheduling_enable"]:checked').val()});
 
-        formData.push({name: 'security', value: wp_all_import_security});
-        formData.push({name: 'action', value: 'save_import_scheduling'});
-        formData.push({name: 'element_id', value: $('#scheduling_import_id').val()});
-        formData.push({name: 'scheduling_enable', value: $('input[name="scheduling_enable"]:checked').val()});
+		$button.find('.easing-spinner').toggle();
 
-        $button.find('.easing-spinner').toggle();
+		$.ajax({
+			type: 'POST',
+			url: ajaxurl,
+			data: formData,
+			success: function (response) {
+				$button.find('.easing-spinner').toggle();
+				$button.find('.save-text').html(initialValue);
+				$button.find('.save-text').removeClass('wpai-iunderstand');
+				$button.find('svg').show();
 
-        $.ajax({
-            type: 'POST',
-            url: ajaxurl,
-            data: formData,
-            success: function (response) {
-                $button.find('.easing-spinner').toggle();
-                $button.find('.save-text').html(initialValue);
-                $button.find('.save-text').removeClass('wpai-iunderstand');
-                $button.find('svg').show();
+				setTimeout(function(){
+					if(saveOnly) {
+						$('#save_only_field').prop('disabled', false);
+					}
+					$('#wpai-submit-confirm-form').submit();
+				}, 1000);
 
-                setTimeout(function(){
-                    if(saveOnly) {
-                        $('#save_only_field').prop('disabled', false);
-                    }
-                    $('#wpai-submit-confirm-form').submit();
-                }, 1000);
+			},
+			error: function () {
+				$button.find('.easing-spinner').toggle();
+				$button.find('.save-text').html(initialValue);
+				$button.find('.save-text').removeClass('wpai-iunderstand');
+			}
+		});
+	}
 
-            },
-            error: function () {
-                $button.find('.easing-spinner').toggle();
-                $button.find('.save-text').html(initialValue);
-                $button.find('.save-text').removeClass('wpai-iunderstand');
-            }
-        });
+    $('.wpai-save-scheduling-button, .wpai-save-scheduling-button-blue').on('click', function (e) {
+		// Validate delete missing options.
+		let notice_type = get_delete_missing_notice_type();
+
+		if ( ! is_valid_delete_missing_options() ) {
+			$('.delete-missing-error').removeClass('hidden');
+			$('.switcher-target-delete_missing_action_keep').addClass('delete-missing-error-wrapper');
+			return;
+		}
+
+		let $this = $(this);
+		// Show notice if any.
+		if (notice_type) {
+			$('.confirmation-modal-' + notice_type).find('.status_of_removed').html($('select[name="status_of_removed"]').val());
+			$('.confirmation-modal-' + notice_type).dialog({
+				resizable: false,
+				height: "auto",
+				width: 550,
+				modal: true,
+				draggable: false,
+				closeText: '',
+				classes: {
+					"ui-dialog": "wpai-warning-check"
+				},
+				buttons: {
+					"Confirm": {
+						click: function() {
+
+							let confirm_field = $('#confirm-settings-' + notice_type);
+
+							let confirm_text = confirm_field.val();
+
+							if (confirm_text !== 'I HAVE BACKUPS') {
+
+								if (confirm_text.length === 0) {
+									alert('Please type the confirmation message.');
+								} else {
+									alert('Please double-check that the confirmation message has been typed as required.');
+								}
+
+								confirm_field.addClass('confirm-error');
+
+								return false;
+							}
+
+							$( this ).dialog( "close" );
+
+							submit_import_settings($this);
+						},
+						text: 'Confirm',
+						class: 'wpai-warning-confirm-button'
+					},
+					"Cancel": {
+						click: function() {
+							$( this ).dialog( "close" );
+						},
+						text: 'Cancel',
+						class: 'wpai-warning-cancel-button'
+					}
+				}
+			});
+		} else {
+			submit_import_settings($this);
+		}
     });
-	
+
 });})(jQuery);

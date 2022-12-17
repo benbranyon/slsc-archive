@@ -2,7 +2,7 @@
 
 class PMXI_Installer
 {
-    const MIN_PHP_VERSION = "5.3.0";
+    const MIN_PHP_VERSION = "7.2.5";
 
     const WRONG_PHP_VERSION_MESSAGE = "WP All Import requires PHP %1s or greater, you are using PHP %2s. Please contact your host and tell them to update your server to at least PHP %1s.";
 

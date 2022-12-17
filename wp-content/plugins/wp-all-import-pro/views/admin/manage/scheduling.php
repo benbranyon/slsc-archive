@@ -45,7 +45,7 @@
 	</p>
 
 	<p>
-		See the <a href='http://www.wpallimport.com/documentation/recurring/cron/'>documentation</a> for more details.
+		See the <a href='http://www.wpallimport.com/documentation/cron/'>documentation</a> for more details.
 	</p>
 
 <?php else: ?>
@@ -54,7 +54,7 @@
 		<?php _e('To schedule this import with a cron job, you must use the "Download from URL" or "Use existing file" option on the Import Settings screen of WP All Import.', 'wp_all_import_plugin'); ?>
 	</p>
 	<p>
-		<a href="<?php echo add_query_arg(array('id' => $item['id'], 'action' => 'options'), $this->baseUrl); ?>"><?php _e('Go to Import Settings now...', 'wp_all_import_plugin'); ?></a>
+		<a href="<?php echo esc_url(add_query_arg(array('id' => $item['id'], 'action' => 'options'), $this->baseUrl)); ?>"><?php _e('Go to Import Settings now...', 'wp_all_import_plugin'); ?></a>
 	</p>
 
 <?php endif; ?>

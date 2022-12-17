@@ -9,7 +9,7 @@
 <table class="wpallimport-layout wpallimport-step-1">
 	<tr>
 		<td class="left">
-			<div class="wpallimport-wrapper">	
+			<div class="wpallimport-wrapper">
 				<h2 class="wpallimport-wp-notices"></h2>
 				<div class="wpallimport-header">
 					<div class="wpallimport-logo"></div>
@@ -19,30 +19,30 @@
 					<div class="wpallimport-links">
 						<a href="http://www.wpallimport.com/support/" target="_blank"><?php _e('Support', 'wp_all_import_plugin'); ?></a> | <a href="http://www.wpallimport.com/documentation/" target="_blank"><?php _e('Documentation', 'wp_all_import_plugin'); ?></a>
 					</div>
-				</div>			
+				</div>
 
-				<div class="clear"></div>											
+				<div class="clear"></div>
 
 				<?php if ($this->errors->get_error_codes()): ?>
 					<?php $this->error() ?>
-				<?php endif ?>				
+				<?php endif ?>
 
 				<?php //do_action('pmxi_choose_file_header'); ?>
 
 		        <form method="post" class="wpallimport-choose-file" enctype="multipart/form-data" autocomplete="off">
-		        	
+
 		        	<div class="wpallimport-upload-resource-step-one">
 
-						<input type="hidden" name="is_submitted" value="1" />						
-						
-						<div class="clear"></div>											
-						
+						<input type="hidden" name="is_submitted" value="1" />
+
+						<div class="clear"></div>
+
 						<div class="wpallimport-import-types">
-							<?php if (empty($_GET['deligate'])): ?>	
+							<?php if (empty($_GET['deligate'])): ?>
 							<h2><?php _e('First, specify how you want to import your data', 'wp_all_import_plugin'); ?></h2>
 							<?php else: ?>
 							<h2 style="margin-bottom: 10px;"><?php _e('First, specify previously exported file', 'wp_all_import_plugin'); ?></h2>
-							<h2 class="wp_all_import_subheadline"><?php _e('The data in this file can be modified, but the structure of the file (column/element names) should not change.', 'wp_all_import_plugin'); ?></h2>
+							<h2 class="wp_all_import_subheadline"><?php _e('The data in this import file can be modified, but the structure of the file (column/element names) should not change.', 'wp_all_import_plugin'); ?></h2>
 							<?php endif; ?>
 							<a class="wpallimport-import-from wpallimport-upload-type <?php echo ('upload' == $post['type']) ? 'selected' : '' ?>" rel="upload_type" href="javascript:void(0);">
 								<span class="wpallimport-icon"></span>
@@ -57,12 +57,12 @@
 								<span class="wpallimport-icon-label"><?php _e('Use existing file', 'wp_all_import_plugin'); ?></span>
 							</a>
 						</div>
-												
+
 						<input type="hidden" value="<?php echo $post['type']; ?>" name="type"/>
 
-						<div class="wpallimport-upload-type-container" rel="upload_type">						
+						<div class="wpallimport-upload-type-container" rel="upload_type">
 							<div id="plupload-ui" class="wpallimport-file-type-options">
-					            <div>				                
+					            <div>
 					                <input type="hidden" name="filepath" value="<?php echo $post['filepath'] ?>" id="filepath"/>
 					                <a id="select-files" href="javascript:void(0);" <?php if (empty($post['filepath'])):?>style="display:none;"<?php endif; ?> /><?php _e('Click here to select file from your computer...', 'wp_all_import_plugin'); ?></a>
 					                <div id="progressbar" class="wpallimport-progressbar">
@@ -74,12 +74,12 @@
 					                	<?php if (!empty($post['filepath'])):?>
 					                	<div class="wpallimport-upload-process ui-progressbar ui-widget ui-widget-content ui-corner-all" id="upload_process" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><div class="ui-progressbar-value ui-widget-header ui-corner-left ui-corner-right" style="width: 100%;"></div></div>
 					                	<?php else: ?>
-					                	<div id="upload_process" class="wpallimport-upload-process"></div>				                	
+					                	<div id="upload_process" class="wpallimport-upload-process"></div>
 					                	<?php endif; ?>
 					                </div>
 					            </div>
 					        </div>
-					        <div class="wpallimport-note" style="margin: 0 auto; font-size: 13px;"><span></span></div>		
+					        <div class="wpallimport-note" style="margin: 0 auto; font-size: 13px;"><span></span></div>
 						</div>
 						<div class="wpallimport-upload-type-container" rel="url_type">
                             <div class="wpallimport-choose-data-type">
@@ -93,10 +93,10 @@
                                 </a>
                             </div>
                         </div>
-						<div class="wpallimport-upload-type-container" rel="file_type">			
-							<?php $upload_dir = wp_upload_dir(); ?>					
+						<div class="wpallimport-upload-type-container" rel="file_type">
+							<?php $upload_dir = wp_upload_dir(); ?>
 							<div class="wpallimport-file-type-options">
-								
+
 								<?php
 									$files_directory = DIRECTORY_SEPARATOR . PMXI_Plugin::FILES_DIRECTORY . DIRECTORY_SEPARATOR;
 
@@ -126,7 +126,7 @@
 										}
 									}
 								?>
-								<script type="text/javascript">									
+								<script type="text/javascript">
 									var existing_file_sizes = <?php echo json_encode($sizes) ?>;
 								</script>
 
@@ -136,16 +136,16 @@
 										<option value="<?php echo $file; ?>" <?php if ( $file == esc_attr($post['file'])):?>selected="selected"<?php endif; ?>><?php echo basename($file); ?></option>
 									<?php endforeach; ?>
 								</select>
-								
-								<input type="hidden" name="file" value="<?php echo esc_attr($post['file']); ?>"/>									
-								
+
+								<input type="hidden" name="file" value="<?php echo esc_attr($post['file']); ?>"/>
+
 								<div class="wpallimport-note" style="margin: 0 auto; font-size: 13px;">
 									<?php printf(__('Upload files to <strong>%s</strong> and they will appear in this list', 'wp_all_import_plugin'), $upload_dir['basedir'] . $files_directory) ?>
 									<span></span>
 								</div>
 							</div>
-						</div>		
-						<div id="wpallimport-url-upload-status"></div>				
+						</div>
+						<div id="wpallimport-url-upload-status"></div>
 
 						<?php if (empty($_GET['deligate'])): ?>
 
@@ -247,15 +247,15 @@
                                 </div>
                             </div>
                         </div>
-						
+
 						<div class="wpallimport-upload-resource-step-two">
-						
+
 							<div class="wpallimport-choose-post-type">
 
-								<input type="hidden" name="wizard_type" value="<?php echo $post['wizard_type']; ?>"/>								
+								<input type="hidden" name="wizard_type" value="<?php echo $post['wizard_type']; ?>"/>
 
-								<h2 style="margin-top:0;"><?php _e('Import data from this file into...', 'wp_all_import_plugin'); ?></h2>
-								
+								<h2 style="margin-top:0;"><?php _e('Import data from this import file into...', 'wp_all_import_plugin'); ?></h2>
+
 								<div class="wpallimport-choose-data-type">
 									<a class="wpallimport-import-to rad4 wpallimport-to-new-items <?php if ($post['wizard_type'] == 'new') echo 'wpallimport-import-to-checked'; ?>" rel="new" href="javascript:void(0);">
 										<span class="wpallimport-import-to-title"><?php _e('New Items', 'wp_all_import_plugin'); ?></span>
@@ -290,8 +290,8 @@
                                         'user_request',
                                         'scheduled-action'
                                     );
-									
-									$custom_types = get_post_types(array('_builtin' => true), 'objects') + get_post_types(array('_builtin' => false, 'show_ui' => true), 'objects'); 
+
+									$custom_types = get_post_types(array('_builtin' => true), 'objects') + get_post_types(array('_builtin' => false, 'show_ui' => true), 'objects');
 									foreach ($custom_types as $key => $ct) {
 										if (in_array($key, $hiddenPosts)) unset($custom_types[$key]);
                                     }
@@ -339,7 +339,7 @@
 									}
                                     $hidden_post_types = apply_filters( 'pmxi_custom_types', $hidden_post_types, 'hidden_post_types' );
 
-								?>	
+								?>
 								<div class="wpallimport-choose-import-direction">
 									<div class="wpallimport-extra-text-left">
 										<div class="wpallimport-new-records"><?php _e('Create new', 'wp_all_import_plugin'); ?></div>
@@ -352,7 +352,7 @@
 										<div class="wpallimport-existing-records"><?php _e('and update some or all of their data.', 'wp_all_import_plugin'); ?>
 											<a class="wpallimport-help" href="#help" style="position: relative; top: -2px;" title="The Existing Items option is commonly used to update existing products with new stock quantities while leaving all their other data alone, update properties on your site with new pricing, etc. <br/><br/> In Step 4, you will map the records in your file to the existing items on your site and specify which data points will be updated and which will be left alone.">?</a>
 										</div>
-									</div>									
+									</div>
                                     <select name="custom_type_selector" id="custom_type_selector" class="wpallimport-post-types">
 
                                     <?php
@@ -364,7 +364,7 @@
 
 
                                     <?php
-                                    $known_imgs     = array( 'post', 'page', 'product', 'import_users', 'shop_order', 'shop_coupon', 'shop_customer', 'users', 'comments', 'taxonomies', 'woo_reviews' );
+                                    $known_imgs     = array( 'post', 'page', 'product', 'import_users', 'shop_order', 'shop_coupon', 'shop_customer', 'users', 'comments', 'taxonomies', 'woo_reviews', 'gf_entries' );
                                     $all_posts      = array_merge( $sorted_cpt, $hidden_post_types );
                                     $all_posts      = apply_filters( 'pmxi_custom_types', $all_posts, 'all_types' );
                                     $ordered_posts  = array( 'post', 'page', 'taxonomies', 'comments', 'import_users', 'shop_order', 'shop_coupon', 'product', 'woo_reviews', 'shop_customer');
@@ -373,15 +373,15 @@
                                         if ( ! in_array( $key, $ordered_posts ) ) {
                                             array_push( $ordered_posts, $key );
                                         }
-                                    }                                    
-                                    
-                                    $order_arr          = apply_filters( 'pmxi_post_list_order', $ordered_posts );                                    
+                                    }
+
+                                    $order_arr          = apply_filters( 'pmxi_post_list_order', $ordered_posts );
                                     $image_data         = apply_filters( 'wp_all_import_post_type_image', array() );
 
                                     foreach ( $order_arr as $key => $post_name ) {
                                         if ( array_key_exists( $post_name, $all_posts ) ) {
                                             $post_obj = $all_posts[ $post_name ];
-                                            
+
                                             if ( in_array( $post_name, $known_imgs ) ) {
                                                 $image_src = 'dashicon-' . $post_name;
                                             } else {
@@ -392,27 +392,27 @@
                                             } else {
                                                 $custom_img_defined = false;
                                             }
-                                            
-                                            $original_image_src = $image_src;                                                                                                 
+
+                                            $original_image_src = $image_src;
                                             $cpt = $post_name;
                                             $cpt_label = $post_obj->labels->name;
-                                            
-                                            $custom_selected_post = apply_filters( 'wpai_custom_selected_post', false, $post, $cpt, 'step1' );                                            
+
+                                            $custom_selected_post = apply_filters( 'wpai_custom_selected_post', false, $post, $cpt, 'step1' );
 
                                             $img_to_echo = 'dashicon ';
 
-                                            if ( $custom_img_defined === true ) { 
-                                                $img_to_echo .= $image_data[ $cpt ]['image']; 
+                                            if ( $custom_img_defined === true ) {
+                                                $img_to_echo .= $image_data[ $cpt ]['image'];
                                             } else {
                                                 $img_to_echo .= $image_src;
                                             }
-                                            
+
                                             ?>
-                                            
-                                            <option value="<?php echo $cpt; ?>" data-imagesrc="<?php echo $img_to_echo; ?>" <?php if ( $custom_selected_post === true ):?>selected="selected"<?php else: if ( $cpt == $post['custom_type'] ):?>selected="selected"<?php endif; endif; ?>><?php echo $cpt_label; ?></option>                                        
+
+                                            <option value="<?php echo $cpt; ?>" data-imagesrc="<?php echo $img_to_echo; ?>" <?php if ( $custom_selected_post === true ):?>selected="selected"<?php else: if ( $cpt == $post['custom_type'] ):?>selected="selected"<?php endif; endif; ?>><?php echo $cpt_label; ?></option>
                                             <?php
                                         }
-                                    }                                    
+                                    }
                                     ?>
                                     </select>
 									<div class="taxonomy_to_import_wrapper">
@@ -439,6 +439,12 @@
 										<a href="https://www.wpallimport.com/checkout/?edd_action=add_to_cart&download_id=2707227&edd_options%5Bprice_id%5D=1" target="_blank" class="upgrade_link"><?php _e('Purchase the WooCommerce Add-On Pro', 'wp_all_import_plugin');?></a>
 									</div>
 									<?php endif; ?>
+                                    <?php if ( class_exists('GFForms') && ! class_exists('PMGI_Plugin') ): ?>
+                                        <div class="wpallimport-upgrade-notice" rel="gf_entries">
+                                            <p><?php _e('The Gravity Forms Add-On is Required to Import Gravity Forms Entries', 'wp_all_import_plugin'); ?></p>
+                                            <a href="https://www.wpallimport.com/checkout/?edd_action=add_to_cart&download_id=4067765&edd_options%5Bprice_id%5D=1" target="_blank" class="upgrade_link"><?php _e('Purchase the Gravity Forms Add-On Pro', 'wp_all_import_plugin');?></a>
+                                        </div>
+                                    <?php endif; ?>
 									<?php if ( class_exists('WooCommerce') &&  ( ! class_exists('PMWI_Plugin') || class_exists('PMWI_Plugin') && PMWI_EDITION == 'free') ): ?>
 										<div class="wpallimport-upgrade-notice" rel="shop_order">
 											<?php if (class_exists('PMWI_Plugin') && PMWI_EDITION == 'free'): ?>
@@ -471,16 +477,16 @@
 							</div>
 						</div>
 						<?php endif; ?>
-					</div>					
+					</div>
 
 					<div class="rad4 first-step-errors error-upload-rejected">
 						<div class="wpallimport-notify-wrapper">
 							<div class="error-headers exclamation">
 								<h3><?php _e('File upload rejected by server', 'wp_all_import_plugin');?></h3>
 								<h4><?php _e("Contact your host and have them check your server's error log.", "wp_all_import_plugin"); ?></h4>
-							</div>		
-						</div>		
-						<a class="button button-primary button-hero wpallimport-large-button wpallimport-notify-read-more" href="http://www.wpallimport.com/documentation/troubleshooting/problems-with-import-files/" target="_blank"><?php _e('Read More', 'wp_all_import_plugin');?></a>		
+							</div>
+						</div>
+						<a class="button button-primary button-hero wpallimport-large-button wpallimport-notify-read-more" href="http://www.wpallimport.com/documentation/troubleshooting/problems-with-import-files/" target="_blank"><?php _e('Read More', 'wp_all_import_plugin');?></a>
 					</div>
 
 					<div class="rad4 first-step-errors error-file-validation" <?php if ( ! empty($upload_validation) ): ?> style="display:block;" <?php endif; ?>>
@@ -488,32 +494,32 @@
 							<div class="error-headers exclamation">
 								<h3><?php _e('There\'s a problem with your import file', 'wp_all_import_plugin');?></h3>
 								<h4>
-									<?php 
-									if ( ! empty($upload_validation) ): 										
+									<?php
+									if ( ! empty($upload_validation) ):
 										$file_type = strtoupper(pmxi_getExtension($post['file']));
-										printf(__('Please verify that the file you using is a valid %s file.', 'wp_all_import_plugin'), $file_type); 
+										printf(__('Please verify that the file you using is a valid %s file.', 'wp_all_import_plugin'), $file_type);
 									endif;
 									?>
 								</h4>
-							</div>		
-						</div>		
-						<a class="button button-primary button-hero wpallimport-large-button wpallimport-notify-read-more" href="http://www.wpallimport.com/documentation/troubleshooting/problems-with-import-files/#invalid" target="_blank"><?php _e('Read More', 'wp_all_import_plugin');?></a>		
-					</div>					
+							</div>
+						</div>
+						<a class="button button-primary button-hero wpallimport-large-button wpallimport-notify-read-more" href="http://www.wpallimport.com/documentation/troubleshooting/problems-with-import-files/#invalid" target="_blank"><?php _e('Read More', 'wp_all_import_plugin');?></a>
+					</div>
 
 					<p class="wpallimport-submit-buttons">
 						<input type="hidden" name="custom_type" value="<?php echo $post['custom_type'];?>">
 						<input type="hidden" name="is_submitted" value="1" />
 						<input type="hidden" name="auto_generate" value="0" />
-						
-						<?php wp_nonce_field('choose-file', '_wpnonce_choose-file'); ?>		
-						<a href="javascript:void(0);" class="back rad3 auto-generate-template" style="float:none; background: #e4e6e6; padding: 0 50px;"><?php _e('Skip to Step 4', 'wp_all_import_plugin'); ?></a>			
+
+						<?php wp_nonce_field('choose-file', '_wpnonce_choose-file'); ?>
+						<a href="javascript:void(0);" class="back rad3 auto-generate-template" style="float:none; background: #e4e6e6; padding: 0 50px;"><?php _e('Skip to Step 4', 'wp_all_import_plugin'); ?></a>
 						<input type="submit" class="button button-primary button-hero wpallimport-large-button" value="<?php _e('Continue to Step 2', 'wp_all_import_plugin') ?>" id="advanced_upload"/>
 					</p>
-					
+
 					<table><tr><td class="wpallimport-note"></td></tr></table>
 				</form>
 				<a href="http://soflyy.com/" target="_blank" class="wpallimport-created-by"><?php _e('Created by', 'wp_all_import_plugin'); ?> <span></span></a>
 			</div>
-		</td>		
+		</td>
 	</tr>
 </table>

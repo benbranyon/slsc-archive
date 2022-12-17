@@ -1,7 +1,7 @@
 <?php
 /**
  * Common logic for all shortcodes plugin implements
- * 
+ *
  * @author Pavel Kulbakin <p.kulbakin@gmail.com>
  */
 abstract class PMXI_Controller {
@@ -31,18 +31,18 @@ abstract class PMXI_Controller {
 	public function __construct() {
 		$this->input = new PMXI_Input();
 		$this->input->addFilter('trim');
-		
+
 		$this->errors = new WP_Error();
 		$this->warnings = new WP_Error();
-		
+
 		$this->init();
 	}
-	
+
 	/**
 	 * Method to put controller initialization logic to
 	 */
 	protected function init() {}
-	
+
 	/**
 	 * Checks wether protocol is HTTPS and redirects user to secure connection if not
 	 */
@@ -53,19 +53,19 @@ abstract class PMXI_Controller {
 			} else {
 				wp_redirect('https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']); die();
 			}
-		}		
+		}
 	}
-	
+
 	/**
 	 * Method returning resolved template content
-	 * 
+	 *
 	 * @param string[optional] $viewPath Template path to render
 	 */
 	protected function render($viewPath = null) {
 
 		if ( ! get_current_user_id() or ! current_user_can( PMXI_Plugin::$capabilities )) {
 		    // This nonce is not valid.
-		    die( 'Security check' ); 
+		    die( 'Security check' );
 		} else {
 			// assume template file name depending on calling function
 			if (is_null($viewPath)) {
@@ -85,10 +85,10 @@ abstract class PMXI_Controller {
 			}
 		}
 	}
-	
+
 	/**
 	 * Display list of errors
-	 * 
+	 *
 	 * @param string|array|WP_Error[optional] $msgs
 	 */
 	protected function error($msgs = NULL) {
@@ -98,13 +98,14 @@ abstract class PMXI_Controller {
 		if (is_wp_error($msgs)) {
 			unset($msgs->errors['root-element-validation']);
 			unset($msgs->errors['upload-validation']);
+			unset($msgs->errors['delete-missing-validation']);
 			$msgs = $msgs->get_error_messages();
 		}
 		if ( ! is_array($msgs)) {
 			$msgs = array($msgs);
 		}
 		$this->data['errors'] = $msgs;
-		
+
 		$viewPathRel = str_replace('_', '/', preg_replace('%^' . preg_quote(PMXI_Plugin::PREFIX, '%') . '%', '', strtolower(get_class($this)))) . '/error.php';
 		if (is_file(PMXI_Plugin::ROOT_DIR . '/views/' . $viewPathRel)) { // if calling controller class has specific error view
 			$this->render($viewPathRel);
@@ -115,14 +116,14 @@ abstract class PMXI_Controller {
 
 	/**
 	 * Display list of warnings
-	 * 
+	 *
 	 * @param string|array|WP_Error[optional] $msgs
 	 */
 	protected function warning($msgs = NULL) {
 		if (is_null($msgs)) {
 			$msgs = $this->warnings;
 		}
-		if (is_wp_error($msgs)) {			
+		if (is_wp_error($msgs)) {
 			unset($msgs->errors['root-element-validation']);
 			$msgs = $msgs->get_error_messages();
 		}
@@ -130,7 +131,7 @@ abstract class PMXI_Controller {
 			$msgs = array($msgs);
 		}
 		$this->data['warnings'] = $msgs;
-		
+
 		$viewPathRel = str_replace('_', '/', preg_replace('%^' . preg_quote(PMXI_Plugin::PREFIX, '%') . '%', '', strtolower(get_class($this)))) . '/warning.php';
 		if (is_file(PMXI_Plugin::ROOT_DIR . '/views/' . $viewPathRel)) { // if calling controller class has specific error view
 			$this->render($viewPathRel);
@@ -138,5 +139,5 @@ abstract class PMXI_Controller {
 			$this->render('controller/warning.php');
 		}
 	}
-	
+
 }

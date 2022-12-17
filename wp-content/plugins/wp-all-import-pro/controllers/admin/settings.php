@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * Admin Settings page
  *
@@ -20,22 +20,22 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 		$this->licenseActivator = new \Wpai\App\Service\License\LicenseActivator();
 	}
 
-	public function __construct(){	
+	public function __construct(){
 
 		parent::__construct();
 
-		self::$upload_transient = 'pmxi_uploads_path';		
+		self::$upload_transient = 'pmxi_uploads_path';
 
-		$uploads = wp_upload_dir();	
+		$uploads = wp_upload_dir();
 
 		$is_secure_import = PMXI_Plugin::getInstance()->getOption('secure');
-		
+
 		if ( ! $is_secure_import ){
 
 			self::$path = wp_all_import_secure_file($uploads['basedir'] . DIRECTORY_SEPARATOR . PMXI_Plugin::UPLOADS_DIRECTORY );
-			
+
 		}
-		else {			
+		else {
 
 			self::$path = get_transient( self::$upload_transient );
 
@@ -48,7 +48,7 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 		$sleep = apply_filters( 'wp_all_import_shard_delay', 0 );
 		usleep($sleep);
 	}
-	
+
 	public function index() {
 
 		$this->data['post'] = $post = $this->input->post(PMXI_Plugin::getInstance()->getOption());
@@ -144,7 +144,7 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 
 		if ($this->input->post('is_settings_submitted')) { // save settings form
 			check_admin_referer('edit-settings', '_wpnonce_edit-settings');
-			
+
 			if ( ! preg_match('%^\d+$%', $post['history_file_count'])) {
 				$this->errors->add('form-validation', __('History File Count must be a non-negative integer', 'wp_all_import_plugin'));
 			}
@@ -178,8 +178,8 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 				PMXI_Plugin::getInstance()->updateOption($post);
 
 				$files = new PMXI_File_List(); $files->sweepHistory(); // adjust file history to new settings specified
-				
-				wp_redirect(add_query_arg('pmxi_nt', urlencode(__('Settings saved', 'wp_all_import_plugin')), $this->baseUrl)); die();
+
+				wp_redirect(esc_url_raw(add_query_arg('pmxi_nt', urlencode(__('Settings saved', 'wp_all_import_plugin')), $this->baseUrl))); die();
 			}
 		}
 
@@ -192,16 +192,16 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 				if (!empty($_FILES)){
 					$file_name = $_FILES['template_file']['name'];
 					$file_size = $_FILES['template_file']['size'];
-					$tmp_name  = $_FILES['template_file']['tmp_name'];										
-					
-					if(isset($file_name)) 
-					{				
-						
+					$tmp_name  = $_FILES['template_file']['tmp_name'];
+
+					if(isset($file_name))
+					{
+
 						$filename  = stripslashes($file_name);
 						$extension = strtolower(pmxi_getExtension($filename));
-										
-						if (($extension != "txt")) 
-						{							
+
+						if (($extension != "txt"))
+						{
 							$this->errors->add('form-validation', __('Unknown File extension. Only txt files are permitted', 'wp_all_import_plugin'));
 						}
 						else {
@@ -209,7 +209,7 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 							if (!empty($import_data)){
 								$import_data = str_replace("\xEF\xBB\xBF", '', $import_data);
 								$templates_data = json_decode($import_data, true);
-								
+
 								if ( ! empty($templates_data) ){
 									if ( ! empty($templates_data[0]['options']) && is_array($templates_data[0]['options'])){
 										$templateOptions = $templates_data[0]['options'];
@@ -230,11 +230,11 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 												unset($template_data['id']);
 												$template->clear()->set($template_data)->insert();
 											}
-											wp_redirect(add_query_arg('pmxi_nt', urlencode(sprintf(_n('%d template imported', '%d templates imported', count($templates_data), 'wp_all_import_plugin'), count($templates_data))), $this->baseUrl)); die();
+											wp_redirect(esc_url_raw(add_query_arg('pmxi_nt', urlencode(sprintf(_n('%d template imported', '%d templates imported', count($templates_data), 'wp_all_import_plugin'), count($templates_data))), $this->baseUrl))); die();
 										}
 									}
 								}
-								else $this->errors->add('form-validation', __('Wrong imported data format', 'wp_all_import_plugin'));							
+								else $this->errors->add('form-validation', __('Wrong imported data format', 'wp_all_import_plugin'));
 							}
 							else $this->errors->add('form-validation', __('File is empty or doesn\'t exests', 'wp_all_import_plugin'));
 						}
@@ -249,34 +249,34 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 				if (empty($templates_ids)) {
 					$this->errors->add('form-validation', __('Templates must be selected', 'wp_all_import_plugin'));
 				}
-				
+
 				if ( ! $this->errors->get_error_codes()) { // no validation errors detected
 					if ($this->input->post('delete_templates')){
 						$template = new PMXI_Template_Record();
 						foreach ($templates_ids as $template_id) {
 							$template->clear()->set('id', $template_id)->delete();
 						}
-						wp_redirect(add_query_arg('pmxi_nt', urlencode(sprintf(_n('%d template deleted', '%d templates deleted', count($templates_ids), 'wp_all_import_plugin'), count($templates_ids))), $this->baseUrl)); die();
+						wp_redirect(esc_url_raw(add_query_arg('pmxi_nt', urlencode(sprintf(_n('%d template deleted', '%d templates deleted', count($templates_ids), 'wp_all_import_plugin'), count($templates_ids))), $this->baseUrl))); die();
 					}
 					if ($this->input->post('export_templates')){
 						$export_data = array();
 						$template = new PMXI_Template_Record();
 						foreach ($templates_ids as $template_id) {
 							$export_data[] = $template->clear()->getBy('id', $template_id)->toArray(TRUE);
-						}	
-						
+						}
+
 						$uploads = wp_upload_dir();
 						$targetDir = $uploads['basedir'] . DIRECTORY_SEPARATOR . PMXI_Plugin::TEMP_DIRECTORY;
 						$export_file_name = "templates_".uniqid().".txt";
 						file_put_contents($targetDir . DIRECTORY_SEPARATOR . $export_file_name, json_encode($export_data));
-						
+
 						PMXI_download::csv($targetDir . DIRECTORY_SEPARATOR . $export_file_name);
-						
-					}				
+
+					}
 				}
 			}
 		}
-		
+
 		$this->render();
 	}
 
@@ -288,7 +288,7 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 	protected function activate_licenses() {
 
 		// listen for our activate button to be clicked
-		if( isset( $_POST['pmxi_license_activate'] ) ) {			
+		if( isset( $_POST['pmxi_license_activate'] ) ) {
 
 			// retrieve the license from the database
 			$options = PMXI_Plugin::getInstance()->getOption();
@@ -301,8 +301,8 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 			$wpdb->query( $wpdb->prepare("DELETE FROM $wpdb->options WHERE option_name = %s", $this->slug . '_timeout_' . PMXI_Plugin::$cache_key) );
 
 			delete_site_transient('update_plugins');
-			
-			foreach ($_POST['pmxi_license_activate'] as $class => $val) {							
+
+			foreach ($_POST['pmxi_license_activate'] as $class => $val) {
 
 				if (!empty($options['licenses'][$class])){
 
@@ -310,15 +310,15 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 
 					if ( $product_name !== false ){
 						// data to send in our API request
-						$api_params = array( 
-							'edd_action'=> 'activate_license', 
+						$api_params = array(
+							'edd_action'=> 'activate_license',
 							'license' 	=> PMXI_Plugin::decode($options['licenses'][$class]),
 							'item_name' => urlencode( $product_name ), // the name of our product in EDD
 							'url' => home_url()
-						);								
-						
+						);
+
 						// Call the custom API.
-						$response = wp_remote_get( add_query_arg( $api_params, $options['info_api_url'] ), array( 'timeout' => 15, 'sslverify' => true ) );
+						$response = wp_remote_get( esc_url_raw(add_query_arg( $api_params, $options['info_api_url'] )), array( 'timeout' => 15, 'sslverify' => true ) );
 
 						// make sure the response came back okay
 						if ( is_wp_error( $response ) )
@@ -326,16 +326,16 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 
 						// decode the license data
 						$license_data = json_decode( wp_remote_retrieve_body( $response ) );
-						
+
 						// $license_data->license will be either "active" or "inactive"
 
 						$options['statuses'][$class] = $license_data->license;
-						
-						PMXI_Plugin::getInstance()->updateOption($options);	
+
+						PMXI_Plugin::getInstance()->updateOption($options);
 					}
 				}
 
-			}				
+			}
 
 		}
 	}
@@ -387,14 +387,14 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 
 			if ( $product_name !== false ){
 
-				$api_params = array( 
-					'edd_action' => 'check_license', 
+				$api_params = array(
+					'edd_action' => 'check_license',
 					'license' => PMXI_Plugin::decode($options['licenses'][$class]),
-					'item_name' => urlencode( $product_name ) 
+					'item_name' => urlencode( $product_name )
 				);
 
 				// Call the custom API.
-				$response = wp_remote_get( add_query_arg( $api_params, $options['info_api_url'] ), array( 'timeout' => 15, 'sslverify' => true ) );
+				$response = wp_remote_get( esc_url_raw(add_query_arg( $api_params, $options['info_api_url'] )), array( 'timeout' => 15, 'sslverify' => true ) );
 
 				if ( is_wp_error( $response ) )
 					return false;
@@ -402,7 +402,7 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 				$license_data = json_decode( wp_remote_retrieve_body( $response ) );
 
 				return $license_data->license;
-				
+
 			}
 		}
 
@@ -423,7 +423,7 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 
 		return $this->licenseActivator->checkLicense(PMXI_Plugin::getSchedulingName(), $options, \Wpai\App\Service\License\LicenseActivator::CONTEXT_SCHEDULING);
 	}
-	
+
 	public function cleanup( $is_cron = false ){
 
 		$removedFiles = 0;
@@ -445,7 +445,7 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 
 			wp_all_import_clear_directory( $dir );
 
-			wp_all_import_clear_directory( $cacheDir );		
+			wp_all_import_clear_directory( $cacheDir );
 
 			$msg = __('Clean Up has been successfully completed.', 'wp_all_import_plugin');
 		}
@@ -474,7 +474,7 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 		}
 
 		// clean uploads folder
-		$table = PMXI_Plugin::getInstance()->getTablePrefix() . 'files';		
+		$table = PMXI_Plugin::getInstance()->getTablePrefix() . 'files';
 		$files = $wpdb->get_results("SELECT * FROM $table", ARRAY_A);
 
 		$required_dirs = array();
@@ -484,11 +484,11 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 			$importRecord = new PMXI_Import_Record();
 			$importRecord->clear();
 			foreach ($files as $file) {
-				$importRecord->getById($file['import_id']);				
+				$importRecord->getById($file['import_id']);
 				if ( $importRecord->isEmpty()){
 					$fileRecord = new PMXI_File_Record();
-					$fileRecord->getById($file['id']);					
-					if ( ! $fileRecord->isEmpty() ) {						
+					$fileRecord->getById($file['id']);
+					if ( ! $fileRecord->isEmpty() ) {
 						$fileRecord->delete();
 					}
 				}
@@ -498,25 +498,25 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 					if ( ! empty($path_parts['dirname'])){
 			            $path_all_parts = explode('/', $path_parts['dirname']);
 			            $dirname = array_pop($path_all_parts);
-			            if ( wp_all_import_isValidMd5($dirname)){    
+			            if ( wp_all_import_isValidMd5($dirname)){
 			            	$required_dirs[] = $path_parts['dirname'];
 			            }
-			        }					
+			        }
 				}
 				$importRecord->clear();
-			}			
+			}
 		}
 
 		$uploads_dir = $wp_uploads['basedir'] . DIRECTORY_SEPARATOR . PMXI_Plugin::UPLOADS_DIRECTORY;
 
-		if (($dir = @opendir($uploads_dir . DIRECTORY_SEPARATOR)) !== false or ($dir = @opendir($uploads_dir)) !== false) {				
+		if (($dir = @opendir($uploads_dir . DIRECTORY_SEPARATOR)) !== false or ($dir = @opendir($uploads_dir)) !== false) {
 			while(($file = @readdir($dir)) !== false) {
-				$filePath = $uploads_dir . DIRECTORY_SEPARATOR . $file;									
-				
+				$filePath = $uploads_dir . DIRECTORY_SEPARATOR . $file;
+
 				if ( is_dir($filePath) and ! in_array($filePath, $required_dirs) and ( ! in_array($file, array('.', '..'))))
 				{
-					wp_all_import_rmdir($filePath);								
-				}						
+					wp_all_import_rmdir($filePath);
+				}
 			}
 		}
 
@@ -526,8 +526,8 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 		}
 		else
 		{
-			wp_redirect(add_query_arg('pmxi_nt', urlencode($msg), $this->baseUrl)); die();
-		}		
+			wp_redirect(esc_url_raw(add_query_arg('pmxi_nt', urlencode($msg), $this->baseUrl))); die();
+		}
 	}
 
 	public function dismiss(){
@@ -543,12 +543,12 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 
 		exit('OK');
 	}
-	
+
 	public function meta_values(){
 
 		if ( ! PMXI_Plugin::getInstance()->getAdminCurrentScreen()->is_ajax) { // call is only valid when send with ajax
 			exit('nice try!');
-		}				
+		}
 
 		if ( ! check_ajax_referer( 'wp_all_import_secure', 'security', false ) ){
 			exit( json_encode(array('meta_values' => array())) );
@@ -562,10 +562,10 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 			SELECT DISTINCT postmeta.meta_value
 			FROM ".$wpdb->postmeta." as postmeta
 			WHERE postmeta.meta_key='".$meta_key."' LIMIT 0,10
-		", ARRAY_A);		
+		", ARRAY_A);
 
 		$meta_values = array();
-		
+
 		if ( ! empty($r) ){
 			foreach ($r as $key => $value) { if (empty($value['meta_value'])) continue;
 				$meta_values[] = esc_html($value['meta_value']);
@@ -584,7 +584,7 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 	 * License: http://www.plupload.com/license
 	 * Contributing: http://www.plupload.com/contributing
 	 */
-	public function upload(){			
+	public function upload(){
 
 		if ( ! check_ajax_referer( 'wp_all_import_secure', '_wpnonce', false )){
 			exit(json_encode(array("jsonrpc" => "2.0", "error" => array("code" => 100, "message" => __('Security check', 'wp_all_import_plugin')), "id" => "id")));
@@ -605,7 +605,7 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 		$maxFileAge = 5 * 3600; // Temp file age in seconds
 
 		// 5 minutes execution time
-		@set_time_limit(5 * 60);		
+		@set_time_limit(5 * 60);
 
 		// Uncomment this one to fake upload time
 		// usleep(5000);
@@ -641,7 +641,7 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 		if (!file_exists($targetDir))
 			@mkdir($targetDir);
 
-		// Remove old temp files	
+		// Remove old temp files
 		if ($cleanupTargetDir && is_dir($targetDir) && ($dir = opendir($targetDir))) {
 			while (($file = readdir($dir)) !== false) {
 				$tmpfilePath = $targetDir . DIRECTORY_SEPARATOR . $file;
@@ -657,7 +657,7 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 			delete_transient( self::$upload_transient );
 			exit(json_encode(array("jsonrpc" => "2.0", "error" => array("code" => 100, "message" => __("Failed to open temp directory.", "wp_all_import_plugin")), "id" => "id")));
 		}
-			
+
 
 		// Look for the content type header
 		if (isset($_SERVER["HTTP_CONTENT_TYPE"]))
@@ -667,7 +667,7 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 			$contentType = $_SERVER["CONTENT_TYPE"];
 
 		// Handle non multipart uploads older WebKit versions didn't support multipart in HTML5
-		if (strpos($contentType, "multipart") !== false) {			
+		if (strpos($contentType, "multipart") !== false) {
 			if (isset($_FILES['async-upload']['tmp_name']) && is_uploaded_file($_FILES['async-upload']['tmp_name'])) {
 				// Open temp file
 				$out = fopen("{$filePath}.part", $chunk == 0 ? "wb" : "ab");
@@ -686,7 +686,7 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 					fclose($out);
 					@unlink($_FILES['async-upload']['tmp_name']);
 				} else {
-					delete_transient( self::$upload_transient );					
+					delete_transient( self::$upload_transient );
 					exit(json_encode(array("jsonrpc" => "2.0", "error" => array("code" => 102, "message" => __("Failed to open output stream.", "wp_all_import_plugin")), "id" => "id")));
 				}
 			} else{
@@ -715,7 +715,7 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 				exit(json_encode(array("jsonrpc" => "2.0", "error" => array("code" => 102, "message" => __("Failed to open output stream.", "wp_all_import_plugin")), "id" => "id")));
 			}
 		}
-		
+
 		$post_type = false;
 
 		$taxonomy_type = false;
@@ -727,7 +727,7 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 
 		// Check if file has been uploaded
 		if (!$chunks || $chunk == $chunks - 1) {
-			// Strip the temp .part suffix off 
+			// Strip the temp .part suffix off
 			$res = rename("{$filePath}.part", $filePath);
 			if (!$res){
 				@copy("{$filePath}.part", $filePath);
@@ -738,9 +738,9 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 
 			$errors = new WP_Error;
 
-			$uploader = new PMXI_Upload($filePath, $errors, rtrim(str_replace(basename($filePath), '', $filePath), '/'));			
-			
-			$upload_result = $uploader->upload();			
+			$uploader = new PMXI_Upload($filePath, $errors, rtrim(str_replace(basename($filePath), '', $filePath), '/'));
+
+			$upload_result = $uploader->upload();
 
 			if ($upload_result instanceof WP_Error){
 
@@ -766,13 +766,13 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 					switch ( $post_type ) {
 						case 'shop_order':
 							if ( ! class_exists('WooCommerce') ) {
-								$notice = __('<p class="wpallimport-bundle-notice">The import bundle you are using requires WooCommerce.</p><a class="upgrade_link" href="https://wordpress.org/plugins/woocommerce/" target="_blank">Get WooCommerce</a>.', 'wp_all_import_plugin');							
+								$notice = __('<p class="wpallimport-bundle-notice">The import bundle you are using requires WooCommerce.</p><a class="upgrade_link" href="https://wordpress.org/plugins/woocommerce/" target="_blank">Get WooCommerce</a>.', 'wp_all_import_plugin');
 							} else {
 								if ( ! defined('PMWI_EDITION') ) {
 									$notice = __('<p class="wpallimport-bundle-notice">The import bundle you are using requires the Pro version of the WooCommerce Add-On.</p><a href="https://www.wpallimport.com/checkout/?edd_action=add_to_cart&download_id=2707227&edd_options%5Bprice_id%5D=1" class="upgrade_link" target="_blank">Purchase the WooCommerce Add-On</a>.', 'wp_all_import_plugin');
 								} elseif ( PMWI_EDITION != 'paid' ) {
 									$notice = __('<p class="wpallimport-bundle-notice">The import bundle you are using requires the Pro version of the WooCommerce Add-On, but you have the free version installed.</p><a href="https://www.wpallimport.com/checkout/?edd_action=add_to_cart&download_id=2707227&edd_options%5Bprice_id%5D=1" target="_blank" class="upgrade_link">Purchase the WooCommerce Add-On</a>.', 'wp_all_import_plugin');
-								}							
+								}
 							}
 							break;
 						case 'import_users':
@@ -782,7 +782,7 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 							break;
 						case 'shop_customer':
 							if ( ! class_exists('WooCommerce') ) {
-								$notice = __('<p class="wpallimport-bundle-notice">The import bundle you are using requires WooCommerce.</p><a class="upgrade_link" href="https://wordpress.org/plugins/woocommerce/" target="_blank">Get WooCommerce</a>.', 'wp_all_import_plugin');							
+								$notice = __('<p class="wpallimport-bundle-notice">The import bundle you are using requires WooCommerce.</p><a class="upgrade_link" href="https://wordpress.org/plugins/woocommerce/" target="_blank">Get WooCommerce</a>.', 'wp_all_import_plugin');
 							} elseif ( ! class_exists('PMUI_Plugin') ) {
 								$notice = __('<p class="wpallimport-bundle-notice">The import bundle you are using requires the User Add-On.</p><p class="wpallimport-upgrade-links-container"><a href="https://www.wpallimport.com/checkout/?edd_action=add_to_cart&download_id=2707221&edd_options%5Bprice_id%5D=1" target="_blank" class="upgrade_link">Purchase the User Add-On</a></p>', 'wp_all_import_plugin');
 							}
@@ -790,7 +790,7 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 						default:
 							# code...
 							break;
-					}					
+					}
 				}
 
 				if ( ! empty($upload_result['is_empty_bundle_file'])) {
@@ -799,8 +799,8 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 				}
 				else {
 
-					// validate XML					
-					$file = new PMXI_Chunk($upload_result['filePath'], array('element' => $upload_result['root_element']));										    					    					   												
+					// validate XML
+					$file = new PMXI_Chunk($upload_result['filePath'], array('element' => $upload_result['root_element']));
 
 					$is_valid = true;
 
@@ -815,7 +815,7 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 
 						while ($xml = $file->read()) {
 
-					    	if ( ! empty($xml) ) { 
+					    	if ( ! empty($xml) ) {
 
 					      		//PMXI_Import_Record::preprocessXml($xml);
 					      		$xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" . "\n" . $xml;
@@ -827,7 +827,7 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 
 								if (($elements = $xpath->query($defaultXpath)) and $elements->length){
 									break;
-								}	
+								}
 
 						    }
 						}
@@ -839,15 +839,15 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 					unset($file);
 
 					if ( ! preg_match('%\W(xml)$%i', trim($upload_result['source']['path']))) @unlink($upload_result['filePath']);
-					
+
 					if ( ! $is_valid ) {
 
-						ob_start();					
-						
+						ob_start();
+
 						?>
-						
+
 						<div class="error inline"><p><?php _e('Please confirm you are importing a valid feed.<br/> Often, feed providers distribute feeds with invalid data, improperly wrapped HTML, line breaks where they should not be, faulty character encodings, syntax errors in the XML, and other issues.<br/><br/>WP All Import has checks in place to automatically fix some of the most common problems, but we can’t catch every single one.<br/><br/>It is also possible that there is a bug in WP All Import, and the problem is not with the feed.<br/><br/>If you need assistance, please contact support – <a href="mailto:support@wpallimport.com">support@wpallimport.com</a> – with your XML/CSV file. We will identify the problem and release a bug fix if necessary.', 'wp_all_import_plugin'); ?></p></div>
-						
+
 						<?php
 
 						$response = ob_get_clean();
@@ -857,7 +857,7 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 						$error_message = sprintf(__("This %s file has errors and is not valid.", "wp_all_import_plugin"), $file_type);
 
 						exit(json_encode(array("jsonrpc" => "2.0", "error" => array("code" => 102, "message" => $error_message), "is_valid" => false, "id" => "id")));
-					
+
 					}
 					else {
 					    $copyFileAllowed = apply_filters('wp_all_import_copy_uploaded_file_into_files_folder', true);
@@ -871,11 +871,11 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 					}
 				}
 			}
-		}			
+		}
 
 		// Return JSON-RPC response
 		exit(json_encode(array("jsonrpc" => "2.0", "error" => null, "result" => null, "id" => "id", "name" => $filePath, "post_type" => $post_type, "taxonomy_type" => $taxonomy_type, "gravity_form_title" => $gravity_form_title, "notice" => $notice)));
 
-	}		
+	}
 
 }

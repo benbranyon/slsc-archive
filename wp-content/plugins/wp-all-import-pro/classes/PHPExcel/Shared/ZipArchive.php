@@ -3,8 +3,8 @@
 if (!defined('PCLZIP_TEMPORARY_DIR')) {
     define('PCLZIP_TEMPORARY_DIR', PHPExcel_Shared_File::sys_get_temp_dir() . DIRECTORY_SEPARATOR);
 }
-require_once PHPEXCEL_ROOT . 'PHPExcel/Shared/PCLZip/pclzip.lib.php';
 
+if (!class_exists('WpaiPclZip')) require_once(PMXI_Plugin::ROOT_DIR.'/libraries/wpaipclzip.lib.php');
 /**
  * PHPExcel_Shared_ZipArchive
  *
@@ -62,7 +62,7 @@ class PHPExcel_Shared_ZipArchive
     public function open($fileName)
     {
         $this->tempDir = PHPExcel_Shared_File::sys_get_temp_dir();
-        $this->zip = new PclZip($fileName);
+        $this->zip = new WpaiPclZip($fileName);
 
         return true;
     }

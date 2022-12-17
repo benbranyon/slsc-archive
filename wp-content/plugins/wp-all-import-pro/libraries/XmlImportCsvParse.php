@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 class PMXI_CsvParser
 {
@@ -22,9 +22,9 @@ class PMXI_CsvParser
 
     $xpath = '',
 
-    $delimiter = '',    
+    $delimiter = '',
 
-    $htmlentities = false,    
+    $htmlentities = false,
 
     $xml_path = '',
 
@@ -76,11 +76,11 @@ class PMXI_CsvParser
     public function __construct( $options = array('filename' => null, 'xpath' => '', 'delimiter' => '', 'encoding' => '', 'xml_path' => '', 'targetDir' => false) ) {
 
         PMXI_Plugin::$csv_path = $options['filename'];
-        
-        $this->xpath = (!empty($options['xpath']) ? $options['xpath'] : ((!empty($_POST['xpath'])) ? $_POST['xpath'] : '/node'));        
-            
+
+        $this->xpath = (!empty($options['xpath']) ? $options['xpath'] : ((!empty($_POST['xpath'])) ? $_POST['xpath'] : '/node'));
+
         if ( ! empty($options['delimiter']) ){
-            $this->delimiter = $options['delimiter'];    
+            $this->delimiter = $options['delimiter'];
         } else {
             $input = new PMXI_Input();
             $id = $input->get('id', 0);
@@ -94,24 +94,26 @@ class PMXI_CsvParser
                     $this->delimiter = empty($import->options['delimiter']) ? '' : $import->options['delimiter'];
                 }
             }
-        }        
-        if ( ! empty($options['encoding'])){ 
+        }
+        if ( ! empty($options['encoding'])){
             $this->csv_encoding = $options['encoding'];
             $this->auto_encoding = false;
         }
         if (!empty($options['xml_path'])) $this->xml_path = $options['xml_path'];
 
         @ini_set( "display_errors", 0);
-        @ini_set('auto_detect_line_endings', true);        
-        
+        if (version_compare(phpversion(), '8.1', '<')) {
+            @ini_set( 'auto_detect_line_endings', true );
+        }
+
         $file_params = self::analyse_file($options['filename'], 1);
 
-        $this->set_settings(array('delimiter' => $file_params['delimiter']['value'], 'eol' => $file_params['line_ending']['value']));        
+        $this->set_settings(array('delimiter' => $file_params['delimiter']['value'], 'eol' => $file_params['line_ending']['value']));
 
         unset($file_params);
 
         $wp_uploads = wp_upload_dir();
-        
+
         $this->targetDir = (empty($options['targetDir'])) ? wp_all_import_secure_file($wp_uploads['basedir'] . DIRECTORY_SEPARATOR . PMXI_Plugin::UPLOADS_DIRECTORY) : $options['targetDir'];
 
         $this->load($options['filename']);
@@ -184,7 +186,7 @@ class PMXI_CsvParser
      *
      * Attempts to create a relationship for every single cell that
      * was captured and its corresponding header. The sample below shows
-     * how a connection/relationship is built.    
+     * how a connection/relationship is built.
      *
      * @param array $columns the columns to connect, if nothing
      * is given all headers will be used to create a connection
@@ -470,7 +472,7 @@ class PMXI_CsvParser
     /**
      * column remover
      *
-     * Completly removes a whole column identified by $name    
+     * Completly removes a whole column identified by $name
      *
      * @param string $name same as the ones returned by getHeaders();
      *
@@ -543,7 +545,7 @@ class PMXI_CsvParser
     /**
      * cell fetcher
      *
-     * gets the value of a specific cell by given coordinates     
+     * gets the value of a specific cell by given coordinates
      *
      * @param integer $x the row to fetch
      * @param integer $y the column to fetch
@@ -565,7 +567,7 @@ class PMXI_CsvParser
     /**
      * cell value filler
      *
-     * replaces the value of a specific cell      
+     * replaces the value of a specific cell
      *
      * @param integer $x     the row to fetch
      * @param integer $y     the column to fetch
@@ -587,7 +589,7 @@ class PMXI_CsvParser
     }
 
     /**
-     * checks if a coordinate is valid   
+     * checks if a coordinate is valid
      *
      * @param mixed $x the row to fetch
      * @param mixed $y the column to fetch
@@ -605,7 +607,7 @@ class PMXI_CsvParser
     /**
      * row fetcher
      *
-     * Note: first row is zero       
+     * Note: first row is zero
      *
      * @param integer $number the row number to fetch
      *
@@ -629,7 +631,7 @@ class PMXI_CsvParser
      *   - all rows if no $range argument is given
      *   - a range of rows identified by their key
      *   - if rows in range are not found nothing is retrived instead
-     *   - if no rows were found an empty array is returned  
+     *   - if no rows were found an empty array is returned
      *
      * @param array $range a list of rows to retrive
      *
@@ -688,7 +690,7 @@ class PMXI_CsvParser
     /**
      * fillRow
      *
-     * Replaces the contents of cells in one given row with $values.       
+     * Replaces the contents of cells in one given row with $values.
      *
      * @param integer $row    the row to fill identified by its key
      * @param mixed   $values the value to use, if a string or number
@@ -727,7 +729,7 @@ class PMXI_CsvParser
      * row existance checker
      *
      * Scans currently loaded dataset and
-     * checks if a given row identified by $number exists       
+     * checks if a given row identified by $number exists
      *
      * @param mixed $number a numeric value that identifies the row
      * you are trying to fetch.
@@ -745,7 +747,7 @@ class PMXI_CsvParser
      * row remover
      *
      * removes one row from the current data set.
-     *  
+     *
      *
      * @param mixed $number the key that identifies that row
      *
@@ -819,7 +821,7 @@ class PMXI_CsvParser
     public function getRawArray()
     {
         $ret_arr   = array();
-        
+
         foreach ($this->rows as $key => $row) {
             $item = array();
             foreach ($this->headers as $col => $value) {
@@ -829,12 +831,12 @@ class PMXI_CsvParser
             unset($item);
         }
         return $ret_arr;
-    }    
+    }
 
     // Fixes the encoding to uf8
     function fixEncoding($in_str)
-    {   
-        
+    {
+
         if (function_exists('mb_detect_encoding') and function_exists('mb_check_encoding')){
 
             $cur_encoding = mb_detect_encoding($in_str) ;
@@ -842,20 +844,20 @@ class PMXI_CsvParser
             if ( $cur_encoding == "UTF-8" && mb_check_encoding($in_str,"UTF-8") ){
                 return $in_str;
             }
-            else 
+            else
                 return utf8_encode($in_str);
 
         }
 
-        return $in_str;        
-        
-    } // fixEncoding 
+        return $in_str;
+
+    } // fixEncoding
 
     /**
      * header creator
      *
      * uses prefix and creates a header for each column suffixed by a
-     * numeric value  
+     * numeric value
      *
      * @param string $prefix string to use as prefix for each
      * independent header
@@ -919,9 +921,9 @@ class PMXI_CsvParser
      * @return boolean
      */
     protected function parse() {
-        if (!$this->validates()) {            
+        if (!$this->validates()) {
             return false;
-        }                      
+        }
 
         $tmpname = wp_unique_filename($this->targetDir, str_replace("csv", "xml", basename($this->_filename)));
         if ("" == $this->xml_path) {
@@ -941,19 +943,19 @@ class PMXI_CsvParser
         $e = $this->settings['escape'];
         $l = $this->settings['length'];
 
-        $this->is_csv = $d;          
+        $this->is_csv = $d;
 
         $is_html = false;
-        $f = @fopen($this->_filename, "rb");       
+        $f = @fopen($this->_filename, "rb");
         while (!@feof($f)) {
-          $chunk = @fread($f, 1024);         
+          $chunk = @fread($f, 1024);
           if (strpos($chunk, "<!DOCTYPE") === 0) $is_html = true;
-          break;      
-        }  
+          break;
+        }
 
         if ($is_html) return;
 
-        $res = fopen($this->_filename, 'rb');                    
+        $res = fopen($this->_filename, 'rb');
 
         $xmlWriter = new XMLWriter();
         $xmlWriter->openURI($this->xml_path);
@@ -961,16 +963,19 @@ class PMXI_CsvParser
         $xmlWriter->setIndentString("\t");
         $xmlWriter->startDocument('1.0', $this->csv_encoding);
         $xmlWriter->startElement('data');
-        
+
         $import_id = 0;
 
         if ( ! empty($_GET['id']) ) $import_id = $_GET['id'];
 
-        if ( ! empty($_GET['import_id']) ) $import_id = $_GET['import_id'];        
+        if ( ! empty($_GET['import_id']) ) $import_id = $_GET['import_id'];
 
         $create_new_headers = false;
         $skip_x_rows = apply_filters('wp_all_import_skip_x_csv_rows', false, $import_id);
         $headers = array();
+        if ($d === "\\t") {
+            $d = "\t";
+        }
         while ($keys = fgetcsv($res, $l, $d, $en, $e)) {
 
             if ($skip_x_rows !== false && $skip_x_rows > $c) {
@@ -1010,11 +1015,11 @@ class PMXI_CsvParser
                     }
 
                     $keys[$key] = ($headers[$value] === 1) ? $value : $value . '_' . $headers[$value];
-                }            
+                }
                 $this->headers = $keys;
                 $create_new_headers = apply_filters('wp_all_import_auto_create_csv_headers', $create_new_headers, $import_id);
                 if ($create_new_headers) {
-                    $this->createHeaders('column');      
+                    $this->createHeaders('column');
                     $keys = $buf_keys;
                 }
             }
@@ -1033,23 +1038,23 @@ class PMXI_CsvParser
                                 $value = preg_replace('/\]\]>/s', '', preg_replace('/<!\[CDATA\[/s', '', $value ));
                                 if ($fixBrokenSymbols) {
                                     // Remove non ASCII symbols and write CDATA.
-                                    $xmlWriter->writeCData(preg_replace('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $value));                                                                                              
+                                    $xmlWriter->writeCData(preg_replace('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $value));
                                 }
                                 else {
-                                    $xmlWriter->writeCData($value);                                
+                                    $xmlWriter->writeCData($value);
                                 }
                             $xmlWriter->endElement();
-                        }                            
-                        $xmlWriter->endElement();                        
-                    }                                        
-                }                
+                        }
+                        $xmlWriter->endElement();
+                    }
+                }
             }
             $c++;
         }
 
         if ($c === 1 && !$create_new_headers) {
             $xmlWriter->startElement('node');
-            $xmlWriter->endElement();    
+            $xmlWriter->endElement();
         }
         fclose($res);
         $xmlWriter->endElement();
@@ -1149,7 +1154,7 @@ class PMXI_CsvParser
     {
         $this->rows    = array();
         $this->headers = array();
-    }    
+    }
 
     function analyse_file($file, $capture_limit_in_kb = 10) {
         // capture starting memory usage
@@ -1157,22 +1162,22 @@ class PMXI_CsvParser
 
         // log the limit how much of the file was sampled (in Kb)
         $output['read_kb']                 = $capture_limit_in_kb;
-       
+
         // read in file
-        $fh = fopen($file, 'r');        
+        $fh = fopen($file, 'r');
             $contents = fgets($fh);
         fclose($fh);
-       
+
         // specify allowed field delimiters
         $delimiters = array(
             'comma'     => ',',
-            'semicolon' => ';',            
+            'semicolon' => ';',
             'pipe'         => '|',
             'tabulation' => "\t"
         );
 
         $delimiters = apply_filters('wp_all_import_specified_delimiters', $delimiters);
-       
+
         // specify allowed line endings
         $line_endings = array(
             'rn'         => "\r\n",
@@ -1180,46 +1185,46 @@ class PMXI_CsvParser
             'r'         => "\r",
             'nr'         => "\n\r"
         );
-       
+
         // loop and count each line ending instance
         foreach ($line_endings as $key => $value) {
             $line_result[$key] = substr_count($contents, $value);
         }
-       
+
         // sort by largest array value
         asort($line_result);
-       
+
         // log to output array
         $output['line_ending']['results']   = $line_result;
         $output['line_ending']['count']     = end($line_result);
         $output['line_ending']['key']       = key($line_result);
         $output['line_ending']['value']     = $line_endings[$output['line_ending']['key']];
         $lines = explode($output['line_ending']['value'], $contents);
-       
+
         // remove last line of array, as this maybe incomplete?
         array_pop($lines);
-       
+
         // create a string from the legal lines
         $complete_lines = implode(' ', $lines);
-       
+
         // log statistics to output array
         $output['lines']['count']     = count($lines);
         $output['lines']['length']     = strlen($complete_lines);
-       
+
         // loop and count each delimiter instance
         foreach ($delimiters as $delimiter_key => $delimiter) {
             $delimiter_result[$delimiter_key] = substr_count($complete_lines, $delimiter);
         }
-       
+
         // sort by largest array value
         asort($delimiter_result);
-       
+
         // log statistics to output array with largest counts as the value
         $output['delimiter']['results']     = $delimiter_result;
         $output['delimiter']['count']         = end($delimiter_result);
         $output['delimiter']['key']         = key($delimiter_result);
         $output['delimiter']['value']         = $delimiters[$output['delimiter']['key']];
-       
+
         // capture ending memory usage
         $output['peak_mem']['end'] = memory_get_peak_usage(true);
 

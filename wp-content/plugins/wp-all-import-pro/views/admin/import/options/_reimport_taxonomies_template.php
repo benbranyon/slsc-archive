@@ -10,46 +10,46 @@ if (empty($custom_type)){
 <div class="wpallimport-collapsed wpallimport-section">
 	<script type="text/javascript">
 		__META_KEYS = <?php echo json_encode($existing_meta_keys) ?>;
-	</script>	
+	</script>
 	<div class="wpallimport-content-section">
-		<div class="wpallimport-collapsed-header">					
-		<?php 		
-		if ( "new" == $post['wizard_type']): ?>	
-			<?php 
+		<div class="wpallimport-collapsed-header">
+		<?php
+		if ( "new" == $post['wizard_type']): ?>
+			<?php
 				if ( ! $this->isWizard )
 				{
 					?>
-					<h3><?php _e('Record Matching', 'wp_all_import_plugin'); ?></h3>	
-					<?php 
+					<h3><?php _e('Record Matching', 'wp_all_import_plugin'); ?></h3>
+					<?php
 				}
 				else
-				{ 					
+				{
 					if ( ! empty(PMXI_Plugin::$session->deligate) and PMXI_Plugin::$session->deligate == 'wpallexport' )
 					{
 						?>
-						<h3 style="padding-left:0;"><?php _e('Choose how exported data will be re-imported.','wp_all_import_plugin');?></h3>	
-						<?php 
+						<h3 style="padding-left:0;"><?php _e('Choose how exported data will be re-imported.','wp_all_import_plugin');?></h3>
+						<?php
 					}
 					else
 					{
 						?>
-						<h3 style="padding-left:0;"><?php printf(__('WP All Import will create new %s for each unique record in your file.','wp_all_import_plugin'), $custom_type->labels->singular_name);?></h3>
-						<?php 
+						<h3 style="padding-left:0;"><?php printf(__('WP All Import will create new %s for each unique record in this import file.','wp_all_import_plugin'), $custom_type->labels->singular_name);?></h3>
+						<?php
 					}
-				} 
-			?>			
+				}
+			?>
 			</div>
 			<div class="wpallimport-collapsed-content" style="padding: 0;">
-				<div class="wpallimport-collapsed-content-inner">					
+				<div class="wpallimport-collapsed-content-inner">
 					<table class="form-table" style="max-width:none;">
 						<tr>
 							<td>
-								<input type="hidden" name="duplicate_matching" value="auto"/>										
-								<?php if ( ! $this->isWizard ):?>												 
-								<h4><?php printf(__('WP All Import will associate records in your file with %s it has already created from previous runs of this import based on the Unique Identifier.','wp_all_import_plugin'), $custom_type->labels->name);?></h4>
+								<input type="hidden" name="duplicate_matching" value="auto"/>
+								<?php if ( ! $this->isWizard ):?>
+								<h4><?php printf(__('WP All Import will associate records in this import file with %s it has already created from previous runs of this import based on the Unique Identifier.','wp_all_import_plugin'), $custom_type->labels->name);?></h4>
 								<?php endif; ?>
 								<div class="wpallimport-unique-key-wrapper" <?php if (!empty(PMXI_Plugin::$session->deligate)):?>style="display:none;"<?php endif; ?>>
-									<label style="font-weight: bold;"><?php _e("Unique Identifier", "pmxi_plugin"); ?></label>										
+									<label style="font-weight: bold;"><?php _e("Unique Identifier", "pmxi_plugin"); ?></label>
 
 									<input type="text" class="smaller-text" name="unique_key" style="width:300px;" value="<?php if ( ! $this->isWizard ) echo esc_attr($post['unique_key']); elseif ($post['tmp_unique_key']) echo esc_attr($post['unique_key']); ?>" <?php echo  ( ! $isWizard and ! empty($post['unique_key']) ) ? 'disabled="disabled"' : '' ?>/>
 
@@ -70,35 +70,35 @@ if (empty($custom_type)){
 										<?php endif; ?>
 									<?php endif; ?>
 
-									<p>&nbsp;</p>
 									<?php if ( $this->isWizard ):?>
-										<p class="drag_an_element_ico"><?php _e('Drag an element, or combo of elements, to the box above. The Unique Identifier should be unique for each record in your file, and should stay the same even if your file is updated. Things like product IDs, titles, and SKUs are good Unique Identifiers because they probably won\'t change. Don\'t use a description or price, since that might be changed.', 'wp_all_import_plugin'); ?></p>
-										<p class="info_ico"><?php printf(__('If you run this import again with an updated file, the Unique Identifier allows WP All Import to correctly link the records in your updated file with the %s it will create right now. If multiple records in this file have the same Unique Identifier, only the first will be created. The others will be detected as duplicates.', 'wp_all_import_plugin'), $custom_type->labels->name); ?></p>
+                                        <p>&nbsp;</p>
+										<p class="drag_an_element_ico"><?php _e('Drag an element, or combo of elements, to the box above. The Unique Identifier should be unique for each record in this import file, and should stay the same even if this import file is updated. Things like product IDs, titles, and SKUs are good Unique Identifiers because they probably won\'t change. Don\'t use a description or price, since that might be changed.', 'wp_all_import_plugin'); ?></p>
+										<p class="info_ico"><?php printf(__('If you run this import again with an updated file, the Unique Identifier allows WP All Import to correctly link the records in your updated file with the %s it will create right now. If multiple records in this import file have the same Unique Identifier, only the first will be created. The others will be detected as duplicates.', 'wp_all_import_plugin'), $custom_type->labels->name); ?></p>
 									<?php endif; ?>
-								</div>													
-								
+								</div>
+
 								<?php include( '_reimport_taxonomies_options.php' ); ?>
-								
+
 							</td>
 						</tr>
 					</table>
 				</div>
-			</div>		
+			</div>
 		<?php else: ?>
 			<?php if ( ! $this->isWizard ):?>
-				<h3><?php _e('Record Matching', 'wp_all_import_plugin'); ?></h3>					
+				<h3><?php _e('Record Matching', 'wp_all_import_plugin'); ?></h3>
 			<?php else: ?>
-				<h3 style="padding-left:0;"><?php printf(__('WP All Import will merge data into existing %s.','wp_all_import_plugin'), $custom_type->labels->name);?></h3>	
+				<h3 style="padding-left:0;"><?php printf(__('WP All Import will merge data into existing %s.','wp_all_import_plugin'), $custom_type->labels->name);?></h3>
 			<?php endif; ?>
 			</div>
-			<div class="wpallimport-collapsed-content" style="padding:0;">				
-				<div class="wpallimport-collapsed-content-inner">					
+			<div class="wpallimport-collapsed-content" style="padding:0;">
+				<div class="wpallimport-collapsed-content-inner">
 					<table class="form-table" style="max-width:none;">
 						<tr>
-							<td>						
-								<div class="input" style="margin-bottom:15px; position:relative;">					
+							<td>
+								<div class="input" style="margin-bottom:15px; position:relative;">
 									<input type="hidden" name="duplicate_matching" value="manual"/>
-									<h4><?php printf(__('Records in your file will be matched with %s on your site based on...', 'wp_all_import_plugin' ), $custom_type->labels->singular_name);?></h4>
+									<h4><?php printf(__('Records in this import file will be matched with %s on your site based on...', 'wp_all_import_plugin' ), $custom_type->labels->singular_name);?></h4>
 									<div style="margin-left: -4px;">
 										<div class="input">
 											<div class="input">
@@ -134,13 +134,13 @@ if (empty($custom_type)){
 											</div>
 										</div>
 									</div>
-								</div>								
+								</div>
 								<?php include( '_reimport_taxonomies_options.php' ); ?>
 							</td>
 						</tr>
 					</table>
 				</div>
-			</div>			
-		<?php endif; ?>	
+			</div>
+		<?php endif; ?>
 	</div>
 </div>

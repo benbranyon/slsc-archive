@@ -48,7 +48,7 @@ $columns = array(
 $columns = apply_filters('pmxi_manage_imports_columns', $columns);
 
 ?>
-<form method="post" id="import-list" action="<?php echo remove_query_arg('pmxi_nt') ?>">
+<form method="post" id="import-list" action="<?php echo esc_url(remove_query_arg('pmxi_nt')) ?>">
 	<input type="hidden" name="action" value="bulk" />
 	<?php wp_nonce_field('bulk-imports', '_wpnonce_bulk-imports') ?>
 
@@ -174,32 +174,38 @@ $columns = apply_filters('pmxi_manage_imports_columns', $columns);
 												}
 											}
 											?>
-											<em><a href="<?php echo add_query_arg(array('id' => $item['id'], 'action' => 'feed', '_wpnonce' => wp_create_nonce( '_wpnonce-download_feed' )), $this->baseUrl); ?>" class="wp_all_import_show_path" rel="<?php echo $item['path']; ?>"><?php echo preg_replace('%.*wp-content/%', 'wp-content/', $path); ?></a></em>
+											<em><a href="<?php echo esc_url(add_query_arg(array('id' => $item['id'], 'action' => 'feed', '_wpnonce' => wp_create_nonce( '_wpnonce-download_feed' )), $this->baseUrl)); ?>" class="wp_all_import_show_path" rel="<?php echo $item['path']; ?>"><?php echo preg_replace('%.*wp-content/%', 'wp-content/', $path); ?></a></em>
                                         <?php elseif ( in_array($item['type'], array('ftp'))): ?>
                                             <em><?php echo $item['options']['ftp_username'] . '@' . preg_replace('%^ftps?://%i', '', $item['options']['ftp_host']) . '/' . $item['options']['ftp_path'];?></em>
 										<?php elseif (in_array($item['type'], array('file'))):?>
 											<?php $item['path'] = wp_all_import_get_absolute_path($item['path']); ?>
-											<em><a href="<?php echo add_query_arg(array('id' => $item['id'], 'action' => 'feed', '_wpnonce' => wp_create_nonce( '_wpnonce-download_feed' )), $this->baseUrl); ?>" class="wp_all_import_show_path" rel="<?php echo $item['path']; ?>"><?php echo preg_replace('%.*wp-content/%', 'wp-content/', $item['path']); ?></a></em>
+											<em><a href="<?php echo esc_url(add_query_arg(array('id' => $item['id'], 'action' => 'feed', '_wpnonce' => wp_create_nonce( '_wpnonce-download_feed' )), $this->baseUrl)); ?>" class="wp_all_import_show_path" rel="<?php echo $item['path']; ?>"><?php echo preg_replace('%.*wp-content/%', 'wp-content/', $item['path']); ?></a></em>
 										<?php else: ?>
 										<em><?php echo str_replace("\\", '/', preg_replace('%^(\w+://[^:]+:)[^@]+@%', '$1*****@', $item['path'])); ?></em>
 										<?php endif; ?>
 									<?php endif ?>
+
+									<?php $delete_missing_notice = wp_all_import_delete_missing_notice($item['options']); ?>
+									<?php if (!empty($delete_missing_notice)): ?>
+                                        <div class="wpai-row-notice" style="padding-top:10px;"><p><?php echo $delete_missing_notice; ?></p></div>
+									<?php endif; ?>
+
 									<div class="row-actions">
 										<?php do_action('pmxi_import_menu', $item['id'], $this->baseUrl); ?>
 										<?php
 											$import_actions = array(
 												'import_template' => array(
-													'url' => ( ! $item['processing'] and ! $item['executing'] ) ? add_query_arg(array('id' => $item['id'], 'action' => 'edit'), $this->baseUrl) : '',
+													'url' => ( ! $item['processing'] and ! $item['executing'] ) ? esc_url(add_query_arg(array('id' => $item['id'], 'action' => 'edit'), $this->baseUrl)) : '',
 													'title' => __('Edit Template', 'wp_all_import_plugin'),
 													'class' => 'edit'
 												),
 												'import_settings' => array(
-													'url' => ( ! $item['processing'] and ! $item['executing'] ) ? add_query_arg(array('id' => $item['id'], 'action' => 'options'), $this->baseUrl) : '',
+													'url' => ( ! $item['processing'] and ! $item['executing'] ) ? esc_url(add_query_arg(array('id' => $item['id'], 'action' => 'options'), $this->baseUrl)) : '',
 													'title' => __('Settings', 'wp_all_import_plugin'),
 													'class' => 'edit'
 												),
 												'delete' => array(
-													'url' => add_query_arg(array('id' => $item['id'], 'action' => 'delete'), $this->baseUrl),
+													'url' => esc_url(add_query_arg(array('id' => $item['id'], 'action' => 'delete'), $this->baseUrl)),
 													'title' => __('Delete', 'wp_all_import_plugin'),
 													'class' => 'delete'
 												),
@@ -329,7 +335,18 @@ $columns = apply_filters('pmxi_manage_imports_columns', $columns);
 										}
 										printf(__('Last run: %s', 'wp_all_import_plugin'), ($item['registered_on'] == '0000-00-00 00:00:00') ? __('never', 'wp_all_import_plugin') : get_date_from_gmt($item['registered_on'], "m/d/Y g:i a")); echo '<br/>';
 										printf(__('%d %s created', 'wp_all_import_plugin'), $item['created'], $cpt_name); echo '<br/>';
-										printf(__('%d updated, %d skipped, %d deleted'), $item['updated'], $item['skipped'], $item['deleted']);
+										//printf(__('%d updated, %d skipped, %d deleted'), $item['updated'], $item['skipped'], $item['deleted']);
+
+                                        $log_msg = sprintf(__('%d updated, %d skipped'), $item['updated'], $item['skipped']);
+                                        if ($item['options']['is_delete_missing']) {
+                                            if (empty($item['options']['delete_missing_action']) || $item['options']['delete_missing_action'] != 'remove') {
+                                                $log_msg = sprintf(__('%d updated, %d skipped, %d missing'), $item['updated'], $item['skipped'], $item['changed_missing']);
+                                            } else {
+                                                $log_msg = sprintf(__('%d updated, %d skipped, %d deleted'), $item['updated'], $item['skipped'], $item['deleted']);
+                                            }
+                                        }
+                                        printf($log_msg);
+
 										//printf(__('%d records', 'wp_all_import_plugin'), $item['post_count']);
 									}
 
@@ -359,7 +376,7 @@ $columns = apply_filters('pmxi_manage_imports_columns', $columns);
 
                                     <?php } ?>
 
-									<a href="<?php echo add_query_arg(array('page' => 'pmxi-admin-history', 'id' => $item['id']), remove_query_arg('pagenum', $this->baseUrl))?>"><?php _e('History Logs', 'wp_all_import_plugin'); ?></a>
+									<a href="<?php echo esc_url(add_query_arg(array('page' => 'pmxi-admin-history', 'id' => $item['id']), remove_query_arg('pagenum', $this->baseUrl))); ?>"><?php _e('History Logs', 'wp_all_import_plugin'); ?></a>
 
 								</td>
 								<?php
@@ -368,11 +385,11 @@ $columns = apply_filters('pmxi_manage_imports_columns', $columns);
 								?>
 								<td style="width: 130px;">
 									<?php if ( ! $item['processing'] and ! $item['executing'] ): ?>
-									<h2 style="float:left;"><a class="add-new-h2" href="<?php echo add_query_arg(array('id' => $item['id'], 'action' => 'update'), remove_query_arg('pagenum', $this->baseUrl)); ?>"><?php _e('Run Import', 'wp_all_import_plugin'); ?></a></h2>
+									<h2 style="float:left;"><a class="add-new-h2" href="<?php echo esc_url(add_query_arg(array('id' => $item['id'], 'action' => 'update'), remove_query_arg('pagenum', $this->baseUrl))); ?>"><?php _e('Run Import', 'wp_all_import_plugin'); ?></a></h2>
 									<?php elseif ($item['processing']) : ?>
-									<h2 style="float:left;"><a class="add-new-h2" href="<?php echo add_query_arg(array('id' => $item['id'], 'action' => 'cancel', '_wpnonce' => wp_create_nonce( '_wpnonce-cancel_import' )), remove_query_arg('pagenum', $this->baseUrl)); ?>"><?php _e('Cancel Cron', 'wp_all_import_plugin'); ?></a></h2>
+									<h2 style="float:left;"><a class="add-new-h2" href="<?php echo esc_url(add_query_arg(array('id' => $item['id'], 'action' => 'cancel', '_wpnonce' => wp_create_nonce( '_wpnonce-cancel_import' )), remove_query_arg('pagenum', $this->baseUrl))); ?>"><?php _e('Cancel Cron', 'wp_all_import_plugin'); ?></a></h2>
 									<?php elseif ($item['executing']) : ?>
-									<h2 style="float:left;"><a class="add-new-h2" href="<?php echo add_query_arg(array('id' => $item['id'], 'action' => 'cancel', '_wpnonce' => wp_create_nonce( '_wpnonce-cancel_import' )), remove_query_arg('pagenum', $this->baseUrl)); ?>"><?php _e('Cancel', 'wp_all_import_plugin'); ?></a></h2>
+									<h2 style="float:left;"><a class="add-new-h2" href="<?php echo esc_url(add_query_arg(array('id' => $item['id'], 'action' => 'cancel', '_wpnonce' => wp_create_nonce( '_wpnonce-cancel_import' )), remove_query_arg('pagenum', $this->baseUrl))); ?>"><?php _e('Cancel', 'wp_all_import_plugin'); ?></a></h2>
 									<?php endif; ?>
 								</td>
 								<?php

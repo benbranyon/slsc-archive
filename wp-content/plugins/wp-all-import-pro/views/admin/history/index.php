@@ -26,7 +26,7 @@ $columns = array(
 	<p> <strong><?php _e('Scheduling Status', 'wp_all_import_plugin'); ?>:</strong> <?php _e('triggered'); ?> <?php if ($import->processing) _e('and processing', 'wp_all_import_plugin'); ?>...</p>
 <?php endif; ?>
 
-<form method="post" id="import-list" action="<?php echo remove_query_arg('pmxi_nt') ?>">
+<form method="post" id="import-list" action="<?php echo esc_url(remove_query_arg('pmxi_nt')) ?>">
 	<input type="hidden" name="action" value="bulk" />
 	<?php wp_nonce_field('bulk-imports', '_wpnonce_bulk-imports') ?>
 
@@ -173,7 +173,7 @@ $columns = array(
 										$log_file = wp_all_import_secure_file( $wp_uploads['basedir'] . DIRECTORY_SEPARATOR . PMXI_Plugin::LOGS_DIRECTORY, $item['id'], false, false ) . DIRECTORY_SEPARATOR . $item['id'] . '.html';
 										if (file_exists($log_file)){
 											?>											
-											<a href="<?php echo add_query_arg(array('id' => $import->id, 'action' => 'log', 'history_id' => $item['id'], '_wpnonce' => wp_create_nonce( '_wpnonce-download_log' )), $this->baseUrl); ?>"><?php _e('Download Log', 'wp_all_import_plugin'); ?></a>
+											<a href="<?php echo esc_url(add_query_arg(array('id' => $import->id, 'action' => 'log', 'history_id' => $item['id'], '_wpnonce' => wp_create_nonce( '_wpnonce-download_log' )), $this->baseUrl)); ?>"><?php _e('Download Log', 'wp_all_import_plugin'); ?></a>
 											<?php
 										} 
 										else { 

@@ -63,6 +63,7 @@ CREATE TABLE {$table_prefix}imports (
   	updated BIGINT(20) NOT NULL DEFAULT 0,
   	skipped BIGINT(20) NOT NULL DEFAULT 0,
   	deleted BIGINT(20) NOT NULL DEFAULT 0,
+  	changed_missing BIGINT(20) NOT NULL DEFAULT 0,
   	canceled BOOL NOT NULL DEFAULT 0,  	
   	canceled_on DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
   	failed BOOL NOT NULL DEFAULT 0,  	

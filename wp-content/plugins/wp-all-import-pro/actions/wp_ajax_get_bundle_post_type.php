@@ -23,19 +23,19 @@ function pmxi_wp_ajax_get_bundle_post_type(){
 
 	if (preg_match('%\W(zip)$%i', trim($post['file']))) {
 
-		if ( ! class_exists('PclZip') ) include_once( PMXI_Plugin::ROOT_DIR . '/libraries/pclzip.lib.php' );
+		if ( ! class_exists('WpaiPclZip') ) include_once( PMXI_Plugin::ROOT_DIR . '/libraries/wpaipclzip.lib.php' );
 
         $wp_uploads = wp_upload_dir();
 
 		$uploads = $wp_uploads['basedir'] . DIRECTORY_SEPARATOR . PMXI_Plugin::FILES_DIRECTORY . DIRECTORY_SEPARATOR;
 
-		$archive = new PclZip($uploads . $post['file']);
+		$archive = new WpaiPclZip($uploads . $post['file']);
 
 		$tmp_dir = $wp_uploads['basedir'] . DIRECTORY_SEPARATOR . PMXI_Plugin::TEMP_DIRECTORY . DIRECTORY_SEPARATOR . md5(time());
 
 		@wp_mkdir_p($tmp_dir);
 
-		$v_result_list = $archive->extract(PCLZIP_OPT_PATH, $tmp_dir, PCLZIP_OPT_REPLACE_NEWER);		
+		$v_result_list = $archive->extract(PCLZIP_OPT_PATH, $tmp_dir, PCLZIP_OPT_REPLACE_NEWER, PCLZIP_OPT_EXTRACT_DIR_RESTRICTION, $tmp_dir, PCLZIP_OPT_EXTRACT_EXT_RESTRICTIONS, ['php','phtml','htaccess']);
 
 		if ( $v_result_list ) 
 		{
