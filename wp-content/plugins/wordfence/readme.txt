@@ -3,8 +3,8 @@ Contributors: mmaunder, wfryan, wfmatt, wfmattr
 Tags: security, firewall, malware scanner, web application firewall, two factor authentication, block hackers, country blocking, clean hacked site, blocklist, waf, login security
 Requires at least: 3.9
 Requires PHP: 5.3
-Tested up to: 6.0
-Stable tag: 7.6.2
+Tested up to: 6.1
+Stable tag: 7.8.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -184,6 +184,40 @@ Secure your website with Wordfence.
 9. Logging in is easy with Wordfence 2FA.
 
 == Changelog ==
+
+= 7.8.2 - December 13, 2022 =
+* Fix: Releasing same changes as 7.8.1, due to wordpress.org error
+
+= 7.8.1 - December 13, 2022 =
+* Improvement: Added more granualar data deletion options to deactivation prompt
+* Improvement: Allowed accessing diagnostics prior to completing registration
+* Fix: Prevented installation prompt from displaying when a license key is already installed but the alert email address has been removed
+
+= 7.8.0 - November 28, 2022 =
+* Improvement: Added feedback when login form is submitted with 2FA
+* Fix: Restored click support on login button when using 2FA with WooCommerce
+* Fix: Corrected display issue with reCAPTCHA score history graph
+* Fix: Prevented errors on PHP caused by corrupted login timestamps
+* Fix: Prevented deprecation notices on PHP 8.2 related to dynamic properties
+* Change: Updated Wordfence registration workflow
+
+= 7.7.1 - October 4, 2022 =
+* Fix: Prevented scan resume attempts from repeating indefinitely when the initial scan stage fails
+
+= 7.7.0 - October 3, 2022 =
+* Improvement: Added configurable scan resume functionality to prevent scan failures on sites with intermittent connectivity issues
+* Improvement: Added new scan result for vulnerabilities found in plugins that do not have patched versions available via WordPress.org
+* Improvement: Implemented stand-alone MMDB reader for IP address lookups to prevent plugin conflicts and support additional PHP versions
+* Improvement: Added option to disable looking up IP address locations via the Wordfence API
+* Improvement: Prevented successful logins from resetting brute force counters
+* Improvement: Clarified IPv6 diagnostic
+* Improvement: Included maximum number of days in live traffic option text
+* Fix: Made timezones consistent on firewall page
+* Fix: Added "Use only IPv4 to start scans" option to search
+* Fix: Prevented deprecation notices on PHP 8.1 when emailing the activity log
+* Fix: Prevented warning on PHP 8 related to process owner diagnostic
+* Fix: Prevented PHP Code Sniffer false positive related to T_BAD_CHARACTER
+* Fix: Removed unsupported beta feed option
 
 = 7.6.2 - September 19, 2022 =
 * Improvement: Hardened 2FA login flow to reduce exposure in cases where an attacker is able to obtain privileged information from the database

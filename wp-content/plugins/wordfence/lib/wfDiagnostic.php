@@ -36,7 +36,8 @@ class wfGrant
 					}
 					break 2;
 				}
-				$this->$permission = true;
+				if (property_exists($this, $permission))
+					$this->$permission = true;
 			}
 		}
 	}
@@ -129,7 +130,7 @@ class wfDiagnostic
 					'connectToServer1' => __('Connecting to Wordfence servers (http)', 'wordfence'),
 					'connectToServer2' => __('Connecting to Wordfence servers (https)', 'wordfence'),
 					'connectToSelf' => __('Connecting back to this site', 'wordfence'),
-					'connectToSelfIpv6' => __('Connecting back to this site via IPv6', 'wordfence'),
+					'connectToSelfIpv6' => array('raw' => true, 'value' => wp_kses(sprintf(__('Connecting back to this site via IPv6 (not required; failure to connect may not be an issue on some sites) <a href="%s" target="_blank" rel="noopener noreferrer" class="wfhelp"><span class="screen-reader-text"> (opens in new tab)</span></a>', 'wordfence'), wfSupportController::esc_supportURL(wfSupportController::ITEM_DIAGNOSTICS_IPV6)), array('a'=>array('href'=>array(), 'target'=>array(), 'rel'=>array(), 'class'=>array()), 'span'=>array('class'=>array())))),
 					'serverIP' => __('IP(s) used by this server', 'wordfence'),
 				)
 			),
@@ -460,7 +461,7 @@ class wfDiagnostic
 			}
 
 			$processOwner = posix_getpwuid(posix_geteuid());
-			if ($processOwner !== null)
+			if ($processOwner !== false)
 			{
 				return array(
 					'test' => true,

@@ -510,7 +510,6 @@ auEa+7b+FGTKs7dUo2BNGR7OVifK4GZ8w/ajS0TelhrSRi3BBQCGXLzUO/UURUAh
 					'blockCustomText' => 'synced',
 					'timeoffset_wf' => 'synced',
 					'advancedBlockingEnabled' => 'synced',
-					'betaThreatDefenseFeed' => 'synced',
 					'disableWAFIPBlocking' => 'synced',
 					'patternBlocks' => 'synced',
 					'countryBlocks' => 'synced',
@@ -1887,7 +1886,6 @@ class wfWAFCronFetchRulesEvent extends wfWAFCronEvent {
 				's'        => $waf->getStorageEngine()->getConfig('siteURL', null, 'synced') ? $waf->getStorageEngine()->getConfig('siteURL', null, 'synced') : $guessSiteURL,
 				'h'        => $waf->getStorageEngine()->getConfig('homeURL', null, 'synced') ? $waf->getStorageEngine()->getConfig('homeURL', null, 'synced') : $guessSiteURL,
 				'openssl'  => $waf->hasOpenSSL() ? 1 : 0,
-				'betaFeed' => (int) $waf->getStorageEngine()->getConfig('betaThreatDefenseFeed', null, 'synced'),
 				'lang'     => $waf->getStorageEngine()->getConfig('WPLANG', null, 'synced'),
 			);
 			$lastRuleHash=$this->forceUpdate ? null : $waf->getStorageEngine()->getConfig('lastRuleHash', null, 'transient');
@@ -1950,7 +1948,6 @@ class wfWAFCronFetchRulesEvent extends wfWAFCronEvent {
 						's'        => $waf->getStorageEngine()->getConfig('siteURL', null, 'synced') ? $waf->getStorageEngine()->getConfig('siteURL', null, 'synced') : $guessSiteURL,
 						'h'        => $waf->getStorageEngine()->getConfig('homeURL', null, 'synced') ? $waf->getStorageEngine()->getConfig('homeURL', null, 'synced') : $guessSiteURL,
 						'openssl'  => $waf->hasOpenSSL() ? 1 : 0,
-						'betaFeed' => (int) $waf->getStorageEngine()->getConfig('betaThreatDefenseFeed', null, 'synced'),
 						'hash'	   => $this->forceUpdate ? null : $waf->getStorageEngine()->getConfig('lastMalwareHash', null, 'transient'),
 						'cs-hash'  => $this->forceUpdate ? null : $waf->getStorageEngine()->getConfig('lastMalwareHashCommonStrings', null, 'transient'),
 						'lang'   => $waf->getStorageEngine()->getConfig('WPLANG', null, 'synced')
@@ -2143,8 +2140,8 @@ class wfWAFCronFetchCookieRedactionPatternsEvent extends wfWAFCronEvent {
 		$lastFailure = $storageEngine->getConfig('cookieRedactionLastUpdateFailure', null, 'transient');
 		if ($lastFailure !== null && time() - (int) $lastFailure < self::RETRY_DELAY)
 			return;
-		$api = new wfWafApi($waf);
 		try {
+			$api = new wfWafApi($waf);
 			$response = $api->actionGet('get_cookie_redaction_patterns');
 			if ($response->getStatusCode() === 200) {
 				$body = $response->getBody();
@@ -2162,7 +2159,10 @@ class wfWAFCronFetchCookieRedactionPatternsEvent extends wfWAFCronEvent {
 				error_log('Failed to retrieve cookie redaction patterns, response code: ' . $response->getStatusCode());
 			}
 		}
-		catch(wfWafApiException $e) {
+		catch (wfWafMissingApiKeyException $e) {
+			// This is intentionally ignored as the API key may be missing during initial setup of the plugin
+		}
+		catch (wfWafApiException $e) {
 			error_log('Failed to retrieve cookie redaction patterns: ' . $e->getMessage());
 		}
 		$storageEngine->setConfig('cookieRedactionLastUpdateFailure', time(), 'transient');
