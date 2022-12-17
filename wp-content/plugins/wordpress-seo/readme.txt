@@ -4,8 +4,8 @@ Donate link: https://yoa.st/1up
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 Tags: SEO, XML sitemap, Content analysis, Readability, Schema
-Tested up to: 6.0
-Stable tag: 19.7.1
+Tested up to: 6.1
+Stable tag: 19.12
 Requires PHP: 5.6.20
 
 Improve your WordPress SEO: Write better content and have a fully optimized WordPress site using the Yoast SEO plugin.
@@ -56,7 +56,7 @@ We know content is king, that's why Yoast SEO is famous for its **state-of-the-a
 * **[Premium]** An orphaned content filter to detect posts that have no links pointing towards them!
 * **[Premium]** SEO workouts to make working on your site as easy as ABC. These SEO workflows will get your site into shape in no time!
 * **[Premium]** **New!** Yoast SEO Premium comes with a new word complexity feature that gives you actionable feedback on using difficult words. This feature is in beta and English only for now.
-* **[Premium]** **New!** Yoast SEO Premium comes with a new inclusive language analysis that helps you write inclusive content. This feature is opt-in, in beta and English only for now.
+* **New!** Yoast SEO Free and Premium come with a new inclusive language analysis that helps you write inclusive content. This feature is opt-in and English-only for now.
 
 #### KEEP YOUR SITE IN PERFECT SHAPE
 
@@ -226,6 +226,10 @@ The plugins you buy at Yoast are called ‘premium plugins’ (even if Premium i
 
 [Read more on how to get support](https://yoa.st/3r2)
 
+= What happens to my data if I enable usage tracking? =
+
+[This page on yoast.com explains what data we collect to improve Yoast SEO](https://yoa.st/4w7). We only collect data when you explicitly opt in. Read more about how we handle your data in [our Privacy Policy](https://yoa.st/4w8). 
+
 = I have a different question than listed here =
 
 Your question has most likely been answered on our help center: [yoast.com/help/](https://yoa.st/1va).
@@ -241,58 +245,74 @@ Your question has most likely been answered on our help center: [yoast.com/help/
 
 == Changelog ==
 
-= 19.7.1 =
-Release Date: September 20th, 2022
+= 19.12 =
 
-Bugfixes:
+Release date: December 13th, 2022
 
-* Fixes a bug where a fatal error would be thrown in combination with certain plugins that change the standard login page URL.
+In Yoast SEO 19.12, we're introducing the inclusive language analysis — previously only available in Yoast SEO Premium. This will help you get feedback on words that might exclude part of your audience and get inclusive alternatives. This is only available in English for now. Plus, it is opt-in. Try it! Find out more about what's new in Yoast SEO 19.12 in [our release post](https://yoa.st/release-13-12-22)!
 
-Other:
+#### Enhancements
 
-* Changes the copy in the `robots.txt` comment. 
+* NEW in Free: Adds the inclusive language analysis for English as a beta feature. Get suggestions on how to improve non-inclusive phrases, to make your content appeal to a larger audience.
+* Improves the Integrations page to explain more clearly the different types of integrations.
+* Adds integration cards for [The Events Calendar](https://wordpress.org/plugins/the-events-calendar/), the [Seriously Simple Podcasting](https://wordpress.org/plugins/seriously-simple-podcasting/) and the [WP Recipe Maker](https://it.wordpress.org/plugins/wp-recipe-maker/) plugins.
+* Adds a new `Website name` text field in the `Site Representation` step of the `First-time configuration`.
+* Improves the _subheading distribution_ assessment by adding highlighting and also targeting long content before the first subheading.
+* Improves the `First-time configuration` styling.
+* Improves the _transition words_ assessment for Arabic by removing some transition words.
+* Improves the Yoast admin bar menu with more functionality and better links.
+* Removes a notification that prompts users to help with translating the plugin in the language of the site.
 
-= 19.7 =
-Release Date: September 20th, 2022
+#### Bugfixes
 
-Yoast SEO 19.7 is out today! We’ve rolled out some general enhancements, bug fixes, and security improvements in this release. Go check it out! Read more about what's new in Yoast SEO 19.7 in [our release post in English](https://yoa.st/release-20-9-22) or [our release post in Spanish](https://yoa.st/release-20-9-22-spanish)!
+* Fixes a bug that would affect users managing the cron jobs with a plugin on PHP 8.1 after they have performed a core upgrade.
+* Fixes a bug where a fatal error would be thrown when trying to create breadcrumbs from unindexable items.
+* Fixes a bug where blocks with a NULL `blockName` would trigger deprecation errors with PHP 8.1 and cause performance issues. Props to [@dustyf](https://github.com/dustyf).
+* Fixes a bug where breadcrumbs markup would not validate due to improper nesting and closing of span tags. Props to [@michaelbourne](https://github.com/michaelbourne).
+* Fixes a bug where highlighting would not be removed from the text after the analysis is updated and the present highlighting has become irrelevant.
+* Fixes a bug where the Baidu Webmaster Tools link would go to the wrong page. Props to [@SavPhill](https://github.com/SavPhill).
+* Fixes a bug where the content analysis would not load when editing web stories in the Web Stories plug-in.
+* Fixes a bug where the highlighting functionality would not be working when highlighting content in lists items in the Block editor in WordPress 6.1.
+* Fixes a bug where the `<title>` tag would potentially be missing when publishing a story with the Web Stories plugin. Props to [@swissspidy](https://github.com/swissspidy).
+* Improves line ending handling for `robots.txt` contents.
 
-Enhancements:
+#### Other
 
-* Improves the handling of fatal errors in the front-end by preventing Yoast SEO to run in the login page, allowing users to access their dashboard.
-* Excludes empty custom post type sitemaps from `sitemap_index.xml`.
-* Introduces a new filter `wpseo_sitemap_post_type_first_links` that can be used to add links at the start of the first sitemap page for post types. Props to @jamalbou.
+* Introduces a notice on the WordPress dashboard and the Yoast SEO dashboard to let users know we are dropping support for PHP < 7.2 starting March 1st, 2023.
+* Reduces noise from PHP 8.1 deprecations.
+* Improves compatibility with PHP 8.2.
+* Allows using the `yoast_seo_development_mode` to override the `wp_get_environment_type()` result to `production`.
+* Deprecates the built-in integration with the `The Events Calendar` plugin, following the release of its version 6.0.4 which integrates with Yoast SEO.
+* Disallows setting or unsetting any dynamic properties on `Abstract_Main`.
+* Removes the note in the readability analysis results that tells users that the _Flesch reading ease_ score has moved to the _Insights_ section.
+* Removes the Yoast i18n package.
+* Resolves a typo in the feedback string for the phrase `exotic` in the inclusive language analysis.
 
-Bugfixes:
+= 19.11 =
 
-* Fixes a bug in the default editor where image elements would lead to repeated requests for that image source while editing content.
+Release date: November 29th, 2022
 
-Other:
+Yoast SEO 19.11 is out now. We're optimizing the Yoast SEO plugin to use fewer resources. This helps make your site faster and more efficient. In this release, we're doing this by streamlining your database. Find out more about what's new in Yoast SEO 19.11 in [our release post](https://yoa.st/release-29-11-22)!
 
-* Adds new disabled toggles to the Crawl settings tab in the General page.
+#### Enhancements
 
-= 19.6.1 =
-Release Date: August 31st, 2022
+* Adds a WP-CLI command to clean up unused data from our custom database tables: `wp yoast cleanup`.
+* Performs a cleanup of indexables when a public post type (or taxonomy) becomes non-public.
+* Notifies users to run the SEO optimization when a non-public post type (or taxonomy) becomes public.
 
-Other:
+#### Bugfixes
 
-* Fixes compliance with the wordpress.org plugin guidelines.
+* Fixes a bug where a fatal error would be thrown when the SEO optimization was run after a post type had been manually excluded via a filter.
+* Fixes a bug where an entry would be added to our indexables table when saving, updating, or accessing a post (or term) for a non-public post type (or taxonomy).
+* Fixes a bug where duplicate indexable records would be created for the same object.
+* Fixes a bug where indexables for users would not get removed when a user did not have any publicly viewable posts anymore.
+* Fixes a bug where indexables for users would not get removed when author archives were disabled.
+* Fixes a bug where indexables would be created for users when author archives were disabled.
+* Fixes a bug where indexables would be created for users who did not have any publicly viewable posts.
 
-= 19.6 =
-Release Date: August 23rd, 2022
+#### Other
 
-Yoast SEO 19.6 is out today! In this release, we’ve rolled out some general enhancements. In addition, we’ve improved the performance of Yoast SEO on bigger, more complex sites. Read more about what's new in Yoast SEO 19.6 in [our release post in English](https://yoa.st/release-23-8-22) or [our release post in Spanish](https://yoa.st/release-23-8-22-spanish)!
-
-Bugfixes:
-
-* Fixes a bug in the Classic Editor where clicking on the SEO link inside the publish box would not always scroll the SEO analysis into view.
-* Fixes a bug where an emoji in our replacement variable editors would not be entirely removed when the backspace/delete button is hit.
-* Fixes a bug where a redirect to our installation success page could happen on admin AJAX calls.
-
-Other:
-
-* Adds a "Search engines discouraged" notification in the Yoast SEO dashboard when the "Discourage search engines from indexing this site" WordPress setting is turned on.
-* Removes the Ryte integration and deprecates all the relevant classes. More information about this can be found at [yoa.st/ryte-deprecation](https://yoa.st/ryte-deprecation).
+* Introduces the `wpseo_indexable_excluded_taxonomies` filter, to allow manually excluding taxonomies from being indexed.
 
 = Earlier versions =
 For the changelog of earlier versions, please refer to [the changelog on yoast.com](https://yoa.st/yoast-seo-changelog).
