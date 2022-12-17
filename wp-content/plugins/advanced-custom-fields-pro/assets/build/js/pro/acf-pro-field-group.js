@@ -1,11 +1,11 @@
-/******/ (() => { // webpackBootstrap
+/******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ "./src/advanced-custom-fields-pro/assets/src/js/pro/_acf-setting-clone.js":
 /*!********************************************************************************!*\
   !*** ./src/advanced-custom-fields-pro/assets/src/js/pro/_acf-setting-clone.js ***!
   \********************************************************************************/
-/***/ (() => {
+/***/ (function() {
 
 (function ($) {
   /**
@@ -19,17 +19,20 @@
    *  @param	void
    *  @return	void
    */
+
   var CloneDisplayFieldSetting = acf.FieldSetting.extend({
     type: 'clone',
     name: 'display',
     render: function () {
       // vars
-      var display = this.field.val(); // set data attribute used by CSS to hide/show
+      var display = this.field.val();
 
+      // set data attribute used by CSS to hide/show
       this.$fieldObject.attr('data-display', display);
     }
   });
   acf.registerFieldSetting(CloneDisplayFieldSetting);
+
   /**
    *  ClonePrefixLabelFieldSetting
    *
@@ -47,17 +50,19 @@
     name: 'prefix_label',
     render: function () {
       // vars
-      var prefix = ''; // if checked
+      var prefix = '';
 
+      // if checked
       if (this.field.val()) {
         prefix = this.fieldObject.prop('label') + ' ';
-      } // update HTML
+      }
 
-
+      // update HTML
       this.$('code').html(prefix + '%field_label%');
     }
   });
   acf.registerFieldSetting(ClonePrefixLabelFieldSetting);
+
   /**
    *  ClonePrefixNameFieldSetting
    *
@@ -75,17 +80,19 @@
     name: 'prefix_name',
     render: function () {
       // vars
-      var prefix = ''; // if checked
+      var prefix = '';
 
+      // if checked
       if (this.field.val()) {
         prefix = this.fieldObject.prop('name') + '_';
-      } // update HTML
+      }
 
-
+      // update HTML
       this.$('code').html(prefix + '%field_name%');
     }
   });
   acf.registerFieldSetting(ClonePrefixNameFieldSetting);
+
   /**
    *  cloneFieldSelectHelper
    *
@@ -106,18 +113,20 @@
       // check
       if (data.ajaxAction == 'acf/fields/clone/query') {
         // remain open on select
-        options.closeOnSelect = false; // customize ajaxData function
+        options.closeOnSelect = false;
 
+        // customize ajaxData function
         instance.data.ajaxData = this.ajaxData;
-      } // return
+      }
 
-
+      // return
       return options;
     },
     ajaxData: function (data) {
       // find current fields
-      data.fields = {}; // loop
+      data.fields = {};
 
+      // loop
       acf.getFieldObjects().map(function (fieldObject) {
         // append
         data.fields[fieldObject.prop('key')] = {
@@ -126,10 +135,12 @@
           label: fieldObject.prop('label'),
           ancestors: fieldObject.getParents().length
         };
-      }); // append title
+      });
 
-      data.title = $('#title').val(); // return
+      // append title
+      data.title = $('#title').val();
 
+      // return
       return data;
     }
   });
@@ -141,7 +152,7 @@
 /*!*******************************************************************************************!*\
   !*** ./src/advanced-custom-fields-pro/assets/src/js/pro/_acf-setting-flexible-content.js ***!
   \*******************************************************************************************/
-/***/ (() => {
+/***/ (function() {
 
 (function ($) {
   /**
@@ -155,6 +166,7 @@
    *  @param	void
    *  @return	void
    */
+
   var FlexibleContentLayoutFieldSetting = acf.FieldSetting.extend({
     type: 'flexible_content',
     name: 'fc_layout',
@@ -188,7 +200,6 @@
     initialize: function () {
       // add sortable
       var $tbody = this.$el.parent();
-
       if (!$tbody.hasClass('ui-sortable')) {
         $tbody.sortable({
           items: '> .acf-field-setting-fc_layout',
@@ -200,9 +211,9 @@
             this.fieldObject.save();
           })
         });
-      } // add meta to sub fields
+      }
 
-
+      // add meta to sub fields
       this.updateFieldLayouts();
     },
     updateFieldLayouts: function () {
@@ -214,8 +225,9 @@
     onChangeLabel: function (e, $el) {
       // vars
       var label = $el.val();
-      var $name = this.$input('name'); // render name
+      var $name = this.$input('name');
 
+      // render name
       if ($name.val() == '') {
         acf.val($name, acf.strSanitize(label));
       }
@@ -223,75 +235,88 @@
     onClickAdd: function (e, $el) {
       // vars
       var prevKey = this.get('id');
-      var newKey = acf.uniqid('layout_'); // duplicate
+      var newKey = acf.uniqid('layout_');
 
+      // duplicate
       $layout = acf.duplicate({
         $el: this.$el,
         search: prevKey,
         replace: newKey,
         after: function ($el, $el2) {
           // vars
-          var $list = $el2.find('.acf-field-list:first'); // remove sub fields
+          var $list = $el2.find('.acf-field-list:first');
 
-          $list.children('.acf-field-object').remove(); // show empty
+          // remove sub fields
+          $list.children('.acf-field-object').remove();
 
-          $list.addClass('-empty'); // reset layout meta values
+          // show empty
+          $list.addClass('-empty');
 
+          // reset layout meta values
           $el2.find('.acf-fc-meta input').val('');
         }
-      }); // get layout
+      });
 
-      var layout = acf.getFieldSetting($layout); // update hidden input
+      // get layout
+      var layout = acf.getFieldSetting($layout);
 
-      layout.$input('key').val(newKey); // save
+      // update hidden input
+      layout.$input('key').val(newKey);
 
+      // save
       this.fieldObject.save();
     },
     onClickDuplicate: function (e, $el) {
       // vars
       var prevKey = this.get('id');
-      var newKey = acf.uniqid('layout_'); // duplicate
+      var newKey = acf.uniqid('layout_');
 
+      // duplicate
       $layout = acf.duplicate({
         $el: this.$el,
         search: prevKey,
         replace: newKey
-      }); // get all fields in new layout similar to fieldManager.onDuplicateField().
+      });
+
+      // get all fields in new layout similar to fieldManager.onDuplicateField().
       // important to run field.wipe() before making any changes to the "parent_layout" prop
       // to ensure the correct input is modified.
-
       var children = acf.getFieldObjects({
         parent: $layout
       });
-
       if (children.length) {
         // loop
         children.map(function (child) {
           // wipe field
-          child.wipe(); // update parent
+          child.wipe();
 
+          // update parent
           child.updateParent();
-        }); // action
+        });
 
+        // action
         acf.doAction('duplicate_field_objects', children, this.fieldObject, this.fieldObject);
-      } // get layout
+      }
 
+      // get layout
+      var layout = acf.getFieldSetting($layout);
 
-      var layout = acf.getFieldSetting($layout); // update hidden input
+      // update hidden input
+      layout.$input('key').val(newKey);
 
-      layout.$input('key').val(newKey); // save
-
+      // save
       this.fieldObject.save();
     },
     onClickDelete: function (e, $el) {
       // Bypass confirmation when holding down "shift" key.
       if (e.shiftKey) {
         return this.delete();
-      } // add class
+      }
 
+      // add class
+      this.$el.addClass('-hover');
 
-      this.$el.addClass('-hover'); // add tooltip
-
+      // add tooltip
       var tooltip = acf.newTooltip({
         confirmRemove: true,
         target: $el,
@@ -306,26 +331,30 @@
     },
     delete: function () {
       // vars
-      var $siblings = this.$el.siblings('.acf-field-setting-fc_layout'); // validate
+      var $siblings = this.$el.siblings('.acf-field-setting-fc_layout');
 
+      // validate
       if (!$siblings.length) {
         alert(acf.__('Flexible Content requires at least 1 layout'));
         return false;
-      } // delete sub fields
+      }
 
-
+      // delete sub fields
       this.getFields().map(function (child) {
         child.delete({
           animate: false
         });
-      }); // remove tr
+      });
 
-      acf.remove(this.$el); // save
+      // remove tr
+      acf.remove(this.$el);
 
+      // save
       this.fieldObject.save();
     }
   });
   acf.registerFieldSetting(FlexibleContentLayoutFieldSetting);
+
   /**
    *  flexibleContentHelper
    *
@@ -345,23 +374,25 @@
     },
     updateParentLayout: function (fieldObject) {
       // vars
-      var parent = fieldObject.getParent(); // delete meta
+      var parent = fieldObject.getParent();
 
+      // delete meta
       if (!parent || parent.prop('type') !== 'flexible_content') {
         fieldObject.prop('parent_layout', null);
         return;
-      } // get layout
+      }
 
-
+      // get layout
       var $layout = fieldObject.$el.closest('.acf-field-setting-fc_layout');
-      var layout = acf.getFieldSetting($layout); // check if previous prop exists
-      // - if not, set prop to allow following code to trigger 'change' and save the field
+      var layout = acf.getFieldSetting($layout);
 
+      // check if previous prop exists
+      // - if not, set prop to allow following code to trigger 'change' and save the field
       if (!fieldObject.has('parent_layout')) {
         fieldObject.prop('parent_layout', 0);
-      } // update meta
+      }
 
-
+      // update meta
       fieldObject.prop('parent_layout', layout.get('id'));
     }
   });
@@ -373,7 +404,7 @@
 /*!***********************************************************************************!*\
   !*** ./src/advanced-custom-fields-pro/assets/src/js/pro/_acf-setting-repeater.js ***!
   \***********************************************************************************/
-/***/ (() => {
+/***/ (function() {
 
 (function ($) {
   /*
@@ -388,6 +419,7 @@
    *  @param	n/a
    *  @return	n/a
    */
+
   var RepeaterCollapsedFieldSetting = acf.FieldSetting.extend({
     type: 'repeater',
     name: 'collapsed',
@@ -396,27 +428,32 @@
     },
     onFocus: function (e, $el) {
       // vars
-      var $select = $el; // collapsed
+      var $select = $el;
 
-      var choices = []; // keep 'null' choice
+      // collapsed
+      var choices = [];
 
+      // keep 'null' choice
       choices.push({
         label: $select.find('option[value=""]').text(),
         value: ''
-      }); // find sub fields
+      });
 
+      // find sub fields
       var $list = this.fieldObject.$('.acf-field-list:first');
       var fields = acf.getFieldObjects({
         list: $list
-      }); // loop
+      });
 
+      // loop
       fields.map(function (field) {
         choices.push({
           label: field.prop('label'),
           value: field.prop('key')
         });
-      }); // render
+      });
 
+      // render
       acf.renderSelect($select, choices);
     }
   });
@@ -453,49 +490,49 @@
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = (module) => {
+/******/ 		__webpack_require__.n = function(module) {
 /******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
 /******/ 			__webpack_require__.d(getter, { a: getter });
 /******/ 			return getter;
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 		__webpack_require__.d = function(exports, definition) {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
+/******/ 		__webpack_require__.r = function(exports) {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
-(() => {
+!function() {
 "use strict";
 /*!*********************************************************************************!*\
   !*** ./src/advanced-custom-fields-pro/assets/src/js/pro/acf-pro-field-group.js ***!
@@ -510,8 +547,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-})();
-
+}();
 /******/ })()
 ;
 //# sourceMappingURL=acf-pro-field-group.js.map
