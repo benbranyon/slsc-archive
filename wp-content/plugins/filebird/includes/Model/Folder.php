@@ -66,6 +66,23 @@ class Folder {
 			array( '%d' )
 		);
 	}
+	public static function updateAuthor( $from_author, $to_author ) {
+		global $wpdb;
+		$wpdb->update(
+			self::getTable( self::$folder_table ),
+			array(
+				'created_by' => $to_author
+			),
+			array( 'created_by' => $from_author ),
+			array( '%d' ),
+			array( '%d' )
+		);
+	}
+	public static function deleteByAuthor( $author ) {
+		global $wpdb;
+		$wpdb->query( "DELETE FROM {$wpdb->prefix}fbv_attachment_folder WHERE folder_id IN (SELECT id FROM {$wpdb->prefix}fbv WHERE created_by = " . (int) $author . ")" );
+		$wpdb->query( "DELETE FROM {$wpdb->prefix}fbv WHERE created_by = " . (int) $author );
+	}
 	public static function rawInsert( $query ) {
 		global $wpdb;
 		$wpdb->query( 'INSERT INTO ' . self::getTable( self::$folder_table ) . ' ' . $query );

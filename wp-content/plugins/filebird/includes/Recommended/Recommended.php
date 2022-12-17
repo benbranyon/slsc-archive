@@ -57,6 +57,33 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 					'type'              => array( 'featured', 'woocommerce' ),
 					'version'           => 0,
 				),
+				'yayswatches'       => array(
+					'slug'              => 'yayswatches',
+					'name'              => 'YaySwatches – Variation Swatches for WooCommerce',
+					'short_description' => 'YaySwatches allows you to show variation selectors as color swatches, image swatches, radio buttons, buttons,…',
+					'icon'              => 'https://ps.w.org/yayswatches/assets/icon-256x256.png?rev=2757155',
+					'download_link'     => 'https://downloads.wordpress.org/plugin/yayswatches.zip',
+					'type'              => array( 'woocommerce' ),
+					'version'           => 0,
+				),
+				'yayextra'          => array(
+					'slug'              => 'yayextra',
+					'name'              => 'YayExtra – WooCommerce Extra Product Options',
+					'short_description' => 'YayExtra is a WooCommerce plugin to allow you to create extra product options and assign…',
+					'icon'              => 'https://ps.w.org/yayextra/assets/icon-256x256.png?rev=2776349',
+					'download_link'     => 'https://downloads.wordpress.org/plugin/yayextra.zip',
+					'type'              => array( 'woocommerce' ),
+					'version'           => 0,
+				),
+				'yaypricing'        => array(
+					'slug'              => 'yaypricing',
+					'name'              => 'YayPricing – WooCommerce Dynamic Pricing & Discounts',
+					'short_description' => 'Offer automatic pricing and discounts to design a powerful marketing strategy for your WooCommerce store.',
+					'icon'              => 'https://yaycommerce.com/wp-content/uploads/2022/03/YayPricing.png',
+					'download_link'     => 'https://yaycommerce.com/yaypricing-woocommerce-dynamic-pricing-and-discounts/',
+					'type'              => array( 'woocommerce' ),
+					'version'           => 0,
+				),
 				'yaysmtp'           => array(
 					'slug'              => 'yaysmtp',
 					'name'              => 'YaySMTP - Simple WP SMTP Mail',
@@ -483,6 +510,15 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 			}
 			if ( 'yaysmtp' === $pluginDetail['slug'] ) {
 				$existProVer = array_key_exists( 'yaysmtp-pro/yay-smtp.php', $allPlugin ) === true ? 'yaysmtp-pro/yay-smtp.php' : false;
+			}
+			if ( 'yayswatches' === $pluginDetail['slug'] ) {
+				$existProVer = array_key_exists( 'yayswatches-pro/yay-swatches.php', $allPlugin ) === true ? 'yayswatches-pro/yay-swatches.php' : false;
+			}
+			if ( 'yayextra' === $pluginDetail['slug'] ) {
+				$existProVer = array_key_exists( 'yayextra-pro/yayextra.php', $allPlugin ) === true ? 'yayextra-pro/yayextra.php' : false;
+			}
+			if ( 'yaypricing' === $pluginDetail['slug'] ) {
+				$existProVer = array_key_exists( 'yaypricing-pro/yaypricing.php', $allPlugin ) === true ? 'yaypricing-pro/yaypricing.php' : false;
 			}
 			if ( 'cf7-multi-step' === $pluginDetail['slug'] ) {
 				$existProVer = array_key_exists( 'contact-form-7-multi-step-pro/contact-form-7-multi-step.php', $allPlugin ) === true ? 'contact-form-7-multi-step-pro/contact-form-7-multi-step.php' : false;

@@ -7,8 +7,8 @@ class Review {
 	public function __construct() {
 		add_action( 'wp_ajax_fbv_save_review', array( $this, 'fbv_save_review' ) );
 
-		$option = get_option( 'fbv_review' );
-		if ( time() >= (int) $option && '0' !== $option ) {
+		$option = get_option( 'fbv_review', false );
+		if ( time() >= intval( $option ) && '0' !== $option ) {
 			add_action( 'admin_notices', array( $this, 'give_review' ) );
 		}
 	}
@@ -46,8 +46,8 @@ class Review {
 	}
 
 	public static function update_time_display() {
-		$option = get_option( 'fbv_review' );
-		if ( $option !== false && '0' !== $option ) {
+		$option = get_option( 'fbv_review', false );
+		if ( '0' !== $option ) {
 			update_option( 'fbv_review', time() + 3 * 60 * 60 * 24 ); //After 3 days show
 		}
 	}
@@ -58,21 +58,21 @@ class Review {
 				$this->enqueue_scripts();
 				?>
 <div class="notice notice-success is-dismissible" id="njt-FileBird-review">
-    <h3><?php esc_html_e( 'Give FileBird a review', 'filebird' ); ?></h3>
-    <p>
-        <?php esc_html_e( 'Thank you for choosing FileBird. We hope you love it. Could you take a couple of seconds posting a nice review to share your happy experience?', 'filebird' ); ?>
-    </p>
-    <p>
-        <?php esc_html_e( 'We will be forever grateful. Thank you in advance ;)', 'filebird' ); ?>
-    </p>
-    <p>
-        <a href="javascript:;" data="rateNow"
-            class="button button-primary"><?php esc_html_e( 'Rate now', 'filebird' ); ?></a>
-        <a href="javascript:;" data="later" class="button"><?php esc_html_e( 'Later', 'filebird' ); ?></a>
-        <a href="javascript:;" data="alreadyDid" class="button"><?php esc_html_e( 'No, thanks', 'filebird' ); ?></a>
-    </p>
+	<h3><?php esc_html_e( 'Give FileBird a review', 'filebird' ); ?></h3>
+	<p>
+				<?php esc_html_e( 'Thank you for choosing FileBird. We hope you love it. Could you take a couple of seconds posting a nice review to share your happy experience?', 'filebird' ); ?>
+	</p>
+	<p>
+				<?php esc_html_e( 'We will be forever grateful. Thank you in advance ;)', 'filebird' ); ?>
+	</p>
+	<p>
+		<a href="javascript:;" data="rateNow"
+			class="button button-primary"><?php esc_html_e( 'Rate now', 'filebird' ); ?></a>
+		<a href="javascript:;" data="later" class="button"><?php esc_html_e( 'Later', 'filebird' ); ?></a>
+		<a href="javascript:;" data="alreadyDid" class="button"><?php esc_html_e( 'No, thanks', 'filebird' ); ?></a>
+	</p>
 </div>
-<?php
+				<?php
 			}
 		}
 	}

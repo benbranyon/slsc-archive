@@ -150,6 +150,11 @@ class Convert {
 			$oldPremioFolders = $this->getOldFolders( 'premio', true );
 		}
 
+		$oldFemlFolders = array();
+		if ( ! $this->isUpdated( 'feml' ) && ! $this->isNoThanks( 'feml' ) ) {
+			$oldFemlFolders = $this->getOldFolders( 'feml', true );
+		}
+
 		if ( count( $oldEnhancedFolders ) > 3 ) {
 			$sites[] = array(
 				'site'  => 'enhanced',
@@ -192,6 +197,15 @@ class Convert {
 				'desc'  => $this->plugin_import_description( count( $oldPremioFolders ), 'Folders' ),
 			);
 		}
+
+		if ( count( $oldFemlFolders ) > 3 ) {
+			$sites[] = array(
+				'site'  => 'feml',
+				'title' => 'feml',
+				'desc'  => $this->plugin_import_description( count( $oldFemlFolders ), 'WP Media Folders' ),
+			);
+		}
+
 
 		return $sites;
 	}
@@ -320,6 +334,8 @@ class Convert {
 			update_option( 'njt_fb_happyfiles_no_thanks', '1' );
 		} elseif ( $site == 'premio' ) {
 			update_option( 'njt_fb_premio_no_thanks', '1' );
+		} elseif ( $site == 'feml' ) {
+			update_option( 'njt_fb_feml_no_thanks', '1' );
 		} elseif ( $site == 'all' ) {
 			update_option( 'njt_fb_happyfiles_no_thanks', '1' );
 			update_option( 'njt_fb_realmedia_no_thanks', '1' );
@@ -327,6 +343,7 @@ class Convert {
 			update_option( 'njt_fb_enhanced_no_thanks', '1' );
 			update_option( 'njt_fb_wpmlf_no_thanks', '1' );
 			update_option( 'njt_fb_premio_no_thanks', '1' );
+			update_option( 'njt_fb_feml_no_thanks', '1' );
 		}
 
 		wp_send_json_success(
@@ -384,6 +401,7 @@ class Convert {
 			update_option( 'njt_fb_updated_from_wpmf', '0' );
 			update_option( 'njt_fb_updated_from_realmedia', '0' );
 			update_option( 'njt_fb_updated_from_happyfiles', '0' );
+			update_option( 'njt_fb_updated_from_feml', '0' );
 
 			wp_send_json_success(
 				array(
@@ -414,6 +432,8 @@ class Convert {
 			$is = get_option( 'njt_fb_updated_from_happyfiles', '0' ) === '1';
 		} elseif ( $site == 'premio' ) {
 			$is = get_option( 'njt_fb_updated_from_premio', '0' ) === '1';
+		} elseif ( $site == 'feml') {
+			$is = get_option( 'njt_fb_updated_from_feml', '0') === '1';
 		}
 
 		return $is;
@@ -431,6 +451,8 @@ class Convert {
 			return get_option( 'njt_fb_happyfiles_no_thanks', '0' ) === '1';
 		} elseif ( $site == 'premio' ) {
 			return get_option( 'njt_fb_premio_no_thanks', '0' ) === '1';
+		} elseif ( $site == 'feml' ) {
+			return get_option( 'njt_fb_feml_no_thanks', '0' ) === '1';
 		}
 	}
 
@@ -537,6 +559,15 @@ class Convert {
 				);
 				exit();
 			}
+		} elseif ( $site == 'feml' ) {
+			if ( get_option( 'njt_fb_updated_from_feml', '0' ) == '1' ) {
+				wp_send_json_success(
+					array(
+						'mess' => __( 'Already Updated', 'filebird' ),
+					)
+				);
+				exit();
+			}
 		}
 	}
 	public function getOldFolders( $site, $flat = false ) {
@@ -556,6 +587,8 @@ class Convert {
 			$folders = Helpers::foldersFromHappyFiles( 0, $flat );
 		} elseif ( $site == 'premio' ) {
 			$folders = Helpers::foldersFromPremio( 0, $flat );
+		} else if ($site == 'feml') {
+			$folders = Helpers::foldersFromWpfeml( 0, $flat );
 		}
 		return $folders;
 	}
@@ -604,8 +637,10 @@ class Convert {
 		} elseif ( $site == 'happyfiles' ) {
 			$att = $wpdb->get_col( $wpdb->prepare( 'SELECT object_id FROM %1$s WHERE term_taxonomy_id = %2$d', $wpdb->term_relationships, $folder->term_taxonomy_id ) );
 		} elseif ( $site == 'premio' ) {
-			$att = $wpdb->get_col( $wpdb->prepare( 'SELECT object_id FROM %1$s WHERE term_taxonomy_id = %2$d', $wpdb->term_relationships, $folder->term_taxonomy_id ) );
-		}
+			$att = $wpdb->get_col( $wpdb->prepare( "SELECT object_id FROM $wpdb->term_relationships WHERE term_taxonomy_id = %d", $folder->term_taxonomy_id ) );
+		} elseif ( $site == 'feml' ) {
+			$att = $wpdb->get_col( $wpdb->prepare( "SELECT object_id FROM $wpdb->term_relationships WHERE term_taxonomy_id = %d", $folder->term_taxonomy_id ) );
+		} 
 		return $att;
 	}
 	private function afterInsertingNewFolders( $site ) {
@@ -625,6 +660,8 @@ class Convert {
 			update_option( 'njt_fb_updated_from_happyfiles', '1' );
 		} elseif ( $site == 'premio' ) {
 			update_option( 'njt_fb_updated_from_premio', '1' );
+		} elseif ( 'feml' === $site ) {
+			update_option( 'njt_fb_updated_from_feml', '1' );
 		}
 	}
 

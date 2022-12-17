@@ -47,7 +47,8 @@ $apiKey = get_option( 'fbv_rest_api_key', '' );
                 </th>
                 <td>
                     <div class="fbv-generate-attachment-size">
-                        <button type="button" class="button button-primary njt_fbv_generate_attachment_size njt-button-loading fbv-pro-feature">
+                        <button type="button"
+                            class="button button-primary njt_fbv_generate_attachment_size njt-button-loading">
                             <?php esc_html_e( 'Generate', 'filebird' ); ?>
                         </button>
                         <span class="processing-status"></span>

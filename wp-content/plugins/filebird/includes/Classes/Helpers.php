@@ -59,6 +59,26 @@ class Helpers {
 		}
 		return $folders;
 	}
+	public static function foldersFromWpfeml( $parent = 0, $flat = false ) {
+		global $wpdb;
+		$folders = $wpdb->get_results( $wpdb->prepare( "SELECT t.term_id as id, t.name as title, tt.term_taxonomy_id FROM $wpdb->terms as t INNER JOIN $wpdb->term_taxonomy as tt ON (t.term_id = tt.term_id) WHERE tt.taxonomy = 'feml-folder' AND tt.parent = %d", $parent ) );
+		foreach ( $folders as $k => $folder ) {
+			$folders[ $k ]->parent = $parent;
+		}
+		if ( $flat ) {
+			foreach ( $folders as $k => $folder ) {
+				$children = self::foldersFromWpfeml( $folder->id, $flat );
+				foreach ( $children as $k2 => $v2 ) {
+					$folders[] = $v2;
+				}
+			}
+		} else {
+			foreach ( $folders as $k => $folder ) {
+				$folders[ $k ]->children = self::foldersFromWpfeml( $folder->id, $flat );
+			}
+		}
+		return $folders;
+	}
 	public static function foldersFromWpmf( $parent = 0, $flat = false ) {
 		global $wpdb;
 		$folders = $wpdb->get_results( $wpdb->prepare( 'SELECT t.term_id as id, t.name as title, tt.term_taxonomy_id FROM %1$s as t  INNER JOIN %2$s as tt ON (t.term_id = tt.term_id) WHERE tt.taxonomy = \'wpmf-category\' AND tt.parent = %3$d', $wpdb->terms, $wpdb->term_taxonomy, $parent ) );

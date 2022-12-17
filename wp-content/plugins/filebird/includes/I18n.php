@@ -162,6 +162,7 @@ class I18n {
 			'size_descending'                 => __( 'Size Descending', 'filebird' ),
 			'PRO'                             => __( 'PRO', 'filebird' ),
 			'change_color'                    => __( 'Change Color', 'filebird' ),
+			'processing'                      => __( 'Processing...', 'filebird' ),
 		);
 		return $translation;
 	}

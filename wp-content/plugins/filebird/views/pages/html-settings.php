@@ -10,6 +10,7 @@ $countWpmfFolder      = count( Helpers::foldersFromWpmf( 0, true ) );
 $countRealMediaFolder = count( Helpers::foldersFromRealMedia( -1, true ) );
 $countHappyFiles      = count( Helpers::foldersFromHappyFiles( 0, true ) );
 $countPremioFolder    = count( Helpers::foldersFromPremio( 0, true ) );
+$countFemlFolder      = count( Helpers::foldersFromWpfeml(0, true ) );
 $countFBOldFolder     = apply_filters( 'fbv_update_database_notice', false ) ? 1 : Convert::countOldFolders();
 
 $tabs        = array(
@@ -47,6 +48,7 @@ $tabs        = array(
 				'countRealMediaFolder' => $countRealMediaFolder,
 				'countHappyFiles'      => $countHappyFiles,
 				'countPremioFolder'    => $countPremioFolder,
+				'countFemlFolder'      => $countFemlFolder,
 			)
 		),
 	),

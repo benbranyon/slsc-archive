@@ -499,4 +499,51 @@ jQuery(document).ready(function () {
       animation: "shift-away",
     });
   });
+
+  jQuery(".njt_fbv_generate_attachment_size").on("click", function (e) {
+    const processingStatus = jQuery(
+      ".fbv-generate-attachment-size .processing-status"
+    );
+    const $this = this;
+    const TIME_INTERVAL = 2000;
+    $this.classList.add("updating-message");
+    $this.disabled = true;
+    const generating = setInterval(() => {
+      jQuery
+        .ajax({
+          url: fbv_data.json_url + "/generate-attachment-size",
+          method: "POST",
+          dataType: "json",
+          contentType: "application/json",
+          // data: JSON.stringify({
+          //   generateAll,
+          // }),
+          headers: {
+            "X-WP-Nonce": fbv_data.rest_nonce,
+            "X-HTTP-Method-Override": "POST",
+          },
+          beforeSend: function () {},
+        })
+        .done((json) => {
+          if (!json.isProcessing) {
+            processingStatus.hide();
+            $this.classList.remove("updating-message");
+            $this.disabled = false;
+            clearInterval(generating);
+            return;
+          }
+          if (processingStatus.css("display") === "none") {
+            processingStatus.show();
+            console.log("display here");
+          }
+          processingStatus.text(
+            `${fbv_data.i18n.processing} ${json.current}/${json.total}`
+          );
+        })
+        .fail((json) => {
+          $this.classList.remove("updating-message");
+          $this.disabled = false;
+        });
+    }, TIME_INTERVAL);
+  });
 });

@@ -44,7 +44,16 @@ foreach ( (array) $recommendedPlugins as $recommendedPlugin ) {
 	if ( current_user_can( 'install_plugins' ) || current_user_can( 'update_plugins' ) ) {
 		$pluginProVer = $this->check_pro_version_exists( $recommendedPlugin );
 		if ( false === $pluginProVer ) {
-			$installStatus = install_plugin_install_status( $recommendedPlugin );
+			if ( 'yaypricing' === $recommendedPlugin['slug'] ) {
+				$installStatus = array(
+					'status'  => 'install',
+					'url'     => $recommendedPlugin['download_link'],
+					'version' => '',
+					'file'    => $pluginProVer,
+				);
+			} else {
+				$installStatus = install_plugin_install_status( $recommendedPlugin );
+			}
 		} else {
 			$installStatus = array(
 				'status'  => 'latest_installed',
@@ -58,13 +67,24 @@ foreach ( (array) $recommendedPlugins as $recommendedPlugin ) {
 			case 'install':
 				if ( $installStatus['url'] ) {
 					if ( $compatible_php && $compatible_wp ) {
-						$actionLinks[] = sprintf(
-							'<button class="install-now button button-primary" data-install-url="%s" aria-label="%s">%s</button>',
-							esc_attr( $downloadLink ),
-							/* translators: %s: Plugin name and version. */
-							esc_attr( sprintf( _x( 'Install %s now', 'plugin', 'ninjateam-whatsapp' ), $name ) ),
-							__( 'Install Now', 'ninjateam-whatsapp' )
-						);
+						if ( 'yaypricing' === $recommendedPlugin['slug'] ) {
+							$actionLinks[] = sprintf(
+								'<a href="%s" target="_bank"><button class="button button-primary" data-install-url="%s" aria-label="%s">%s</button></a>',
+								esc_attr( $downloadLink ),
+								esc_attr( $downloadLink ),
+								/* translators: %s: Plugin name and version. */
+								esc_attr( sprintf( _x( 'Install %s now', 'plugin', 'ninjateam-whatsapp' ), $name ) ),
+								__( 'Install Now', 'ninjateam-whatsapp' )
+							);
+						} else {
+							$actionLinks[] = sprintf(
+								'<button class="install-now button button-primary" data-install-url="%s" aria-label="%s">%s</button>',
+								esc_attr( $downloadLink ),
+								/* translators: %s: Plugin name and version. */
+								esc_attr( sprintf( _x( 'Install %s now', 'plugin', 'ninjateam-whatsapp' ), $name ) ),
+								__( 'Install Now', 'ninjateam-whatsapp' )
+							);
+						}
 					} else {
 						$actionLinks[] = sprintf(
 							'<button type="button" class="button button-disabled" disabled="disabled">%s</button>',
@@ -78,16 +98,29 @@ foreach ( (array) $recommendedPlugins as $recommendedPlugin ) {
 			case 'update_available':
 				if ( $installStatus['url'] ) {
 					if ( $compatible_php && $compatible_wp ) {
-						$actionLinks[] = sprintf(
-							'<button class="update-now button aria-button-if-js" data-plugin="%s" data-slug="%s" data-update-url="%s" aria-label="%s" data-name="%s">%s</button>',
-							esc_attr( $installStatus['file'] ),
-							esc_attr( $recommendedPlugin['slug'] ),
-							esc_url( $installStatus['url'] ),
-							/* translators: %s: Plugin name and version. */
-							esc_attr( sprintf( _x( 'Update %s now', 'plugin', 'ninjateam-whatsapp' ), $name ) ),
-							esc_attr( $name ),
-							__( 'Update Now', 'ninjateam-whatsapp' )
-						);
+						if ( 'yaypricing' === $recommendedPlugin['slug'] ) {
+							$actionLinks[] = sprintf(
+								'<button class="button aria-button-if-js" data-plugin="%s" data-slug="%s" data-update-url="%s" aria-label="%s" data-name="%s">%s</button>',
+								esc_attr( $installStatus['file'] ),
+								esc_attr( $recommendedPlugin['slug'] ),
+								esc_url( $installStatus['url'] ),
+								/* translators: %s: Plugin name and version. */
+								esc_attr( sprintf( _x( 'Update %s now', 'plugin', 'ninjateam-whatsapp' ), $name ) ),
+								esc_attr( $name ),
+								__( 'Update Now', 'ninjateam-whatsapp' )
+							);
+						} else {
+							$actionLinks[] = sprintf(
+								'<button class="update-now button aria-button-if-js" data-plugin="%s" data-slug="%s" data-update-url="%s" aria-label="%s" data-name="%s">%s</button>',
+								esc_attr( $installStatus['file'] ),
+								esc_attr( $recommendedPlugin['slug'] ),
+								esc_url( $installStatus['url'] ),
+								/* translators: %s: Plugin name and version. */
+								esc_attr( sprintf( _x( 'Update %s now', 'plugin', 'ninjateam-whatsapp' ), $name ) ),
+								esc_attr( $name ),
+								__( 'Update Now', 'ninjateam-whatsapp' )
+							);
+						}
 					} else {
 						$actionLinks[] = sprintf(
 							'<button type="button" class="button button-disabled" disabled="disabled">%s</button>',

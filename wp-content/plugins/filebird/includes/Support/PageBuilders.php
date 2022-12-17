@@ -81,7 +81,11 @@ class PageBuilders {
 		}
 	}
 
-	public function enqueueScripts() {
+	public function enqueueScripts( $is_enqueue_media = false ) {
+		if ( $is_enqueue_media ) {
+			wp_enqueue_media();
+        }
+
 		$this->folderController->enqueueAdminScripts( 'pagebuilders' );
 	}
 
@@ -140,14 +144,13 @@ class PageBuilders {
 	}
 
 	public function registerThemify() {
-		$is_admin   = is_admin() === true && \Themify_Builder_Model::hasAccess();
-		$is_builder = \Themify_Builder_Model::is_frontend_editor_page();
-		if ( $is_admin || $is_builder ) {
-			if ( ! $is_admin ) {
-				wp_enqueue_media();
-			}
-			add_action( 'themify_body_end', array( $this, 'enqueueScripts' ) );
-		}
+		add_action(
+             'wp_ajax_tb_load_editor',
+            function() {
+				$this->enqueueScripts( true );
+			},
+            9
+		);
 	}
 
 	public function registerBricksBuilder() {

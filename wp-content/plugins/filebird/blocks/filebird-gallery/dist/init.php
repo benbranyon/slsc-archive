@@ -124,6 +124,7 @@ function filebird_gallery_render( $attributes ) {
 		}
 	}
 	$ulClass  = 'wp-block-filebird-block-filebird-gallery wp-block-gallery blocks-gallery-grid';
+	$ulClass .= ! empty( $attributes['className'] ) ? ' ' . esc_attr( $attributes['className'] ) : '';
 	$ulClass .= ' columns-' . esc_attr( $attributes['columns'] );
 	$ulClass .= $attributes['isCropped'] ? ' is-cropped' : '';
 

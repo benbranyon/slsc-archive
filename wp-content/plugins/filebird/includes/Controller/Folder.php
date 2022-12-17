@@ -58,7 +58,7 @@ class Folder extends Controller {
 		$this->userSettings = UserSettings::getInstance();
 
 		// MailPoet plugin support
-		SizeMeta::getInstance();
+		SizeMeta::getInstance()->doHooks();
 		new Exclude();
 		new Api();
 		new FolderUser();
@@ -67,6 +67,9 @@ class Folder extends Controller {
 
 		add_filter( 'mailpoet_conflict_resolver_whitelist_script', array( $this, 'mailpoet_conflict_resolver_whitelist_script' ), 10, 1 );
 		add_filter( 'mailpoet_conflict_resolver_whitelist_style', array( $this, 'mailpoet_conflict_resolver_whitelist_style' ), 10, 1 );
+
+		add_filter( 'users_have_additional_content', array( $this, 'users_have_additional_content' ), 10, 2 );
+		add_action( 'deleted_user', array( $this, 'deleted_user' ), 10, 3 );
 	}
 
 	public function mailpoet_conflict_resolver_whitelist_script( $scripts ) {
@@ -172,6 +175,15 @@ class Folder extends Controller {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'ajaxSetFolder' ),
+				'permission_callback' => array( $this, 'resPermissionsCheck' ),
+			)
+		);
+		register_rest_route(
+			NJFB_REST_URL,
+			'generate-attachment-size',
+			array(
+				'methods'             => \WP_REST_Server::CREATABLE,
+				'callback'            => array( SizeMeta::getInstance(), 'apiCallback' ),
 				'permission_callback' => array( $this, 'resPermissionsCheck' ),
 			)
 		);
@@ -337,7 +349,14 @@ class Folder extends Controller {
 		}
 
 		// $isFolderUserEnabled = has_filter('fbv_in_not_in_created_by');
+		$sizeMeta    = SizeMeta::getInstance()->meta_key;
 		$fbvPropery = $query->get( 'fbv' );
+
+		if ( $query->get( 'orderby' ) === $sizeMeta ) {
+			$clauses['join']   .= " LEFT JOIN {$wpdb->postmeta} AS fbmt ON ({$wpdb->posts}.ID = fbmt.post_id AND fbmt.meta_key = '{$sizeMeta}') ";
+			$clauses['orderby'] = " fbmt.meta_value + 0 {$query->query['order']} ";
+		}
+
 		if ( isset( $_GET['fbv'] ) || $fbvPropery !== '' ) {
 			$fbv = isset( $_GET['fbv'] ) ? (int) sanitize_text_field( $_GET['fbv'] ) : (int) $fbvPropery;
 
@@ -363,9 +382,11 @@ class Folder extends Controller {
 				if ( $parent < 0 ) {
 					$parent = 0; //important
 				}
-				unset( $fbv[0] );
-				foreach ( $fbv as $k => $v ) {
-					$parent = FolderModel::newOrGet( $v, $parent );
+				if( apply_filters( 'fbv_auto_create_folders', true ) ) {
+					unset( $fbv[0] );
+					foreach ( $fbv as $k => $v ) {
+						$parent = FolderModel::newOrGet( $v, $parent );
+					}
 				}
 			}
 			FolderModel::setFoldersForPosts( $post_id, $parent );
@@ -754,5 +775,21 @@ class Folder extends Controller {
 		$result = $this->restoreFolderStructure( $data );
 
 		return new \WP_REST_Response( array( 'success' => $result ) );
+	}
+	public function deleted_user( $id, $reassign, $user ) {
+		if( $reassign === null ) {
+			FolderModel::deleteByAuthor( $id );
+		} else {
+			FolderModel::updateAuthor( $id, (int) $reassign );
+		}
+	}
+	public function users_have_additional_content( $users_have_content, $userids ) {
+		global $wpdb;
+		if ( $userids && ! $users_have_content ) {
+			if ( $wpdb->get_var( "SELECT id FROM {$wpdb->prefix}fbv WHERE created_by IN( " . implode( ',', $userids ) . ' ) LIMIT 1' ) ) {
+				$users_have_content = true;
+			}
+		}
+		return $users_have_content;
 	}
 }
