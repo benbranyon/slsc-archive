@@ -21,13 +21,13 @@
                 let label = $el.text();
 
                 if ($el.hasClass('facetwp-page')) {
-                    label = 'Go to page ' + label;
+                    label = FWP_JSON.a11y.label_page + ' ' + label;
 
-                    if ($el.hasClass('prev')) {
-                        label = 'Go to previous page';
+                    if ($el.hasClass('next')) {
+                        label = FWP_JSON.a11y.label_page_next;
                     }
-                    else if ($el.hasClass('next')) {
-                        label = 'Go to next page';
+                    else if ($el.hasClass('prev')) {
+                        label = FWP_JSON.a11y.label_page_prev;
                     }
                 }
 
@@ -41,8 +41,8 @@
                 $(this).attr('aria-label', $(this).find('option:selected').text());
             });
 
-            // search
-            $('.facetwp-search').each(function() {
+            // search, date
+            $('.facetwp-search, .facetwp-date').each(function() {
                 $(this).attr('aria-label', $(this).attr('placeholder'));
             });
 
@@ -59,6 +59,8 @@
                 $(this).attr('aria-haspopup', 'true');
                 $(this).attr('aria-expanded', $(this).hasClass('fs-open') ? 'true' : 'false');
             });
+
+            $('.facetwp-type-fselect .facetwp-dropdown').attr('aria-hidden', 'true');
 
             // pager
             $('.facetwp-pager').attr('role', 'navigation');

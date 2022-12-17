@@ -55,7 +55,7 @@ window.fComplete = (() => {
             var that = this;
 
             var html = `
-            <div class="fcomplete-wrap hidden">
+            <div class="fcomplete-wrap fcomplete-hidden">
                 <div class="fcomplete-status"></div>
                 <div class="fcomplete-results"></div>
             </div>
@@ -85,12 +85,12 @@ window.fComplete = (() => {
         }
 
         open() {
-            this.input._rel.classList.remove('hidden');
+            this.input._rel.classList.remove('fcomplete-hidden');
         }
 
         close() {
             window.fCompleteInit.lastFocus = null;
-            this.input._rel.classList.add('hidden');
+            this.input._rel.classList.add('fcomplete-hidden');
         }
 
         setStatus(text) {
@@ -99,7 +99,7 @@ window.fComplete = (() => {
             node.innerHTML = text;
 
             var method = (text) ? 'remove' : 'add';
-            node.classList[method]('hidden');
+            node.classList[method]('fcomplete-hidden');
         }
 
         render(data) {
@@ -188,7 +188,7 @@ window.fComplete = (() => {
                     this.fcomplete.open();
                 }
                 else if (!wrap && !isInput) {
-                    document.querySelectorAll('.fcomplete-wrap').forEach((node) => node.classList.add('hidden'));
+                    document.querySelectorAll('.fcomplete-wrap').forEach((node) => node.classList.add('fcomplete-hidden'));
                 }
             });
 

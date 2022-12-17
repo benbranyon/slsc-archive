@@ -25,6 +25,8 @@ class FacetWP_Upgrade
 
         $int = apply_filters( 'facetwp_use_bigint', false ) ? 'BIGINT' : 'INT';
 
+        $charset_collate = $wpdb->get_charset_collate();
+
         $sql = "
         CREATE TABLE IF NOT EXISTS {$wpdb->prefix}facetwp_index (
             id BIGINT unsigned not null auto_increment,
@@ -40,7 +42,7 @@ class FacetWP_Upgrade
             INDEX post_id_idx (post_id),
             INDEX facet_name_idx (facet_name),
             INDEX facet_name_value_idx (facet_name, facet_value)
-        ) DEFAULT CHARSET=utf8";
+        ) $charset_collate";
         dbDelta( $sql );
 
         // Add default settings

@@ -157,6 +157,15 @@
     cursor: pointer;
 }
 
+.facetwp-slider[data-disabled="true"] {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.facetwp-slider[data-disabled="true"] .noUi-handle {
+    cursor: not-allowed;
+}
+
 /* Search */
 
 .facetwp-input-wrap {
@@ -309,10 +318,6 @@
 }
 
 /* Layout builder */
-
-.fwpl-layout, .fwpl-row {
-    display: grid;
-}
 
 @media (max-width: 480px) {
     body .facetwp-template .fwpl-layout,

@@ -16,9 +16,20 @@ class FacetWP_Updater
     function get_plugins_to_check() {
         $output = [];
         $plugins = get_plugins();
-        $active_plugins = get_option( 'active_plugins', [] );
+
+        if ( is_multisite() ) {
+            $active_plugins = get_site_option( 'active_sitewide_plugins', [] );
+            $active_plugins = array_flip( $active_plugins ); // [plugin] => path
+        }
+        else {
+            $active_plugins = get_option( 'active_plugins', [] );
+        }
 
         foreach ( $active_plugins as $plugin_path ) {
+            if ( is_multisite() ) {
+                $plugin_path = str_replace( WP_PLUGIN_DIR, '', $plugin_path );
+            }
+
             if ( isset( $plugins[ $plugin_path ] ) ) {
                 $info = $plugins[ $plugin_path ];
                 $slug = trim( dirname( $plugin_path ), '/' );
@@ -130,6 +141,8 @@ class FacetWP_Updater
                         'plugin'        => $plugin_path,
                         'new_version'   => $info['version'],
                         'package'       => $info['package'],
+                        'requires'      => $info['requires'],
+                        'tested'        => $info['tested']
                     ];
 
                     if ( version_compare( $plugins[ $slug ]['version'], $info['version'], '<' ) ) {

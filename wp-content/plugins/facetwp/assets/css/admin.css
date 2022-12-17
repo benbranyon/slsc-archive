@@ -2,8 +2,9 @@
 :root {
     --red: #dc3545;
     --red-dark: #c82333;
-    --purple: #673ab7;
-    --green: #54b054;
+    --orange: #ffac66;
+    --purple: #752cbd;
+    --green: #62dd62;
     --blue: #50b7ff;
     --blue-light: #b4ddff;
     --blue-medium: #209cee;
@@ -20,6 +21,10 @@
 body.settings_page_facetwp {
     background: var(--white);
     font-size: 14px;
+}
+
+body.settings_page_facetwp .wrap {
+    margin: 20px 20px 0 0;
 }
 
 body.settings_page_facetwp #screen-meta,
@@ -41,18 +46,17 @@ a:hover {
 }
 
 .facetwp-header {
-    margin: 0 0 20px -20px;
-    padding: 8px 20px;
-    border-bottom: 1px solid var(--grey-medium);
-    background-color: var(--white);
+    margin: 0 0 0 -20px;
+    padding: 10px 20px;
+    background-color: var(--purple);
 }
 
 .facetwp-logo {
-    line-height: 21px;
-    background: url('../images/logo.svg') no-repeat;
-    background-size: 27px 21px;
+    line-height: 25px;
+    background: url('../images/logo.svg?v=4.1') no-repeat;
+    background-size: 32px 25px;
     display: inline-block;
-    width: 27px;
+    width: 32px;
 }
 
 .facetwp-version {
@@ -65,12 +69,16 @@ a:hover {
     cursor: pointer;
     display: inline-block;
     border-radius: 3px;
-    padding: 4px 12px;
-    color: var(--grey-dark);
+    padding: 5px 15px;
+    color: #d7d7d7;
 }
 
 .facetwp-tab.active {
-    background-color: var(--purple);
+    background-color: rgba(255, 255, 255, 0.2);
+    color: var(--white);
+}
+
+.facetwp-tab:hover {
     color: var(--white);
 }
 
@@ -80,14 +88,13 @@ a:hover {
 
 .facetwp-response-wrap {
     position: absolute;
-    right: 21px;
-    margin-top: 8px;
+    right: 20px;
+    margin-top: 10px;
     padding: 2px 8px;
     line-height: 1;
+    color: var(--white);
 
-    background-color: var(--white);
-    border: 1px solid var(--grey-medium);
-    border-top: none;
+    background-color: var(--purple);
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     cursor: pointer;
@@ -128,7 +135,7 @@ a:hover {
 
 .facetwp-response-icon[data-status="error"] span::before {
     content: "\f534";
-    color: var(--red);
+    color: var(--orange);
 }
 
 .facetwp-response-icon[data-status="load"] span {
@@ -144,7 +151,6 @@ a:hover {
     position: relative;
     display: inline-block;
     background-color: var(--red);
-    border: 1px solid transparent;
     border-radius: 3px;
     vertical-align: top;
     cursor: pointer;
@@ -160,6 +166,10 @@ a:hover {
     border: 1px solid var(--grey-medium);
 }
 
+.facetwp-header .btn-normal {
+    border: 1px solid var(--white);
+}
+
 .btn-normal:hover {
     border: 1px solid var(--grey-dark);
 }
@@ -167,12 +177,19 @@ a:hover {
 .btn-split .btn-label,
 .btn-split .btn-caret {
     display: inline-block;
-    padding: 4px 8px;
+    padding: 5px 10px;
     color: var(--white);
 }
 
 .btn-split .btn-label {
-    padding: 4px 12px;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    padding: 5px 15px;
+}
+
+.btn-split .btn-caret {
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
 }
 
 .btn-split .btn-label:hover,
@@ -226,6 +243,7 @@ a:hover {
 
 .facetwp-region {
     display: none;
+    padding-bottom: 30px;
 }
 
 .facetwp-region.active {
@@ -282,6 +300,7 @@ h3 .facetwp-btn {
 .facetwp-region input[type='number'],
 .facetwp-region select {
     width: 220px;
+    border-radius: 4px;
 }
 
 .facet-fields input.facet-step,
@@ -382,7 +401,7 @@ h3 .facetwp-btn {
 }
 
 .facetwp-region .fs-label-wrap .fs-arrow {
-    top: 5px;
+    top: 6px;
     right: 5px;
     bottom: initial;
     width: 16px;
@@ -585,7 +604,7 @@ h3 .facetwp-btn {
 .qb-wrap .qb-orderby,
 .qb-wrap .qb-type,
 .qb-wrap .qb-order {
-    width: 100px;
+    width: 120px;
 }
 
 .facet-fields .qb-row {
@@ -646,10 +665,12 @@ h3 .facetwp-btn {
     height: 20px;
     min-height: auto;
     margin: 4px 2px 0;
+    line-height: 20px;
 }
 
 .qb-wrap .v-select .vs__search,
 .qb-wrap .v-select .vs__search:focus {
+    font-size: 14px;
     border: 1px solid var(--grey);
     padding: 0 8px;
 }

@@ -30,12 +30,6 @@ class FacetWP_Renderer
     /* (boolean) Are we preloading? */
     public $is_preload = false;
 
-    /* (array) Data for the sort box dropdown */
-    public $sort_options;
-
-    /* (array) Sort facet, if available */
-    public $sort_facet;
-
     /* (array) Cache preloaded facet values */
     public $preloaded_values;
 
@@ -54,7 +48,6 @@ class FacetWP_Renderer
      * @return array
      */
     function render( $params ) {
-        global $wpdb;
 
         $output = [
             'facets'        => [],
@@ -98,11 +91,6 @@ class FacetWP_Renderer
 
                 $facet['selected_values'] = FWP()->helper->sanitize( $f['selected_values'] );
 
-                // Is a sort facet?
-                if ( 'sort' == $facet['type'] ) {
-                    $this->sort_facet = $facet;
-                }
-
                 $this->facets[ $name ] = $facet;
             }
         }
@@ -131,74 +119,38 @@ class FacetWP_Renderer
             }
 
             // Get the template "query" field
-            $this->query_args = apply_filters( 'facetwp_query_args', $query_args, $this );
+            $query_args = apply_filters( 'facetwp_query_args', $query_args, $this );
 
             // Pagination
-            $this->query_args['paged'] = empty( $params['paged'] ) ? 1 : (int) $params['paged'];
+            $query_args['paged'] = empty( $params['paged'] ) ? 1 : (int) $params['paged'];
 
             // Preserve SQL_CALC_FOUND_ROWS
-            unset( $this->query_args['no_found_rows'] );
+            unset( $query_args['no_found_rows'] );
 
             // Narrow posts based on facet selections
-            $post_ids = $this->get_filtered_post_ids();
+            $post_ids = $this->get_filtered_post_ids( $query_args );
 
             // Update the SQL query
             if ( ! empty( $post_ids ) ) {
                 if ( FWP()->is_filtered ) {
-                    $this->query_args['post__in'] = $post_ids;
+                    $query_args['post__in'] = $post_ids;
                 }
 
                 $this->where_clause = ' AND post_id IN (' . implode( ',', $post_ids ) . ')';
             }
 
-            // Sort handler
-            $sort_value = 'default';
-            $this->sort_options = $this->get_sort_options();
-            if ( ! empty( $params['extras']['sort'] ) ) {
-                $sort_value = $params['extras']['sort'];
-                if ( ! empty( $this->sort_options[ $sort_value ] ) ) {
-                    $args = $this->sort_options[ $sort_value ]['query_args'];
-                    $this->query_args = array_merge( $this->query_args, $args );
-                }
-            }
-
-            // Sort the results by relevancy
-            $use_relevancy = apply_filters( 'facetwp_use_search_relevancy', true, $this );
-            $is_default_sort = ( 'default' == $sort_value && empty( $this->http_params['get']['orderby'] ) );
-            if ( $this->is_search && $use_relevancy && $is_default_sort && FWP()->is_filtered ) {
-                $this->query_args['orderby'] = 'post__in';
-            }
-
-            // Sort facet
-            if ( ! empty( $this->sort_facet ) && ! empty( $this->sort_facet['selected_values'] ) ) {
-                $chosen_sort = $this->sort_facet['selected_values'][0];
-
-                foreach ( $this->sort_facet['sort_options'] as $contents ) {
-                    if ( $chosen_sort == $contents['name'] ) {
-                        $args = FWP()->builder->parse_query_obj([ 'orderby' => $contents['orderby'] ]);
-
-                        if ( isset( $args['meta_query'] ) ) {
-                            $meta_query = $this->query_args['meta_query'] ?? [];
-                            $meta_query = array_merge( $meta_query, $args['meta_query'] );
-                            $this->query_args['meta_query'] = $meta_query;
-                        }
-
-                        $this->query_args['orderby'] = $args['orderby'];
-                        break;
-                    }
-                }
-            }
-
             // Set the default limit
-            if ( empty( $this->query_args['posts_per_page'] ) ) {
-                $this->query_args['posts_per_page'] = (int) get_option( 'posts_per_page' );
+            if ( empty( $query_args['posts_per_page'] ) ) {
+                $query_args['posts_per_page'] = (int) get_option( 'posts_per_page' );
             }
 
             // Adhere to the "per page" box
             $per_page = isset( $params['extras']['per_page'] ) ? $params['extras']['per_page'] : '';
             if ( ! empty( $per_page ) && 'default' != $per_page ) {
-                $this->query_args['posts_per_page'] = (int) $per_page;
+                $query_args['posts_per_page'] = (int) $per_page;
             }
+
+            $this->query_args = apply_filters( 'facetwp_filtered_query_args', $query_args, $this );
 
             // Run the WP_Query
             $this->query = new WP_Query( $this->query_args );
@@ -254,14 +206,9 @@ class FacetWP_Renderer
             $output['counts'] = $this->get_result_count( $pager_args );
         }
 
-        // Not paging or sorting
+        // Not paging
         if ( 0 == $params['soft_refresh'] ) {
             $output['settings']['num_choices'] = [];
-
-            // Display the sort box
-            if ( isset( $params['extras']['sort'] ) ) {
-                $output['sort'] = $this->get_sort_html();
-            }
         }
 
         // Get facet data
@@ -274,7 +221,7 @@ class FacetWP_Renderer
                 continue;
             }
 
-            // Skip facets when paging or sorting
+            // Skip facets when paging
             if ( 0 < $params['soft_refresh'] && 'pager' != $facet_type ) {
                 continue;
             }
@@ -386,7 +333,7 @@ class FacetWP_Renderer
             // Subsequent ajax requests
             elseif ( ! empty( $this->http_params['archive_args'] ) ) {
                 foreach ( $this->http_params['archive_args'] as $key => $val ) {
-                    if ( in_array( $key, [ 'cat', 'tag_id', 'taxonomy', 'term' ] ) ) {
+                    if ( in_array( $key, [ 'cat', 'tag_id', 'taxonomy', 'term', 's' ] ) ) {
                         $defaults[ $key ] = $val;
                     }
                 }
@@ -413,11 +360,14 @@ class FacetWP_Renderer
      * Get ALL post IDs for the matching query
      * @return array An array of post IDs
      */
-    function get_filtered_post_ids() {
-        global $wpdb;
+    function get_filtered_post_ids( $query_args = [] ) {
+
+        if ( empty( $query_args ) ) {
+            $query_args = $this->query_args;
+        }
 
         // Only get relevant post IDs
-        $args = array_merge( $this->query_args, [
+        $args = array_merge( $query_args, [
             'paged' => 1,
             'posts_per_page' => -1,
             'update_post_meta_cache' => false,
@@ -583,74 +533,6 @@ class FacetWP_Renderer
             'lower' => $lower,
             'upper' => $upper,
             'total' => $total_rows,
-        ] );
-    }
-
-
-    /**
-     * Handle sorting options
-     * @return array
-     */
-    function get_sort_options() {
-
-        $options = [
-            'default' => [
-                'label' => __( 'Sort by', 'fwp-front' ),
-                'query_args' => []
-            ],
-            'title_asc' => [
-                'label' => __( 'Title (A-Z)', 'fwp-front' ),
-                'query_args' => [
-                    'orderby' => 'title',
-                    'order' => 'ASC',
-                ]
-            ],
-            'title_desc' => [
-                'label' => __( 'Title (Z-A)', 'fwp-front' ),
-                'query_args' => [
-                    'orderby' => 'title',
-                    'order' => 'DESC',
-                ]
-            ],
-            'date_desc' => [
-                'label' => __( 'Date (Newest)', 'fwp-front' ),
-                'query_args' => [
-                    'orderby' => 'date',
-                    'order' => 'DESC',
-                ]
-            ],
-            'date_asc' => [
-                'label' => __( 'Date (Oldest)', 'fwp-front' ),
-                'query_args' => [
-                    'orderby' => 'date',
-                    'order' => 'ASC',
-                ]
-            ]
-        ];
-
-        return apply_filters( 'facetwp_sort_options', $options, [
-            'template_name' => $this->template['name'],
-        ] );
-    }
-
-
-    /**
-     * Display the sorting control
-     * @return string (HTML)
-     */
-    function get_sort_html( $params = [] ) {
-
-        if ( isset( $this->sort_options ) ) {
-            $output = '<select class="facetwp-sort-select">';
-            foreach ( $this->sort_options as $key => $atts ) {
-                $output .= '<option value="' . $key . '">' . $atts['label'] . '</option>';
-            }
-            $output .= '</select>';
-        }
-
-        return apply_filters( 'facetwp_sort_html', $output, [
-            'sort_options' => $this->sort_options,
-            'template_name' => $this->template['name'],
         ] );
     }
 

@@ -23,10 +23,11 @@ class FacetWP_Indexer
 
 
     function __construct() {
+        $this->set_table_prop();
+        $this->run_cron();
+
         if ( apply_filters( 'facetwp_indexer_is_enabled', true ) ) {
-            $this->set_table_prop();
             $this->run_hooks();
-            $this->run_cron();
         }
     }
 
@@ -667,11 +668,13 @@ class FacetWP_Indexer
                 $temp = preg_split( '/\r\n|\r|\n/', trim( $facet['modifier_values'] ) );
                 $values = [];
 
-                // Compare using both original and decoded values
+                // Compare using both original and encoded values
                 foreach ( $temp as $val ) {
                     $val = trim( $val );
+                    $val_encoded = htmlentities( $val );
                     $val_decoded = html_entity_decode( $val );
                     $values[ $val ] = true;
+                    $values[ $val_encoded ] = true;
                     $values[ $val_decoded ] = true;
                 }
 

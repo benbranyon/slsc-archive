@@ -59,8 +59,9 @@ window.fSelect = (() => {
             var that = this;
             var options = that.buildOptions();
             var label = that.getDropdownLabel();
-            var searchClass = (that.settings.showSearch) ? '' : ' fs-hidden';
             var mode = (that.settings.multiple) ? 'multiple' : 'single';
+            var searchClass = (that.settings.showSearch) ? '' : ' fs-hidden';
+            var noResultsClass = (build.idx < 2) ? '' : ' fs-hidden';
 
             var html = `
             <div class="fs-wrap ${mode}" tabindex="0">
@@ -72,7 +73,7 @@ window.fSelect = (() => {
                     <div class="fs-search${searchClass}">
                         <input type="text" placeholder="${that.settings.searchText}" />
                     </div>
-                    <div class="fs-no-results fs-hidden">${that.settings.noResultsText}</div>
+                    <div class="fs-no-results${noResultsClass}">${that.settings.noResultsText}</div>
                     <div class="fs-options">${options}</div>
                 </div>
             </div>
@@ -104,7 +105,11 @@ window.fSelect = (() => {
             var wrap = this.input._rel;
             wrap.classList.add('fs-open');
             wrap.querySelector('.fs-dropdown').classList.remove('fs-hidden');
-            wrap.querySelector('.fs-search input').focus();
+
+            // don't auto-focus for touch devices
+            if (! window.matchMedia("(pointer: coarse)").matches) {
+                wrap.querySelector('.fs-search input').focus();
+            }
 
             window.fSelectInit.lastChoice = this.getSelectedOptions('value');
             window.fSelectInit.activeEl = wrap;
@@ -276,6 +281,7 @@ window.fSelect = (() => {
                     }
                 }
 
+                // hide optgroups if no choices
                 wrap.querySelectorAll('.fs-optgroup-label').forEach((node) => {
                     var group = node.getAttribute('data-group');
                     var container = node.closest('.fs-options');
@@ -285,6 +291,15 @@ window.fSelect = (() => {
                         node.classList.add('fs-hidden');
                     }
                 });
+
+                // toggle the noResultsText div
+                if (wrap.querySelectorAll('.fs-option:not(.fs-hidden').length) {
+                    wrap.querySelector('.fs-no-results').classList.add('fs-hidden');
+                }
+                else {
+                    wrap.querySelector('.fs-no-results').classList.remove('fs-hidden');
+                }
+
             }, 100));
 
             that.on('click', optionSelector, function(e) {
@@ -308,13 +323,8 @@ window.fSelect = (() => {
                 wrap.querySelector('.fs-label').innerHTML = label;
 
                 // fire a change event
-                var lastChoice = window.fSelectInit.lastChoice;
-                var currentChoice = input.fselect.getSelectedOptions('value');
-    
-                if (JSON.stringify(lastChoice) !== JSON.stringify(currentChoice)) {
-                    input.dispatchEvent(new Event('change', { bubbles: true }));
-                    input.fselect.trigger('fs:changed', wrap);
-                }
+                input.dispatchEvent(new Event('change', { bubbles: true }));
+                input.fselect.trigger('fs:changed', wrap);
 
                 if (!isMultiple) {
                     input.fselect.close();

@@ -228,24 +228,38 @@
         var vals = params.selected_values;
         var facet_name = $el.attr('data-name');
         var fields = FWP.settings[facet_name].fields;
-        var out = [];
+        var out = '';
 
-        if ('' !== vals[0]) {
-            let val = $el.find('.facetwp-date-min').val();
-            if ('start_date' === fields || ('both' === fields && '' === vals[1])) {
-                val = val + '...';
+        if ('exact' == fields) {
+            if ('' !== vals[0]) {
+                out = vals[0];
             }
-            out.push(val);
         }
-        if ('' !== vals[1]) {
-            let val = $el.find('.facetwp-date-max').val();
-            if ('end_date' === fields || ('both' === fields && '' === vals[0])) {
-                val = '...' + val;
+        else if ('start_date' == fields) {
+            if ('' !== vals[0]) {
+                out = '[>=] ' + vals[0];
             }
-            out.push(val);
+        }
+        else if ('end_date' == fields) {
+            if ('' !== vals[1]) {
+                out = '[<=] ' + vals[1];
+            }
+        }
+        else if ('both' == fields) {
+            if ('' !== vals[0] || '' !== vals[1]) {
+                if ('' !== vals[0] && '' !== vals[1]) {
+                    out = vals[0] + ' - ' + vals[1];
+                }
+                else if ('' !== vals[0]) {
+                    out = '[>=] ' + vals[0];
+                }
+                else if ('' !== vals[1]) {
+                    out = '[<=] ' + vals[1];
+                }
+            }
         }
 
-        return (out.length) ? '(' + out.join('...') + ')' : '';
+        return out;
     });
 
     $().on('facetwp-loaded', function() {
@@ -378,8 +392,9 @@
         });
     });
 
-    $().on('fs:changed', function() {
-        if (! FWP.is_refresh) {
+    $().on('fs:changed', function(e) {
+        var is_facet = $(e.detail[0]).closest('.facetwp-type-fselect').len() > 0;
+        if (! FWP.is_refresh && is_facet) {
             FWP.autoload();
         }
     });
@@ -428,7 +443,48 @@
     });
 
     FWP.hooks.addFilter('facetwp/selections/number_range', function(output, params) {
-        return params.selected_values[0] + ' - ' + params.selected_values[1];
+        var $el = params.el;
+        var vals = params.selected_values;
+        var facet_name = $el.attr('data-name');
+        var fields = FWP.settings[facet_name].fields;
+        var out = '';
+
+        if ('exact' == fields) {
+            if ('' !== vals[0]) {
+                out = vals[0];
+            }
+        }
+        else if ('min' == fields) {
+            if ('' !== vals[0]) {
+                out = '[>=] ' + vals[0];
+            }
+        }
+        else if ('max' == fields) {
+            if ('' !== vals[1]) {
+                out = '[<=] ' + vals[1];
+            }
+        }
+        else if ('both' == fields) {
+            if ('' !== vals[0] || '' !== vals[1]) {
+                if ('' !== vals[0] && '' !== vals[1]) {
+                    out = vals[0] + ' - ' + vals[1];
+                }
+                else if ('' !== vals[0]) {
+                    out = '[>=] ' + vals[0];
+                }
+                else if ('' !== vals[1]) {
+                    out = '[<=] ' + vals[1];
+                }
+            }
+        }
+
+        return out;
+    });
+
+    $().on('keyup', '.facetwp-type-number_range .facetwp-number', function(e) {
+        if (13 === e.which && ! FWP.is_refresh) {
+            FWP.autoload();
+        }
     });
 
     $().on('click', '.facetwp-type-number_range .facetwp-submit', function() {
@@ -769,11 +825,16 @@
                 }
 
                 // fail on invalid ranges
-                if (parseFloat(opts.range.min) >= parseFloat(opts.range.max)) {
+                if (parseFloat(opts.range.min) > parseFloat(opts.range.max)) {
                     FWP.settings[facet_name]['lower'] = opts.range.min;
                     FWP.settings[facet_name]['upper'] = opts.range.max;
                     FWP.hooks.doAction('facetwp/set_label/slider', $parent);
                     return;
+                }
+
+                // disable the UI if only 1 value
+                if (parseFloat(opts.range.min) == parseFloat(opts.range.max)) {
+                    $this.attr('data-disabled', 'true');
                 }
 
                 var slider = this;
@@ -933,11 +994,6 @@
                         return !values.includes(name);
                     });
                 }
-
-                // ignore pseudo-facet types
-                values = values.filter(name => {
-                    return !['pager','reset','sort'].includes(FWP.facet_type[name]);
-                });
 
                 // store the target facets (array) within the DOM element
                 $this.nodes[0]._facets = values;

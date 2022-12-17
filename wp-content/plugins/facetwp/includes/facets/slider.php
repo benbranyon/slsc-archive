@@ -79,8 +79,8 @@ class FacetWP_Facet_Slider extends FacetWP_Facet
             'thousands_separator' => FWP()->helper->get_setting( 'thousands_separator' ),
             'start' => [ $selected_min, $selected_max ], // inner (handles) 
             'format' => $facet['format'],
-            'prefix' => $facet['prefix'],
-            'suffix' => $facet['suffix'],
+            'prefix' => facetwp_i18n( $facet['prefix'] ),
+            'suffix' => facetwp_i18n( $facet['suffix'] ),
             'step' => $facet['step']
         ];
     }

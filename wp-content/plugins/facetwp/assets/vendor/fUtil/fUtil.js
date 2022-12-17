@@ -246,6 +246,11 @@ window.fUtil = (() => {
             return clone;
         }
 
+        prepend(html) {
+            this.each(node => node.insertAdjacentHTML('afterbegin', html));
+            return this;
+        }
+
         append(html) {
             this.each(node => node.insertAdjacentHTML('beforeend', html));
             return this;

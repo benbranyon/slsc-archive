@@ -15,6 +15,9 @@ final class FacetWP_Helper
     /* (array) Cached terms */
     public $term_cache;
 
+    /* (array) Index table row counts */
+    public $row_counts;
+
 
     function __construct() {
         $this->facet_types = $this->get_facet_types();
@@ -496,7 +499,7 @@ final class FacetWP_Helper
             ];
     
             foreach ( $taxonomies as $tax ) {
-                $sources['taxonomies']['choices'][ 'tax/' . $tax->name ] = $tax->labels->name;
+                $sources['taxonomies']['choices'][ 'tax/' . $tax->name ] = $tax->labels->name . ' (' . $tax->name . ')';
             }
     
             foreach ( $custom_fields as $cf ) {
@@ -537,6 +540,10 @@ final class FacetWP_Helper
      * @since 3.3.4
      */
     function get_row_counts() {
+        if ( isset( $this->row_counts ) ) {
+            return $this->row_counts;
+        }
+
         global $wpdb;
 
         $output = [];
@@ -545,6 +552,8 @@ final class FacetWP_Helper
         foreach ( $results as $result ) {
             $output[ $result->facet_name ] = (int) $result->row_count;
         }
+
+        $this->row_counts = $output;
 
         return $output;
     }

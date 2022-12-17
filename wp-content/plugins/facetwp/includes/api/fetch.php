@@ -82,8 +82,9 @@ class FacetWP_API_Fetch
         }
 
         // Get bucket of post IDs
-        FWP()->facet->query_args = $params['query_args'];
-        $post_ids = FWP()->facet->get_filtered_post_ids();
+        $query_args = $params['query_args'];
+        FWP()->facet->query_args = $query_args;
+        $post_ids = FWP()->facet->get_filtered_post_ids( $query_args );
 
         // SQL WHERE used by facets
         $where_clause = ' AND post_id IN (' . implode( ',', $post_ids ) . ')';

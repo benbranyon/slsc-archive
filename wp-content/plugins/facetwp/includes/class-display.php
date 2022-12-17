@@ -170,6 +170,11 @@ class FacetWP_Display
 
             if ( 'yes' == $a11y || $a11y_hook ) {
                 $this->assets['accessibility.js'] = FACETWP_URL . '/assets/js/src/accessibility.js';
+                $this->json['a11y'] = [
+                    'label_page'        => __( 'Go to page', 'fwp-front' ),
+                    'label_page_next'   => __( 'Go to next page', 'fwp-front' ),
+                    'label_page_prev'   => __( 'Go to previous page', 'fwp-front' )
+                ];
             }
 
             // Pass GET and URI params

@@ -198,7 +198,13 @@ class FacetWP_Request
      * Is this the main query?
      */
     function is_main_query( $query ) {
-        $is_main_query = ( $query->is_main_query() || $query->is_archive );
+        if ( 'yes' == FWP()->helper->get_setting( 'strict_query_detection', 'no' ) ) {
+            $is_main_query = ( $query->is_main_query() );
+        }
+        else {
+            $is_main_query = ( $query->is_main_query() || $query->is_archive );
+        }
+
         $is_main_query = ( $query->is_singular || $query->is_feed ) ? false : $is_main_query;
         $is_main_query = ( $query->get( 'suppress_filters', false ) ) ? false : $is_main_query; // skip get_posts()
         $is_main_query = ( '' !== $query->get( 'facetwp' ) ) ? (bool) $query->get( 'facetwp' ) : $is_main_query; // flag

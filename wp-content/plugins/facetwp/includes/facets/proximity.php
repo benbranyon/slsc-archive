@@ -248,7 +248,7 @@ class FacetWP_Facet_Proximity_Core extends FacetWP_Facet
             $latlng = $params['facet_value'];
 
             // Only handle "lat, lng" strings
-            if ( is_string( $latlng ) ) {
+            if ( ! empty( $latlng ) && is_string( $latlng ) ) {
                 $latlng = preg_replace( '/[^0-9.,-]/', '', $latlng );
 
                 if ( ! empty( $facet['source_other'] ) ) {
@@ -256,7 +256,7 @@ class FacetWP_Facet_Proximity_Core extends FacetWP_Facet
                     $other_params['facet_source'] = $facet['source_other'];
                     $rows = $class->get_row_data( $other_params );
 
-                    if ( false === strpos( $latlng, ',' ) ) {
+                    if ( ! empty( $rows ) && false === strpos( $latlng, ',' ) ) {
                         $lng = $rows[0]['facet_display_value'];
                         $lng = preg_replace( '/[^0-9.,-]/', '', $lng );
                         $latlng .= ',' . $lng;

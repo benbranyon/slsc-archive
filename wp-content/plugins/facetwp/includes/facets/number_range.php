@@ -121,4 +121,17 @@ class FacetWP_Facet_Number_Range extends FacetWP_Facet
             ]
         ];
     }
+
+
+    /**
+     * (Front-end) Attach settings to the AJAX response
+     */
+    function settings_js( $params ) {
+        $facet = $params['facet'];
+        $fields = empty( $facet['fields'] ) ? 'both' : $facet['fields'];
+
+        return [
+            'fields' => $fields
+        ];
+    }
 }

@@ -105,16 +105,16 @@ FWP.data.settings = FWP.hooks.applyFilters('facetwp/load_settings', FWP.data.set
         <span class="facetwp-version">v<?php echo FACETWP_VERSION; ?></span>
 
         <span class="facetwp-header-nav">
-            <a class="facetwp-tab" :class="{ active: active_tab == 'facets' }" @click="tabClick('facets')"><?php _e( 'Facets', 'fwp' ); ?></a>
-            <a class="facetwp-tab" :class="{ active: active_tab == 'templates' }" @click="tabClick('templates')"><?php _e( 'Listings', 'fwp' ); ?></a>
-            <a class="facetwp-tab" :class="{ active: active_tab == 'settings' }" @click="tabClick('settings')"><?php _e( 'Settings', 'fwp' ); ?></a>
-            <a class="facetwp-tab" :class="{ active: active_tab == 'support' }" @click="tabClick('support')"><?php _e( 'Support', 'fwp' ); ?></a>
+            <a class="facetwp-tab" :class="{ active: active_tab == 'facets' }" @click="tabClick('facets')"><?php _e( 'Facets', 'fwp' ); ?></a><!--
+            --><a class="facetwp-tab" :class="{ active: active_tab == 'templates' }" @click="tabClick('templates')"><?php _e( 'Listings', 'fwp' ); ?></a><!--
+            --><a class="facetwp-tab" :class="{ active: active_tab == 'settings' }" @click="tabClick('settings')"><?php _e( 'Settings', 'fwp' ); ?></a><!--
+            --><a class="facetwp-tab" :class="{ active: active_tab == 'support' }" @click="tabClick('support')"><?php _e( 'Support', 'fwp' ); ?></a>
         </span>
 
         <span class="facetwp-actions">
             <div class="btn-split facetwp-rebuild">
-                <div class="btn-label" @click="rebuildAction" v-html="indexButtonLabel"><?php _e( 'Re-index', 'fwp' ); ?></div>
-                <div class="btn-caret" @click="is_rebuild_open = !is_rebuild_open"><?php echo $svg_icons['caret-down']; ?></div>
+                <div class="btn-label" @click="rebuildAction" v-html="indexButtonLabel"><?php _e( 'Re-index', 'fwp' ); ?></div><!--
+                --><div class="btn-caret" @click="is_rebuild_open = !is_rebuild_open"><?php echo $svg_icons['caret-down']; ?></div>
                 <div class="btn-dropdown" v-cloak v-show="is_rebuild_open">
                     <div class="dropdown-inner">
                         <div @click="showIndexerStats"><?php _e( 'Show indexer stats', 'fwp' ); ?></div>

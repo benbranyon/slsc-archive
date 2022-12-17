@@ -160,13 +160,14 @@ class FacetWP_Integration_ACF
      * Extract field values from the repeater array
      */
     function process_field_value( $value, $hierarchy, $parent_field_key ) {
-
-        if ( ! is_array( $value ) ) {
-            return [];
-        }
-
         $temp_val = [];
-        $parent_field_type = $this->parent_type_lookup[ $parent_field_key ];
+
+        // prevent PHP8 fatal error on invalid lookup field
+        $parent_field_type = $this->parent_type_lookup[ $parent_field_key ] ?? 'none';
+
+        if ( ! is_array( $value ) || 'none' == $parent_field_type ) {
+            return $temp_val;
+        }
 
         // reduce the hierarchy array
         $field_key = array_shift( $hierarchy );

@@ -209,7 +209,7 @@
                         date_format: {
                             type: 'text',
                             title: FWP.__('Date format'),
-                            placeholder: 'F j, Y',
+                            defaultValue: 'F j, Y',
                             v_show: [
                                 { type: 'field_type', value: 'date' },
                                 { type: 'source', value: 'post_date' },
@@ -219,7 +219,7 @@
                         input_format: {
                             type: 'text',
                             title: FWP.__('Input format'),
-                            placeholder: 'Y-m-d',
+                            defaultValue: 'Y-m-d',
                             v_show: [
                                 { type: 'field_type', value: 'date' },
                                 { type: 'source', value: 'post_date' },
@@ -289,7 +289,8 @@
                         },
                         name: {
                             type: 'text',
-                            title: FWP.__('Name')
+                            title: FWP.__('Unique name'),
+                            notes: '(Required) unique element name, without spaces'
                         },
                         css_class: {
                             type: 'text',
@@ -482,11 +483,13 @@
                         <option v-if="showCompare('NOT IN', row)" value="NOT IN">NOT IN</option>
                         <option v-if="showCompare('EXISTS', row)" value="EXISTS">EXISTS</option>
                         <option v-if="showCompare('NOT EXISTS', row)" value="NOT EXISTS">NOT EXISTS</option>
+                        <option v-if="showCompare('EMPTY', row)" value="EMPTY">EMPTY</option>
+                        <option v-if="showCompare('NOT EMPTY', row)" value="NOT EMPTY">NOT EMPTY</option>
                     </select>
 
                     <v-select
                         v-model="row.value"
-                        v-show="row.compare != 'EXISTS' && row.compare != 'NOT EXISTS'"
+                        v-show="maybeShowValue(row.compare)"
                         :options="[]"
                         :multiple="true"
                         :taggable="true"
@@ -513,6 +516,9 @@
                 },
                 getPlaceholder({key}) {
                     return ('tax/' == key.substr(0, 4)) ? FWP.__('Enter term slugs') : FWP.__('Enter values');
+                },
+                maybeShowValue(compare) {
+                    return !['EXISTS', 'NOT EXISTS', 'EMPTY', 'NOT EMPTY'].includes(compare);
                 },
                 showCompare(option, {key, type}) {
                     if ('tax/' == key.substr(0, 4)) {
@@ -623,8 +629,12 @@
             props: ['settings', 'name', 'source', 'tab'],
             template: `
             <div class="builder-setting" v-show="isVisible">
-                <div class="setting-title" v-html="title"></div>
-                <component :is="getSettingComponent" v-bind="$props" :meta="meta"></component>
+                <div v-if="meta.notes" class="setting-title facetwp-tooltip">
+                    {{ title }}
+                    <div class="facetwp-tooltip-content" v-html="meta.notes"></div>
+                </div>
+                <div v-else class="setting-title" v-html="title"></div>
+                <div><component :is="getSettingComponent" v-bind="$props" :meta="meta"></component></div>
             </div>
             `,
             computed: {
@@ -1875,9 +1885,7 @@
                     return this.editing.label;
                 },
                 deleteItem(type, index) {
-                    if (confirm(FWP.__('Delete item?'))) {
-                        this.app[type + 's'].splice(index, 1);
-                    }
+                    this.app[type + 's'].splice(index, 1);
                 },
                 saveChanges() {
                     window.setStatus('load', FWP.__('Saving') + '...');
@@ -2067,7 +2075,7 @@
                     val = val.replace(/[^\w- ]/g, ''); // strip invalid characters
                     val = val.replace(/[- ]/g, '_'); // replace space and hyphen with underscore
                     val = val.replace(/[_]{2,}/g, '_'); // strip consecutive underscores
-                    val = ('pager' == val || 'sort' == val) ? val + '_' : val; // reserved
+                    val = ('pager' == val || 'sort' == val || 'labels' == val) ? val + '_' : val; // reserved
                     return val;
                 },
                 documentClick({target}) {

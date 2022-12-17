@@ -286,7 +286,6 @@ class FacetWP_Ajax
      * The AJAX facet refresh handler
      */
     function refresh() {
-
         global $wpdb;
 
         $params = FWP()->request->process_post_data();
