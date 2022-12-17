@@ -140,7 +140,7 @@ if( isset($_GET['settings-updated']) && $_GET['settings-updated'] == 'true' ) {
 									</th>
 									<td>
 										<input type="number" min="0" name="wmpci_options[wmpci_popup_exp]" value="<?php echo $wmpci_options['wmpci_popup_exp']; ?>" class="wmpci-popup-expiry" id="wmpci-popup-expiry" /> <span><?php _e('Days', 'wmpci'); ?></span><br/>
-										<span class="description"><?php _e('Enter expiry time when user click on close button. Upon exiry user will see popup again.', 'wp-modal-popup-with-cookie-integration'); ?></span>
+										<span class="description"><?php _e('Enter expiry time when user click on close button. Upon expiry user will see popup again.', 'wp-modal-popup-with-cookie-integration'); ?></span>
 									</td>
 								</tr>
 

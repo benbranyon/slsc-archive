@@ -1,0 +1,198 @@
+# Copyright (C) 2022 Astoundify
+# This file is distributed under the same license as the WP Modal Popup with Cookie Integration plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: WP Modal Popup with Cookie Integration 2.4\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-modal-popup-with-cookie-integration\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2022-07-22T12:21:37+02:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.5.0\n"
+"X-Domain: wp-modal-popup-with-cookie-integration\n"
+
+#. Plugin Name of the plugin
+msgid "WP Modal Popup with Cookie Integration"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://astoundify.com/products/modalify/"
+msgstr ""
+
+#. Description of the plugin
+msgid "Show Popup on your blog with desired content."
+msgstr ""
+
+#. Author of the plugin
+msgid "Astoundify"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://astoundify.com/"
+msgstr ""
+
+#: includes/admin/class-wmpci-admin.php:32
+msgid "WP PopUp"
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:51
+msgid "General Settings"
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:61
+msgid "Enable Popup"
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:65
+msgid "Check this box if you want to display popup on site."
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:71
+msgid "Main Heading"
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:75
+msgid "Enter the main heading- eg. GET 10% OFF"
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:81
+msgid "Sub Heading"
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:85
+msgid "Enter the sub heading - eg.  Now purchase anything site-wide"
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:91
+msgid "Popup Content"
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:95
+msgid "Enter your popup content."
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:101
+msgid "Popup Design"
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:113
+msgid "Select design for popup."
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:119
+msgid "Popup Delay"
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:123
+msgid "Enter no of second to open popup after page load."
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:129
+msgid "Popup Disappear"
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:133
+msgid "Enter no of second to hide popup."
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:139
+msgid "Popup Expiry Time"
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:143
+msgid "Enter expiry time when user click on close button. Upon exiry user will see popup again."
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:149
+msgid "Hide Close Button"
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:153
+msgid "Check this box if you want to hide the close button of popup."
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:159
+msgid "Close on Esc"
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:163
+msgid "Check this box if you want to close the popup on esc key."
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:169
+#: includes/admin/form/wmpci-settings.php:286
+msgid "Save Changes"
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:191
+msgid "Appearance Settings"
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:201
+msgid "Popup Height and Width"
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:204
+msgid "Height"
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:205
+msgid "Width"
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:206
+msgid "Enter custom height and width for popup. Leave empty to use default. (i.e 600px OR 60%)"
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:212
+msgid "Popup Background Color"
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:220
+#: includes/admin/form/wmpci-settings.php:238
+#: includes/admin/form/wmpci-settings.php:276
+msgid "Select Color"
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:224
+msgid "Select Popup background color."
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:230
+msgid "Popup Fonts Color"
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:242
+msgid "Select Popup font color."
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:248
+msgid "Popup Border Width"
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:252
+msgid "Enter width of popup border."
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:258
+msgid "Popup Border Radius"
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:268
+msgid "Popup Border Color"
+msgstr ""
+
+#: includes/admin/form/wmpci-settings.php:280
+msgid "Select Popup border color."
+msgstr ""
+
+#: wp-modal-popup.php:119
+msgid "Thank you for activating %s"
+msgstr ""
+
+#: wp-modal-popup.php:120
+msgid "It looks like you had PRO version %s of this plugin activated. To avoid conflicts the extra version has been deactivated and we recommend you delete it."
+msgstr ""
