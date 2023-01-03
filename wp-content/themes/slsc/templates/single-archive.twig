@@ -8,10 +8,11 @@
       <div class="l-constrain">
         <div class="single-archive-sidebar__content">
     	    <h2 class="single-archive__title">{{ post.title }}</h2>
-          {% set file = post.archive_file_upload %}
-          <div class="single-archive-download">
-            <a href="{{ file.url }}">Download File</a>
-          </div>
+          {% if file_url %}
+            <div class="single-archive-download">
+              <a href="{{ file_url }}">Download File</a>
+            </div>
+          {% endif %}
           <label class="form-item__label">Description</label>
           <div class="single-archive-description">{{ post.preview.read_more(false) }}</div>
           <label class="form-item__label">Topics</label>

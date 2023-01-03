@@ -41,6 +41,8 @@ if(get_post_type($post) == 'archive') {
 			$context['collection_title'] = $term->title;
 		}
 	}
+	$file = get_field( 'archive_file_upload' );
+	$context['file_url'] = $file['url'];
 }
 
 if ( post_password_required( $post->ID ) ) {
