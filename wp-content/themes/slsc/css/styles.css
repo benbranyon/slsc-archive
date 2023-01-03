@@ -1228,6 +1228,9 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 40px;
   font-weight: bold; }
 
+.single-archive-download {
+  margin-bottom: 40px; }
+
 .single-archive-description {
   margin-bottom: 40px; }
 

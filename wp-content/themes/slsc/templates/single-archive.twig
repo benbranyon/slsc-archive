@@ -8,13 +8,13 @@
       <div class="l-constrain">
         <div class="single-archive-sidebar__content">
     	    <h2 class="single-archive__title">{{ post.title }}</h2>
-          <label class="form-item__label">Description</label>
-          <div class="single-archive-description">{{ post.preview.read_more(false) }}</div>
           {% if file_url %}
             <div class="single-archive-download">
               <a class="button" href="{{ file_url }}" download>Download File</a>
             </div>
           {% endif %}
+          <label class="form-item__label">Description</label>
+          <div class="single-archive-description">{{ post.preview.read_more(false) }}</div>
           <label class="form-item__label">Topics</label>
           <div class="single-archive__topics">
             {% set topics = post.terms('topic') %}
