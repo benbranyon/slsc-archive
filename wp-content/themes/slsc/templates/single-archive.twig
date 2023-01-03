@@ -10,6 +10,11 @@
     	    <h2 class="single-archive__title">{{ post.title }}</h2>
           <label class="form-item__label">Description</label>
           <div class="single-archive-description">{{ post.preview.read_more(false) }}</div>
+          {% if file_url %}
+            <div class="single-archive-download">
+              <a class="button" href="{{ file_url }}" download>Download File</a>
+            </div>
+          {% endif %}
           <label class="form-item__label">Topics</label>
           <div class="single-archive__topics">
             {% set topics = post.terms('topic') %}
@@ -35,11 +40,6 @@
             <div class="single-archive__type"><span>Type:</span> {{ post.terms('file_type')[0] }}</div>
             <div><span>Language</span> {{ post.archive_language }}</div>
           </div>
-          {% if file_url %}
-            <div class="single-archive-download">
-              <a class="button" href="{{ file_url }}" download>Download File</a>
-            </div>
-          {% endif %}
       </div>
 
       </div>
