@@ -1248,6 +1248,12 @@ h1, h2, h3, h4, h5, h6 {
   .single-archive__provenance span {
     font-weight: bold; }
 
+@media (min-width: 50em) {
+  .single-archive .article {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 40px; } }
+
 .single-get_involved .l-sidebar__sidebar {
   background-color: #fff;
   padding: 0px; }

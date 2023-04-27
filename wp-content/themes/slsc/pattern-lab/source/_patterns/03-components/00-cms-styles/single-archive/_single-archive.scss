@@ -73,3 +73,10 @@
   }
 }
 
+.single-archive .article {
+  @include breakpoint($bp-medium) {
+    position: sticky;
+    top: 40px;
+  }
+}
+
