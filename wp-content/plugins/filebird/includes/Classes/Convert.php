@@ -206,7 +206,6 @@ class Convert {
 			);
 		}
 
-
 		return $sites;
 	}
 
@@ -290,7 +289,7 @@ class Convert {
 			?>
 		  <div class="njt notice notice-warning <?php echo esc_attr( $site['site'] ); ?> is-dismissible">
 			<p>
-			  <strong><?php _e( 'Import categories to FileBird', 'filebird' ); ?></strong>
+			  <strong><?php esc_html_e( 'Import categories to FileBird', 'filebird' ); ?></strong>
 			</p>
 			<p>
 			  <?php _e( sprintf( __( 'We found you have %1$s categories you created from <strong>%2$s</strong> plugin. Would you like to import it to <strong>FileBird</strong>?', 'filebird' ), $c, $site['title'] ) ); ?>
@@ -307,8 +306,8 @@ class Convert {
 								)
 							);
 							?>
-													" class="button button-primary"><?php _e( 'Import Now', 'filebird' ); ?></a> 
-			  <button class="button njt_fb_no_thanks_btn" data-site="<?php echo esc_attr( $site['site'] ); ?>"><?php _e( 'No, thanks', 'filebird' ); ?></button> 
+													" class="button button-primary"><?php esc_html_e( 'Import Now', 'filebird' ); ?></a> 
+			  <button class="button njt_fb_no_thanks_btn" data-site="<?php echo esc_attr( $site['site'] ); ?>"><?php esc_html_e( 'No, thanks', 'filebird' ); ?></button> 
 			</p>
 		  </div>
 		<?php endforeach; ?>
@@ -432,8 +431,8 @@ class Convert {
 			$is = get_option( 'njt_fb_updated_from_happyfiles', '0' ) === '1';
 		} elseif ( $site == 'premio' ) {
 			$is = get_option( 'njt_fb_updated_from_premio', '0' ) === '1';
-		} elseif ( $site == 'feml') {
-			$is = get_option( 'njt_fb_updated_from_feml', '0') === '1';
+		} elseif ( $site == 'feml' ) {
+			$is = get_option( 'njt_fb_updated_from_feml', '0' ) === '1';
 		}
 
 		return $is;
@@ -587,7 +586,7 @@ class Convert {
 			$folders = Helpers::foldersFromHappyFiles( 0, $flat );
 		} elseif ( $site == 'premio' ) {
 			$folders = Helpers::foldersFromPremio( 0, $flat );
-		} else if ($site == 'feml') {
+		} elseif ( $site == 'feml' ) {
 			$folders = Helpers::foldersFromWpfeml( 0, $flat );
 		}
 		return $folders;
@@ -595,7 +594,7 @@ class Convert {
 	public function insertFolderAndItsAtt( $site, $folders ) {
 		foreach ( $folders as $k => $folder ) {
 			if ( \is_array( $folder ) ) {
-				$folder = json_decode( json_encode( $folder ) );
+				$folder = json_decode( wp_json_encode( $folder ) );
 			}
 			$new_parent = $folder->parent;
 			if ( $new_parent > 0 ) {
@@ -611,7 +610,7 @@ class Convert {
 		global $wpdb;
 		$att = array();
 		if ( is_array( $folder ) ) {
-			$folder = json_decode( json_encode( $folder ) );
+			$folder = json_decode( wp_json_encode( $folder ) );
 		}
 
 		if ( $site == 'enhanced' ) {
@@ -640,7 +639,7 @@ class Convert {
 			$att = $wpdb->get_col( $wpdb->prepare( "SELECT object_id FROM $wpdb->term_relationships WHERE term_taxonomy_id = %d", $folder->term_taxonomy_id ) );
 		} elseif ( $site == 'feml' ) {
 			$att = $wpdb->get_col( $wpdb->prepare( "SELECT object_id FROM $wpdb->term_relationships WHERE term_taxonomy_id = %d", $folder->term_taxonomy_id ) );
-		} 
+		}
 		return $att;
 	}
 	private function afterInsertingNewFolders( $site ) {

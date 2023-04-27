@@ -143,7 +143,7 @@ class Helpers {
 		}
 		return $folders;
 	}
-	public static function foldersFromPremio( $parent = 0, $flat = false ){
+	public static function foldersFromPremio( $parent = 0, $flat = false ) {
 		global $wpdb;
 		$folders = $wpdb->get_results( $wpdb->prepare( 'SELECT t.term_id as id, t.name as title, tt.term_taxonomy_id FROM %1$s as t  INNER JOIN %2$s as tt ON (t.term_id = tt.term_id) WHERE tt.taxonomy = \'media_folder\' AND tt.parent = %3$d', $wpdb->terms, $wpdb->term_taxonomy, $parent ) );
 		foreach ( $folders as $k => $folder ) {

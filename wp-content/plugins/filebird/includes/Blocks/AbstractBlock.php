@@ -38,7 +38,7 @@ abstract class AbstractBlock {
             $this->namespace . '-' . $this->block_name . '-css',
             NJFB_PLUGIN_URL . 'blocks/' . $this->block_name . '/dist/index.css',
             $this->get_editor_dependencies(),
-            NJFB_VERSION,
+            NJFB_VERSION
         );
     }
 

@@ -4,8 +4,8 @@ defined( 'ABSPATH' ) || exit;
 
 if ( ! class_exists( 'YayCommerce' ) ) {
 	class YayCommerce {
-		private $autoInstallUrl       = '';
-		private $nonce                = '';
+		private $autoInstallUrl = '';
+		private $nonce          = '';
 		public function __construct() {
 			if ( ! function_exists( 'WC' ) || defined( 'YAYMAIL_VERSION' ) ) {
 				return;
@@ -48,7 +48,7 @@ if ( ! class_exists( 'YayCommerce' ) ) {
 			} else {
 				return;
 			}
-			
+
 			wp_enqueue_script( 'yaycommerce', NJFB_PLUGIN_URL . 'assets/js/yc.js', array(), NJFB_VERSION, true );
 			wp_localize_script(
 				'yaycommerce',
@@ -61,11 +61,11 @@ if ( ! class_exists( 'YayCommerce' ) ) {
 			?>
 				<div class="notice notice-info is-dismissible" id="njt-yc">
 					<div class="njt-yc-wrapper">
-					<h3><?php _e( 'Email Customizer for WooCommerce', 'filebird' ); ?></h3>
-					<p style="margin: 17px 0"><?php _e( 'YayMail helps you easily customize your WooCommerce emails with email builder. Try it today!', 'filebird' ); ?></p>
+					<h3><?php esc_html_e( 'Email Customizer for WooCommerce', 'filebird' ); ?></h3>
+					<p style="margin: 17px 0"><?php esc_html_e( 'YayMail helps you easily customize your WooCommerce emails with email builder. Try it today!', 'filebird' ); ?></p>
 					<p>
-						<a href="<?php echo esc_url( $this->autoInstallUrl ); ?>" aria-label="More information about YayMail" data-title="YayMail" class="button button-primary"><?php _e( 'Install for Free', 'filebird' ); ?></a>
-						<a href="javascript:;" id="njt-yc-noti-dismiss"><?php _e( 'No, Thanks', 'filebird' ); ?></a>
+						<a href="<?php echo esc_url( $this->autoInstallUrl ); ?>" aria-label="More information about YayMail" data-title="YayMail" class="button button-primary"><?php esc_html_e( 'Install for Free', 'filebird' ); ?></a>
+						<a href="javascript:;" id="njt-yc-noti-dismiss"><?php esc_html_e( 'No, Thanks', 'filebird' ); ?></a>
 					</p>
 					</div>
 				</div>

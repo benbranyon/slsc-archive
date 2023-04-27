@@ -6,12 +6,12 @@ defined( 'ABSPATH' ) || exit;
 
 class ACF {
 
-	function __construct() {
+	public function __construct() {
 		add_action( 'acf/include_field_types', array( $this, 'include_field' ) ); // v5
 		add_action( 'acf/register_fields', array( $this, 'include_field' ) ); // v4
 	}
 
-	function include_field( $version = false ) {
+	public function include_field( $version = false ) {
 		if ( ! $version ) {
 			$version = 4;
 		}

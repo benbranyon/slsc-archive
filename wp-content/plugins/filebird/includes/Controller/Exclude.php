@@ -16,6 +16,11 @@ class Exclude {
 			$where[] = " posts.post_parent NOT IN (SELECT {$wpdb->posts}.ID FROM {$wpdb->posts} WHERE {$wpdb->posts}.post_type = 'picu_collection') ";
 		}
 
+		if ( function_exists( 'uncode_get_gallery_attachment_ids' ) ) {
+			$media_attachments_ids = implode( ',', uncode_get_gallery_attachment_ids() );
+			$where[]               = "posts.ID NOT IN ($media_attachments_ids)";
+		}
+
 		return $where;
 	}
 }

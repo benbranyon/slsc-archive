@@ -104,7 +104,7 @@ class Api {
 		}
 		wp_send_json_error(
 			array(
-				'mess' => __( 'Invalid action' ),
+				'mess' => __( 'Invalid action', 'filebird' ),
 			)
 		);
 	}
@@ -207,7 +207,7 @@ class Api {
 		);
 	}
 	public function resAdminPermissionsCheck() {
-		return current_user_can( 'upload_files' );
+		return current_user_can( 'upload_files' ) && current_user_can( 'manage_options' );
 	}
 	public function resPublicPermissionsCheck() {
 		$key = get_option( 'fbv_rest_api_key', '' );
@@ -222,7 +222,7 @@ class Api {
 		$charactersLength = strlen( $characters );
 		$randomString     = '';
 		for ( $i = 0; $i < $length; $i++ ) {
-			$randomString .= $characters[ rand( 0, $charactersLength - 1 ) ];
+			$randomString .= $characters[ wp_rand( 0, $charactersLength - 1 ) ];
 		}
 		return $randomString;
 	}

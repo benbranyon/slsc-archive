@@ -79,6 +79,16 @@ class PageBuilders {
 		if ( defined( 'BRICKS_VERSION' ) ) {
 			$this->registerBricksBuilder();
 		}
+
+		// BeTheme
+		if ( defined( 'MFN_THEME_VERSION' ) ) {
+			$this->registerBeBuilder();
+		}
+
+		// LearnPress
+		if ( class_exists( 'LP_Addon_Frontend_Editor_Preload' ) ) {
+			$this->registerLearnPress();
+		}
 	}
 
 	public function enqueueScripts( $is_enqueue_media = false ) {
@@ -161,5 +171,35 @@ class PageBuilders {
 
 	public function registerAvada() {
 		add_action( 'fusion_enqueue_live_scripts', array( $this, 'enqueueScripts' ) );
+	}
+
+	public function registerBeBuilder() {
+		add_action(
+             'admin_enqueue_scripts',
+            function() {
+				if ( ! wp_script_is( 'mfn-vbscripts', 'enqueued' ) ) {
+					return;
+				}
+
+				$this->enqueueScripts();
+			},
+            PHP_INT_MAX
+        );
+
+		add_action(
+             'wp_enqueue_scripts',
+            function() {
+				if ( ! wp_script_is( 'mfn-vbscripts', 'enqueued' ) ) {
+					return;
+				}
+
+				$this->enqueueScripts();
+			},
+            PHP_INT_MAX
+        );
+	}
+
+	public function registerLearnPress() {
+		add_action( 'learnpress/addons/frontend_editor/enqueue_scripts', array( $this, 'enqueueScripts' ) );
 	}
 }

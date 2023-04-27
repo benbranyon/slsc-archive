@@ -22,7 +22,7 @@ class Convert {
 		}
 		foreach ( $folders as $k => $folder ) {
 			if ( is_array( $folder ) ) {
-				$folder = json_decode( json_encode( $folder ) );
+				$folder = json_decode( wp_json_encode( $folder ) );
 			}
 
 			$parent = $folder->parent;

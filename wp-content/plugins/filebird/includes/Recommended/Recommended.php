@@ -50,7 +50,7 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 				),
 				'yaycurrency'       => array(
 					'slug'              => 'yaycurrency',
-					'name'              => 'YayCurrency – WooCommerce Multi-Currency Switcher',
+					'name'              => 'YayCurrency - WooCommerce Multi-Currency Switcher',
 					'short_description' => 'WooCommerce Multi-Currency made easy, powerful, and flexible.',
 					'icon'              => 'https://ps.w.org/yaycurrency/assets/icon-256x256.png?rev=2550570',
 					'download_link'     => 'https://downloads.wordpress.org/plugin/yaycurrency.zip',
@@ -59,8 +59,8 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 				),
 				'yayswatches'       => array(
 					'slug'              => 'yayswatches',
-					'name'              => 'YaySwatches – Variation Swatches for WooCommerce',
-					'short_description' => 'YaySwatches allows you to show variation selectors as color swatches, image swatches, radio buttons, buttons,…',
+					'name'              => 'YaySwatches - Variation Swatches for WooCommerce',
+					'short_description' => 'Optimize your variable product showcase with color swatches, image swatches, custom images, buttons, and more!',
 					'icon'              => 'https://ps.w.org/yayswatches/assets/icon-256x256.png?rev=2757155',
 					'download_link'     => 'https://downloads.wordpress.org/plugin/yayswatches.zip',
 					'type'              => array( 'woocommerce' ),
@@ -68,8 +68,8 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 				),
 				'yayextra'          => array(
 					'slug'              => 'yayextra',
-					'name'              => 'YayExtra – WooCommerce Extra Product Options',
-					'short_description' => 'YayExtra is a WooCommerce plugin to allow you to create extra product options and assign…',
+					'name'              => 'YayExtra - WooCommerce Extra Product Options',
+					'short_description' => 'Add WooCommerce product options like personal engraving, print-on-demand items, gifts, custom canvas prints, and personalized products.',
 					'icon'              => 'https://ps.w.org/yayextra/assets/icon-256x256.png?rev=2776349',
 					'download_link'     => 'https://downloads.wordpress.org/plugin/yayextra.zip',
 					'type'              => array( 'woocommerce' ),
@@ -77,9 +77,9 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 				),
 				'yaypricing'        => array(
 					'slug'              => 'yaypricing',
-					'name'              => 'YayPricing – WooCommerce Dynamic Pricing & Discounts',
+					'name'              => 'YayPricing - WooCommerce Dynamic Pricing & Discounts',
 					'short_description' => 'Offer automatic pricing and discounts to design a powerful marketing strategy for your WooCommerce store.',
-					'icon'              => 'https://yaycommerce.com/wp-content/uploads/2022/03/YayPricing.png',
+					'icon'              => 'https://yaycommerce.com/wp-content/uploads/2022/11/yaypricing-256x256-1.png',
 					'download_link'     => 'https://yaycommerce.com/yaypricing-woocommerce-dynamic-pricing-and-discounts/',
 					'type'              => array( 'woocommerce' ),
 					'version'           => 0,

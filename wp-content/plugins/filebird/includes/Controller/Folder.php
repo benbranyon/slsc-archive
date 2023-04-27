@@ -349,7 +349,7 @@ class Folder extends Controller {
 		}
 
 		// $isFolderUserEnabled = has_filter('fbv_in_not_in_created_by');
-		$sizeMeta    = SizeMeta::getInstance()->meta_key;
+		$sizeMeta   = SizeMeta::getInstance()->meta_key;
 		$fbvPropery = $query->get( 'fbv' );
 
 		if ( $query->get( 'orderby' ) === $sizeMeta ) {
@@ -382,7 +382,7 @@ class Folder extends Controller {
 				if ( $parent < 0 ) {
 					$parent = 0; //important
 				}
-				if( apply_filters( 'fbv_auto_create_folders', true ) ) {
+				if ( apply_filters( 'fbv_auto_create_folders', true ) ) {
 					unset( $fbv[0] );
 					foreach ( $fbv as $k => $v ) {
 						$parent = FolderModel::newOrGet( $v, $parent );
@@ -777,7 +777,7 @@ class Folder extends Controller {
 		return new \WP_REST_Response( array( 'success' => $result ) );
 	}
 	public function deleted_user( $id, $reassign, $user ) {
-		if( $reassign === null ) {
+		if ( $reassign === null ) {
 			FolderModel::deleteByAuthor( $id );
 		} else {
 			FolderModel::updateAuthor( $id, (int) $reassign );

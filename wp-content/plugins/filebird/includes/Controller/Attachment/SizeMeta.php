@@ -83,7 +83,7 @@ class SizeMeta {
     public function apiCallback() {
         $generateAll = true;
 		$state       = $this->get_state();
-        if ( $state['current'] >= intval($state['total']) ) {
+        if ( $state['current'] >= intval( $state['total'] ) ) {
             $this->cancel_process();
     		$state = $this->get_state();
         }

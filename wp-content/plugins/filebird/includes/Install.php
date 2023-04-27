@@ -34,7 +34,7 @@ class Install {
 			$sql = 'CREATE TABLE ' . $table . ' (
             `folder_id` int(11) unsigned NOT NULL,
             `attachment_id` bigint(20) unsigned NOT NULL,
-            UNIQUE( `folder_id`, `attachment_id`)
+            PRIMARY KEY( `folder_id`, `attachment_id`)
             )' . $charset_collate . ';';
 			dbDelta( $sql );
 		}

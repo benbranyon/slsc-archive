@@ -1,9 +1,11 @@
 <?php
+
 namespace FileBird\Model;
 
 defined( 'ABSPATH' ) || exit;
 
 class Folder {
+
 
 	private static $folder_table   = 'fbv';
 	private static $relation_table = 'fbv_attachment_folder';
@@ -40,11 +42,11 @@ class Folder {
 		return $folders;
 	}
 	public static function countFolder() {
-		global $wpdb;
+      global $wpdb;
 		return $wpdb->get_var( 'SELECT count(*) as c FROM ' . self::getTable( self::$folder_table ) );
 	}
 	public static function getRelations() {
-		global $wpdb;
+         global $wpdb;
 		$query     = "SELECT `attachment_id`, GROUP_CONCAT(`folder_id`) as folders FROM `{$wpdb->prefix}fbv_attachment_folder` GROUP BY `attachment_id`";
 		$relations = $wpdb->get_results( $query );
 		$res       = array();
@@ -71,7 +73,7 @@ class Folder {
 		$wpdb->update(
 			self::getTable( self::$folder_table ),
 			array(
-				'created_by' => $to_author
+				'created_by' => $to_author,
 			),
 			array( 'created_by' => $from_author ),
 			array( '%d' ),
@@ -80,7 +82,7 @@ class Folder {
 	}
 	public static function deleteByAuthor( $author ) {
 		global $wpdb;
-		$wpdb->query( "DELETE FROM {$wpdb->prefix}fbv_attachment_folder WHERE folder_id IN (SELECT id FROM {$wpdb->prefix}fbv WHERE created_by = " . (int) $author . ")" );
+		$wpdb->query( "DELETE FROM {$wpdb->prefix}fbv_attachment_folder WHERE folder_id IN (SELECT id FROM {$wpdb->prefix}fbv WHERE created_by = " . (int) $author . ')' );
 		$wpdb->query( "DELETE FROM {$wpdb->prefix}fbv WHERE created_by = " . (int) $author );
 	}
 	public static function rawInsert( $query ) {
@@ -94,20 +96,21 @@ class Folder {
 	public static function getFolderFromPostId( $post_id ) {
 		global $wpdb;
 
-		$created = 0;
+		$created             = 0;
 		$user_has_own_folder = get_option( 'njt_fbv_folder_per_user', '0' ) === '1';
 		if ( $user_has_own_folder ) {
 			$created = get_current_user_id();
 		}
 		return $wpdb->get_results(
-            $wpdb->prepare(
-                "SELECT `folder_id`,`name` FROM {$wpdb->prefix}fbv as fbv
+			$wpdb->prepare(
+				"SELECT `folder_id`,`name` FROM {$wpdb->prefix}fbv as fbv
 				JOIN {$wpdb->prefix}fbv_attachment_folder as fbva ON fbv.id = fbva.folder_id
 				WHERE `attachment_id` = %d AND `created_by` = %d GROUP BY `folder_id`",
-			$post_id, $created
+				$post_id,
+				$created
 			),
-            OBJECT
-            );
+			OBJECT
+		);
 	}
 	public static function setFoldersForPosts( $post_ids, $folder_ids, $has_action = true ) {
 		global $wpdb;
@@ -117,10 +120,13 @@ class Folder {
 		if ( ! is_array( $folder_ids ) ) {
 			$folder_ids = array( $folder_ids );
 		}
+		$user_has_own_folder = get_option( 'njt_fbv_folder_per_user', '0' ) === '1';
+		$current_user_id     = get_current_user_id();
 
 		foreach ( $folder_ids as $k => $folder_id ) {
 			foreach ( $post_ids as $k2 => $post_id ) {
 				do_action( 'fbv_before_setting_folder', (int) $post_id, (int) $folder_id );
+				$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}fbv_attachment_folder WHERE `attachment_id` = %d AND `folder_id` IN (SELECT `id` FROM {$wpdb->prefix}fbv WHERE `created_by` = %d)", (int) $post_id, $user_has_own_folder ? $current_user_id : 0 ) );
 				if ( $folder_id > 0 ) {
 					$wpdb->insert(
 						self::getTable( self::$relation_table ),
@@ -136,7 +142,7 @@ class Folder {
 				}
 			}
 		}
-		if(count($post_ids) > 0) {
+		if ( count( $post_ids ) > 0 ) {
 			clean_post_cache( $post_ids[0] );
 		}
 	}
@@ -196,7 +202,7 @@ class Folder {
 		);
 	}
 	public static function deleteAll() {
-		global $wpdb;
+        global $wpdb;
 		$wpdb->query( "DELETE FROM {$wpdb->prefix}fbv" );
 		$wpdb->query( "DELETE FROM {$wpdb->prefix}fbv_attachment_folder" );
 	}
