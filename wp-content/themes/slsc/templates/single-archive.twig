@@ -16,7 +16,7 @@
           {% endif %}
 
           <label class="form-item__label">Description</label>
-          <div class="single-archive-description">{{ post.preview.read_more() }}</div>
+          <div class="single-archive-description">{{ post.preview.read_more(false) }}</div>
 
           {% set topics = post.terms('topic') %}
           {% if topics %}
