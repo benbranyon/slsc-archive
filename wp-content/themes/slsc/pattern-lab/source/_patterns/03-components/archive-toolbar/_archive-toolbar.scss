@@ -10,7 +10,7 @@
     padding: 30px;
     margin-bottom: 30px;
   }
-  @include breakpoint($bp-xlarge) {
+  @include breakpoint($bp-large) {
     margin-right: 0px;
     margin-left: 0px;
   }
