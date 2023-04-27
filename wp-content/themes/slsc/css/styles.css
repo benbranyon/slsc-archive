@@ -1107,7 +1107,7 @@ h1, h2, h3, h4, h5, h6 {
   .home .frontpage__content {
     position: -webkit-sticky;
     position: sticky;
-    top: 40px; } }
+    top: 30px; } }
 
 .frontpage__content {
   background-color: #dcd2c7;
