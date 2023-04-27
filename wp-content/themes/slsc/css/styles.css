@@ -1025,7 +1025,7 @@ h1, h2, h3, h4, h5, h6 {
 .taxonomy-info .collection-summary span {
   font-weight: bold; }
 
-.post-type-archive-archive .l-sidebar {
+.archive .l-sidebar {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -1034,16 +1034,22 @@ h1, h2, h3, h4, h5, h6 {
       -ms-flex-direction: column-reverse;
           flex-direction: column-reverse; }
   @media (min-width: 37.5em) {
-    .post-type-archive-archive .l-sidebar {
+    .archive .l-sidebar {
       -webkit-box-orient: horizontal;
       -webkit-box-direction: reverse;
           -ms-flex-direction: row-reverse;
               flex-direction: row-reverse; } }
-  .post-type-archive-archive .l-sidebar .l-sidebar__sidebar {
+  .archive .l-sidebar .l-sidebar__sidebar {
     width: 100%; }
     @media (min-width: 37.5em) {
-      .post-type-archive-archive .l-sidebar .l-sidebar__sidebar {
+      .archive .l-sidebar .l-sidebar__sidebar {
         width: auto; } }
+    @media (min-width: 50em) {
+      .archive .l-sidebar .l-sidebar__sidebar {
+        padding: 0px; } }
+    @media (min-width: 56.25em) {
+      .archive .l-sidebar .l-sidebar__sidebar {
+        padding: 30px; } }
 
 .facetwp-counts {
   display: inline-block; }

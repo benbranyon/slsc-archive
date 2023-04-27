@@ -57,7 +57,7 @@
   }
 }
 
-.post-type-archive-archive {
+.archive {
   .l-sidebar {
     display: flex;
     flex-direction: column-reverse;
@@ -68,6 +68,12 @@
       width: 100%;
       @include breakpoint($bp-small) {
         width: auto;
+      }
+      @include breakpoint($bp-medium) {
+        padding: 0px;
+      }
+      @include breakpoint($bp-large) {
+        padding: 30px;
       }
     }
   }
