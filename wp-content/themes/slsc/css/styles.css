@@ -2317,7 +2317,7 @@ details.details {
     width: auto;
     z-index: 3; }
     .menu--mobile .menu__link:focus, .menu--mobile .menu__link:hover, .menu--mobile .menu__link:active, .menu--mobile .menu__link.is-active {
-      color: #000; }
+      color: #ff0000; }
   .menu--mobile .menu__item--parent {
     position: relative; }
     .menu--mobile .menu__item--parent.is-open {
