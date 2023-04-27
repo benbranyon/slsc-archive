@@ -1410,7 +1410,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: bold;
   margin-bottom: 30px;
   z-index: 2; }
-  @media (min-width: 50em) {
+  @media (min-width: 75em) {
     .swiper-title {
       font-size: 48px; } }
 
