@@ -2287,7 +2287,7 @@ details.details {
       float: none; } }
 
 .mobile-menu {
-  float: left; }
+  float: right; }
   @media (min-width: 37.5em) {
     .mobile-menu {
       float: none; } }
@@ -2514,6 +2514,7 @@ details.details {
   background-color: #f3f3f3;
   background-color: #330000;
   color: #555559;
+  left: 0px;
   position: absolute;
   width: 100%;
   z-index: 100; }

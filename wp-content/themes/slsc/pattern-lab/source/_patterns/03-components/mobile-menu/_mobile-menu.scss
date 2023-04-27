@@ -85,6 +85,7 @@ $mobile-menu-text-color: #555559 !default;
   background-color: $mobile-menu-fallback-bg-color;
   background-color: $mobile-menu-bg-color;
   color: $mobile-menu-text-color;
+  left: 0px;
   position: absolute;
   width: 100%;
   z-index: 100;

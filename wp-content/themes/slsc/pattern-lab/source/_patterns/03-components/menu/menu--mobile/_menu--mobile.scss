@@ -16,7 +16,7 @@ $menu-mobile-submenu-hover-color: #000 !default;
 }
 
 .mobile-menu {
-  float:  left;
+  float:  right;
   @include breakpoint($bp-small) {
     float: none;
   }
