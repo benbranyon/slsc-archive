@@ -1586,6 +1586,9 @@ h1, h2, h3, h4, h5, h6 {
       -ms-flex-direction: column;
           flex-direction: column;
   padding: 1.5rem 1rem; }
+  @media (min-width: 56.25em) {
+    .card__body {
+      min-height: 158px; } }
 
 .card__content {
   margin-bottom: 0.5rem; }

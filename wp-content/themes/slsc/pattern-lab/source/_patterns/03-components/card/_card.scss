@@ -12,6 +12,9 @@ $card_padding: 1rem;
   display: flex;
   flex-direction: column;
   padding: $card_padding*1.5 $card_padding;
+  @include breakpoint($bp-large) {
+    min-height: 158px;
+  }
 }
 
 .card__content {
