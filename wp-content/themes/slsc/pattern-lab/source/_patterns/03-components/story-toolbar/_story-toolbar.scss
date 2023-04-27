@@ -1,8 +1,6 @@
 .story-toolbar {
   align-items: center;
   background-color: #222222;
-  display: flex;
-  justify-content: space-between;
   padding: 25px 40px;
   h1 {
     color: #fff;
@@ -12,5 +10,9 @@
     a {
       margin-bottom: 0px;
     }
+  }
+  @include breakpoint($bp-medium) {
+    display: flex;
+    justify-content: space-between;
   }
 }
