@@ -28,7 +28,7 @@
   &::after {
     color: #000;
   }
-  @include breakpoint($bp-medium) {
+  @include breakpoint($bp-xlarge) {
     height: 105px;
     width: 105px;
   }
