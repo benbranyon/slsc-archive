@@ -8,20 +8,26 @@
       <div class="l-constrain">
         <div class="single-archive-sidebar__content">
     	    <h2 class="single-archive__title">{{ post.title }}</h2>
+
           {% if file_url %}
             <div class="single-archive-download">
               <a class="button" href="{{ file_url }}" download>Download File</a>
             </div>
           {% endif %}
+
           <label class="form-item__label">Description</label>
           <div class="single-archive-description">{{ post.preview.read_more(false) }}</div>
-          <label class="form-item__label">Topics</label>
-          <div class="single-archive__topics">
-            {% set topics = post.terms('topic') %}
-            {% for topic in topics %}
-              <a href="/archive/?_topic={{ topic.slug }}">{{ topic }}</a>
-            {% endfor %}
-          </div>
+
+          {% set topics = post.terms('topic') %}
+          {% if topics %}
+            <label class="form-item__label">Topics</label>
+            <div class="single-archive__topics">
+              {% for topic in topics %}
+                <a href="/archive/?_topic={{ topic.slug }}">{{ topic }}</a>
+              {% endfor %}
+            </div>
+          {% endif %}
+
           <label class="form-item__label">Provenace</label>
           <div class="single-archive__provenance">
             <div class="single-archive__collection"><span>Collection:</span> <a href="/collection/{{ collection_slug }}">{{ collection_title }}</a></div>
@@ -35,13 +41,17 @@
               <div><span>Original Date Created:</span> {{ post.archive_file_date|date('F j, Y') }}</div>
             {% endif %}
           </div>
+
           <label class="form-item__label">Additional Metadata</label>
           <div class="single-archive__metadata">
-            <div class="single-archive__type"><span>Type:</span> {{ post.terms('file_type')[0] }}</div>
-            <div><span>Language</span> {{ post.archive_language }}</div>
+            {% if post.terms('file_type')[0] %}
+              <div class="single-archive__type"><span>Type:</span> {{ post.terms('file_type')[0] }}</div>
+            {% endif %}
+            {% if post.archive_language %}
+              <div><span>Language:</span> {{ post.archive_language }}</div>
+            {% endif %}
           </div>
-      </div>
-
+        </div>
       </div>
     {% endblock %}
     {% block sidebar_main %}
