@@ -3,9 +3,9 @@ Contributors: Asif2BD, priyomukul, wpdevteam, re_enter_rupok, alimuzzamanalim, s
 Donate link: https://wpdeveloper.com/
 Tags: comments, delete comments, disable comments, spam comment, disable, stop spam, remove comments, anti spam, disable xml-rpc, hide comment, XML-RPC, REST-API, WP-CLI, multi-site support
 Requires at least: 5.0
-Tested up to: 6.0
+Tested up to: 6.2
 Requires PHP: 5.6
-Stable tag: 2.4.2
+Stable tag: 2.4.3
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -45,7 +45,7 @@ https://www.youtube.com/watch?v=J9AteKzQpPs
 * **[New]** Delete comments by type.
 * **[New]** Disable comments via [XML-RPC](https://wpdeveloper.com/docs/how-to-disable-comments-made-via-xml-rpc/) & [REST-API](https://wpdeveloper.com/docs/how-to-disable-comments-made-via-rest-api/)
 * **[New]** Fully Multi-site Network supported.
-* **[New]** Manage multiple website networks specific subsites or entire networks comments in advance. 
+* **[New]** Manage multiple website networks specific subsites or entire networks comments in advance.
 * **[New]** Exclude Disable Comments Settings based on user roles.
 
 https://www.youtube.com/watch?v=FBq3-W-p-DM
@@ -193,6 +193,9 @@ Go to the tools page for the Disable Comments plugin and utlize the Delete Comme
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 This will be maiintained from August 19, 2020 - @asif2bd
+
+= [2.4.3] - 2023-01-12 =
+* Added: PHP 8.2 Compatibility
 
 = [2.4.2] - 2022-09-18 =
 * Improved sanitization.
