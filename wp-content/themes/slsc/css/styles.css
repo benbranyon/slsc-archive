@@ -1103,6 +1103,12 @@ h1, h2, h3, h4, h5, h6 {
     .home .l-sidebar__sidebar {
       padding-top: 30px; } }
 
+@media (min-width: 50em) {
+  .home .frontpage__content {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 40px; } }
+
 .frontpage__content {
   background-color: #dcd2c7;
   color: #fff;

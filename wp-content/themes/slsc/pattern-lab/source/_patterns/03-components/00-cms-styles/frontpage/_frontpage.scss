@@ -11,6 +11,12 @@
     @include breakpoint($bp-small) {
       padding-top: 30px;
     }
+  }
+  .frontpage__content {
+    @include breakpoint($bp-medium) {
+      position: sticky;
+      top: 40px;
+    }
   } 
 }
 
