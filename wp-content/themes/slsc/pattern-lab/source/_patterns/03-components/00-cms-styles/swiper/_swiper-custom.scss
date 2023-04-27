@@ -53,6 +53,7 @@
   }
   @include breakpoint($bp-medium) {
     max-height:400px;
+    overflow: hidden;
   }
   &::before {
     content: '';

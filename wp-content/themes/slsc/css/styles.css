@@ -1365,7 +1365,8 @@ h1, h2, h3, h4, h5, h6 {
     width: 100%; }
   @media (min-width: 50em) {
     .swiper-slide__image {
-      max-height: 400px; } }
+      max-height: 400px;
+      overflow: hidden; } }
   .swiper-slide__image::before {
     content: '';
     height: 100%;
