@@ -31,7 +31,7 @@ function rsssl_general_security_notices( $notices ) {
 				'msg' => __("Disable application passwords.", "really-simple-ssl"),
 				'icon' => 'premium',
 				'url' => 'https://really-simple-ssl.com/definition/what-are-application-passwords/',
-				'dismissible' => true,
+				'dismissible' => false,
 				'highlight_field_id' => 'disable_application_passwords',
 			),
 		),
@@ -268,6 +268,19 @@ function rsssl_general_security_notices( $notices ) {
 			),
 		),
 	);
+
+//	$notices['login-url-not-working'] = array(
+//		'callback' => 'NOT rsssl_new_login_url_working',
+//		'score' => 5,
+//		'output' => array(
+//			'true' => array(
+//				'msg' => __("Your new login URL does not seem to work. Still using /wp-admin and /wp-login.php.", "really-simple-ssl"),
+//				'url' => 'https://really-simple-ss.com/',
+//				'icon' => 'warning',
+//				'dismissible' => true,
+//			),
+//		),
+//	);
 
 	return $notices;
 }

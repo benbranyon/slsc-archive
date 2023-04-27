@@ -39,21 +39,17 @@ class SettingsPage extends Component {
     }
 
     componentDidMount() {
-
-        let fields = this.props.fields;
         //if count >1, it's a wizard
-        let changedFields = [];
-        let selectedMenuItem = this.props.selectedMenuItem;
-        this.selectedMenuItem = selectedMenuItem;
-        this.changedFields = changedFields;
+        this.selectedMenuItem = this.props.selectedMenuItem;
+        this.changedFields = [];
         this.setState({
             isAPILoaded: true,
             fields: this.props.fields,
-            changedFields: changedFields,
+            changedFields: this.changedFields,
             selectedMainMenuItem: this.props.selectedMainMenuItem,
         });
 
-        this.props.menu.menu_items = this.addVisibleToMenuItems(this.props.menu.menu_items);
+       this.props.menu.menu_items = this.addVisibleToMenuItems(this.props.menu.menu_items);
         this.checkRequiredFields();
         this.updateFieldsListWithConditions();
     }
@@ -61,6 +57,7 @@ class SettingsPage extends Component {
     //if the main menu is switched, only this event fires, not the didmount event.
     componentDidUpdate(){
         this.props.menu.menu_items = this.addVisibleToMenuItems(this.props.menu.menu_items);
+        this.updateFieldsListWithConditions();
     }
 
     addVisibleToMenuItems(menuItems) {
@@ -114,10 +111,11 @@ class SettingsPage extends Component {
     }
 
     filterMenuItems(menuItems) {
+
         const newMenuItems = menuItems;
         for (const [index, menuItem] of menuItems.entries()) {
             const menuItemFields = this.props.fields.filter((field) => {
-                return (field.menu_id === menuItem.id && field.visible)
+                return (field.menu_id === menuItem.id && field.visible && !field.conditionallyDisabled)
             });
             if( menuItemFields.length === 0 && !menuItem.hasOwnProperty('menu_items') )  {
                 newMenuItems[index].visible = false;
@@ -140,8 +138,8 @@ class SettingsPage extends Component {
 
     updateFieldsListWithConditions(){
         for (const field of this.props.fields){
-          let enabled = !(field.hasOwnProperty('react_conditions') && !this.validateConditions(field.react_conditions, this.props.fields));
 
+          let enabled = !(field.hasOwnProperty('react_conditions') && !this.validateConditions(field.react_conditions, this.props.fields));
           //we want to update the changed fields if this field has just become visible. Otherwise the new field won't get saved.
           let previouslyDisabled = this.props.fields[this.props.fields.indexOf(field)].conditionallyDisabled;
           this.props.fields[this.props.fields.indexOf(field)].conditionallyDisabled = !enabled;
@@ -163,7 +161,7 @@ class SettingsPage extends Component {
             this.props.fields[this.props.fields.indexOf(field)].visible = true;
           }
         }
-        this.filterMenuItems(this.props.menu.menu_items)
+        this.props.menu.menu_items = this.filterMenuItems(this.props.menu.menu_items)
     }
 
     saveChangedFields(changedField){
@@ -315,6 +313,7 @@ class SettingsPage extends Component {
                 />
                 <Settings
                     updateFields={this.props.updateFields}
+                    addNotice={this.props.addNotice}
                     dropItemFromModal={this.props.dropItemFromModal}
                     selectMenu={this.props.selectMenu}
                     selectMainMenu={this.props.selectMainMenu}

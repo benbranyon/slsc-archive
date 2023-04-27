@@ -1,12 +1,12 @@
 === Really Simple SSL ===
-Contributors: RogierLankhorst, markwolters, hesseldejong, vicocotea
+Contributors: RogierLankhorst, markwolters, hesseldejong, janwoostendorp, vicocotea
 Donate link: https://www.paypal.me/reallysimplessl
 Tags: SSL, https, force SSL, mixed content, insecure content, secure website, website security, TLS, security, secure socket layers, HSTS
 Requires at least: 5.7
 License: GPL2
-Tested up to: 6.1
+Tested up to: 6.2
 Requires PHP: 7.2
-Stable tag: 6.0.14
+Stable tag: 6.2.4
 
 The easiest way to improve security! Leverage your SSL certificate and protect your website visitors.
 
@@ -96,6 +96,51 @@ The plugin checks your certificate before enabling, but if, for example, you mig
 If you can't deactivate, do not just remove the plugin folder to uninstall! Follow these [instructions](https://really-simple-ssl.com/knowledge-base/uninstall-websitebackend-not-accessible/) instead.
 
 == Changelog ==
+= 6.2.4 =
+* Improvement: optionally enable notification emails in onboarding wizard
+* Improvement: onboarding styling
+* Improvement: do not send an 'admin username renamed' email if the setting has been enabled, but no username was actually renamed, props @zignorp
+* Fix: catch non array value from notices array, props @kenrichman
+* Fix: typo in documentation link, props @bookman53
+* Fix: Let's Encrypt Wizard not functioning because of change to functional components, props @growthrankmedia
+
+= 6.2.3 =
+* Improvement: Changed Back-end react to functional components
+* Improvement: multisite notice should link to network admin page
+* Improvement: detect existing CAA records to check Let's Encrypt compatibility
+* Improvement: tested up to wp 6.2
+* Improvement: UX improvement learning mode
+
+= 6.2.2 =
+* Fix: capability mismatch for a non administrator in multisite admin, props @jg-visual
+
+= 6.2.1 =
+* Fix: race condition when activating SSL through wp-cli, because of upgrade script
+* Fix: missing disabled state in textarea and checkboxes
+* Fix: some strings not translatable
+* Fix: Let's Encrypt renewal with add on
+* Improvement: permissions check re-structuring
+* Improvement: notice on subsite within multisite environment about wildcard updated
+
+= 6.2.0 =
+* New: optional email notifications on advanced settings
+* Improvement: added tooltips
+* Improvement: added warnings for .htaccess redirect
+* Improvement: don't send user email change on renaming admin user, as the email doesn't actually change
+* Improvement: Use BASEPATH only for wp-load.php, so symlinked folders will load based on ABSPATH
+* Improvement: Improved support for environments where Rest API is blocked
+
+= 6.1.1 =
+* Fix: WP CLI not completing SSL when because site_has_ssl option is not set if website has not been visited before, props @oolongm
+* Improvement: prevent 'undefined' status showing up in api calls on settings page
+* Improvement: show notice if users are using an <2.0 Let's Encrypt shell add-on which is not compatible with 6.0
+
+= 6.1.0 =
+* Improvement: some UX changes
+* Improvement: Limit number of notices in the dashboard
+* Improvement: load rest api request url over https if website is loaded over https
+* Fix: empty menu item visible in Let's Encrypt menu
+
 = 6.0.14 =
 * Fix: settings page when using plain permalinks, props @mvsitecreator, props @doug2son
 
