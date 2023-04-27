@@ -1354,12 +1354,19 @@ h1, h2, h3, h4, h5, h6 {
 .swiper-button-next,
 .swiper-button-prev {
   background-color: #fff;
+  border: 1px solid #000;
   border-radius: 50%;
-  height: 105px;
-  width: 105px; }
+  height: 60px;
+  opacity: 80%;
+  width: 60px; }
   .swiper-button-next::after,
   .swiper-button-prev::after {
     color: #000; }
+  @media (min-width: 50em) {
+    .swiper-button-next,
+    .swiper-button-prev {
+      height: 105px;
+      width: 105px; } }
 
 .swiper-slide {
   width: 100%; }

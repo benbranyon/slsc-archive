@@ -33,11 +33,17 @@
 .swiper-button-next,
 .swiper-button-prev {
   background-color: #fff;
+  border: 1px solid #000;
   border-radius: 50%;
-  height: 105px;
-  width: 105px;
+  height: 60px;
+  opacity: 80%;
+  width: 60px;
   &::after {
     color: #000;
+  }
+  @include breakpoint($bp-medium) {
+    height: 105px;
+    width: 105px;
   }
 }
 
