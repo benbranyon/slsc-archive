@@ -1389,6 +1389,7 @@ SQL
 		}
 
 		wfScanMonitor::registerActions();
+		wfUpdateCheck::installPluginAPIFixer();
 	}
 
 	public static function registerDeactivationPrompt() {
@@ -4017,7 +4018,7 @@ SQL
 		$content .= "\n\n";
 
 		ob_start();
-		phpinfo();
+		if (wfUtils::funcEnabled('phpinfo')) { phpinfo(); } else { echo "\n\n" . __('Unable to output phpinfo content because it is disabled', 'wordfence') . "\n\n"; }
 		$phpinfo = ob_get_contents();
 		ob_get_clean();
 
@@ -6125,6 +6126,10 @@ HTML;
 			} else {
 				add_action('admin_notices', 'wordfence::wafAutoPrependNotice');
 			}
+		}
+
+		if (wfConfig::get('wordfenceCentralConfigurationIssue')) {
+			add_action(is_multisite() ? 'network_admin_notices' : 'admin_notices', 'wordfence::showCentralConfigurationIssueNotice');
 		}
 		
 		if (isset($_GET['page']) && $_GET['page'] == 'WordfenceWAF' && isset($_GET['subpage']) && $_GET['subpage'] == 'waf_options') {
@@ -9141,6 +9146,14 @@ SQL
 			echo wfView::create('onboarding/disabled-overlay')->render();
 		}
 		echo wfView::create('onboarding/banner', array('dismissable' => !self::isWordfencePage(false)))->render();
+	}
+
+	public static function showCentralConfigurationIssueNotice() {	
+?>
+		<div class="fade error">
+			<p><?php echo wp_kses(sprintf(__('An error was detected with this site\'s configuration that is preventing a successful connection to Wordfence Central. Disconnecting from Central <a href="%s">on the Wordfence Dashboard</a> and reconnecting may resolve it. If the issue persists, please contact Wordfence support.', 'wordfence'), network_admin_url('admin.php?page=Wordfence#wf-central-status')), array('a' => array('href' => array()))) ?></p>
+		</div>
+<?php
 	}
 
 	public static function wafAutoPrependNotice() {

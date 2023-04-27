@@ -4,6 +4,7 @@
 		basePageName: '',
 		panelQueue: [],
 		pendingChanges: {},
+		userIsActivating: false,
 		
 		//Screen sizes
 		SCREEN_XS: 'xs',

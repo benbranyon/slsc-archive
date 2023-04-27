@@ -1653,6 +1653,13 @@
 						});
 					});
 
+					//Hook up Tooltips
+					issue.find('[data-tooltip]').each(function() {
+						$(this).tooltip({
+							tooltipClass: "wf-tooltip",
+						});
+					});
+
 					//Swap out if the row already exists
 					var existing = $('.wf-issue[data-issue-id="' + issueObject.id + '"]');
 					if (existing.length) {
