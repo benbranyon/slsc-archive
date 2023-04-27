@@ -4,7 +4,6 @@
   padding: 25px 40px;
   h1 {
     color: #fff;
-    margin-bottom: 0px;
   }
   .story-toolbar__button {
     a {
@@ -14,5 +13,8 @@
   @include breakpoint($bp-medium) {
     display: flex;
     justify-content: space-between;
+    h1 {
+      margin-bottom: 0px;
+    }
   }
 }

@@ -2655,8 +2655,7 @@ details.details {
   background-color: #222222;
   padding: 25px 40px; }
   .story-toolbar h1 {
-    color: #fff;
-    margin-bottom: 0px; }
+    color: #fff; }
   .story-toolbar .story-toolbar__button a {
     margin-bottom: 0px; }
   @media (min-width: 50em) {
@@ -2666,7 +2665,9 @@ details.details {
       display: flex;
       -webkit-box-pack: justify;
           -ms-flex-pack: justify;
-              justify-content: space-between; } }
+              justify-content: space-between; }
+      .story-toolbar h1 {
+        margin-bottom: 0px; } }
 
 .tabs::after {
   clear: both;
