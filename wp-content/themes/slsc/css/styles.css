@@ -890,10 +890,14 @@ h1, h2, h3, h4, h5, h6 {
               flex-grow: 1;
       -ms-flex-negative: 0;
           flex-shrink: 0;
-      -ms-flex-preferred-size: 500px;
-          flex-basis: 500px;
+      -ms-flex-preferred-size: 400px;
+          flex-basis: 400px;
       padding: 30px;
       min-height: calc(100vh - 71px); } }
+    @media (min-width: 63.75em) and (min-width: 75em) {
+      .l-sidebar .l-sidebar__sidebar {
+        -ms-flex-preferred-size: 500px;
+            flex-basis: 500px; } }
 
 .archive .l-sidebar__main,
 .search .l-sidebar__main {

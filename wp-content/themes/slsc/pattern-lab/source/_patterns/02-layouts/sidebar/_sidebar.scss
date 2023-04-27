@@ -38,9 +38,12 @@ $l-sidebar-gutter: 1rem;
     .l-sidebar__sidebar {
       flex-grow: 1;
       flex-shrink: 0;
-      flex-basis: #{$l-sidebar-width};
+      flex-basis: 400px;
       padding: 30px;
       min-height: calc(100vh - 71px);
+      @include breakpoint($bp-xlarge) {
+        flex-basis: #{$l-sidebar-width};
+      }
     }
   }
 }
