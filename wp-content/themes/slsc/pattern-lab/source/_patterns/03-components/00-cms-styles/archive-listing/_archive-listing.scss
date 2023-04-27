@@ -72,7 +72,7 @@
       @include breakpoint($bp-medium) {
         padding: 0px;
       }
-      @include breakpoint($bp-large) {
+      @include breakpoint($bp-xlarge) {
         padding: 30px;
       }
     }
