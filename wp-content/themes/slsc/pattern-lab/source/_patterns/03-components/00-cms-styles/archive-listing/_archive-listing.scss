@@ -67,10 +67,8 @@
     .l-sidebar__sidebar {
       width: 100%;
       @include breakpoint($bp-small) {
-        width: auto;
-      }
-      @include breakpoint($bp-medium) {
         padding: 0px;
+        width: auto;
       }
       @include breakpoint($bp-xlarge) {
         padding: 30px;
