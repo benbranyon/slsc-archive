@@ -2660,7 +2660,7 @@ details.details {
       -ms-flex-pack: justify;
           justify-content: space-between;
   padding: 25px 40px; }
-  .story-toolbar h2 {
+  .story-toolbar h1 {
     color: #fff;
     margin-bottom: 0px; }
   .story-toolbar .story-toolbar__button a {
