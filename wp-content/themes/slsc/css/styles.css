@@ -842,7 +842,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .l-header .menu--main {
   display: none; }
-  @media (min-width: 50em) {
+  @media (min-width: 62.5em) {
     .l-header .menu--main {
       display: -webkit-box;
       display: -ms-flexbox;
@@ -2448,7 +2448,7 @@ details.details {
   .messages--warning a {
     color: #8a6d3b; }
 
-@media (min-width: 50em) {
+@media (min-width: 62.5em) {
   .mobile-menu {
     display: none; } }
 
