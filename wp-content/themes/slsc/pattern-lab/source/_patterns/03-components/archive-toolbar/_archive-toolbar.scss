@@ -15,7 +15,6 @@
     margin-left: 0px;
   }
   .archive-toolbar__info {
-    display: flex;
     margin-bottom: 20px;
     @include breakpoint($bp-medium) {
       margin-bottom: 0px;
