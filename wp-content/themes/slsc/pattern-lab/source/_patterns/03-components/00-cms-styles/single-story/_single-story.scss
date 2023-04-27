@@ -12,6 +12,19 @@
   }
 }
 
+.story-title {
+  background-color: #330000;
+  display: inline-block;
+  font-family: $header-font-family-secondary;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 40px;
+  margin-left: 40px;
+  margin-top: 40px;
+  padding: 5px;
+}
+
 .story-content {
   padding-bottom: 100px;
   padding-top: 100px;

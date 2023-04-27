@@ -1,16 +1,3 @@
-.story-title {
-  background-color: #330000;
-  display: inline-block;
-  font-family: $header-font-family-secondary;
-  font-size: 18px;
-  font-weight: bold;
-  text-transform: uppercase;
-  margin-bottom: 40px;
-  margin-left: 40px;
-  margin-top: 40px;
-  padding: 5px;
-}
-
 .swiper-container {
   padding: 20px;
   padding-top: 0px;
@@ -83,7 +70,7 @@
   font-weight: bold;
   margin-bottom: 30px;
   z-index: 2;
-  @include breakpoint($bp-small) {
+  @include breakpoint($bp-medium) {
     font-size: 48px;
   }
 }

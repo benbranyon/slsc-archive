@@ -1300,6 +1300,18 @@ h1, h2, h3, h4, h5, h6 {
   .single-story .cd-timeline-img span::before {
     display: none; }
 
+.story-title {
+  background-color: #330000;
+  display: inline-block;
+  font-family: "Courier New", "Courier", "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 40px;
+  margin-left: 40px;
+  margin-top: 40px;
+  padding: 5px; }
+
 .story-content {
   padding-bottom: 100px;
   padding-top: 100px; }
@@ -1326,18 +1338,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .sticky {
   display: block; }
-
-.story-title {
-  background-color: #330000;
-  display: inline-block;
-  font-family: "Courier New", "Courier", "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
-  font-size: 18px;
-  font-weight: bold;
-  text-transform: uppercase;
-  margin-bottom: 40px;
-  margin-left: 40px;
-  margin-top: 40px;
-  padding: 5px; }
 
 .swiper-container {
   padding: 20px;
@@ -1410,7 +1410,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: bold;
   margin-bottom: 30px;
   z-index: 2; }
-  @media (min-width: 37.5em) {
+  @media (min-width: 50em) {
     .swiper-title {
       font-size: 48px; } }
 
