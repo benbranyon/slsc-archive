@@ -51,6 +51,9 @@
   img {
     width: 100%;
   }
+  @include breakpoint($bp-medium) {
+    max-height:400px;
+  }
   &::before {
     content: '';
     height: 100%;
