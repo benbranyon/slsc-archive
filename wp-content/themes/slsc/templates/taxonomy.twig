@@ -8,7 +8,7 @@
 	        <h1>{{ title }}</h1>
 	        <div class="story-link">
 	       		{% for item in story %}
-	        		<img src="{{ item.thumbnail.src }}" alt="{{ item.thumbnail.alt }}"/>
+	        		<img src="{{ item.thumbnail.src('large') }}" alt="{{ item.thumbnail.alt }}"/>
 	        		<a href="{{ item.link }}" class="button story-collection-link">View Story</a>
 	       		{% endfor %}
 	        </div>
