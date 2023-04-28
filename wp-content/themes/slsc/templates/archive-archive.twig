@@ -5,6 +5,7 @@
   {% embed '@layouts/sidebar/sidebar.twig' %}
     {% block sidebar_aside %}
       <div class="arhcive-filters">
+        <h1>Archive</h1>
         {% include '@components/searchform/searchform.twig' with {
           'action': '/',
           'placeholder' : 'Enter Keyword',
