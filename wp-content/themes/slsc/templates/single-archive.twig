@@ -32,7 +32,10 @@
           <div class="single-archive__provenance">
             <div class="single-archive__collection"><span>Collection:</span> <a href="/collection/{{ collection_slug }}">{{ collection_title }}</a></div>
             {% if post.archive_original_filename %}
-              <div><span>Original Filename:</span> {{ post.archive_original_filename }}</div>
+              <div>
+                <span>Original Filename:</span>
+                {{ post.archive_original_filename }}
+              </div>
             {% endif %}
             {% if post.archive_author %}
               <div class="single-archive__author"><span>Original Author:</span> {{ post.archive_author }}</div>
