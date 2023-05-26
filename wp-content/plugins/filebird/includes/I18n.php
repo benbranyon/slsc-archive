@@ -163,6 +163,11 @@ class I18n {
 			'PRO'                             => __( 'PRO', 'filebird' ),
 			'change_color'                    => __( 'Change Color', 'filebird' ),
 			'processing'                      => __( 'Processing...', 'filebird' ),
+			'all_folders'                     => __( 'All folders', 'filebird' ),
+			'common_folders'                  => __( 'Common folders', 'filebird' ),
+			'all_folders_description'         => __( 'This option imports the common folder tree and user-based folder trees.', 'filebird' ),
+			'common_folders_description'      => __( 'This option imports only the common folder tree.', 'filebird' ),
+			'user_folders_description'        => __( 'This option imports the folder tree created by', 'filebird' ),
 		);
 		return $translation;
 	}

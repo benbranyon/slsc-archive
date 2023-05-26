@@ -382,6 +382,78 @@ jQuery(document).ready(function () {
     link.click();
   }
 
+  function getUserFromCSV(fileValue) {
+    let fileUpload = new FormData();
+
+    if (!fileValue.length) {
+      return Promise.reject("There is no file!");
+    }
+    if (fileValue.length) {
+      fileUpload.append("file", fileValue[0]);
+      return jQuery
+        .ajax({
+          url: fbv_data.json_url + "/import-csv-detail",
+          method: "POST",
+          processData: false,
+          contentType: false,
+          beforeSend: function () {
+            // $this.addClass("updating-message");
+          },
+          data: fileUpload,
+          headers: {
+            "X-WP-Nonce": fbv_data.rest_nonce,
+            "X-HTTP-Method-Override": "POST",
+          },
+        })
+        .done((res) => {
+          let users = {
+            "": "",
+            "-1": fbv_data.i18n.all_folders,
+            0: fbv_data.i18n.common_folders,
+          };
+          if (Object.entries(res).length) {
+            users = {
+              ...users,
+              ...res,
+            };
+          }
+
+          jQuery("#njt-fb-csv-user-import").closest("p").removeClass("hidden");
+          jQuery("#njt-fb-csv-user-import").html(
+            Object.entries(users)
+              .sort()
+              .map(
+                (user) =>
+                  jQuery("<option></option>").val(user[0]).html(user[1])[0]
+                    .outerHTML
+              )
+              .join("")
+          );
+        });
+    }
+  }
+
+  jQuery(document).on("change", "#njt-fb-csv-user-import", function (event) {
+    let description = "";
+    const val = event.target.value;
+
+    if (val) {
+      if (val === "-1") description = fbv_data.i18n.all_folders_description;
+      else if (val === "0")
+        description = fbv_data.i18n.common_folders_description;
+      else
+        description = `${fbv_data.i18n.user_folders_description} ${jQuery(
+          "option:selected",
+          event.target
+        ).text()}.`;
+      jQuery(".njt-fb-csv-import").prop("disabled", false);
+      jQuery("#njt-fb-csv-user-import-description").html(description);
+    } else {
+      jQuery(".njt-fb-csv-import").prop("disabled", true);
+      jQuery("#njt-fb-csv-user-import-description").empty();
+    }
+  });
+
   jQuery(".njt-fb-csv-export").on("click", function () {
     const $this = jQuery(this);
     jQuery
@@ -418,9 +490,15 @@ jQuery(document).ready(function () {
       });
   });
 
-  jQuery("#njt-fb-upload-csv").on("change", function (event) {
+  jQuery("#njt-fb-upload-csv").on("change", async function (event) {
     const fileValue = event.target.files;
     let fileUpload = new FormData();
+
+    jQuery("#njt-fb-csv-user-import").val("");
+    jQuery("#njt-fb-csv-user-import-description").empty();
+    jQuery(".njt-fb-csv-import").prop("disabled", true);
+
+    await getUserFromCSV(fileValue);
 
     if (fileValue.length) {
       fileUpload.append("file", fileValue[0]);
@@ -428,6 +506,7 @@ jQuery(document).ready(function () {
       jQuery(".njt-fb-csv-import")
         .unbind("click")
         .bind("click", function () {
+          fileUpload.append("userId", jQuery("#njt-fb-csv-user-import").val());
           $this = jQuery(this);
           jQuery
             .ajax({

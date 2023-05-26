@@ -45,7 +45,7 @@ class Folder extends Controller {
 		add_filter( 'posts_clauses', array( $this, 'postsClauses' ), 10, 2 );
 		add_filter( 'attachment_fields_to_save', array( $this, 'attachment_fields_to_save' ), 10, 2 );
 
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueueAdminScripts' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueueAdminScripts' ), PHP_INT_MAX );
 		add_action( 'rest_api_init', array( $this, 'registerRestFields' ) );
 		add_action( 'add_attachment', array( $this, 'addAttachment' ) );
 		add_action( 'delete_attachment', array( $this, 'deleteAttachment' ) );
@@ -234,6 +234,16 @@ class Folder extends Controller {
 				'permission_callback' => array( $this, 'resPermissionsCheck' ),
 			)
 		);
+
+		register_rest_route(
+			NJFB_REST_URL,
+			'import-csv-detail',
+			array(
+				'methods'             => \WP_REST_Server::CREATABLE,
+				'callback'            => array( $this, 'getImportCSVDetail' ),
+				'permission_callback' => array( $this, 'resPermissionsCheck' ),
+			)
+		);
 	}
 	public function resPermissionsCheck() {
 		 return current_user_can( 'upload_files' );
@@ -348,14 +358,7 @@ class Folder extends Controller {
 			return $clauses;
 		}
 
-		// $isFolderUserEnabled = has_filter('fbv_in_not_in_created_by');
-		$sizeMeta   = SizeMeta::getInstance()->meta_key;
 		$fbvPropery = $query->get( 'fbv' );
-
-		if ( $query->get( 'orderby' ) === $sizeMeta ) {
-			$clauses['join']   .= " LEFT JOIN {$wpdb->postmeta} AS fbmt ON ({$wpdb->posts}.ID = fbmt.post_id AND fbmt.meta_key = '{$sizeMeta}') ";
-			$clauses['orderby'] = " fbmt.meta_value + 0 {$query->query['order']} ";
-		}
 
 		if ( isset( $_GET['fbv'] ) || $fbvPropery !== '' ) {
 			$fbv = isset( $_GET['fbv'] ) ? (int) sanitize_text_field( $_GET['fbv'] ) : (int) $fbvPropery;
@@ -694,39 +697,62 @@ class Folder extends Controller {
 	public function exportCSV() {
 		global $wpdb;
 
-		$folders = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}fbv", ARRAY_A );
+		$folders       = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}fbv", ARRAY_A );
+		$attachmentIds = $wpdb->get_results( "SELECT folder_id, GROUP_CONCAT(attachment_id SEPARATOR '|') as attachment_ids FROM {$wpdb->prefix}fbv_attachment_folder GROUP BY (folder_id)", OBJECT_K );
+
+		foreach ( $folders as $key => $folder ) {
+			$folders[ $key ]['attachment_ids'] = $attachmentIds[ $folder['id'] ]->attachment_ids ? $attachmentIds[ $folder['id'] ]->attachment_ids : '';
+		}
 
 		return new \WP_REST_Response( array( 'folders' => $folders ) );
 	}
 
-	public function restoreFolderStructure( $folders ) {
-		global $wpdb;
-		$currentUserId = get_current_user_id();
-		try {
-			foreach ( $folders as $k => $folder ) {
-				$new_parent = $folder['parent'];
-				if ( intval( $new_parent ) > 0 ) {
-					$new_parent = get_option( 'njt_new_term_id_' . $new_parent );
+	public function buildTree( array &$data, $parentId = 0 ) {
+		$tree = array();
+		foreach ( $data as &$node ) {
+			if ( $node['parent'] == $parentId ) {
+				$children = $this->buildTree( $data, $node['id'] );
+				if ( $children ) {
+					$node['children'] = $children;
 				}
-				$data = array(
-					'name'       => sanitize_text_field( $folder['name'] ),
-					'parent'     => intval( $new_parent ),
-					'type'       => 0,
-					'ord'        => intval( $folder['ord'] ),
-					'created_by' => get_option( 'njt_fbv_folder_per_user', '0' ) === '1' ? $currentUserId : 0,
-				);
-
-				$table    = "{$wpdb->prefix}fbv";
-				$inserted = $wpdb->insert( $table, $data );
-				update_option( 'njt_new_term_id_' . $folder['id'], $wpdb->insert_id );
+				$tree[] = $node;
+				unset( $node );
 			}
-			return true;
-		} catch ( \Throwable $th ) {
-			return false;
 		}
+		return $tree;
 	}
 
-	public function importCSV( \WP_REST_Request $request ) {
+	public function run_import_folders( $folders, $parent = 0 ) {
+        $folders_created = array();
+
+		foreach ( $folders as $folder ) {
+			$new_folder_id  = FolderModel::newOrGet( $folder['name'], $parent );
+			$attachment_ids = ! empty( $folder['attachment_ids'] ) ? explode( '|', $folder['attachment_ids'] ) : false;
+            array_push( $folders_created, $folder['id'] );
+
+			if ( $attachment_ids && false !== $new_folder_id ) {
+				FolderModel::setFoldersForPosts( $attachment_ids, $new_folder_id );
+			}
+
+			if ( isset( $folder['children'] ) && count( $folder['children'] ) > 0 ) {
+				$new_child_folders = $this->run_import_folders( $folder['children'], $new_folder_id );
+				$folders_created   = array_merge( $folders_created, $new_child_folders );
+			}
+		}
+
+		return $folders_created;
+    }
+
+	public function restoreFolderStructure( $folders ) {
+		$tree            = $this->buildTree( $folders );
+        $folders_created = $this->run_import_folders( $tree );
+
+		$mess = sprintf( __( 'Congratulations! We imported successfully %d folders into <strong>FileBird.</strong>', 'filebird' ), count( $folders_created ) );
+
+		return new \WP_REST_Response( array( 'mess' => $mess ) );
+	}
+
+	public function readCSV( \WP_REST_Request $request ) {
 		$params  = $request->get_file_params();
 		$handle  = \fopen( $params['file']['tmp_name'], 'r' );
 		$data    = array();
@@ -760,6 +786,7 @@ class Folder extends Controller {
 				'type',
 				'ord',
 				'created_by',
+				'attachment_ids',
 			)
 		);
 
@@ -772,10 +799,45 @@ class Folder extends Controller {
 			);
 		}
 
+		return $data;
+	}
+
+	public function importCSV( \WP_REST_Request $request ) {
+		$data      = $this->readCSV( $request );
+		$createdBy = intval( $request->get_param( 'userId' ) );
+
+		if ( $createdBy != '-1' ) {
+			$data = array_filter(
+                $data,
+                function( $item ) use ( $createdBy ) {
+				return $item['created_by'] == $createdBy;
+				}
+                );
+		}
+
 		$result = $this->restoreFolderStructure( $data );
 
 		return new \WP_REST_Response( array( 'success' => $result ) );
 	}
+
+	public function getImportCSVDetail( \WP_REST_Request $request ) {
+		$data = $this->readCSV( $request );
+
+		$users = \get_users(
+            array(
+				'include' => array_unique( array_column( $data, 'created_by' ) ),
+			)
+            );
+
+		$usersReturn = array();
+
+		foreach ( $users as $user ) {
+			$usersReturn[ $user->ID ] = $user->data->display_name . ' ' . __( 'folders', 'filebird' );
+		}
+
+		return new \WP_REST_Response( $usersReturn );
+	}
+
 	public function deleted_user( $id, $reassign, $user ) {
 		if ( $reassign === null ) {
 			FolderModel::deleteByAuthor( $id );

@@ -4,7 +4,7 @@ Donate link: https://codecanyon.net/item/media-folders-manager-for-wordpress/217
 Tags: wordpress media library folders, media library folders, media folder, file manager, folders, wp media folder, wp media folders, wordpress media folders, wordpress media library, wordpress media manager, media manager, firebird
 Requires at least: 3.0
 Tested up to: 6.2
-Stable tag: 5.1.6
+Stable tag: 5.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -192,6 +192,23 @@ Happy Organizing! 😍
 
 
 == Changelog ==
+
+= May 15, 2023 – Version 5.3.2 =
+- Fixed: SQL security
+
+= May 11, 2023 – Version 5.3.1 =
+- Fixed: Guide link
+
+= May 8, 2023 – Version 5.3 =
+- Added: Options Choose user folder when import CSV (with attachments)
+- Fixed: Compatible with PHP 5.6, PHP 8.2
+- Fixed: Disable button Bulk select after moving files
+
+= Apr 18, 2023 – Version 5.2 =
+- Added: Folders for other post types (PRO)
+- Fixed: Error with layout of woo product
+- Fixed: Move files 
+- Fixed: sql_require_primary_key
 
 = Apr 10, 2023 - Version 5.1.6 =
 - Fixed: Sql_require_primary_key in Digital Ocean

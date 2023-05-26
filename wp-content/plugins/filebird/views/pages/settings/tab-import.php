@@ -1,6 +1,6 @@
-<?php if ( ( $countEnhancedFolder + $countWpmlfFolder + $countWpmfFolder + $countRealMediaFolder + $countHappyFiles + $countPremioFolder + $countFemlFolder ) > 0 ) : ?>
-<h2><?php esc_html_e( 'Import', 'filebird' ); ?></h2>
 <div id="fbv-import-setting">
+	<?php if ( ( $countEnhancedFolder + $countWpmlfFolder + $countWpmfFolder + $countRealMediaFolder + $countHappyFiles + $countPremioFolder + $countFemlFolder ) > 0 ) : ?>
+		<h2><?php esc_html_e( 'Import', 'filebird' ); ?></h2>
 	<p>
 		<?php esc_html_e( 'Import categories/folders from other plugins. We import virtual folders, your website will be safe, don\'t worry ;)', 'filebird' ); ?>
 	</p>
@@ -195,17 +195,25 @@
 					</label>
 				</th>
 				<td>
-					<div class="flex-item-center">
-						<input type="file" accept=".csv" id="njt-fb-upload-csv" name="csv_file">
-						<button class="button button-large njt-fb-csv-import hidden njt-button-loading" type="button">
-							<?php esc_html_e( 'Import Now', 'filebird' ); ?>
-						</button>
-					</div>
-					<p class="description">
-						<?php esc_html_e( 'Choose FileBird CSV file to import.', 'filebird' ); ?><br />
-						<?php esc_html_e( '(Please check to make sure that there is no duplicated name. The current folder structure is preserved.)', 'filebird' ); ?><br />
-					</p>
-				</td>
+                    <div class="flex-item-center">
+                        <input type="file" accept=".csv" id="njt-fb-upload-csv" name="csv_file">
+                    </div>
+                    <p class="hidden">
+                        Choose user folder:
+                        <select id="njt-fb-csv-user-import">
+                        </select>
+                        <button disabled class="button button-large njt-fb-csv-import hidden njt-button-loading" type="button">
+                            <?php esc_html_e( 'Import Now', 'filebird' ); ?>
+                        </button>
+                    </p>
+                    <p id="njt-fb-csv-user-import-description"></p>
+                    <p class="description">
+                        <?php esc_html_e( 'Choose FileBird CSV file to import.', 'filebird' ); ?><br />
+                        <?php esc_html_e( '(Please check to make sure that there is no duplicated name. The current folder structure is preserved.)', 'filebird' ); ?>
+                        <a href="https://ninjateam.gitbook.io/filebird/settings/import-and-export-folder-structure" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Learn more', 'filebird' ); ?></a>
+                        <br />
+                    </p>
+                </td>
 			</tr>
 		</tbody>
 	</table>
