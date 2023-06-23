@@ -4,7 +4,7 @@
  * Plugin Name: Disable Comments
  * Plugin URI: https://wordpress.org/plugins/disable-comments/
  * Description: Allows administrators to globally disable comments on their site. Comments can be disabled according to post type. You could bulk delete comments using Tools.
- * Version: 2.4.3
+ * Version: 2.4.4
  * Author: WPDeveloper
  * Author URI: https://wpdeveloper.com
  * License: GPL-3.0+
@@ -41,7 +41,7 @@ class Disable_Comments
 
 	function __construct()
 	{
-		define('DC_VERSION', '2.4.3');
+		define('DC_VERSION', '2.4.4');
 		define('DC_PLUGIN_SLUG', 'disable_comments_settings');
 		define('DC_PLUGIN_ROOT_PATH', dirname(__FILE__));
 		define('DC_PLUGIN_VIEWS_PATH', DC_PLUGIN_ROOT_PATH . '/views/');
@@ -350,6 +350,7 @@ class Disable_Comments
 		}
 		// rest API Comment Block
 		if (isset($this->options['remove_rest_API_comments']) && intval($this->options['remove_rest_API_comments']) === 1) {
+			add_filter('rest_endpoints', array($this, 'filter_rest_endpoints'));
 			add_filter('rest_pre_insert_comment', array($this, 'disable_rest_API_comments'), 10, 2);
 		}
 
@@ -535,7 +536,15 @@ class Disable_Comments
 	 */
 	public function filter_rest_endpoints($endpoints)
 	{
-		unset($endpoints['comments']);
+		if(isset($endpoints['comments'])){
+			unset($endpoints['comments']);
+		}
+		if(isset($endpoints['/wp/v2/comments'])){
+			unset($endpoints['/wp/v2/comments']);
+		}
+		if(isset($endpoints['/wp/v2/comments/(?P<id>[\d]+)'])){
+			unset($endpoints['/wp/v2/comments/(?P<id>[\d]+)']);
+		}
 		return $endpoints;
 	}
 
