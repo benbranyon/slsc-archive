@@ -31,6 +31,25 @@
 			context.find('#wf-onboarding-consent-input').prop('checked', false);
 		});
 
+		var subscriptionOptionSelector = '.wf-onboarding-subscription-options li';
+		function handleSubscriptionOptionClick(event) {
+			var target = $(event.target);
+			target.parent().find('li').removeClass('wf-active').attr('aria-checked', 'false');
+			target.addClass('wf-active').attr('aria-checked', 'true');
+			event.stopPropagation();
+		};
+		$(subscriptionOptionSelector).on('click', handleSubscriptionOptionClick);
+		$(document).on('click', subscriptionOptionSelector, handleSubscriptionOptionClick);
+
+		$(document).on('keyup keydown', subscriptionOptionSelector, function (event) {
+			if (event.which == 32) {
+				event.preventDefault();
+				event.stopPropagation();
+				if (event.type == 'keyup')
+					$(event.target).trigger('click');
+			}
+		});
+
 		$(document).on('submit', '.wf-onboarding-form', function(event) {
 			event.preventDefault();
 			var context = $(this);
@@ -47,7 +66,16 @@
 			};
 			var email = context.find('#wf-onboarding-email-input').val();
 			var licenseKey = context.find('#wf-onboarding-license-input').val();
-			var subscribe = context.find('#wf-onboarding-subscribe-input').prop('checked');
+			var subscriptionWarning = context.find('.wf-onboarding-subscription-option-required').hide();
+			var subscribe = false;
+			if (context.find('.wf-onboarding-subscription-options:visible').length) {
+				var subscriptionOption = context.find(subscriptionOptionSelector).filter('.wf-active');
+				if (!subscriptionOption.length) {
+					subscriptionWarning.show();
+					return enable(false);
+				}
+				subscribe = !!parseInt(subscriptionOption.data('value'));
+			}
 			var consent = context.find('#wf-onboarding-consent-input').prop('checked');
 			if (!consent)
 				return enable(false);
