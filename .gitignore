@@ -13,9 +13,12 @@ wp-content/backups/
 wp-content/uploads/
 wp-content/upgrade/
 wp-content/wp-cache-config.php
+wp-content/cache/
+wp-content/object-cache.php
 sitemap.xml
 sitemap.xml.gz
 wp-config.php
+.user.ini
 /.htaccess
 
 # Logs and databases #
