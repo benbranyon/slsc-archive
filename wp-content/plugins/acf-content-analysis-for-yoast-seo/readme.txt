@@ -1,13 +1,12 @@
 === ACF Content Analysis for Yoast SEO ===
 Contributors: yoast, angrycreative, kraftner, marcusforsberg, viktorfroberg, joostdevalk, atimmer, jipmoors, theorboman
 Tags: Yoast, SEO, ACF, Advanced Custom Fields, analysis, Search Engine Optimization
-Requires at least: 5.9
-Tested up to: 6.1
+Requires at least: 6.1
 Tested up to: 6.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
-Stable tag: 3.0.1
-Requires PHP: 5.6.20
+Stable tag: 3.1
+Requires PHP: 7.2.5
 
 WordPress plugin that adds the content of all ACF fields to the Yoast SEO score analysis.
 
@@ -55,6 +54,25 @@ Previously called Yoast ACF Analysis.
 });`
 
 == Changelog ==
+
+= 3.1 =
+
+Released May 23rd, 2023
+
+Enhancements:
+
+* Improves the analysis by excluding content from the URL and email fields.
+
+Bugfixes:
+
+* Fixes a bug where the content in ACF fields was not included in the analysis in Classic editor when WordProof plugin was activated.
+
+Other:
+
+* Sets the minimum required Yoast SEO version to 20.8.
+* Sets the minimum required ACF version to 6.0.0.
+* Sets the minimum supported WordPress version to 6.1 and "Tested up to" to 6.2.
+* Drops compatibility with PHP 5.6, 7.0 and 7.1.
 
 = 3.0.1 =
 

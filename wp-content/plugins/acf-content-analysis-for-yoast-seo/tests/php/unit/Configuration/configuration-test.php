@@ -2,10 +2,9 @@
 
 namespace Yoast\WP\ACF\Tests\Configuration;
 
-use Brain\Monkey;
 use Brain\Monkey\Filters;
 use Brain\Monkey\Functions;
-use PHPUnit\Framework\TestCase;
+use Yoast\WPTestUtils\BrainMonkey\TestCase;
 use Yoast_ACF_Analysis_Configuration;
 use Yoast_ACF_Analysis_Facade;
 use Yoast_ACF_Analysis_String_Store;
@@ -16,26 +15,6 @@ use Yoast_ACF_Analysis_String_Store;
  * @covers Yoast_ACF_Analysis_Configuration
  */
 class Configuration_Test extends TestCase {
-
-	/**
-	 * Sets up test fixtures.
-	 *
-	 * @return void
-	 */
-	protected function setUp() {
-		parent::setUp();
-		Monkey\setUp();
-	}
-
-	/**
-	 * Tears down test fixtures previously setup.
-	 *
-	 * @return void
-	 */
-	protected function tearDown() {
-		Monkey\tearDown();
-		parent::tearDown();
-	}
 
 	/**
 	 * Tests empty configurations.
@@ -65,7 +44,7 @@ class Configuration_Test extends TestCase {
 			$configuration->to_array()
 		);
 
-		$this->assertSame( Filters\applied( 'acf/get_info' ), 1 );
+		$this->assertSame( 1, Filters\applied( 'acf/get_info' ) );
 	}
 
 	/**
@@ -180,7 +159,7 @@ class Configuration_Test extends TestCase {
 			->with( [] )
 			->andReturn( [] );
 
-		$this->assertSame( $configuration->get_blacklist_name(), $blacklist_name );
+		$this->assertSame( $blacklist_name, $configuration->get_blacklist_name() );
 
 
 		Filters\expectApplied( 'ysacf_exclude_fields' )
@@ -188,7 +167,7 @@ class Configuration_Test extends TestCase {
 			->with( [] )
 			->andReturn( [] );
 
-		$this->assertSame( $configuration->get_blacklist_name()->to_array(), [] );
+		$this->assertSame( [], $configuration->get_blacklist_name()->to_array() );
 
 
 		Filters\expectApplied( 'ysacf_exclude_fields' )
@@ -196,7 +175,7 @@ class Configuration_Test extends TestCase {
 			->with( [] )
 			->andReturn( [ 'some_field_name' ] );
 
-		$this->assertSame( $configuration->get_blacklist_name()->to_array(), [ 'some_field_name' ] );
+		$this->assertSame( [ 'some_field_name' ], $configuration->get_blacklist_name()->to_array() );
 	}
 
 	/**
@@ -219,14 +198,14 @@ class Configuration_Test extends TestCase {
 			->with( [] )
 			->andReturn( 'invalid' );
 
-		$this->assertSame( $configuration->get_blacklist_name(), $blacklist_name );
+		$this->assertSame( $blacklist_name, $configuration->get_blacklist_name() );
 
 		Filters\expectApplied( 'ysacf_exclude_fields' )
 			->once()
 			->with( [] )
 			->andReturn( 'invalid' );
 
-		$this->assertSame( $configuration->get_blacklist_name()->to_array(), [] );
+		$this->assertSame( [], $configuration->get_blacklist_name()->to_array() );
 	}
 
 	/**
