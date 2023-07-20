@@ -55,6 +55,8 @@ class Folder extends Controller {
 		add_action( 'admin_notices', array( $this, 'adminNotices' ) );
 		add_action( 'attachment_fields_to_edit', array( $this, 'attachment_fields_to_edit' ), 10, 2 );
 
+		add_filter( 'wp_edited_image_metadata', array( $this, 'edited_image_metadata' ), 10, 3 );
+
 		$this->userSettings = UserSettings::getInstance();
 
 		// MailPoet plugin support
@@ -105,10 +107,12 @@ class Folder extends Controller {
 	}
 
 	public function check_update_database() {
-		$is_converted = get_option( 'fbv_old_data_updated_to_v4', '0' );
-		if ( $is_converted !== '1' ) {
-			if ( ConvertController::countOldFolders() > 0 && ! isset( $_GET['autorun'] ) ) {
-				add_filter( 'fbv_update_database_notice', '__return_true' );
+		if( is_admin() ) {
+			$is_converted = get_option( 'fbv_old_data_updated_to_v4', '0' );
+			if ( $is_converted !== '1' ) {
+				if ( ConvertController::countOldFolders() > 0 && ! isset( $_GET['autorun'] ) ) {
+					add_filter( 'fbv_update_database_notice', '__return_true' );
+				}
 			}
 		}
 	}
@@ -634,6 +638,15 @@ class Folder extends Controller {
 		return $post;
 	}
 
+	public function edited_image_metadata( $new_image_meta, $new_attachment_id, $attachment_id ) {
+		$folder = FolderModel::getFolderFromPostId( $attachment_id );
+		if( is_array( $folder ) && count( $folder ) > 0 ) {
+			if( (int) $folder[0]->folder_id > 0 ) {
+				FolderModel::setFoldersForPosts( $new_attachment_id, (int) $folder[0]->folder_id );
+			}
+		}
+		return $new_image_meta;
+	}
 	private static function addFolderToZip( &$zip, $children, $parent_dir = '' ) {
 		foreach ( $children as $k => $v ) {
 			$folder_name = $v->name;

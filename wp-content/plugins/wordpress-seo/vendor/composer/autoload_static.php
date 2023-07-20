@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit51966439afa696395ace4d2aedbde39e
+class ComposerStaticInit0198cf30433eb0da4c0d76a0071fb247
 {
     public static $prefixLengthsPsr4 = array (
         'C' => 
@@ -582,6 +582,7 @@ class ComposerStaticInit51966439afa696395ace4d2aedbde39e
         'Yoast\\WP\\SEO\\Conditionals\\Admin_Conditional' => __DIR__ . '/../..' . '/src/conditionals/admin-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Attachment_Redirections_Enabled_Conditional' => __DIR__ . '/../..' . '/src/conditionals/attachment-redirections-enabled-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Conditional' => __DIR__ . '/../..' . '/src/conditionals/conditional-interface.php',
+        'Yoast\\WP\\SEO\\Conditionals\\Deactivating_Yoast_Seo_Conditional' => __DIR__ . '/../..' . '/src/conditionals/deactivating-yoast-seo-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Development_Conditional' => __DIR__ . '/../..' . '/src/conditionals/development-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Feature_Flag_Conditional' => __DIR__ . '/../..' . '/src/conditionals/feature-flag-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Front_End_Conditional' => __DIR__ . '/../..' . '/src/conditionals/front-end-conditional.php',
@@ -675,6 +676,9 @@ class ComposerStaticInit51966439afa696395ace4d2aedbde39e
         'Yoast\\WP\\SEO\\Config\\Wincher_PKCE_Provider' => __DIR__ . '/../..' . '/src/config/wincher-pkce-provider.php',
         'Yoast\\WP\\SEO\\Config\\Wordproof_App_Config' => __DIR__ . '/../..' . '/src/config/wordproof-app-config.php',
         'Yoast\\WP\\SEO\\Config\\Wordproof_Translations' => __DIR__ . '/../..' . '/src/config/wordproof-translations.php',
+        'Yoast\\WP\\SEO\\Content_Type_Visibility\\Application\\Content_Type_Visibility_Dismiss_Notifications' => __DIR__ . '/../..' . '/src/content-type-visibility/application/content-type-visibility-dismiss-notifications.php',
+        'Yoast\\WP\\SEO\\Content_Type_Visibility\\Application\\Content_Type_Visibility_Watcher_Actions' => __DIR__ . '/../..' . '/src/content-type-visibility/application/content-type-visibility-watcher-actions.php',
+        'Yoast\\WP\\SEO\\Content_Type_Visibility\\User_Interface\\Content_Type_Visibility_Dismiss_New_Route' => __DIR__ . '/../..' . '/src/content-type-visibility/user-interface/content-type-visibility-dismiss-new-route.php',
         'Yoast\\WP\\SEO\\Context\\Meta_Tags_Context' => __DIR__ . '/../..' . '/src/context/meta-tags-context.php',
         'Yoast\\WP\\SEO\\Exceptions\\Addon_Installation\\Addon_Activation_Error_Exception' => __DIR__ . '/../..' . '/src/exceptions/addon-installation/addon-activation-error-exception.php',
         'Yoast\\WP\\SEO\\Exceptions\\Addon_Installation\\Addon_Already_Installed_Exception' => __DIR__ . '/../..' . '/src/exceptions/addon-installation/addon-already-installed-exception.php',
@@ -809,7 +813,7 @@ class ComposerStaticInit51966439afa696395ace4d2aedbde39e
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Menu_Badge_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/menu-badge-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Migration_Error_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/migration-error-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Old_Configuration_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/old-configuration-integration.php',
-        'Yoast\\WP\\SEO\\Integrations\\Admin\\Old_Premium_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/old-premium-integration.php',
+        'Yoast\\WP\\SEO\\Integrations\\Admin\\Old_Premium_Integration' => __DIR__ . '/../..' . '/src/deprecated/src/integrations/admin/old-premium-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Redirect_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/redirect-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Redirect_Old_Features_Tab_Integration' => __DIR__ . '/../..' . '/src/deprecated/src/integrations/admin/redirect-old-features-tab-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Redirects_Page_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/redirects-page-integration.php',
@@ -852,6 +856,7 @@ class ComposerStaticInit51966439afa696395ace4d2aedbde39e
         'Yoast\\WP\\SEO\\Integrations\\Primary_Category' => __DIR__ . '/../..' . '/src/integrations/primary-category.php',
         'Yoast\\WP\\SEO\\Integrations\\Schema_Blocks' => __DIR__ . '/../..' . '/src/deprecated/src/integrations/schema-blocks.php',
         'Yoast\\WP\\SEO\\Integrations\\Settings_Integration' => __DIR__ . '/../..' . '/src/integrations/settings-integration.php',
+        'Yoast\\WP\\SEO\\Integrations\\Support_Integration' => __DIR__ . '/../..' . '/src/integrations/support-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Third_Party\\AMP' => __DIR__ . '/../..' . '/src/integrations/third-party/amp.php',
         'Yoast\\WP\\SEO\\Integrations\\Third_Party\\BbPress' => __DIR__ . '/../..' . '/src/integrations/third-party/bbpress.php',
         'Yoast\\WP\\SEO\\Integrations\\Third_Party\\CoAuthors_Plus' => __DIR__ . '/../..' . '/src/deprecated/src/integrations/third-party/coauthors-plus.php',
@@ -1075,9 +1080,9 @@ class ComposerStaticInit51966439afa696395ace4d2aedbde39e
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit51966439afa696395ace4d2aedbde39e::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit51966439afa696395ace4d2aedbde39e::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit51966439afa696395ace4d2aedbde39e::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit0198cf30433eb0da4c0d76a0071fb247::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit0198cf30433eb0da4c0d76a0071fb247::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit0198cf30433eb0da4c0d76a0071fb247::$classMap;
 
         }, null, ClassLoader::class);
     }
