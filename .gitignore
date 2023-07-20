@@ -15,6 +15,7 @@ wp-content/upgrade/
 wp-content/wp-cache-config.php
 wp-content/cache/
 wp-content/object-cache.php
+wp-content/wflogs/
 sitemap.xml
 sitemap.xml.gz
 wp-config.php
