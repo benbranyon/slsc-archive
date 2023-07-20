@@ -625,4 +625,24 @@ jQuery(document).ready(function () {
         });
     }, TIME_INTERVAL);
   });
+
+  jQuery(".njt_fbv_sync_wpml").on("click", function () {
+    jQuery(this).addClass("updating-message");
+    jQuery
+      .ajax({
+        url: window.ajaxurl,
+        method: "POST",
+        data: {
+          action: "fbv_sync_wpml",
+          nonce: window.fbv_data.nonce,
+        },
+      })
+      .then((res) => {
+        jQuery(this).next().text(res.message);
+      })
+      .catch((err) => console.log(err))
+      .always(() => {
+        jQuery(this).removeClass("updating-message");
+      });
+  });
 });

@@ -21,6 +21,14 @@ class Exclude {
 			$where[]               = "posts.ID NOT IN ($media_attachments_ids)";
 		}
 
+		// Compatible https://wordpress.org/plugins/pdf-image-generator/
+		if ( class_exists( 'PIGEN' ) ) {
+			$opt = get_option( 'pigen_options' );
+			if ( isset( $opt['hidethumb'] ) && $opt['hidethumb'] !== '' ) {
+				$where[] = " posts.ID NOT IN (SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_thumbnail_id') ";
+			}
+		}
+
 		return $where;
 	}
 }

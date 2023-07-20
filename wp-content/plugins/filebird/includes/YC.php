@@ -19,8 +19,6 @@ if ( ! class_exists( 'YayCommerce' ) ) {
 			if ( function_exists( 'current_user_can' ) && current_user_can( 'install_plugins' ) ) {
 				$this->nonce          = wp_create_nonce( 'install-plugin_yaymail' );
 				$this->autoInstallUrl = self_admin_url( 'update.php?action=install-plugin&plugin=yaymail&_wpnonce=' . $this->nonce );
-
-				$this->userCanInstallPlugin = true;
 			} else {
 				$this->autoInstallUrl = admin_url( 'plugin-install.php?s=yaymail&tab=search&type=term' );
 			}

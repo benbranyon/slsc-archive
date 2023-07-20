@@ -3,8 +3,8 @@ Contributors: ninjateam
 Donate link: https://codecanyon.net/item/media-folders-manager-for-wordpress/21715379
 Tags: wordpress media library folders, media library folders, media folder, file manager, folders, wp media folder, wp media folders, wordpress media folders, wordpress media library, wordpress media manager, media manager, firebird
 Requires at least: 3.0
-Tested up to: 6.2
-Stable tag: 5.3.2
+Tested up to: 6.2.2
+Stable tag: 5.4.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -192,6 +192,30 @@ Happy Organizing! 😍
 
 
 == Changelog ==
+
+= Jul 7, 2023 - Version 5.4.5 =
+- Added: Compatible with PDF Image Generator (By Mizuho Ogino)
+- Updated: Document Link
+- Fixed: PHP 8 warning
+
+= Jul 3, 2023 – Version 5.4.4 =
+- Added: Compatible with text block of UX builder (Theme Flatsome)
+- Fixed: Drop item when a subfolder is deleted
+- Fixed: Conpatible with Twenty twenty three theme
+
+= Jun 27, 2023 - Version 5.4.3 =
+- Fixed: Conflict with plugin CMS Tree Page View
+- Fixed: Set folder for cropped image
+
+= Jun 20, 2023 - Version 5.4.2 =
+- Added: Sync WPML
+
+= Jun 7, 2023 - Version 5.4.1 =
+- Fixed: Compatible with the latest version of Beaver Builder (PRO)
+- Fixed: PostType Tree keep loading with Editor Role (PRO)
+
+= Jun 5, 2023 - Version 5.4 =
+- Added: Support migrate folders from Wicked Folders plugin
 
 = May 15, 2023 – Version 5.3.2 =
 - Fixed: SQL security

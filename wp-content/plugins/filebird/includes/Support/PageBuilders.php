@@ -91,10 +91,20 @@ class PageBuilders {
 		}
 	}
 
-	public function enqueueScripts( $is_enqueue_media = false ) {
+	public function enqueueScripts( $is_enqueue_media = false, $is_enqueue_footer = false ) {
 		if ( $is_enqueue_media ) {
 			wp_enqueue_media();
+
         }
+
+		if ( $is_enqueue_footer ) {
+			add_action(
+                'wp_footer',
+                function() {
+					$this->folderController->enqueueAdminScripts( 'pagebuilders' );
+				}
+            );
+		}
 
 		$this->folderController->enqueueAdminScripts( 'pagebuilders' );
 	}
@@ -104,7 +114,12 @@ class PageBuilders {
 	}
 
 	public function registerForBeaver() {
-		add_action( 'fl_before_sortable_enqueue', array( $this, 'enqueueScripts' ) );
+		add_action(
+            'fl_before_sortable_enqueue',
+            function() {
+				$this->enqueueScripts( false, true );
+			}
+		);
 	}
 
 	public function registerForBrizy() {

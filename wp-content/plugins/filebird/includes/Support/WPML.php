@@ -28,6 +28,7 @@ class WPML extends Controller {
 		add_action( 'fbv_after_set_folder', array( $this, 'fbvAfterSetFolder' ), 10, 2 );
 		add_filter( 'wpml_pre_parse_query', array( $this, 'preParseQuery' ) );
 		add_filter( 'wpml_post_parse_query', array( $this, 'postParseQuery' ) );
+		add_action( 'wp_ajax_fbv_sync_wpml', array( $this, 'syncWPML' ) );
 
 		if ( ! isset( $this->cpt_sync_options['attachment'] ) || $this->cpt_sync_options['attachment'] != '0' ) {
 			add_filter( 'fbv_in_not_in_query', array( $this, 'fbv_in_not_in_query' ), 10, 2 );
@@ -35,6 +36,37 @@ class WPML extends Controller {
 			add_filter( 'fbv_speedup_get_count_query', '__return_true' );
 			add_filter( 'fbv_all_folders_and_count', array( $this, 'all_folders_and_count_query' ), 10, 2 );
 		}
+	}
+
+	public function syncWPML() {
+		global $wpdb;
+
+		check_ajax_referer( 'fbv_nonce', 'nonce', true );
+
+		$translationNotInFolder = $wpdb->get_results(
+			"SELECT GROUP_CONCAT( IF(fbv.folder_id is NULL, icl.element_id, NULL) ) as attachment_ids, GROUP_CONCAT(DISTINCT(fbv.folder_id)) as folder_id
+			FROM `{$wpdb->prefix}icl_translations` icl
+			LEFT JOIN `{$wpdb->prefix}fbv_attachment_folder` fbv 
+			ON fbv.attachment_id = icl.element_id
+			WHERE ( icl.element_type = 'post_attachment' )
+			GROUP BY icl.trid
+			HAVING ( COUNT(icl.element_id) > COUNT(fbv.folder_id) AND COUNT(fbv.folder_id) > 0 )"
+        );
+
+		foreach ( $translationNotInFolder as $translation ) {
+			$elementIds = explode( ',', $translation->attachment_ids );
+			$folderId   = intval( $translation->folder_id );
+
+			foreach ( $elementIds as $elementId ) {
+				FolderModel::setFoldersForPosts( $elementId, $folderId );
+			}
+		}
+
+		return wp_send_json(
+			array(
+				'message' => __( 'Done!', 'filebird' ),
+			)
+		);
 	}
 
 	public function fbv_get_count_query( $q, $folder_id, $lang ) {
