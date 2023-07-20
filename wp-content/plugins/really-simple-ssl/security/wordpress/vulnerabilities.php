@@ -105,6 +105,20 @@ if (!class_exists("rsssl_vulnerabilities")) {
         }
 
 	    /**
+	     * Allow users to manually force a re-check, e.g. in case of manually updating plugins
+	     * @return void
+	     */
+	    public function force_reload_files(){
+		    if ( ! rsssl_admin_logged_in() ) {
+			    return;
+		    }
+
+		    if ( isset($_GET['rsssl_check_vulnerabilities']) ) {
+			    $this->reload_files_on_update();
+		    }
+	    }
+
+	    /**
 	     * Checks the files on age and downloads if needed.
 	     * @return void
 	     */
@@ -136,6 +150,8 @@ if (!class_exists("rsssl_vulnerabilities")) {
             add_action('upgrader_process_complete', array($this, 'reload_files_on_update'), 10, 2);
             //After activation, we need to reload the files.
             add_action( 'activate_plugin', array($this, 'reload_files_on_update'), 10, 2);
+	        //we can also force it
+            add_action( 'admin_init', array($this, 'force_reload_files'));
 
             //same goes for themes.
             add_action('after_switch_theme', array($this, 'reload_files_on_update'), 10, 2);
@@ -222,8 +238,8 @@ if (!class_exists("rsssl_vulnerabilities")) {
             $risks = $this->count_risk_levels();
 	        $level_to_show_on_dashboard = rsssl_get_option('vulnerability_notification_dashboard');
 	        $level_to_show_sitewide = rsssl_get_option('vulnerability_notification_sitewide');
-            foreach ($this->risk_levels as $key => $value) {
-                if ( !isset($risks[$key]) ) {
+            foreach ($this->risk_levels as $risk_level => $value) {
+                if ( !isset($risks[$risk_level]) ) {
                     continue;
                 }
                 //this is shown bases on the config of vulnerability_notification_dashboard
@@ -243,18 +259,18 @@ if (!class_exists("rsssl_vulnerabilities")) {
                     continue;
                 }
 
-                $count = $risks[$key];
-                $count_label = _n('vulnerability', 'vulnerabilities', $count, 'really-simple-ssl');
+                $count = $risks[$risk_level];
+	            $title = $this->get_warning_string($risk_level, $count);
                 $notice = [
                     'callback' => '_true_',
                     'score' => 1,
                     'show_with_options' => ['enable_vulnerability_scanner'],
                     'output' => [
                         'true' => [
-                            'title' => sprintf(__('You have %s %s %s', 'really-simple-ssl'), $count, $this->risk_naming[$key], $count_label),
-                            'msg' => sprintf(__('You have %s %s %s. Please take appropriate action.','really-simple-ssl'), $count, $this->risk_naming[$key],$count_label ),
+                            'title' => $title,
+                            'msg' => $title.' '.__('Please take appropriate action.','really-simple-ssl'),
                             'url' => add_query_arg(['page'=>'really-simple-security#settings/vulnerabilities/vulnerabilities-overview'], rsssl_admin_url() ),
-                            'icon' => ($key === 'c' || $key==='h') ? 'warning' : 'open',
+                            'icon' => ($risk_level === 'c' || $risk_level==='h') ? 'warning' : 'open',
                             'type' => 'warning',
                             'dismissible' => true,
                             'admin_notice' => $siteWide,
@@ -262,7 +278,7 @@ if (!class_exists("rsssl_vulnerabilities")) {
                         ]
                     ],
                 ];
-                $notices['risk_level_' . $key] = $notice;
+                $notices['risk_level_' . $risk_level] = $notice;
 
             }
             //now we add the test notices for admin and dahboard.
@@ -1411,17 +1427,42 @@ if (!class_exists("rsssl_vulnerabilities")) {
                     }
                 }
             }
-            $vulnerability = _n('vulnerability', 'vulnerabilities', $count, 'really-simple-ssl');
+
             $risk = $this->risk_naming[$risk_level];
+	        $title = $this->get_warning_string($risk_level, $count);
 	        $message = $count === 1 ? sprintf(__("A %s vulnerability is found in %s.", "really-simple-ssl"),$risk, $plugin_name) : sprintf(__("Multiple %s vulnerabilities have been found.", "really-simple-ssl"), $risk);
 
             return [
-                'title' => sprintf(__("You have %s %s %s", "really-simple-ssl"), $count, $risk, $vulnerability),
+                'title' => $title,
                 'message' => $message . ' ' .
                              __('Based on your settings, Really Simple SSL will take appropriate action, or you will need to solve it manually.','really-simple-ssl') .' '.
                              sprintf(__('Get more information from the Really Simple SSL dashboard on %s'), $this->domain() ),
                 'url' => "https://really-simple-ssl.com/instructions/about-vulnerabilities/",
             ];
+        }
+
+	    /**
+	     * @param string $risk_level
+	     * @param int    $count
+	     *
+	     * @return string
+	     */
+        public function get_warning_string( string $risk_level, int $count): string {
+            switch ($risk_level){
+                case 'c':
+                    $warning = sprintf(_n('You have 1 critical vulnerability', 'You have %s critical vulnerabilities', $count, 'really-simple-ssl'), $count);
+                    break;
+                case 'h':
+                    $warning = sprintf(_n('You have 1 high-risk vulnerability', 'You have %s high-risk vulnerabilities', $count, 'really-simple-ssl'), $count);
+                    break;
+                case 'm':
+                    $warning = sprintf(_n('You have 1 medium-risk vulnerability', 'You have %s medium-risk vulnerabilities', $count, 'really-simple-ssl'), $count);
+                    break;
+                default:
+	                $warning = sprintf(_n('You have 1 low-risk vulnerability', 'You have %s low-risk vulnerabilities', $count, 'really-simple-ssl'), $count);
+                    break;
+            }
+            return $warning;
         }
 
 	    /**
