@@ -505,27 +505,38 @@ function acf_get_current_url() {
  *
  * @since 6.0.0
  *
- * @param string $url The URL to be tagged.
+ * @param string $url      The URL to be tagged.
  * @param string $campaign The campaign tag.
- * @param string $content The UTM content tag.
+ * @param string $content  The UTM content tag.
+ * @param bool   $anchor   An optional anchor ID.
+ * @param string $source   An optional UTM source tag.
+ * @param string $medium   An optional UTM medium tag.
  * @return string
  */
-function acf_add_url_utm_tags( $url, $campaign, $content, $anchor = false ) {
+function acf_add_url_utm_tags( $url, $campaign, $content, $anchor = false, $source = '', $medium = '' ) {
 	$anchor_url = $anchor ? '#' . $anchor : '';
-	$query      = http_build_query(
+	$medium     = ! empty( $medium ) ? $medium : 'insideplugin';
+
+	if ( empty( $source ) ) {
+		$source = ( defined( 'ACF_PRO' ) && ACF_PRO ) ? 'ACF PRO' : 'ACF Free';
+	}
+
+	$query = http_build_query(
 		apply_filters(
 			'acf/admin/acf_url_utm_parameters',
 			array(
-				'utm_source'   => ( defined( 'ACF_PRO' ) && ACF_PRO ) ? 'ACF PRO' : 'ACF Free',
-				'utm_medium'   => 'insideplugin',
-				'utm_campagin' => $campaign,
+				'utm_source'   => $source,
+				'utm_medium'   => $medium,
+				'utm_campaign' => $campaign,
 				'utm_content'  => $content,
 			)
 		)
 	);
+
 	if ( $query ) {
 		$query = '?' . $query;
 	}
+
 	return esc_url( $url . $query . $anchor_url );
 }
 
@@ -545,7 +556,7 @@ function acf_sanitize_request_args( $args = array() ) {
 		case 'double':
 			return (float) $args;
 		case 'array':
-			$sanitized = [];
+			$sanitized = array();
 			foreach ( $args as $key => $value ) {
 				$key               = sanitize_text_field( $key );
 				$sanitized[ $key ] = acf_sanitize_request_args( $value );
@@ -632,4 +643,24 @@ function acf_sanitize_files_value_array( $array, $sanitize_function ) {
 	}
 
 	return $array;
+}
+
+/**
+ * Maybe unserialize, but don't allow any classes.
+ *
+ * @since 6.1
+ *
+ * @param string $data String to be unserialized, if serialized.
+ * @return mixed The unserialized, or original data.
+ */
+function acf_maybe_unserialize( $data ) {
+	if ( is_serialized( $data ) ) { // Don't attempt to unserialize data that wasn't serialized going in.
+		if ( PHP_VERSION_ID >= 70000 ) {
+			return @unserialize( trim( $data ), array( 'allowed_classes' => false ) ); //phpcs:ignore -- code only runs on PHP7+
+		} else {
+			return @\ACF\Brumann\Polyfill\unserialize::unserialize( trim( $data ), array( 'allowed_classes' => false ) );
+		}
+	}
+
+	return $data;
 }
