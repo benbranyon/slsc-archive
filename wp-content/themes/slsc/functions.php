@@ -170,6 +170,9 @@ function gesso_add_editor_styles() {
 }
 add_action( 'admin_init', 'gesso_add_editor_styles' );
 
+//Remove core block styles
+add_filter( 'should_load_separate_core_block_assets', '__return_true' );
+
 
 //------------------------------------------------------
 // Timber Support - Starter Theme Functions
