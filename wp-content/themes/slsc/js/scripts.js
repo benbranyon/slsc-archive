@@ -79,10 +79,11 @@ jQuery( document ).ready(function( $ ) {
       // this option stays selected
       classie.add( opt, 'cbp-vm-selected' );
     }
-
-  $('.timeline').timeline({
-    verticalStartPosition: 'right',
-    verticalTrigger: '150px'
-  });
+  if ($('body').hasClass('single-story')) {
+    $('.timeline').timeline({
+      verticalStartPosition: 'right',
+      verticalTrigger: '150px'
+    });
+  }
 
 });
