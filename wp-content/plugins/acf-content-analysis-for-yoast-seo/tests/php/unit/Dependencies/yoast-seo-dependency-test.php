@@ -2,8 +2,7 @@
 
 namespace Yoast\WP\ACF\Tests\Dependencies;
 
-use Brain\Monkey;
-use PHPUnit\Framework\TestCase;
+use Yoast\WPTestUtils\BrainMonkey\TestCase;
 use Yoast_ACF_Analysis_Dependency_Yoast_SEO;
 
 /**
@@ -28,26 +27,6 @@ class Yoast_SEO_Dependency_Test extends TestCase {
 	protected $runTestInSeparateProcess = true;
 
 	/**
-	 * Sets up test fixtures.
-	 *
-	 * @return void
-	 */
-	protected function setUp() {
-		parent::setUp();
-		Monkey\setUp();
-	}
-
-	/**
-	 * Tears down test fixtures previously setup.
-	 *
-	 * @return void
-	 */
-	protected function tearDown() {
-		Monkey\tearDown();
-		parent::tearDown();
-	}
-
-	/**
 	 * Tests that requirements are not met when Yoast SEO can't be found.
 	 *
 	 * @return void
@@ -64,7 +43,7 @@ class Yoast_SEO_Dependency_Test extends TestCase {
 	 * @return void
 	 */
 	public function testPass() {
-		\define( 'WPSEO_VERSION', '14.9.0' );
+		\define( 'WPSEO_VERSION', '20.8' );
 
 		$testee = new Yoast_ACF_Analysis_Dependency_Yoast_SEO();
 		$this->assertTrue( $testee->is_met() );
@@ -76,7 +55,7 @@ class Yoast_SEO_Dependency_Test extends TestCase {
 	 * @return void
 	 */
 	public function testOldVersion() {
-		\define( 'WPSEO_VERSION', '14.5.0' );
+		\define( 'WPSEO_VERSION', '20.7' );
 
 		$testee = new Yoast_ACF_Analysis_Dependency_Yoast_SEO();
 		$this->assertFalse( $testee->is_met() );
@@ -91,7 +70,7 @@ class Yoast_SEO_Dependency_Test extends TestCase {
 		$testee = new Yoast_ACF_Analysis_Dependency_Yoast_SEO();
 		$testee->register_notifications();
 
-		$this->assertTrue( \has_action( 'admin_notices', [ $testee, 'message_plugin_not_activated' ] ) );
+		$this->assertSame( 10, \has_action( 'admin_notices', [ $testee, 'message_plugin_not_activated' ] ) );
 	}
 
 	/**
@@ -105,6 +84,6 @@ class Yoast_SEO_Dependency_Test extends TestCase {
 		$testee = new Yoast_ACF_Analysis_Dependency_Yoast_SEO();
 		$testee->register_notifications();
 
-		$this->assertTrue( \has_action( 'admin_notices', [ $testee, 'message_minimum_version' ] ) );
+		$this->assertSame( 10, \has_action( 'admin_notices', [ $testee, 'message_minimum_version' ] ) );
 	}
 }

@@ -21,10 +21,13 @@ if ( ! class_exists( 'acf_field_select' ) ) :
 		function initialize() {
 
 			// vars
-			$this->name     = 'select';
-			$this->label    = _x( 'Select', 'noun', 'acf' );
-			$this->category = 'choice';
-			$this->defaults = array(
+			$this->name          = 'select';
+			$this->label         = _x( 'Select', 'noun', 'acf' );
+			$this->category      = 'choice';
+			$this->description   = __( 'A dropdown list with a selection of choices that you specify.', 'acf' );
+			$this->preview_image = acf_get_url() . '/assets/images/field-type-previews/field-preview-select.png';
+			$this->doc_url       = acf_add_url_utm_tags( 'https://www.advancedcustomfields.com/resources/select/', 'docs', 'field-type-selection' );
+			$this->defaults      = array(
 				'multiple'      => 0,
 				'allow_null'    => 0,
 				'choices'       => array(),
@@ -318,6 +321,10 @@ if ( ! class_exists( 'acf_field_select' ) ) :
 				$select['data-ajax_action'] = $field['ajax_action'];
 			}
 
+			if ( ! empty( $field['hide_search'] ) ) {
+				$select['data-minimum-results-for-search'] = '-1';
+			}
+
 			// hidden input is needed to allow validation to see <select> element with no selected value
 			if ( $field['multiple'] || $field['ui'] ) {
 				acf_hidden_input(
@@ -403,8 +410,8 @@ if ( ! class_exists( 'acf_field_select' ) ) :
 			acf_render_field_setting(
 				$field,
 				array(
-					'label'        => __( 'Select multiple values?', 'acf' ),
-					'instructions' => '',
+					'label'        => __( 'Select Multiple', 'acf' ),
+					'instructions' => 'Allow content editors to select multiple values',
 					'name'         => 'multiple',
 					'type'         => 'true_false',
 					'ui'           => 1,
@@ -425,7 +432,7 @@ if ( ! class_exists( 'acf_field_select' ) ) :
 			acf_render_field_setting(
 				$field,
 				array(
-					'label'        => __( 'Allow Null?', 'acf' ),
+					'label'        => __( 'Allow Null', 'acf' ),
 					'instructions' => '',
 					'name'         => 'allow_null',
 					'type'         => 'true_false',

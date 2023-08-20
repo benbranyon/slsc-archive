@@ -2,11 +2,10 @@
 
 namespace Yoast\WP\ACF\Tests;
 
-use Brain\Monkey;
 use Brain\Monkey\Functions;
-use PHPUnit\Framework\TestCase;
 use Yoast\WP\ACF\Tests\Doubles\Failing_Dependency;
 use Yoast\WP\ACF\Tests\Doubles\Passing_Dependency;
+use Yoast\WPTestUtils\BrainMonkey\TestCase;
 use Yoast_ACF_Analysis_Requirements;
 
 /**
@@ -17,19 +16,10 @@ class Requirements_Test extends TestCase {
 	/**
 	 * Sets up test fixtures.
 	 */
-	protected function setUp() {
-		parent::setUp();
-		Monkey\setUp();
+	protected function set_up() {
+		parent::set_up();
 
 		Functions\expect( 'current_user_can' )->andReturn( true );
-	}
-
-	/**
-	 * Tears down test fixtures previously set up.
-	 */
-	protected function tearDown() {
-		Monkey\tearDown();
-		parent::tearDown();
 	}
 
 	/**
