@@ -64,7 +64,7 @@ function gesso_scripts() {
   if ( is_singular( 'story' ) ) {
       wp_enqueue_style('timeline-styles', get_template_directory_uri() . '/css/lib/timeline.min.css');
 
-      wp_register_script('timeline-js', get_template_directory_uri() . '/js/lib/timeline.min.js', array('jquery') );\
+      wp_register_script('timeline-js', get_template_directory_uri() . '/js/lib/timeline.min.js', array('jquery') );
       wp_enqueue_script('timeline-js');
   }
 
