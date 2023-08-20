@@ -1,5 +1,5 @@
 <?php
-use wpai_acf_add_on\acf\groups\GroupFactory;
+use wpai_acf_add_on\groups\GroupFactory;
 
 /**
  *  Render ACF group

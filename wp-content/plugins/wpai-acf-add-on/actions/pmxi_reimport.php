@@ -12,9 +12,17 @@ function pmai_pmxi_reimport($entry, $post){
 				$fields = acf_get_fields($group);
 				if (!empty($fields)) {
 					foreach ($fields as $key => $field) {
-					    if ( ! empty($field['name']) ) {
-						    $all_existing_acf[] = '[' . $field['name'] . '] ' . $field['label'];
-                        }
+						if ( ! empty($field['name']) ) {
+							$all_existing_acf[] = '[' . $field['name'] . '] ' . $field['label'];
+							// Include subfields.
+							if( isset($field['sub_fields']) && !in_array($field['type'], ['repeater', 'flexible_content']) && is_array($field['sub_fields']) && !empty($field['sub_fields'])){
+								foreach($field['sub_fields'] as $sub_field){
+									if( ! empty($sub_field['name'])){
+										$all_existing_acf[] = '[' . $field['name'] . '_' . $sub_field['name'] . '] ' . $sub_field['label'];
+									}
+								}
+							}
+						}
 					}
 				}
 			}

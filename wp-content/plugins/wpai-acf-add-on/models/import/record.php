@@ -1,7 +1,7 @@
 <?php
 
-use wpai_acf_add_on\acf\groups\Group;
-use wpai_acf_add_on\acf\groups\GroupFactory;
+use wpai_acf_add_on\groups\Group;
+use wpai_acf_add_on\groups\GroupFactory;
 
 /**
  * Class PMAI_Import_Record
