@@ -4,7 +4,7 @@ Donate link: https://codecanyon.net/item/media-folders-manager-for-wordpress/217
 Tags: wordpress media library folders, media library folders, media folder, file manager, folders, wp media folder, wp media folders, wordpress media folders, wordpress media library, wordpress media manager, media manager, firebird
 Requires at least: 3.0
 Tested up to: 6.2.2
-Stable tag: 5.4.5
+Stable tag: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,7 +19,7 @@ Let's organize WordPress media library folders using a drag and drop organizer.
 [TEST DRIVE](https://media-folder.ninjateam.org/create/) | [**GO PRO (Lifetime License)**](https://1.envato.market/FileBird-Premium) 💎
 
 
-FileBird enhances your media library with a clean user interface, native icons, smooth drag & drop, dynamic gallery, advanced sort options, and better organization. 
+FileBird enhances your media library with a clean user interface, native icons, smooth drag & drop, dynamic gallery, and advanced sort options. With such a better organization, it becomes super easy to insert images into Gutenberg blocks, find old files, and remove unused images.
 
 The free version allows you to create **unlimited main folders** and **subfolders**.
 
@@ -29,7 +29,7 @@ The free version allows you to create **unlimited main folders** and **subfolder
 
 ###⚡️ FEATURES
 
-FileBird allows you to create virtual folders to categorize your WordPress media file uploads. So when you move files and folders around, it won’t break the permalinks to your images in the page/post content.
+FileBird allows you to create virtual folders to [categorize your WordPress media file uploads](https://ninjateam.org/how-to-organize-your-wordpress-media-library/). So when you move files and folders around, it won’t break the permalinks to your images in the page/post content.
 
 With FileBird Pro you can save time on WP media management, search for any files & folders, sort them out, add product image gallery, download/export media folders, etc. That’s a great way to boost your admin workflow and productivity.
 
@@ -52,7 +52,7 @@ Drag and drop to upload or bulk move files into folders. Drag and drop to arrang
 Right-click on FileBird folders section to quickly create, rename, cut, paste, or delete folders just the way you do on your computer.
 
 **Full Control In One Toolbar**
-FileBird’s collapsible sidebar provides you with the ultimate control over all WordPress media library folders.
+FileBird’s collapsible sidebar provides you with ultimate control over all WordPress media library folders.
 
 **Painless Migration**
 Import and seamlessly synchronize media category/folder structure from Enhanced Media Library, WP Media Folder by JoomUnited, WordPress Media Library Folders by Max Foundry, Real Media Library, and HappyFiles.
@@ -61,7 +61,7 @@ Import and seamlessly synchronize media category/folder structure from Enhanced 
 One-click to export the whole WP media folder structure so that you can migrate it to your live sites or simply keep a backup.
 
 **User Based Folder View**
-Enabling this mode allows admins and other users with access to create their own categories/directories. A user can freely manage his/her folders without affecting others' directory structure.
+Enabling this mode allows admins and other users access to create their own categories/directories. A user can freely manage his/her folders without affecting others' directory structure.
 
 **Powerful Search Feature**
 You can sort and search for file and folder name not only in Media library but also in page/post editor.
@@ -76,7 +76,10 @@ Now you can calculate your attachment size in a single click and be able to sort
 Right-click on a specific folder to pick a distinct color. This helps differentiate it between numerous folders.
 
 **Multiple Tree View Styles (PRO)**
-Apart from hierarchical tree view, you have an option to hide levels from tree view, too. This flat tree view is very useful for those with a large number of folders.
+Apart from the hierarchical tree view, you have an option to hide levels from the tree view, too. This flat tree view is very useful for those with a large number of folders.
+
+**Categorize Pages, Posts, and Custom Post Types (PRO)**
+Easily enable the folder tree to organize your WordPress pages, posts, plugins, WooCommerce coupons, discounts, and other CPTs.
 
 **Customizable Default File Order**
 Set a way of sorting files ascending/descending alphabetically by the file name, title, date, modified, and author.
@@ -111,11 +114,12 @@ You won’t see WordPress media library not loading, as FileBird smart-loads one
 
 * Upload multiple folders and their files directly from computer to WordPress
 * Create gallery from folders using Gutenberg block of FileBird gallery 
-* Create document gallery with shortcode
+* [Create WordPress document gallery](https://ninjateam.org/document-gallery-wordpress/) with shortcode
 * Resize the left sidebar to get an overview of all folders
 * Upload files to a specific folder by choosing the destination folder from the dropdown
 * Easily **search** for the name of file/folder
 * From the page/post composer, **browse** files and folders in the FileBird UI
+* While [customizing WooCommerce email](https://yaycommerce.com/woocommerce-email-template-customization/) with a drag and drop email builder, you can quickly find the images you need
 * Keep your folders uncluttered by clearing out the old files using **Sort** features
 * Press ESC to exit bulk select mode
 
@@ -138,7 +142,18 @@ You won’t see WordPress media library not loading, as FileBird smart-loads one
 
 * WPML – Best WP plugin to translate and display your website in any languages
 * Polylang – A plugin allows you to create a bilingual or multilingual WordPress site
-* Gutenberg – New editor Gutenberg from WordPress 5.0
+* Elementor Website Builder 
+* JetEngine
+* Flatsome UX Builder
+* Divi Builder
+* Visual Composer
+* Beaver Builder
+* SiteOrigin Pro
+* Bricks Builder
+* KingComposer
+* Tatsu Builder
+* Oxygen
+* Thrive Architect
 * Classic Editor – Old WordPress editor to display tree view folders
 * Slider Revolution – Best selling WordPress Responsive plugin
 * EWWW Image Optimizer
@@ -173,7 +188,7 @@ No worries, your website will be completely unaffected. Upon deactivation, all y
 You can reach us here [https://ninjateam.org/support/](https://ninjateam.org/support/)
 
 = Why should I buy the premium plugin? =
-If you wish to use FileBird folders in all premium page builders, you can **[upgrade to FileBird PRO](https://codecanyon.net/item/media-folders-manager-for-wordpress/21715379?irgwc=1&clickid=ynBwuiXfXxyORfPwUx0Mo3QWUkiVPZQJY3UNU00&iradid=275988&irpid=418490&iradtype=ONLINE_TRACKING_LINK&irmptype=mediapartner&mp_value1=&utm_campaign=af_impact_radius_418490&utm_medium=affiliate&utm_source=impact_radius)**. Premium features include advanced sort & filtering for both files and folders; download folders; more themes, plugins & page builders supported.
+If you wish to use FileBird folders in all premium page builders, you can [upgrade to FileBird PRO](https://codecanyon.net/item/media-folders-manager-for-wordpress/21715379?irgwc=1&clickid=ynBwuiXfXxyORfPwUx0Mo3QWUkiVPZQJY3UNU00&iradid=275988&irpid=418490&iradtype=ONLINE_TRACKING_LINK&irmptype=mediapartner&mp_value1=&utm_campaign=af_impact_radius_418490&utm_medium=affiliate&utm_source=impact_radius). Premium features include advanced sort & filtering for both files and folders, [download entire media folders](https://ninjateam.org/download-wordpress-media-library/), more themes, plugins & page builders supported.
 
 = Is that a one-time payment for FileBird Pro?
 Yes! FileBird lifetime license costs you a **one-time** fee, you can use it on a single site, and get unlimited updates.
@@ -192,6 +207,15 @@ Happy Organizing! 😍
 
 
 == Changelog ==
+
+= Aug 3, 2023 – Version 5.5 =
+- Added: New filter for Post Types Support: filebird_post_types
+- Added: Label All Posts/Pages/Items (PRO) & Logo Empty Folder 
+- Added: Counter of folder on the right
+- Fixed: Tooltip of folder on the right
+- Fixed: Laggy moving
+- Improved: Logic and performance
+- Updated: POT files, updated Dutch Language
 
 = Jul 7, 2023 - Version 5.4.5 =
 - Added: Compatible with PDF Image Generator (By Mizuho Ogino)

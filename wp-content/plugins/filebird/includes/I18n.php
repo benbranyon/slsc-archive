@@ -168,6 +168,9 @@ class I18n {
 			'all_folders_description'         => __( 'This option imports the common folder tree and user-based folder trees.', 'filebird' ),
 			'common_folders_description'      => __( 'This option imports only the common folder tree.', 'filebird' ),
 			'user_folders_description'        => __( 'This option imports the folder tree created by', 'filebird' ),
+			'add_your_first_folder'             => __( 'Add your first folder', 'filebird' ),
+			'add_your_first_folder_description' => __( 'You don\'t have any folder. Add folder to easily manage your files.', 'filebird' ),
+			'add_folder'                        => __( 'Add Folder', 'filebird' ),
 		);
 		return $translation;
 	}

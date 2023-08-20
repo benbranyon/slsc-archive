@@ -299,6 +299,7 @@ class Folder extends Controller {
 					'media_mode'               => get_user_option( 'media_library_mode', get_current_user_id() ),
 					'json_url'                 => apply_filters( 'filebird_json_url', rtrim( rest_url( NJFB_REST_URL ), '/' ) ),
 					'media_url'                => admin_url( 'upload.php' ),
+					'asset_url'              => NJFB_PLUGIN_URL . 'assets/',
 					'auto_import_url'          => esc_url(
 						add_query_arg(
 							array(
