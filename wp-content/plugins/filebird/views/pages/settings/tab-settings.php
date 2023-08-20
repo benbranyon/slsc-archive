@@ -42,7 +42,7 @@ defined( 'ABSPATH' ) || exit;
                     <?php esc_html_e( 'Count files in each folder', 'filebird' ); ?>
                 </option>
                 <option value="counter_file_in_folder_and_sub" disabled>
-                    <?php esc_html_e( 'Count files in both parent folder and subfolders', 'filebird' ); ?>
+                    <?php esc_html_e( 'Count files in both parent folder and subfolders (PRO)', 'filebird' ); ?>
                 </option>
             </select>
         </td>

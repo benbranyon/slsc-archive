@@ -1,6 +1,6 @@
 <?php
 
-use wpai_acf_add_on\acf\ACFService;
+use wpai_acf_add_on\ACFService;
 
 /**
  *

@@ -3,11 +3,11 @@
 Plugin Name: WP All Import - ACF Add-On
 Plugin URI: http://www.wpallimport.com/
 Description: Import to Advanced Custom Fields. Requires WP All Import & Advanced Custom Fields.
-Version: 3.3.6
+Version: 3.3.8
 Author: Soflyy
 */
 /**
- * Plugin root dir with forward slashes as directory separator regardless of actuall DIRECTORY_SEPARATOR value
+ * Plugin root dir with forward slashes as directory separator regardless of actual DIRECTORY_SEPARATOR value
  * @var string
  */
 define('PMAI_ROOT_DIR', str_replace('\\', '/', dirname(__FILE__)));
@@ -24,7 +24,7 @@ define('PMAI_ROOT_URL', rtrim(plugin_dir_url(__FILE__), '/'));
  */
 define('PMAI_PREFIX', 'pmai_');
 
-define('PMAI_VERSION', '3.3.6');
+define('PMAI_VERSION', '3.3.8');
 
 if ( class_exists('PMAI_Plugin') and PMAI_EDITION == "free"){
 
@@ -47,6 +47,8 @@ if ( class_exists('PMAI_Plugin') and PMAI_EDITION == "free"){
 else {
 
 	define('PMAI_EDITION', 'paid');
+
+    require PMAI_ROOT_DIR . '/vendor/autoload.php';
 
 	/**
 	 * Main plugin file, Introduces MVC pattern
@@ -185,11 +187,6 @@ else {
 			// register helpers
 			if (is_dir(self::ROOT_DIR . '/helpers')) foreach (PMAI_Helper::safe_glob(self::ROOT_DIR . '/helpers/*.php', PMAI_Helper::GLOB_RECURSE | PMAI_Helper::GLOB_PATH) as $filePath) {
 				require_once $filePath;
-			}
-
-			if (is_dir(self::ROOT_DIR . '/libraries')) foreach (PMAI_Helper::safe_glob(self::ROOT_DIR . '/libraries/*.php', PMAI_Helper::GLOB_RECURSE | PMAI_Helper::GLOB_PATH | PMAI_Helper::GLOB_NOSORT) as $filePath) {
-				$subPath = substr($filePath, strlen( self::ROOT_DIR ));
-				if (strpos($subPath, 'view') === false && strpos($subPath, 'template') === false) require_once $filePath;
 			}
 
 			register_activation_hook(self::FILE, array($this, 'activation'));
@@ -367,6 +364,11 @@ else {
 		 * @return bool
 		 */
 		public function autoload($className) {
+
+            if ( ! preg_match('/PMAI/m', $className) ) {
+                return false;
+            }
+
 			$is_prefix = false;
 			$filePath = str_replace('_', '/', preg_replace('%^' . preg_quote(self::PREFIX, '%') . '%', '', strtolower($className), 1, $is_prefix)) . '.php';
 			if ( ! $is_prefix) { // also check file with original letter case
