@@ -19,31 +19,33 @@ jQuery( document ).ready(function( $ ) {
     TO = setTimeout(resizeStuff, 200);
   }).resize();
 
-  var mySwiper = new Swiper('.swiper-container', {
-    // Optional parameters
-    direction: 'horizontal',
-    loop: false,
-    preloadImages: true,
-    slidesPerView: 1,
-    spaceBetween: 40,
+  if ($('body').hasClass('home')) {
+    var mySwiper = new Swiper('.swiper-container', {
+      // Optional parameters
+      direction: 'horizontal',
+      loop: false,
+      preloadImages: true,
+      slidesPerView: 1,
+      spaceBetween: 40,
 
 
-    // If we need pagination
-    pagination: {
-      el: '.swiper-pagination',
-    },
+      // If we need pagination
+      pagination: {
+        el: '.swiper-pagination',
+      },
 
-    // Navigation arrows
-    navigation: {
-      nextEl: '.swiper-button-next',
-      prevEl: '.swiper-button-prev',
-    },
+      // Navigation arrows
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
 
-    // And if we need scrollbar
-    scrollbar: {
-      el: '.swiper-scrollbar',
-    },
-  });
+      // And if we need scrollbar
+      scrollbar: {
+        el: '.swiper-scrollbar',
+      },
+    });
+  }
 
   var sticky = new Sticky('.sticky');
 

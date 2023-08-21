@@ -88,6 +88,7 @@ add_action( 'wp_enqueue_scripts', 'gesso_scripts' );
 function slsc_defer_scripts( $tag, $handle, $src ) {
   $defer = array( 
     'sticky-js',
+    'swiper-js'
   );
   if ( in_array( $handle, $defer ) ) {
      return '<script src="' . $src . '" defer="defer" type="text/javascript"></script>' . "\n";
