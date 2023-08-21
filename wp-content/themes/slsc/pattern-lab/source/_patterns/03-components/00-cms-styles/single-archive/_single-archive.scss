@@ -1,5 +1,6 @@
 .single-archive {
   .l-sidebar {
+    background: black;
     display: flex;
     flex-direction: column-reverse;
     @include breakpoint($bp-medium) {
