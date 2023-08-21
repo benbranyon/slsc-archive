@@ -86,9 +86,4 @@ jQuery( document ).ready(function( $ ) {
       verticalTrigger: '150px'
     });
   }
-
-  if ($('body').hasClass('single-archive')) {
-    $('.solid-container').FlipBook({pdf: 'src/FoxitPdfSdk.pdf'});
-  }
-
 });
