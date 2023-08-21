@@ -23,6 +23,26 @@
             "mime_types": ""
         },
         {
+            "key": "field_64e2bd36ceab8",
+            "label": "Archive PDF file",
+            "name": "archive_pdf_file",
+            "aria-label": "",
+            "type": "file",
+            "instructions": "Use this field for alternative embed pdf",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "library": "all",
+            "min_size": "",
+            "max_size": "",
+            "mime_types": ""
+        },
+        {
             "key": "field_63b3822105c09",
             "label": "Annotated File Upload",
             "name": "annotated_file_upload",
@@ -179,26 +199,6 @@
             "prepend": "",
             "append": "",
             "maxlength": ""
-        },
-        {
-            "key": "field_64e2bd36ceab8",
-            "label": "Archive PDF file",
-            "name": "archive_pdf_file",
-            "aria-label": "",
-            "type": "file",
-            "instructions": "Use this field for embed if the original file is not a PDF.",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "return_format": "array",
-            "library": "all",
-            "min_size": "",
-            "max_size": "",
-            "mime_types": ""
         }
     ],
     "location": [
@@ -219,5 +219,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1692581276
+    "modified": 1692581506
 }
