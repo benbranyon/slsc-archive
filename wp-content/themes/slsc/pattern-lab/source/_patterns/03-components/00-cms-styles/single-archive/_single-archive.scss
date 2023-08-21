@@ -16,7 +16,7 @@
     max-height: calc(100vh - 70px);
     @include breakpoint($bp-large) {
       position: sticky;
-      top: 60px;
+      top: 0px;
     }
   }
 
