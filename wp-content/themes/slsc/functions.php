@@ -50,16 +50,18 @@ function has_visible_widgets( $sidebar_id ) {
 
 function gesso_scripts() {
 
-  wp_register_script('swiper-js', 'https://unpkg.com/swiper@6.0.0/swiper-bundle.min.js');
-  wp_enqueue_script('swiper-js');
-
-  wp_enqueue_style('swiper-styles', 'https://unpkg.com/swiper@6.0.0/swiper-bundle.min.css');
-
   wp_register_script('gessomodernizr', get_template_directory_uri() . '/js/lib/modernizr.min.js', array('jquery') ); // Modernizr
   wp_enqueue_script('gessomodernizr');
 
   wp_register_script('sticky-js', get_template_directory_uri() . '/js/lib/sticky.js', array('jquery') );
   wp_enqueue_script('sticky-js');
+
+  if ( is_front_page() ) {
+      wp_register_script('swiper-js', 'https://unpkg.com/swiper@6.0.0/swiper-bundle.min.js');
+      wp_enqueue_script('swiper-js');
+
+      wp_enqueue_style('swiper-styles', 'https://unpkg.com/swiper@6.0.0/swiper-bundle.min.css');
+  }
 
   if ( is_singular( 'story' ) ) {
       wp_enqueue_style('timeline-styles', get_template_directory_uri() . '/css/lib/timeline.min.css');
