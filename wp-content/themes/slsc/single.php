@@ -43,6 +43,7 @@ if(get_post_type($post) == 'archive') {
 	}
 	$file = get_field( 'archive_file_upload' );
 	$context['file_url'] = $file['url'];
+	$context['pdf_shortcode'] = '[3d-flip-book mode="fullscreen" pdf="'. $file['url'] . '"][/3d-flip-book]';
 }
 
 if ( post_password_required( $post->ID ) ) {
