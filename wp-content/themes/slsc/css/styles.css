@@ -1220,7 +1220,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .single-archive .l-sidebar__main {
   background-color: #000;
-  margin-left: 0px; }
+  margin-left: 0px;
+  max-height: 100vh; }
 
 @media (min-width: 50em) {
   .single-archive {
