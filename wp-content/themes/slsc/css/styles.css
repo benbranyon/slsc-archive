@@ -1226,7 +1226,7 @@ h1, h2, h3, h4, h5, h6 {
     .single-archive .l-sidebar__main {
       position: -webkit-sticky;
       position: sticky;
-      top: 60px; } }
+      top: 0px; } }
 
 @media (min-width: 50em) {
   .single-archive {
