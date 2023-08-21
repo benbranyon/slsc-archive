@@ -2557,6 +2557,10 @@ details.details {
 .single-get_involved .page-title {
   color: #000; }
 
+.home-title {
+  display: inline;
+  font-size: 20px; }
+
 .pager__items {
   list-style-type: none;
   margin: 0;
