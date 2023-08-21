@@ -42,8 +42,14 @@ if(get_post_type($post) == 'archive') {
 		}
 	}
 	$file = get_field( 'archive_file_upload' );
+	$file_pdf = get_field( 'archive_pdf_file' );
 	$context['file_url'] = $file['url'];
-	$context['pdf_shortcode'] = '[3d-flip-book mode="fullscreen" pdf="'. $file['url'] . '"][/3d-flip-book]';
+	if($file_pdf) {
+        $context['pdf_shortcode'] = '[3d-flip-book mode="fullscreen" pdf="'. $file_pdf['url'] . '"][/3d-flip-book]';
+	} else {
+		$context['pdf_shortcode'] = '[3d-flip-book mode="fullscreen" pdf="'. $file['url'] . '"][/3d-flip-book]';
+	}
+	
 }
 
 if ( post_password_required( $post->ID ) ) {
