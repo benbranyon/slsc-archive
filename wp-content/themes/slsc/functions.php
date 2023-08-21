@@ -85,6 +85,18 @@ function gesso_scripts() {
 }
 add_action( 'wp_enqueue_scripts', 'gesso_scripts' );
 
+function slsc_defer_scripts( $tag, $handle, $src ) {
+  $defer = array( 
+    'sticky-js',
+  );
+  if ( in_array( $handle, $defer ) ) {
+     return '<script src="' . $src . '" defer="defer" type="text/javascript"></script>' . "\n";
+  }
+    
+    return $tag;
+} 
+add_filter( 'script_loader_tag', 'slsc_defer_scripts', 10, 3 );
+
 function register_gesso_menu() {
   register_nav_menus( array(
     'primary' => __('Primary', 'gesso'),
