@@ -68,20 +68,6 @@ function gesso_scripts() {
       wp_enqueue_script('timeline-js');
   }
 
-  if ( is_singular('archive')) {
-      wp_register_script('html-canvas-js', get_template_directory_uri() . '/js/lib/html2canvas.min.js', array('jquery') );
-      wp_enqueue_script('html-canvas-js');
-
-      wp_register_script('three-js', get_template_directory_uri() . '/js/lib/three.min.js', array('jquery') );
-      wp_enqueue_script('three-js');
-
-      wp_register_script('pdf-js', get_template_directory_uri() . '/js/lib/pdf.min.js', array('jquery') );
-      wp_enqueue_script('pdf-js');
-
-      wp_register_script('flipbook-js', get_template_directory_uri() . '/js/lib/3dflipbook.min.js', array('jquery') );
-      wp_enqueue_script('flipbook-js');
-  }
-
   if ( is_singular() && comments_open() ) {
     wp_enqueue_script( "comment-reply" );
   }
