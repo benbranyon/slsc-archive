@@ -6098,7 +6098,7 @@ HTML;
 			'loadTwoFactor', 'sendTestEmail',
 			'email_summary_email_address_debug', 'unblockNetwork',
 			'sendDiagnostic', 'saveDisclosureState', 'saveWAFConfig', 'updateWAFRules', 'loadLiveTraffic', 'whitelistWAFParamKey',
-			'disableDirectoryListing', 'fixFPD', 'deleteAdminUser', 'revokeAdminUser',
+			'disableDirectoryListing', 'fixFPD', 'deleteAdminUser', 'revokeAdminUser', 'acknowledgeAdminUser',
 			'hideFileHtaccess', 'saveDebuggingConfig',
 			'whitelistBulkDelete', 'whitelistBulkEnable', 'whitelistBulkDisable',
 			'dismissNotification', 'utilityScanForBlacklisted', 'dashboardShowMore',
@@ -7600,6 +7600,35 @@ SQL
 			revoke_super_admin($data['userID']);
 		}
 
+		$wfIssues->deleteIssue($issueID);
+		wfScanEngine::refreshScanNotification($wfIssues);
+
+		return array(
+			'ok'         => 1,
+			'user_login' => $userLogin,
+		);
+	}
+	
+	public static function ajax_acknowledgeAdminUser_callback() {
+		$issueID = absint(!empty($_POST['issueID']) ? $_POST['issueID'] : 0);
+		$wfIssues = new wfIssues();
+		$issue = $wfIssues->getIssueByID($issueID);
+		if (!$issue) {
+			return array('errorMsg' => __("We could not find that issue in the database.", 'wordfence'));
+		}
+		$data = $issue['data'];
+		if (empty($data['userID'])) {
+			return array('errorMsg' => __("We could not find that user in the database.", 'wordfence'));
+		}
+		$user = new WP_User($data['userID']);
+		if (!$user->exists()) {
+			return array('errorMsg' => __("We could not find that user in the database.", 'wordfence'));
+		}
+		$userLogin = $user->user_login;
+		
+		$adminUsers = new wfAdminUserMonitor();
+		$adminUsers->addAdmin($data['userID']);
+		
 		$wfIssues->deleteIssue($issueID);
 		wfScanEngine::refreshScanNotification($wfIssues);
 

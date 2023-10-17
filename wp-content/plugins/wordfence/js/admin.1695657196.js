@@ -3068,6 +3068,23 @@
 					}
 				});
 			},
+			
+			acknowledgeAdminUser: function (issueID) {
+				var self = this;
+				this.ajax('wordfence_acknowledgeAdminUser', {
+					issueID: issueID
+				}, function(res) {
+					if (res.ok) {
+						self.loadIssues(function() {
+							self.colorboxModal((self.isSmallScreen ? '300px' : '400px'), __("Successfully acknowledged admin"), sprintf(__("The admin user %s will no longer show up in future scans."), res.user_login));
+						});
+					} else if (res.errorMsg) {
+						self.loadIssues(function() {
+							WFAD.colorboxError(res.errorMsg, res.tokenInvalid);
+						});
+					}
+				});
+			},
 
 			windowHasFocus: function() {
 				if (typeof document.hasFocus === 'function') {

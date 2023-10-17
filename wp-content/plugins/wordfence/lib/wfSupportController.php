@@ -149,6 +149,7 @@ class wfSupportController {
 	const ITEM_SCAN_RESULT_PUBLIC_CONFIG = 'scan-result-public-config';
 	const ITEM_SCAN_RESULT_PLUGIN_ABANDONED = 'scan-result-plugin-abandoned';
 	const ITEM_SCAN_RESULT_PLUGIN_REMOVED = 'scan-result-plugin-removed';
+	const ITEM_SCAN_RESULT_UPDATE_CHECK_FAILED = 'scan-result-update-check-failed';
 	const ITEM_SCAN_RESULT_OPTION_MALWARE_URL = 'scan-result-option-malware-url';
 	const ITEM_SCAN_RESULT_GEOIP_UPDATE = 'scan-result-geoip-update';
 	const ITEM_SCAN_RESULT_WAF_DISABLED = 'scan-result-waf-disabled';
@@ -341,6 +342,7 @@ class wfSupportController {
 			case self::ITEM_SCAN_RESULT_PUBLIC_CONFIG:
 			case self::ITEM_SCAN_RESULT_PLUGIN_ABANDONED:
 			case self::ITEM_SCAN_RESULT_PLUGIN_REMOVED:
+			case self::ITEM_SCAN_RESULT_UPDATE_CHECK_FAILED:
 			case self::ITEM_SCAN_RESULT_OPTION_MALWARE_URL:
 			case self::ITEM_SCAN_RESULT_GEOIP_UPDATE:
 			case self::ITEM_SCAN_RESULT_WAF_DISABLED:
