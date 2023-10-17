@@ -2,9 +2,9 @@
 # This file is distributed under the GPL-3.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: Disable Comments 2.4.4\n"
+"Project-Id-Version: Disable Comments 2.4.5\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/disable-comments\n"
-"POT-Creation-Date: 2023-06-19 08:39:24+00:00\n"
+"POT-Creation-Date: 2023-08-30 08:51:04+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -40,11 +40,11 @@ msgstr ""
 msgid "200"
 msgstr ""
 
-#: disable-comments.php:159
+#: disable-comments.php:160
 msgid "Want to help make Disable Comments even better?"
 msgstr ""
 
-#: disable-comments.php:160
+#: disable-comments.php:161
 msgid ""
 "We collect non-sensitive diagnostic data and plugin usage information. Your "
 "site URL, WordPress & PHP version, plugins & themes and email address to "
@@ -53,7 +53,7 @@ msgid ""
 "I promise."
 msgstr ""
 
-#: disable-comments.php:172
+#: disable-comments.php:173
 #. translators: %s: WordPress version no.
 msgid "Disable Comments requires WordPress version %s or greater."
 msgstr ""
@@ -62,11 +62,11 @@ msgstr ""
 msgid "Disable Comments"
 msgstr ""
 
-#: disable-comments.php:516 disable-comments.php:675 disable-comments.php:682
+#: disable-comments.php:517 disable-comments.php:677 disable-comments.php:684
 msgid "Comments are closed."
 msgstr ""
 
-#: disable-comments.php:631
+#: disable-comments.php:632
 #. translators: %s: disabled post types.
 msgid ""
 "Note: The <em>Disable Comments</em> plugin is currently active, and "
@@ -74,11 +74,11 @@ msgid ""
 "not be applicable for those post types."
 msgstr ""
 
-#: disable-comments.php:631
+#: disable-comments.php:632
 msgid ", "
 msgstr ""
 
-#: disable-comments.php:666
+#: disable-comments.php:668
 #. translators: %s: URL to Disabled Comment settings page.
 msgid ""
 "The <strong>Disable Comments</strong> plugin is active, but isn't "
@@ -86,40 +86,40 @@ msgid ""
 "page</a> to choose which post types to disable comments on."
 msgstr ""
 
-#: disable-comments.php:755 views/partials/_disable.php:3
+#: disable-comments.php:757 views/partials/_disable.php:3
 msgid "Settings"
 msgstr ""
 
-#: disable-comments.php:756
+#: disable-comments.php:758
 msgid "Tools"
 msgstr ""
 
-#: disable-comments.php:775 views/partials/_delete.php:72
+#: disable-comments.php:777 views/partials/_delete.php:72
 msgid "Delete Comments"
 msgstr ""
 
-#: disable-comments.php:840
+#: disable-comments.php:842
 msgid "Default (no type)"
 msgstr ""
 
-#: disable-comments.php:869
+#: disable-comments.php:871
 msgid "Logged out users"
 msgstr ""
 
-#: disable-comments.php:1049
+#: disable-comments.php:1051
 msgid "Saved"
 msgstr ""
 
-#: disable-comments.php:1124 disable-comments.php:1158
-#: disable-comments.php:1181
+#: disable-comments.php:1126 disable-comments.php:1160
+#: disable-comments.php:1183
 msgid "All comments have been deleted"
 msgstr ""
 
-#: disable-comments.php:1126 disable-comments.php:1130
+#: disable-comments.php:1128 disable-comments.php:1132
 msgid "Internal error occured. Please try again later."
 msgstr ""
 
-#: disable-comments.php:1192
+#: disable-comments.php:1194
 msgid "All spam comments have been deleted."
 msgstr ""
 
@@ -551,7 +551,7 @@ msgstr ""
 msgid "https://wpdeveloper.com"
 msgstr ""
 
-#: disable-comments.php:765
+#: disable-comments.php:767
 msgctxt "settings menu title"
 msgid "Disable Comments"
 msgstr ""
