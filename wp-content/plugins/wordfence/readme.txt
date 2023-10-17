@@ -4,7 +4,7 @@ Tags: security, waf, malware, 2fa, two factor, login security, firewall, brute f
 Requires at least: 3.9
 Requires PHP: 5.5
 Tested up to: 6.3
-Stable tag: 7.10.3
+Stable tag: 7.10.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -189,12 +189,20 @@ Secure your website with Wordfence.
 
 == Changelog ==
 
+= 7.10.4 - September 25, 2023 =
+* Improvement: "Admin created outside of WordPress" scan results may now be reviewed and approved
+* Improvement: The WAF storage engine may now be specified by setting the environmental variable "WFWAF_STORAGE_ENGINE"
+* Improvement: Detect when a plugin or theme with a custom update handler is broken and blocking update version checks
+* Change: Deprecated support for WordPress versions lower than 4.7.0
+* Change: Exclude parse errors of a damaged compiled rules file from reporting
+* Fix: Suppress PHP notices related to rule loading when running WP-CLI
+* Fix: Fixed an issue with the scan monitor cron that could leave it running unnecessarily
+
 = 7.10.3 - July 31, 2023 =
 * Improvement: Updated GeoIP database
 * Fix: Added missing text domain to translation function call
 * Fix: Corrected inconsistent styling of switch controls
 * Change: Made MySQLi storage engine the default for Flywheel hosted sites
-
 
 = 7.10.2 - July 17, 2023 =
 * Fix: Prevented bundled sodium_compat library from conflicting with versions included with older WordPress versions

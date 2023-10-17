@@ -2605,6 +2605,7 @@ function gallery_shortcode( $attr ) {
 			$attachments[ $val->ID ] = $_attachments[ $key ];
 		}
 	} elseif ( ! empty( $atts['exclude'] ) ) {
+		$post_parent_id = $id;
 		$attachments = get_children(
 			array(
 				'post_parent'    => $id,
@@ -2617,6 +2618,7 @@ function gallery_shortcode( $attr ) {
 			)
 		);
 	} else {
+		$post_parent_id = $id;
 		$attachments = get_children(
 			array(
 				'post_parent'    => $id,
@@ -2627,6 +2629,17 @@ function gallery_shortcode( $attr ) {
 				'orderby'        => $atts['orderby'],
 			)
 		);
+	}
+
+	if ( ! empty( $post_parent_id ) ) {
+		$post_parent = get_post( $post_parent_id );
+
+		// terminate the shortcode execution if user cannot read the post or password-protected
+		if (
+		( ! is_post_publicly_viewable( $post_parent->ID ) && ! current_user_can( 'read_post', $post_parent->ID ) )
+		|| post_password_required( $post_parent ) ) {
+			return '';
+		}
 	}
 
 	if ( empty( $attachments ) ) {
@@ -2959,6 +2972,15 @@ function wp_playlist_shortcode( $attr ) {
 	} else {
 		$args['post_parent'] = $id;
 		$attachments         = get_children( $args );
+	}
+
+	if ( ! empty( $args['post_parent'] ) ) {
+		$post_parent = get_post( $id );
+
+		// terminate the shortcode execution if user cannot read the post or password-protected
+		if ( ! current_user_can( 'read_post', $post_parent->ID ) || post_password_required( $post_parent ) ) {
+			return '';
+		}
 	}
 
 	if ( empty( $attachments ) ) {
@@ -5622,7 +5644,7 @@ function wp_get_loading_optimization_attributes( $tag_name, $attr, $context ) {
 	};
 	// Closure to increase media count for images with certain minimum threshold, mostly used for header images.
 	$maybe_increase_content_media_count = static function() use ( $attr ) {
-		/** This filter is documented in wp-admin/includes/media.php */
+		/** This filter is documented in wp-includes/media.php */
 		$wp_min_priority_img_pixels = apply_filters( 'wp_min_priority_img_pixels', 50000 );
 		// Images with a certain minimum size in the header of the page are also counted towards the threshold.
 		if ( $wp_min_priority_img_pixels <= $attr['width'] * $attr['height'] ) {

@@ -1229,6 +1229,9 @@ class wfWAFUtils {
 	public static function isVersionBelow($target, $compared) {
 		return $compared === null || version_compare($compared, $target, '<');
 	}
-
+	
+	public static function isCli() {
+		return (@php_sapi_name()==='cli') || !array_key_exists('REQUEST_METHOD', $_SERVER);
+	}
 }
 }

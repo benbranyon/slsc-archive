@@ -4,7 +4,7 @@
  * Plugin Name: Disable Comments
  * Plugin URI: https://wordpress.org/plugins/disable-comments/
  * Description: Allows administrators to globally disable comments on their site. Comments can be disabled according to post type. You could bulk delete comments using Tools.
- * Version: 2.4.4
+ * Version: 2.4.5
  * Author: WPDeveloper
  * Author URI: https://wpdeveloper.com
  * License: GPL-3.0+
@@ -41,7 +41,7 @@ class Disable_Comments
 
 	function __construct()
 	{
-		define('DC_VERSION', '2.4.4');
+		define('DC_VERSION', '2.4.5');
 		define('DC_PLUGIN_SLUG', 'disable_comments_settings');
 		define('DC_PLUGIN_ROOT_PATH', dirname(__FILE__));
 		define('DC_PLUGIN_VIEWS_PATH', DC_PLUGIN_ROOT_PATH . '/views/');
@@ -134,8 +134,9 @@ class Disable_Comments
 				return;
 			}
 			$current_screen = get_current_screen()->id;
-			$hascaps = $this->networkactive && is_network_admin() ? current_user_can('manage_network_plugins') : current_user_can('manage_options');
-			if( ! in_array( $current_screen, ['settings_page_disable_comments_settings', 'settings_page_disable_comments_settings-network']) && $hascaps ) {
+			$has_caps = $this->networkactive && is_network_admin() ? current_user_can('manage_network_plugins') : current_user_can('manage_options');
+			// if( ! in_array( $current_screen, ['settings_page_disable_comments_settings', 'settings_page_disable_comments_settings-network']) && $has_caps ) {
+			if ($has_caps && in_array($current_screen, ['dashboard-network', 'dashboard'])) {
 				$this->tracker->notice();
 			}
 		}
@@ -653,7 +654,8 @@ class Disable_Comments
 
 	public function setup_notice()
 	{
-		if (strpos(get_current_screen()->id, 'settings_page_disable_comments_settings') === 0) {
+		$current_screen = get_current_screen()->id;
+		if (!in_array($current_screen, ['dashboard-network', 'dashboard'])) {
 			return;
 		}
 		$hascaps = $this->networkactive && is_network_admin() ? current_user_can('manage_network_plugins') : current_user_can('manage_options');
