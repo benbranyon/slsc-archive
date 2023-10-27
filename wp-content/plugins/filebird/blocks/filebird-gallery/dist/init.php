@@ -14,7 +14,7 @@ function filebird_gallery_block_assets() {
 	wp_register_style(
 		'filebird_gallery-block-css',
 		NJFB_PLUGIN_URL . 'blocks/filebird-gallery/dist/blocks.style.build.css',
-		array(),
+		array('wp-block-gallery'),
 		NJFB_VERSION
 	);
 
@@ -68,6 +68,8 @@ function filebird_gallery_block_assets() {
 			),
 		)
 	);
+
+	wp_set_script_translations( 'filebird_gallery-block-js', 'filebird', NJFB_PLUGIN_PATH . 'i18n/languages/' );
 }
 
 function filebird_gallery_prepare_ids( $ids ) {

@@ -89,6 +89,11 @@ class PageBuilders {
 		if ( class_exists( 'LP_Addon_Frontend_Editor_Preload' ) ) {
 			$this->registerLearnPress();
 		}
+
+		// Break Dance Builder
+		if ( defined( '__BREAKDANCE_VERSION' ) ) {
+			$this->registerBreakDance();
+		}
 	}
 
 	public function enqueueScripts( $is_enqueue_media = false, $is_enqueue_footer = false ) {
@@ -216,5 +221,11 @@ class PageBuilders {
 
 	public function registerLearnPress() {
 		add_action( 'learnpress/addons/frontend_editor/enqueue_scripts', array( $this, 'enqueueScripts' ) );
+	}
+
+	public function registerBreakDance() {
+		if ( isset( $_GET['breakdance_wpuiforbuilder_media'] ) && $_GET['breakdance_wpuiforbuilder_media'] ) {
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueueScripts' ), 9 );
+		}
 	}
 }

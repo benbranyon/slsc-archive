@@ -3,8 +3,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: FileBird\n"
 "POT-Creation-Date: 2021-05-08 00:10+0700\n"
-"PO-Revision-Date: 2023-10-08 09:16+0000\n"
-"Language-Team: Deutsch\n"
+"PO-Revision-Date: 2023-10-08 09:24+0000\n"
+"Language-Team: Deutsch (Schweiz)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -17,7 +17,7 @@ msgstr ""
 "esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
 "_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
 "Last-Translator: \n"
-"Language: de_DE\n"
+"Language: de_CH\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.min.js\n"
 "X-Poedit-SearchPathExcluded-1: apps\n"
@@ -43,7 +43,7 @@ msgstr ""
 #: views/pages/settings/tab-import.php:157
 #, php-format
 msgid " Would you like to import to %1$sFileBird%2$s?"
-msgstr "Möchtest du importieren nach %1$sFileBird%2$s?"
+msgstr "Möchten Sie importieren nach %1$sFileBird%2$s?"
 
 #: build/filebird-lite/views/pages/settings/tab-import.php:212
 #: views/pages/settings/tab-import.php:212
@@ -51,7 +51,7 @@ msgid ""
 "(Please check to make sure that there is no duplicated name. The current "
 "folder structure is preserved.)"
 msgstr ""
-"(Bitte überprüfe, dass es keine doppelten Namen gibt. Die aktuelle "
+"(Bitte überprüfen Sie, dass es keine doppelten Namen gibt. Die aktuelle "
 "Ordnerstruktur bleibt erhalten.)"
 
 #. translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page.
@@ -62,8 +62,8 @@ msgid ""
 "<a href=\"%1$s\">Please update WordPress</a>, and then <a href=\"%2$s\">"
 "learn more about updating PHP</a>."
 msgstr ""
-"<a href=\"%1$s\">Bitte aktualisiere WordPress</a>, und dann <a href=\"%2$s\">"
-"erfahre mehr über die Aktualisierung von PHP</a>."
+"<a href=\"%1$s\">Bitte aktualisieren Sie WordPress</a>, und dann <a "
+"href=\"%2$s\">erfahren Sie mehr über die Aktualisierung von PHP</a>."
 
 #. translators: %s: URL to Update PHP page.
 #: build/filebird-lite/includes/Recommended/views/content.php:231
@@ -72,7 +72,7 @@ msgstr ""
 #: includes/Recommended/views/content.php:250
 #, php-format
 msgid "<a href=\"%s\">Learn more about updating PHP</a>."
-msgstr "<a href=\"%s\">Erfahre mehr über die Aktualisierung von PHP</a>. "
+msgstr "<a href=\"%s\">Erfahren Sie mehr über die Aktualisierung von PHP</a>. "
 
 #. translators: %s: URL to WordPress Updates screen.
 #: build/filebird-lite/includes/Recommended/views/content.php:225
@@ -81,7 +81,7 @@ msgstr "<a href=\"%s\">Erfahre mehr über die Aktualisierung von PHP</a>. "
 #: includes/Recommended/views/content.php:241
 #, php-format
 msgid "<a href=\"%s\">Please update WordPress</a>."
-msgstr "<a href=\"%s\">Bitte aktualisiere WordPress</a>."
+msgstr "<a href=\"%s\">Bitte aktualisieren Sie WordPress</a>."
 
 #: build/filebird-lite/includes/I18n.php:105 includes/I18n.php:105
 msgid ""
@@ -103,8 +103,9 @@ msgid ""
 "          <li>30-day Refund Guarantee</li>\n"
 "        </ul>"
 msgstr ""
-"<p>FileBird Lite-Version unterstützt bis zu 10 Ordner.<br>Bitte aktualisiere,"
-" um unbegrenzte Ordner und andere Premium-Funktionen zu haben!</p>\n"
+"<p>FileBird Lite-Version unterstützt bis zu 10 Ordner.<br>Bitte "
+"aktualisieren Sie, um unbegrenzte Ordner und andere Premium-Funktionen zu "
+"haben!</p>\n"
 "        <ul class=\"fbv-in_feature\">\n"
 "          <li>Unbegrenzte Ordner</li>\n"
 "          <li>Sortieren von Dateien / Ordnern</li>\n"
@@ -126,8 +127,8 @@ msgstr ""
 #: includes/Controller/Folder.php:496 includes/Controller/Folder.php:519
 msgid "A folder with this name already exists. Please choose another one."
 msgstr ""
-"Ein Ordner mit diesem Namen existiert bereits. Bitte wähle einen anderen "
-"Namen."
+"Ein Ordner mit diesem Namen existiert bereits. Bitte wählen Sie einen "
+"anderen Namen."
 
 #: build/filebird-lite/includes/Recommended/views/content.php:149
 #: includes/Recommended/views/content.php:149
@@ -147,7 +148,7 @@ msgstr "Ordner hinzufügen"
 
 #: build/filebird-lite/includes/I18n.php:171 includes/I18n.php:171
 msgid "Add your first folder"
-msgstr "Füge deinen ersten Ordner hinzu"
+msgstr "Fügen Sie Ihren ersten Ordner hinzu"
 
 #: build/filebird-lite/views/pages/settings/tab-active.php:37
 #: views/pages/settings/tab-active.php:37
@@ -184,19 +185,19 @@ msgstr "Bereits aktualisiert"
 
 #: build/filebird-lite/includes/I18n.php:55 includes/I18n.php:55
 msgid "Are you sure you want to delete"
-msgstr "Willst du wirklich löschen"
+msgstr "Wollen Sie wirklich löschen"
 
 #: build/filebird-lite/includes/I18n.php:67 includes/I18n.php:67
 msgid ""
 "Are you sure you want to delete this folder? Those files will be moved to "
 "<strong>Uncategorized</strong> folder."
 msgstr ""
-"Möchtest du diesen Ordner wirklich löschen? Diese Dateien werden in den "
+"Möchten Sie diesen Ordner wirklich löschen? Diese Dateien werden in den "
 "Ordner <strong>\"Nicht kategorisiert\"</strong> verschoben."
 
 #: build/filebird-lite/includes/I18n.php:56 includes/I18n.php:56
 msgid "Are you sure?"
-msgstr "Bist du sicher?"
+msgstr "Sind Sie sicher?"
 
 #: blocks/filebird-gallery/dist/blocks.build.js:1
 #: build/filebird-lite/blocks/filebird-gallery/dist/blocks.build.js:1
@@ -206,7 +207,8 @@ msgstr "Aufsteigend"
 #: build/filebird-lite/views/pages/settings/tab-tools.php:98
 #: views/pages/settings/tab-tools.php:98
 msgid "Assign WPML existing translated media to FileBird folders."
-msgstr "Weise die in WPML bereits übersetzte Medien dem FileBird Ordnern zu."
+msgstr ""
+"Weisen Sie die in WPML bereits übersetzte Medien dem FileBird Ordnern zu."
 
 #: blocks/filebird-gallery/dist/blocks.build.js:1
 #: build/filebird-lite/blocks/filebird-gallery/dist/blocks.build.js:1
@@ -216,7 +218,7 @@ msgstr "Anhang Seite"
 #: build/filebird-lite/views/pages/settings/tab-tools.php:46
 #: views/pages/settings/tab-tools.php:46
 msgid "Attachment Size"
-msgstr "Anhang Größe"
+msgstr "Anhang Grösse"
 
 #: build/filebird-lite/includes/I18n.php:82 includes/I18n.php:82
 msgid "Author Ascending"
@@ -261,16 +263,16 @@ msgstr ""
 
 #: build/filebird-lite/includes/I18n.php:160 includes/I18n.php:160
 msgid "By Size"
-msgstr "Nach Größe"
+msgstr "Nach Grösse"
 
 #: build/filebird-lite/includes/I18n.php:128 includes/I18n.php:128
 msgid "Can not active your License, please try again."
-msgstr "Kann deine Lizenz nicht aktivieren, versuche es erneut."
+msgstr "Kann Ihre Lizenz nicht aktivieren, versuchen Sie es erneut."
 
 #: build/filebird-lite/includes/Controller/Folder.php:556
 #: includes/Controller/Folder.php:556
 msgid "Can't delete folder, please try again later"
-msgstr "Ordner kann nicht gelöscht werden, versuche es später erneut"
+msgstr "Ordner kann nicht gelöscht werden, versuchen Sie es später erneut"
 
 #: build/filebird-lite/includes/I18n.php:49 includes/I18n.php:49
 msgid "Can't delete!"
@@ -292,7 +294,7 @@ msgstr "Farbe ändern"
 #: build/filebird-lite/views/pages/settings/tab-import.php:211
 #: views/pages/settings/tab-import.php:211
 msgid "Choose FileBird CSV file to import."
-msgstr "Wähle die FileBird CSV-Datei zum Importieren."
+msgstr "Wählen Sie die FileBird CSV-Datei zum Importieren."
 
 #: build/filebird-lite/views/particle/folder_dropdown.php:2
 #: views/particle/folder_dropdown.php:2
@@ -313,7 +315,7 @@ msgstr "Alle Daten löschen"
 #: includes/Controller/Folder.php:628
 msgid "Click on the button to move this file to another folder"
 msgstr ""
-"Klicke auf die Schaltfläche, um diese Datei in einen anderen Ordner zu "
+"Klicken Sie auf die Schaltfläche, um diese Datei in einen anderen Ordner zu "
 "verschieben"
 
 #: build/filebird-lite/includes/I18n.php:141 includes/I18n.php:141
@@ -361,7 +363,7 @@ msgstr "Dateien in jedem Ordner zählen"
 #: build/filebird-lite/views/notices/html-notice-first-folder.php:11
 #: views/notices/html-notice-first-folder.php:11
 msgid "Create your first folder for media library now."
-msgstr "Erstelle jetzt deinen ersten Ordner für die Medienbibliothek."
+msgstr "Erstellen Sie jetzt Ihren ersten Ordner für die Medienbibliothek."
 
 #: blocks/filebird-gallery/dist/blocks.build.js:1
 #: build/filebird-lite/blocks/filebird-gallery/dist/blocks.build.js:1
@@ -427,7 +429,7 @@ msgstr "Dokumentation"
 
 #: build/filebird-lite/includes/I18n.php:92 includes/I18n.php:92
 msgid "Don't know how to use it."
-msgstr "Du weißt nicht, wie du es verwenden sollst."
+msgstr "Sie wissen nicht, wie Sie es verwenden sollen."
 
 #: build/filebird-lite/includes/Support/WPML.php:67
 #: includes/Support/WPML.php:67
@@ -511,8 +513,8 @@ msgstr "Jetzt exportieren"
 #: build/filebird-lite/includes/I18n.php:133 includes/I18n.php:133
 msgid "Failed to save settings. Please try again!"
 msgstr ""
-"Es war nicht möglich, die Einstellungen zu speichern. Bitte versuche es noch "
-"einmal!"
+"Es war nicht möglich, die Einstellungen zu speichern. Bitte versuchen Sie es "
+"noch einmal!"
 
 #: build/filebird-lite/views/pages/settings/tab-active.php:64
 #: views/pages/settings/tab-active.php:64
@@ -636,8 +638,8 @@ msgstr "Generieren"
 #: views/pages/settings/tab-tools.php:58
 msgid "Generate attachment size used in \"Sort by size\" function."
 msgstr ""
-"Erzeugt die Größe der Anhänge, die in der Funktion \"Nach Größe sortieren\" "
-"verwendet werden."
+"Erzeugt die Grösse der Anhänge, die in der Funktion \"Nach Grösse "
+"sortieren\" verwendet werden."
 
 #: build/filebird-lite/includes/I18n.php:45 includes/I18n.php:45
 msgid "Generating download link..."
@@ -713,8 +715,8 @@ msgid ""
 "Import categories/folders from other plugins. We import virtual folders, "
 "your website will be safe, don't worry ;)"
 msgstr ""
-"Importiere Kategorien/Ordner aus anderen Plugins. Wir importieren virtuelle "
-"Ordner, deine Website ist sicher, keine Sorge ;)"
+"Importieren Sie Kategorien/Ordner aus anderen Plugins. Wir importieren "
+"virtuelle Ordner, Ihre Website ist sicher, keine Sorge ;)"
 
 #: build/filebird-lite/views/pages/settings/tab-import.php:194
 #: views/pages/settings/tab-import.php:194
@@ -726,9 +728,9 @@ msgid ""
 "Import failed. Please try again or <a href=\"https://ninjateam.org/support\" "
 "target=\"_blank\">contact our support</a>."
 msgstr ""
-"Der Import ist fehlgeschlagen. Bitte versuche es erneut oder <a href=\"https:"
-"//ninjateam.org/support\" target=\"_blank\">wende dich an unseren Support</a>"
-"."
+"Der Import ist fehlgeschlagen. Bitte versuchen Sie es erneut oder <a "
+"href=\"https://ninjateam.org/support\" target=\"_blank\">wenden Sie sich an "
+"unseren Support</a>."
 
 #: build/filebird-lite/includes/I18n.php:149 includes/I18n.php:149
 msgid "Import folders to FileBird"
@@ -807,9 +809,9 @@ msgid ""
 "before activating this new version. All of the settings and data are still "
 "preserved."
 msgstr ""
-"Es sieht so aus, als hättest du eine andere FileBird Version installiert. "
-"Bitte lösche diese, bevor du die neue Version aktivierst. Alle Einstellungen "
-"und Daten bleiben erhalten."
+"Es sieht so aus, als hätten Sie eine andere FileBird Version installiert. "
+"Bitte löschen Sie diese, bevor Sie die neue Version aktivieren. Alle "
+"Einstellungen und Daten bleiben erhalten."
 
 #: build/filebird-lite/includes/I18n.php:147 includes/I18n.php:147
 msgid "item"
@@ -931,7 +933,7 @@ msgstr "Einmalige Zahlung"
 msgid ""
 "Organize thousands of WordPress media files into folders/ categories at ease."
 msgstr ""
-"Organisiere einfach Tausende von WordPress-Mediendateien in Ordner / "
+"Organisieren Sie einfach Tausende von WordPress-Mediendateien in Ordner / "
 "Kategorien."
 
 #: build/filebird-lite/includes/I18n.php:94 includes/I18n.php:94
@@ -948,7 +950,7 @@ msgid ""
 "support here</a>, we will fix it for you."
 msgstr ""
 "Bitte <a target=\"_blank\" href=\"https://ninjateam.org/support/\">hier um "
-"Unterstützung</a> anfragen, wir werden es für dich beheben."
+"Unterstützung</a> anfragen, wir werden es für Sie beheben."
 
 #: build/filebird-lite/includes/I18n.php:159 includes/I18n.php:159
 msgid "Please activate FileBird license to use this feature."
@@ -957,20 +959,22 @@ msgstr "Bitte aktiviere die FileBird-Lizenz, um diese Funktion zu nutzen."
 #: build/filebird-lite/includes/Controller/Folder.php:473
 #: includes/Controller/Folder.php:473
 msgid "Please choose folder"
-msgstr "Bitte wähle einen Ordner"
+msgstr "Bitte wählen Sie einen Ordner"
 
 #: blocks/filebird-gallery/dist/blocks.build.js:1
 #: build/filebird-lite/blocks/filebird-gallery/dist/blocks.build.js:1
 msgid "Please choose folder in the block settings."
-msgstr "Bitte wähle einen Ordner in den Blockeinstellungen."
+msgstr "Bitte wählen Sie einen Ordner in den Blockeinstellungen."
 
 #: build/filebird-lite/includes/I18n.php:127 includes/I18n.php:127
 msgid "Please enter your Personal Access Token or get one."
-msgstr "Bitte gebe deinen persönlichen Zugriffstoken ein oder hole dir einen."
+msgstr ""
+"Bitte geben Sie Ihren persönlichen Zugriffstoken ein oder holen Sie sich "
+"einen."
 
 #: build/filebird-lite/includes/I18n.php:126 includes/I18n.php:126
 msgid "Please enter your Purchase Code."
-msgstr "Bitte geben deinen Lizenzcode ein."
+msgstr "Bitte geben Sie Ihren Lizenzcode ein."
 
 #: build/filebird-lite/includes/I18n.php:98 includes/I18n.php:98
 msgid ""
@@ -978,29 +982,30 @@ msgid ""
 "//ninjateam.gitbook.io/filebird/\">here</a> or <a target=\"_blank\" "
 "href=\"https://ninjateam.org/support/\">chat with us</a> if you need help"
 msgstr ""
-"Bitte lese die Dokumentation <a target=\"_blank\" href=\"https://ninjateam."
-"gitbook.io/filebird/\">hier</a> oder chatte <a target=\"_blank\" "
-"href=\"https://ninjateam.org/support/\">mit uns,</a> wenn du Hilfe benötigst"
+"Bitte lesen Sie die Dokumentation <a target=\"_blank\" href=\"https:"
+"//ninjateam.gitbook.io/filebird/\">hier</a> oder chatten Sie <a "
+"target=\"_blank\" href=\"https://ninjateam.org/support/\">mit uns,</a> wenn "
+"Sie Hilfe benötigst"
 
 #: build/filebird-lite/views/pages/settings/tab-tools.php:39
 #: views/pages/settings/tab-tools.php:39
 #, php-format
 msgid "Please see FileBird API for developers %1$shere%2$s."
-msgstr "Bitte lese die FileBird API für Entwickler %1$shier%2$s."
+msgstr "Bitte lesen Sie die FileBird API für Entwickler %1$shier%2$s."
 
 #: build/filebird-lite/includes/I18n.php:100 includes/I18n.php:100
 msgid "Please share your thoughts..."
-msgstr "Bitte teile deine Gedanken..."
+msgstr "Bitte teilen Sie Ihre Gedanken..."
 
 #: build/filebird-lite/includes/I18n.php:97 includes/I18n.php:97
 msgid "Please tell us which one"
-msgstr "Bitte sage uns, welches für dich zutrifft"
+msgstr "Bitte sagen Sie uns, welches für Sie zutrifft"
 
 #: build/filebird-lite/includes/Classes/Convert.php:413
 #: build/filebird-lite/includes/I18n.php:156 includes/Classes/Convert.php:413
 #: includes/I18n.php:156
 msgid "Please try again."
-msgstr "Bitte versuche es erneut."
+msgstr "Bitte versuchen Sie es erneut."
 
 #. translators: %s: Plugin name.
 #: build/filebird-lite/includes/Recommended/views/content.php:151
@@ -1127,7 +1132,7 @@ msgstr "Speichern"
 
 #: build/filebird-lite/includes/I18n.php:131 includes/I18n.php:131
 msgid "Select a default startup folder:"
-msgstr "Wähle einen Standard-Startordner:"
+msgstr "Wählen Sie einen Standard-Startordner:"
 
 #: build/filebird-lite/includes/I18n.php:129
 #: build/filebird-lite/views/pages/html-settings.php:26 includes/I18n.php:129
@@ -1147,12 +1152,12 @@ msgstr "Breadcrumb anzeigen"
 #: build/filebird-lite/includes/I18n.php:161 includes/I18n.php:161
 #| msgid "Title Ascending"
 msgid "Size Ascending"
-msgstr "Größe aufsteigend"
+msgstr "Grösse aufsteigend"
 
 #: build/filebird-lite/includes/I18n.php:162 includes/I18n.php:162
 #| msgid "Title Descending"
 msgid "Size Descending"
-msgstr "Größe absteigend"
+msgstr "Grösse absteigend"
 
 #: build/filebird-lite/includes/I18n.php:84 includes/I18n.php:84
 msgid "Skip & Deactivate"
@@ -1162,8 +1167,8 @@ msgstr "Überspringen & deaktivieren"
 msgid ""
 "Sorry to see you walk away, please share why you want to deactivate FileBird?"
 msgstr ""
-"Es tut uns leid, dass du weggehst, bitte teile uns mit, warum du FileBird "
-"deaktivieren möchtest?"
+"Es tut uns leid, dass Sie weggehen, bitte teilen Sie uns mit, warum Sie "
+"FileBird deaktivieren möchten?"
 
 #: build/filebird-lite/includes/I18n.php:68 includes/I18n.php:68
 msgid "Sort Ascending"
@@ -1252,9 +1257,9 @@ msgid ""
 "Thank you for choosing FileBird. We hope you love it. Could you take a "
 "couple of seconds posting a nice review to share your happy experience?"
 msgstr ""
-"Vielen Dank, dass du sich für FileBird entschieden hast. Wir hoffen, dass du "
-"es liebst. Hast du ein paar Sekunden Zeit, um eine nette Bewertung zu "
-"schreiben und deine zufriedene Erfahrung zu teilen?"
+"Vielen Dank, dass Sie sich für FileBird entschieden haben. Wir hoffen, dass "
+"Sie es lieben. Hätten Sie ein paar Sekunden Zeit, um eine nette Bewertung zu "
+"schreiben und Ihre zufriedene Erfahrung zu teilen?"
 
 #: build/filebird-lite/includes/I18n.php:86 includes/I18n.php:86
 msgid "Thank you so much!"
@@ -1269,8 +1274,8 @@ msgstr "Die aktuelle Ordnerstruktur wird exportiert."
 #: includes/Controller/Folder.php:811
 msgid "The uploaded file was not generated by FileBird. Please check again."
 msgstr ""
-"Die hochgeladene Datei wurde nicht von FileBird generiert. Bitte überprüfe "
-"die Datei noch einmal."
+"Die hochgeladene Datei wurde nicht von FileBird generiert. Bitte überprüfen "
+"Sie die Datei noch einmal."
 
 #: build/filebird-lite/views/pages/settings/tab-tools.php:78
 #: views/pages/settings/tab-tools.php:78
@@ -1279,17 +1284,18 @@ msgid ""
 "back to WordPress default media library."
 msgstr ""
 "Diese Aktion löscht alle FileBird-Daten und FileBird-Einstellungen und "
-"bringt dich zurück zu WordPress Standard-Medienbibliothek."
+"bringt Sie zurück zu WordPress Standard-Medienbibliothek."
 
 #: blocks/filebird-gallery/dist/blocks.build.js:1
 #: build/filebird-lite/blocks/filebird-gallery/dist/blocks.build.js:1
 msgid "This folder has no images, please choose another one."
-msgstr "Dieser Ordner enthält keine Bilder, bitte wähle einen anderen Ordner."
+msgstr ""
+"Dieser Ordner enthält keine Bilder, bitte wählen Sie einen anderen Ordner."
 
 #: build/filebird-lite/includes/Support/DocumentGallery.php:26
 #: includes/Support/DocumentGallery.php:26
 msgid "This folder ID does not exist, please check again."
-msgstr "Diese Ordner-ID existiert nicht, bitte überprüfe sie erneut."
+msgstr "Diese Ordner-ID existiert nicht, bitte überprüfen Sie sie erneut."
 
 #: build/filebird-lite/includes/I18n.php:93 includes/I18n.php:93
 msgid "This is just temporary, I will use it again."
@@ -1341,8 +1347,8 @@ msgid ""
 "To use FileBird folders with your current page builder/plugin, please "
 "upgrade to PRO version."
 msgstr ""
-"Um FileBird-Ordner mit deinem aktuellen Seitengenerator/Plugin zu verwenden, "
-"aktualisiere bitte auf die PRO-Version."
+"Um FileBird-Ordner mit Ihrem aktuellen Seitengenerator/Plugin zu verwenden, "
+"aktualisieren Sie bitte auf die PRO-Version."
 
 #: build/filebird-lite/views/pages/html-settings.php:33
 #: views/pages/html-settings.php:33
@@ -1351,7 +1357,7 @@ msgstr "Werkzeuge"
 
 #: build/filebird-lite/includes/I18n.php:145 includes/I18n.php:145
 msgid "Total size"
-msgstr "Gesamtgröße"
+msgstr "Gesamtgrösse"
 
 #: build/filebird-lite/includes/I18n.php:140 includes/I18n.php:140
 msgid "Turn off for 7 days"
@@ -1431,7 +1437,7 @@ msgstr "VIP Live-Chat-Support"
 
 #: build/filebird-lite/includes/I18n.php:101 includes/I18n.php:101
 msgid "Want a better FileBird?"
-msgstr "Möchtest du einen besseres FileBird?"
+msgstr "Möchten Sie einen besseres FileBird?"
 
 #: build/filebird-lite/includes/Classes/Convert.php:111
 #: build/filebird-lite/includes/Classes/Convert.php:295
@@ -1441,9 +1447,9 @@ msgid ""
 "We found you have %1$s categories you created from <strong>%2$s</strong> "
 "plugin. Would you like to import it to <strong>FileBird</strong>?"
 msgstr ""
-"Wir haben festgestellt, dass du %1$s Kategorien aus dem <strong>%2$s</strong>"
-" Plugin erstellt hast. Möchten du diese in <strong>FileBird</strong> "
-"importieren?"
+"Wir haben festgestellt, dass Sie %1$s Kategorien aus dem <strong>"
+"%2$s</strong> Plugin erstellt haben. Möchten Sie diese in <strong>"
+"FileBird</strong> importieren?"
 
 #: build/filebird-lite/views/pages/settings/tab-import.php:23
 #: views/pages/settings/tab-import.php:23
@@ -1452,8 +1458,8 @@ msgid ""
 "We found you have %1$s(%2$s)%3$s categories you created from %4$sEnhanced "
 "Media Library%5$s plugin."
 msgstr ""
-"Wir haben festgestellt, dass du %1$s(%2$s)%3$s Kategorien aus dem Plugin "
-"%4$sEnhanced Media Library%5$s erstellt hast."
+"Wir haben festgestellt, dass Sie %1$s(%2$s)%3$s Kategorien aus dem Plugin "
+"%4$sEnhanced Media Library%5$s erstellt haben."
 
 #: build/filebird-lite/views/pages/settings/tab-import.php:133
 #: views/pages/settings/tab-import.php:133
@@ -1462,8 +1468,8 @@ msgid ""
 "We found you have %1$s(%2$s)%3$s categories you created from %4$sFolders%5$s "
 "plugin."
 msgstr ""
-"Wir haben festgestellt, dass du %1$s(%2$s)%3$s Kategorien aus dem Plugin "
-"%4$sFolders%5$s erstellt hast."
+"Wir haben festgestellt, dass Sie %1$s(%2$s)%3$s Kategorien aus dem Plugin "
+"%4$sFolders%5$s erstellt haben."
 
 #: build/filebird-lite/views/pages/settings/tab-import.php:111
 #: views/pages/settings/tab-import.php:111
@@ -1472,8 +1478,8 @@ msgid ""
 "We found you have %1$s(%2$s)%3$s categories you created from "
 "%4$sHappyFiles%5$s plugin."
 msgstr ""
-"Wir haben festgestellt, dass du %1$s(%2$s)%3$s Kategorien aus dem Plugin "
-"%4$sHappyFiles%5$s erstellt hast."
+"Wir haben festgestellt, dass Sie %1$s(%2$s)%3$s Kategorien aus dem Plugin "
+"%4$sHappyFiles%5$s erstellt haben."
 
 #: build/filebird-lite/views/pages/settings/tab-import.php:45
 #: views/pages/settings/tab-import.php:45
@@ -1482,8 +1488,8 @@ msgid ""
 "We found you have %1$s(%2$s)%3$s categories you created from %4$sWordPress "
 "Media Library Folders%5$s plugin."
 msgstr ""
-"Wir haben festgestellt, dass du %1$s(%2$s)%3$s Kategorien aus dem Plugin "
-"%4$sWordPress Media Library Folders%5$s erstellt hast."
+"Wir haben festgestellt, dass Sie %1$s(%2$s)%3$s Kategorien aus dem Plugin "
+"%4$sWordPress Media Library Folders%5$s erstellt haben."
 
 #: build/filebird-lite/views/pages/settings/tab-import.php:67
 #: views/pages/settings/tab-import.php:67
@@ -1492,8 +1498,8 @@ msgid ""
 "We found you have %1$s(%2$s)%3$s categories you created from %4$sWP Media "
 "folder%5$s plugin."
 msgstr ""
-"Wir haben festgestellt, dass du %1$s(%2$s)%3$s Kategorien aus dem Plugin "
-"%4$sWP Media folder%5$s erstellt hast."
+"Wir haben festgestellt, dass Sie %1$s(%2$s)%3$s Kategorien aus dem Plugin "
+"%4$sWP Media folder%5$s erstellt haben."
 
 #: build/filebird-lite/views/pages/settings/tab-import.php:155
 #: views/pages/settings/tab-import.php:155
@@ -1502,8 +1508,8 @@ msgid ""
 "We found you have %1$s(%2$s)%3$s categories you created from %4$sWP Media "
 "Folders%5$s plugin."
 msgstr ""
-"Wir haben festgestellt, dass du %1$s(%2$s)%3$s Kategorien aus dem Plugin "
-"%4$sWP Media Folders%5$s erstellt hast."
+"Wir haben festgestellt, dass Sie %1$s(%2$s)%3$s Kategorien aus dem Plugin "
+"%4$sWP Media Folders%5$s erstellt haben."
 
 #: build/filebird-lite/views/pages/settings/tab-import.php:89
 #: views/pages/settings/tab-import.php:89
@@ -1512,8 +1518,8 @@ msgid ""
 "We found you have %1$s(%2$s)%3$s categories you created from %4$sWP Real "
 "Media Library%5$s plugin."
 msgstr ""
-"Wir haben festgestellt, dass du %1$s(%2$s)%3$s Kategorien aus dem Plugin "
-"%4$sWP Real Media Library%5$s erstellt hast."
+"Wir haben festgestellt, dass Sie %1$s(%2$s)%3$s Kategorien aus dem Plugin "
+"%4$sWP Real Media Library%5$s erstellt haben."
 
 #: build/filebird-lite/includes/Classes/Review.php:66
 #: includes/Classes/Review.php:66
@@ -1554,13 +1560,14 @@ msgid ""
 "YayMail helps you easily customize your WooCommerce emails with email "
 "builder. Try it today!"
 msgstr ""
-"YayMail hilft dir dabei, deine WooCommerce-E-Mails mit dem E-Mail-Builder "
-"einfach anzupassen. Probiere es heute aus!"
+"YayMail hilft Ihnen, Ihre WooCommerce-E-Mails mit dem E-Mail-Builder leicht "
+"anzupassen. Probieren Sie es heute!"
 
 #: build/filebird-lite/includes/I18n.php:58 includes/I18n.php:58
 msgid "You are editing another folder! Please complete the task first!"
 msgstr ""
-"Du bearbeitest einen anderen Ordner! Bitte erledige diese Aufgabe zuerst!"
+"Sie bearbeiten einen anderen Ordner! Bitte erledigen Sie diese Aufgabe "
+"zuerst!"
 
 #: build/filebird-lite/views/notices/html-notice-update-database.php:24
 #: views/notices/html-notice-update-database.php:24
@@ -1571,13 +1578,13 @@ msgid ""
 "You are using the new FileBird 4. Please update database to view your "
 "folders correctly."
 msgstr ""
-"Du verwendest das neue FileBird 4. Bitte aktualisiere die Datenbank, um "
+"Sie verwenden das neue FileBird 4. Bitte aktualisieren Sie die Datenbank, um "
 "deine Ordner korrekt anzuzeigen."
 
 #: build/filebird-lite/includes/I18n.php:172 includes/I18n.php:172
 msgid "You don't have any folder. Add folder to easily manage your files."
 msgstr ""
-"Du hast keinen Ordner. Füge Ordner hinzu, um deine Dateien einfach zu "
+"Sie haben keinen Ordner. Fügen Sie Ordner hinzu, um Ihre Dateien einfach zu "
 "verwalten."
 
 #: build/filebird-lite/includes/I18n.php:152 includes/I18n.php:152
@@ -1585,27 +1592,27 @@ msgid ""
 "You have some folders created by other media plugins. Would you like to "
 "import them?"
 msgstr ""
-"Du hast einige Ordner erstellt, die von anderen Medien-Plugins stammen. "
-"Möchtest du diese importieren?"
+"Sie haben einige Ordner erstellt, die von anderen Medien-Plugins stammen. "
+"Möchtest Sie diese importieren?"
 
 #: build/filebird-lite/includes/I18n.php:137 includes/I18n.php:137
 msgid ""
 "You're using a third party plugin, which is supported in FileBird PRO. "
 "Please upgrade to browse files faster and get more done."
 msgstr ""
-"Du verwendest ein Drittanbieter-Plugin, das in FileBird PRO unterstützt wird."
-" Bitte führe ein Upgrade durch, um Dateien schneller durchsuchen zu können "
-"und mehr zu erledigen."
+"Sie verwenden ein Drittanbieter-Plugin, das in FileBird PRO unterstützt wird."
+" Bitte führen Sie ein Upgrade durch, um Dateien schneller durchsuchen zu "
+"können und mehr zu erledigen."
 
 #: build/filebird-lite/includes/I18n.php:123 includes/I18n.php:123
 msgid ""
 "You're using the new FileBird 4. Please import database to view your folders "
 "correctly."
 msgstr ""
-"Du verwendest das neue FileBird 4. Bitte aktualisiere die Datenbank, um "
-"deine Ordner korrekt anzuzeigen."
+"Sie verwendes das neue FileBird 4. Bitte aktualisieren Sie die Datenbank, um "
+"Ihre Ordner korrekt anzuzeigen."
 
 #: build/filebird-lite/includes/Controller/Folder.php:293
 #: includes/Controller/Folder.php:293
 msgid "Your request can't be processed."
-msgstr "Deine Anfrage kann nicht verarbeitet werden."
+msgstr "Ihre Anfrage kann nicht verarbeitet werden."
