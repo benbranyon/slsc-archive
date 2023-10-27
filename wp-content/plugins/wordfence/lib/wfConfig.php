@@ -699,7 +699,7 @@ class wfConfig {
 		
 		global $wpdb;
 		$dbh = $wpdb->dbh;
-		$useMySQLi = (is_object($dbh) && $wpdb->use_mysqli && wfConfig::get('allowMySQLi', true) && WORDFENCE_ALLOW_DIRECT_MYSQLI);
+		$useMySQLi = wfUtils::useMySQLi();
 		
 		if (!self::$tableExists) {
 			return;

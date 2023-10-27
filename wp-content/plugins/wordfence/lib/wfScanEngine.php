@@ -1625,7 +1625,7 @@ class wfScanEngine {
 		$counter = 0;
 		$query = "select ID from " . $wpdb->users;
 		$dbh = $wpdb->dbh;
-		$useMySQLi = (is_object($dbh) && $wpdb->use_mysqli && wfConfig::get('allowMySQLi', true) && WORDFENCE_ALLOW_DIRECT_MYSQLI);
+		$useMySQLi = wfUtils::useMySQLi();
 		if ($useMySQLi) { //If direct-access MySQLi is available, we use it to minimize the memory footprint instead of letting it fetch everything into an array first
 			$result = $dbh->query($query);
 			if (!is_object($result)) {
@@ -2075,8 +2075,12 @@ class wfScanEngine {
 						$statusArray['version'] = null;
 						wordfence::status(3, 'error', "Unable to determine version for plugin $slug");
 					}
-					$lastUpdateTimestamp = strtotime($statusArray['last_updated']);
-					if ($lastUpdateTimestamp > 0 && (time() - $lastUpdateTimestamp) > 63072000 /* ~2 years */) {
+					
+					if (array_key_exists('last_updated', $statusArray) && 
+						is_string($statusArray['last_updated']) && 
+						($lastUpdateTimestamp = strtotime($statusArray['last_updated'])) && 
+						(time() - $lastUpdateTimestamp) > 63072000 /* ~2 years */) {
+						
 						$statusArray['dateUpdated'] = wfUtils::formatLocalTime(get_option('date_format'), $lastUpdateTimestamp);
 						$severity = wfIssues::SEVERITY_MEDIUM;
 						$statusArray['abandoned'] = true;
@@ -2479,7 +2483,6 @@ class wfScanEngine {
 			wfConfig::set('wfKillRequested', 0, wfConfig::DONT_AUTOLOAD);
 			wordfence::status(4, 'info', __("Entering start scan routine", 'wordfence'));
 			if (wfScanner::shared()->isRunning()) {
-				wfUtils::getScanFileError();
 				return __("A scan is already running. Use the stop scan button if you would like to terminate the current scan.", 'wordfence');
 			}
 			wfConfig::set('currentCronKey', ''); //Ensure the cron key is cleared

@@ -4,7 +4,7 @@ Tags: security, waf, malware, 2fa, two factor, login security, firewall, brute f
 Requires at least: 3.9
 Requires PHP: 5.5
 Tested up to: 6.3
-Stable tag: 7.10.4
+Stable tag: 7.10.5
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -188,6 +188,21 @@ Secure your website with Wordfence.
 9. Logging in is easy with Wordfence 2FA.
 
 == Changelog ==
+
+= 7.10.5 - October 23, 2023 =
+* Improvement: Updated the bundled GeoIP database
+* Improvement: Added detection for Cloudflare reverse proxies blocking callbacks to the site
+* Change: Files are no longer excluded from future scans if a previous scan stopped during their processing
+* Fix: Added handling for the pending WordPress 6.4 change that removes $wpdb->use_mysqli
+* Fix: The WAF MySQLi storage engine will now work correctly when either DB_COLLATE or DB_CHARSET are not defined
+* Fix: Added additional error handling to Central calls to better handle request failures or conflicts
+* Fix: Addressed a warning that would occur if a non-repo plugin update hook did not provide a last updated date
+* Fix: Fixed an error in PHP 8 that could occur if the time correction offset was not numeric
+* Fix: 2FA AJAX calls now use an absolute path rather than a full URL to avoid CORS issues on sites that do not canonicalize www and non-www requests
+* Fix: Addressed a race condition where multiple concurrent hits on multisite could trigger overlapping role sync tasks
+* Fix: Improved performance when viewing the user list on large multisites
+* Fix: Fixed a UI bug where an invalid code on 2FA activation would leave the activate button disabled
+* Fix: Reverted a change on error modals to bring back the additional close button for better accessibility
 
 = 7.10.4 - September 25, 2023 =
 * Improvement: "Admin created outside of WordPress" scan results may now be reviewed and approved
