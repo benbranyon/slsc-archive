@@ -9493,9 +9493,23 @@ if (file_exists(__DIR__.%1$s)) {
 		}
 
 		$request = new wfCentralAPIRequest('/site/access-token', 'GET', $authGrant);
-		$response = $request->execute();
+		try {
+			$response = $request->execute();
+		}
+		catch (Exception $e) {
+			wfCentralAPIRequest::handleInternalCentralAPIError($e);
+		}
+		catch (Throwable $t) {
+			wfCentralAPIRequest::handleInternalCentralAPIError($t);
+		}
 
-		if ($response->isError()) {
+		if (!isset($response)) {
+			return array(
+				'err'      => 1,
+				'errorMsg' => __('Internal error when connecting to Wordfence Central (see server error log)', 'wordfence'),
+			);
+		}
+		else if ($response->isError()) {
 			return $response->returnErrorArray();
 		}
 
@@ -9568,9 +9582,23 @@ if (file_exists(__DIR__.%1$s)) {
 					),
 				),
 			));
-		$response = $request->execute();
-
-		if ($response->isError()) {
+		try {
+			$response = $request->execute();
+		}
+		catch (Exception $e) {
+			wfCentralAPIRequest::handleInternalCentralAPIError($e);
+		}
+		catch (Throwable $t) {
+			wfCentralAPIRequest::handleInternalCentralAPIError($t);
+		}
+		
+		if (!isset($response)) {
+			return array(
+				'err'      => 1,
+				'errorMsg' => __('Internal error when connecting to Wordfence Central (see server error log)', 'wordfence'),
+			);
+		}
+		else if ($response->isError()) {
 			return $response->returnErrorArray();
 		}
 
@@ -9606,10 +9634,25 @@ if (file_exists(__DIR__.%1$s)) {
 				'success' => 1,
 			);
 
-		} catch (wfCentralAPIException $e) {
+		}
+		catch (wfCentralAPIException $e) {
 			return array(
 				'error' => 1,
 				'errorMsg' => $e->getMessage(),
+			);
+		}
+		catch (Exception $e) {
+			wfCentralAPIRequest::handleInternalCentralAPIError($e);
+			return array(
+				'error' => 1,
+				'errorMsg' => $e->getMessage(),
+			);
+		}
+		catch (Throwable $t) {
+			wfCentralAPIRequest::handleInternalCentralAPIError($t);
+			return array(
+				'error' => 1,
+				'errorMsg' => $t->getMessage(),
 			);
 		}
 	}
@@ -9676,10 +9719,25 @@ if (file_exists(__DIR__.%1$s)) {
 					rawurlencode(wfConfig::get('wordfenceCentralSiteID')), rawurlencode($body['access-token'])),
 			);
 
-		} catch (wfCentralAPIException $e) {
+		}
+		catch (wfCentralAPIException $e) {
 			return array(
 				'error' => 1,
 				'errorMsg' => $e->getMessage(),
+			);
+		}
+		catch (Exception $e) {
+			wfCentralAPIRequest::handleInternalCentralAPIError($e);
+			return array(
+				'error' => 1,
+				'errorMsg' => $e->getMessage(),
+			);
+		}
+		catch (Throwable $t) {
+			wfCentralAPIRequest::handleInternalCentralAPIError($t);
+			return array(
+				'error' => 1,
+				'errorMsg' => $t->getMessage(),
 			);
 		}
 	}
@@ -9712,8 +9770,15 @@ if (file_exists(__DIR__.%1$s)) {
 				sprintf('/site/%s', wfConfig::get('wordfenceCentralSiteID')),
 				'DELETE');
 			$response = $request->execute();
-		} catch (wfCentralAPIException $e) {
+		}
+		catch (wfCentralAPIException $e) {
 
+		}
+		catch (Exception $e) {
+			wfCentralAPIRequest::handleInternalCentralAPIError($e);
+		}
+		catch (Throwable $t) {
+			wfCentralAPIRequest::handleInternalCentralAPIError($t);
 		}
 
 		wfRESTConfigController::disconnectConfig();

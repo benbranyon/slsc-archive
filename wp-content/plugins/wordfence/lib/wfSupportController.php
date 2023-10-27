@@ -179,6 +179,7 @@ class wfSupportController {
 	const ITEM_DIAGNOSTICS_OPTION_BETA_TDF = 'diagnostics-option-beta-tdf';
 	const ITEM_DIAGNOSTICS_OPTION_WORDFENCE_TRANSLATIONS = 'diagnostics-option-wordfence-translations';
 	const ITEM_DIAGNOSTICS_IPV6 = 'diagnostics-ipv6';
+	const ITEM_DIAGNOSTICS_CLOUDFLARE_BLOCK = 'compatibility-cloudflare';
 
 	const ITEM_MODULE_LOGIN_SECURITY = 'module-login-security';
 	const ITEM_MODULE_LOGIN_SECURITY_2FA = 'module-login-security-2fa';
@@ -372,6 +373,7 @@ class wfSupportController {
 			case self::ITEM_DIAGNOSTICS_OPTION_BETA_TDF:
 			case self::ITEM_DIAGNOSTICS_OPTION_WORDFENCE_TRANSLATIONS:
 			case self::ITEM_DIAGNOSTICS_IPV6:
+			case self::ITEM_DIAGNOSTICS_CLOUDFLARE_BLOCK:
 
 			case self::ITEM_MODULE_LOGIN_SECURITY:
 			case self::ITEM_MODULE_LOGIN_SECURITY_2FA:

@@ -171,6 +171,7 @@ class I18n {
 			'add_your_first_folder'             => __( 'Add your first folder', 'filebird' ),
 			'add_your_first_folder_description' => __( 'You don\'t have any folder. Add folder to easily manage your files.', 'filebird' ),
 			'add_folder'                        => __( 'Add Folder', 'filebird' ),
+			'contact_support'                   => __( 'Contact Support', 'filebird' ),
 		);
 		return $translation;
 	}

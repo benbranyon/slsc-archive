@@ -48,6 +48,7 @@ jQuery(document).ready(function () {
     function get_folders(onDone, onFail) {
       jQuery
         .ajax({
+          cache: false,
           dataType: "json",
           contentType: "application/json",
           url: fbv_data.json_url + "/fb-get-old-data",
@@ -68,6 +69,7 @@ jQuery(document).ready(function () {
       if (typeof folders[index] != "undefined") {
         jQuery
           .ajax({
+            cache: false,
             dataType: "json",
             contentType: "application/json",
             url: fbv_data.json_url + "/fb-insert-old-data",
@@ -104,6 +106,7 @@ jQuery(document).ready(function () {
     $this.addClass("updating-message");
     jQuery
       .ajax({
+        cache: false,
         dataType: "json",
         contentType: "application/json",
         url: fbv_data.json_url + "/fb-wipe-old-data",
@@ -133,6 +136,7 @@ jQuery(document).ready(function () {
     $this.focusout().addClass("updating-message");
     jQuery
       .ajax({
+        cache: false,
         dataType: "json",
         contentType: "application/json",
         url: fbv_data.json_url + "/fb-wipe-clear-all-data",
@@ -160,6 +164,7 @@ jQuery(document).ready(function () {
         dataType: "json",
         contentType: "application/json",
         type: "post",
+        cache: false,
         url: fbv_data.json_url + "/fb-no-thanks",
         headers: {
           "X-WP-Nonce": fbv_data.rest_nonce,
@@ -187,6 +192,7 @@ jQuery(document).ready(function () {
         contentType: "application/json",
         url: fbv_data.json_url + "/fb-import",
         method: "POST",
+        cache: false,
         headers: {
           "X-WP-Nonce": fbv_data.rest_nonce,
           "X-HTTP-Method-Override": "POST",
@@ -229,6 +235,7 @@ jQuery(document).ready(function () {
           contentType: "application/json",
           url: fbv_data.json_url + "/fb-import-insert-folder",
           method: "POST",
+          cache: false,
           headers: {
             "X-WP-Nonce": fbv_data.rest_nonce,
             "X-HTTP-Method-Override": "POST",
@@ -248,6 +255,7 @@ jQuery(document).ready(function () {
           contentType: "application/json",
           url: fbv_data.json_url + "/fb-import-after-inserting",
           method: "POST",
+          cache: false,
           data: JSON.stringify({
             site: site,
             count: more_data_when_done.count,
@@ -273,6 +281,7 @@ jQuery(document).ready(function () {
         dataType: "json",
         contentType: "application/json",
         type: "post",
+        cache: false,
         url: fbv_data.json_url + "/fbv-api",
         data: JSON.stringify({
           act: "generate-key",
@@ -328,6 +337,7 @@ jQuery(document).ready(function () {
           dataType: "json",
           url: window.ajaxurl,
           type: "post",
+          cache: false,
           data: {
             action: "fbv_first_folder_notice",
             nonce: window.fbv_data.nonce,
@@ -395,6 +405,7 @@ jQuery(document).ready(function () {
           url: fbv_data.json_url + "/import-csv-detail",
           method: "POST",
           processData: false,
+          cache: false,
           contentType: false,
           beforeSend: function () {
             // $this.addClass("updating-message");
@@ -461,6 +472,7 @@ jQuery(document).ready(function () {
         dataType: "json",
         contentType: "application/json",
         type: "get",
+        cache: false,
         url: fbv_data.json_url + "/export-csv",
         headers: {
           "X-WP-Nonce": fbv_data.rest_nonce,
@@ -513,6 +525,7 @@ jQuery(document).ready(function () {
               url: fbv_data.json_url + "/import-csv",
               method: "POST",
               processData: false,
+              cache: false,
               contentType: false,
               beforeSend: function () {
                 $this.addClass("updating-message");
@@ -592,6 +605,7 @@ jQuery(document).ready(function () {
         .ajax({
           url: fbv_data.json_url + "/generate-attachment-size",
           method: "POST",
+          cache: false,
           dataType: "json",
           contentType: "application/json",
           // data: JSON.stringify({
@@ -632,6 +646,7 @@ jQuery(document).ready(function () {
       .ajax({
         url: window.ajaxurl,
         method: "POST",
+        cache: false,
         data: {
           action: "fbv_sync_wpml",
           nonce: window.fbv_data.nonce,

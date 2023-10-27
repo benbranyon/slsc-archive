@@ -3,8 +3,8 @@ Contributors: ninjateam
 Donate link: https://codecanyon.net/item/media-folders-manager-for-wordpress/21715379
 Tags: wordpress media library folders, media library folders, media folder, file manager, folders, wp media folder, wp media folders, wordpress media folders, wordpress media library, wordpress media manager, media manager, firebird
 Requires at least: 3.0
-Tested up to: 6.2.2
-Stable tag: 5.5
+Tested up to: 6.3.2
+Stable tag: 5.5.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -207,6 +207,18 @@ Happy Organizing! 😍
 
 
 == Changelog ==
+
+= Oct 24, 2023 – Version 5.5.3 =
+- Improved: Work with cache
+
+= Aug 31, 2023 – Version 5.5.2 =
+- Fixed: Counter wrong in popup modal with WPML (PRO)
+- Fixed: Support Betheme latest version (PRO)
+- Fixed: Conflict tooltip style with Betheme builder (PRO)
+- Fixed: Drag/drop attachment not working correctly (conflict with betheme builder drag/drop) (PRO)
+
+= Aug 23, 2023 – Version 5.5.1 =
+- Fixed: Error with WP 6.0.x
 
 = Aug 3, 2023 – Version 5.5 =
 - Added: New filter for Post Types Support: filebird_post_types
