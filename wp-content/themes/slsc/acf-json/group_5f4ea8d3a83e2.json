@@ -28,7 +28,7 @@
             "name": "archive_pdf_file",
             "aria-label": "",
             "type": "file",
-            "instructions": "Use this field for alternative embed pdf",
+            "instructions": "If the original file isn't a pdf use this field to upload a pdf converted version",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -219,5 +219,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1692581506
+    "modified": 1698220019
 }
