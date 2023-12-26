@@ -193,4 +193,19 @@ class Helpers {
         }
         return false;
     }
+
+	public static function findFolder( $folder_id, $tree ) {
+		foreach ( $tree as $k => $v ) {
+			if ( $v['id'] == $folder_id ) {
+				return $v;
+			}
+			if ( isset( $v['children'] ) ) {
+				$folder = self::findFolder( $folder_id, $v['children'] );
+				if ( $folder ) {
+					return $folder;
+				}
+			}
+		}
+		return null;
+	}
 }
