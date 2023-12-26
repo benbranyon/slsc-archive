@@ -16,6 +16,12 @@ wp-content/wp-cache-config.php
 wp-content/cache/
 wp-content/object-cache.php
 wp-content/wflogs/
+wp-content/smush-webp/
+wp-content/uploads-webpc/
+wp-content/plugins/webp-converter-for-media/
+wp-content/plugins/w3-total-cache/
+wp-content/w3tc-config/
+wp-content/plugins/media-deduper/
 sitemap.xml
 sitemap.xml.gz
 wp-config.php

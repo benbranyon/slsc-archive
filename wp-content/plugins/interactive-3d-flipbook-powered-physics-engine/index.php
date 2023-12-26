@@ -5,7 +5,7 @@
     Description: Interactive 3D FlipBook Powered Physics Engine WordPress Plugin  <a href="http://3dflipbook.net/download-wp"><strong>Go Pro</strong></a>
     Author: iberezansky
     Author URI: http://3dflipbook.net/
-    Version: 1.15.2
+    Version: 1.15.3
     License: GPLv2 or later
 
     Text Domain: 3d-flip-book
@@ -34,6 +34,13 @@
       'posts'=> ['ids_mis'=> [], 'ids'=> []],
       'pages'=> [],
       'firstPages'=> []
+      ],
+      'user_levels'=> [
+        'administrator'=> 50,
+        'editor'=> 40,
+        'author'=> 30,
+        'contributor'=> 20,
+        'subscriber'=> 10
       ]
   );
 

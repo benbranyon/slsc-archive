@@ -14,7 +14,7 @@ function filebird_gallery_block_assets() {
 	wp_register_style(
 		'filebird_gallery-block-css',
 		NJFB_PLUGIN_URL . 'blocks/filebird-gallery/dist/blocks.style.build.css',
-		array('wp-block-gallery'),
+		array(),
 		NJFB_VERSION
 	);
 
@@ -179,6 +179,7 @@ function filebird_gallery_render( $attributes ) {
 	$html .= '</ul>';
 
 	wp_enqueue_style( 'filebird_gallery-block-css' );
+	wp_enqueue_style('wp-block-gallery');
 
 	return $html;
 }

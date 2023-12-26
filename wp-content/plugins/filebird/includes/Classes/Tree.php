@@ -87,5 +87,9 @@ class Tree {
 		}
 		return $tree;
 	}
-
+	
+	public static function getFolder( $folder_id ) {
+		$tree = self::getFolders();
+		return Helpers::findFolder( $folder_id, $tree );
+	}
 }

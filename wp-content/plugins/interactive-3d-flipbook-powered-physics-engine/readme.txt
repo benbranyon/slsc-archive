@@ -3,9 +3,9 @@ Contributors: iberezansky
 Donate link: https://3dflipbook.net/download-wp
 Tags: flipbook, flip book, pdf viewer, pdf flipbook, pdf to flip book
 Requires at least: 4.3
-Tested up to: 6.3
+Tested up to: 6.4
 Requires PHP: 5.3
-Stable tag: 1.15.2
+Stable tag: 1.15.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -89,6 +89,10 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
   <li><strong>HTML, PDF, images as sources:</strong> build your flipbooks from everything, 3D FlipBook supports very reach set of sources.</li>
   <li><strong>Interactivity:</strong> Supporting HTML opens wide abilities for creating interactive books. It allows to use CSS3 and JavaScript, create navigation, use hover effects and much more. 3D FlipBook as PDF Viewer supports PDF links, highlighters and any HTMl as the second markup layer.</li>
 </ul>
+
+<p>
+  If these features are still not enough, you can <a href="https://3dflipbook.net/sources/interactive-3d-flipbook-powered-physics-engine-sources.zip">download</a> the plugin sources and add your ones.
+</p>
 
 <h3>What do users say about 3D FlipBook</h3>
 
@@ -211,6 +215,13 @@ This will open your PDF Flipbook or Image Flipbook at page 10 when it starts.
 17. Tilted unrolling flipping pages & flexible corners
 
 == Changelog ==
+
+<h4>1.15.3</h4>
+<ul>
+  <li>
+    Filtering unsecured content (css layers, ready function) from users less then editor
+  </li>
+</ul>
 
 <h4>1.15.2</h4>
 <ul>

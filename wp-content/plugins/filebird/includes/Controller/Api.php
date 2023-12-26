@@ -108,13 +108,27 @@ class Api {
 			)
 		);
 	}
+
+	private function addFolderCounter( $folders, $counter ) {
+		if ( is_array( $folders ) ) {
+			foreach ( $folders as $k => $v ) {
+				$folders[ $k ]['li_attr']['data-count'] = isset( $counter[ $v['id'] ] ) ? $counter[ $v['id'] ] : 0;
+				if ( isset( $v['children'] ) ) {
+					$folders[ $k ]['children'] = $this->addFolderCounter( $v['children'], $counter );
+				}
+			}
+		}
+		return $folders;
+	}
+
 	public function publicRestApiGetFolders() {
 		$data = array();
+		$data['folders'] = Tree::getFolders( null );
+		$counter         = Tree::getAllFoldersAndCount();
 
-		$order_by        = null;
-		$data['folders'] = Tree::getFolders( $order_by );
+		$results['folders'] = $this->addFolderCounter( $data['folders'], $counter );
 
-		wp_send_json_success( $data );
+		wp_send_json_success( $results );
 	}
 	public function publicRestApiGetFolderDetail( $request ) {
 		$folder_id = $request->get_param( 'folder_id' );

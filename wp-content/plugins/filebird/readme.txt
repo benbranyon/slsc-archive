@@ -3,8 +3,8 @@ Contributors: ninjateam
 Donate link: https://codecanyon.net/item/media-folders-manager-for-wordpress/21715379
 Tags: wordpress media library folders, media library folders, media folder, file manager, folders, wp media folder, wp media folders, wordpress media folders, wordpress media library, wordpress media manager, media manager, firebird
 Requires at least: 3.0
-Tested up to: 6.3.2
-Stable tag: 5.5.3
+Tested up to: 6.4
+Stable tag: 5.5.8.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -207,6 +207,26 @@ Happy Organizing! 😍
 
 
 == Changelog ==
+
+= Dec 7, 2023 - Version 5.5.8.1 =
+- Fixed: Folder names in document library not seen on mobile
+
+= Nov 28, 2023 – Version 5.5.8 =
+- Fixed: Compatible with Polylang latest version
+
+= Nov 22, 2023 – Version 5.5.7 =
+- Added: Support YooTheme ver 4 and greater
+- Fixed: Conflict with ATUM Purchase Order Pro plugin (by Stock Management Labs™)
+
+= Nov 13, 2023 – Version 5.5.6 =
+- Fixed: Sorting in WooCommerce Products (PRO)
+
+= Nov 8, 2023 – Version 5.5.5 =
+- Fixed: Compatible with WP 6.4
+- Improved: Review suggestion
+
+= Oct 25, 2023 – Version 5.5.4 =
+- Fixed: Not show folder tree in post types (PRO)
 
 = Oct 24, 2023 – Version 5.5.3 =
 - Improved: Work with cache

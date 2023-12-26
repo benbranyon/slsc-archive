@@ -241,6 +241,7 @@
   }
 
   function props_save($id) {
+    global $fb3d;
     $autosave = wp_is_post_autosave($id);
     $revision = wp_is_post_revision($id);
     $valid = isset($_POST[PROPS_NONCE_NAME]) && wp_verify_nonce($_POST[PROPS_NONCE_NAME], PROPS_NONCE_ACTION);
@@ -248,6 +249,14 @@
     if(!($autosave || $revision || !$valid)) {
       $src = json_decode(isset($_POST['3dfb-data'])? str_replace('&x5c', '\\', str_replace('&x27', '\'', str_replace('&x22', '"', $_POST['3dfb-data']))): '{}', true);
       $data = get_post_data($id, $src? $src: []);
+
+      if(get_current_user_level()<$fb3d['user_levels']['editor']) {
+        $data['3dfb']['post']['ready_function'] = '';
+        foreach ($data['3dfb']['pages'] as &$page) {
+          $page['page_meta_data']['css_layer'] = ['css'=> '', 'html'=> '', 'js'=> ''];
+        }
+      }
+
       foreach ($data['3dfb']['post'] as $key => $value) {
         if($key==='outline') {
           update_post_meta($id, META_PREFIX.$key, json_decode($value, true));

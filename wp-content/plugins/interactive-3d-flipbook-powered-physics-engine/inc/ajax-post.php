@@ -15,6 +15,20 @@
     return $res;
   }
 
+  function get_current_user_level() {
+    global $fb3d;
+    $level = 0;
+    if(is_user_logged_in()) {
+      $user = wp_get_current_user();
+      $roles = (array)$user->roles;
+      foreach ($roles as $role) {
+        if(isset($fb3d['user_levels'][$role])) {
+          $level = max($level, $fb3d['user_levels'][$role]);
+        }
+      }
+    }
+    return $level;
+  }
   function receive_book_template() {
     if(is_request_allowed()) {
       $template = rec_stripslashes(is_array($_POST['template'])? $_POST['template']: []);

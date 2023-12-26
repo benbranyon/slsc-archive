@@ -94,6 +94,11 @@ class PageBuilders {
 		if ( defined( '__BREAKDANCE_VERSION' ) ) {
 			$this->registerBreakDance();
 		}
+
+		// YooTheme
+		if ( class_exists( 'YOOtheme\Builder' ) ) {
+			$this->registerYooTheme();
+		}
 	}
 
 	public function enqueueScripts( $is_enqueue_media = false, $is_enqueue_footer = false ) {
@@ -227,5 +232,9 @@ class PageBuilders {
 		if ( isset( $_GET['breakdance_wpuiforbuilder_media'] ) && $_GET['breakdance_wpuiforbuilder_media'] ) {
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueueScripts' ), 9 );
 		}
+	}
+
+	public function registerYooTheme() {
+		add_action( 'admin_print_footer_scripts-yootheme_customizer', array( $this, 'enqueueScripts' ) );
 	}
 }

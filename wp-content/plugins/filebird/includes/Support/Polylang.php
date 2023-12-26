@@ -28,22 +28,35 @@ class Polylang extends Controller {
 				add_filter( 'fbv_get_count_query', array( $this, 'fbv_get_count_query' ), 10, 3 );
 				add_filter( 'fbv_all_folders_and_count', array( $this, 'all_folders_and_count_query' ), 10, 2 );
 				add_filter( 'fbv_pll_lang', array( $this, 'fbv_pll_lang' ), 10, 1 );
+				add_filter( 'fbv_data', array( $this, 'fbv_data' ), 10, 1 );
 			}
 		}
 	}
 
+	public function fbv_data( $data ) {
+		$data['icl_lang'] = null;
+		return $data;
+	}
+
 	public function get_preferred_language( $lang ) {
 		$pll_lang = PLL()->model->get_language( $lang );
+
 		if ( $pll_lang ) {
-			return $pll_lang->term_id;
+			if ( version_compare( POLYLANG_VERSION, '3.4', '>=' ) ) {
+				return $pll_lang->get_tax_prop( 'language', 'term_taxonomy_id' );
+			} else {
+				return $pll_lang->term_props['language']['term_taxonomy_id'];
+			}
 		}
 		return $this->lang_id;
 	}
 
 	public function fbv_pll_lang( $lang ) {
-		if ( ! PLL_SETTINGS && ! PLL_ADMIN && PLL()->model->get_languages_list() ) {
-			return true;
-		}
+		// Fixed for new polylang version
+		// if ( ! PLL_SETTINGS && ! PLL_ADMIN && PLL()->model->get_languages_list() ) {
+		// 	return true;
+		// }
+		return pll_current_language();
 	}
 
 	public function fbv_get_count_query( $q, $folder_id, $lang ) {
