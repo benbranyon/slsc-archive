@@ -466,6 +466,10 @@
 							value = optionElement.data('enabledToggleValue');
 						}
 
+						if (option === undefined) {
+							return;
+						}
+
 						var originalValue = optionElement.data('originalToggleValue');
 						if (originalValue == value) {
 							delete WFAD.pendingChanges[option];
@@ -510,6 +514,10 @@
 						var optionElement = $(this).closest('.wf-option');
 						var option = optionElement.data('selectOption');
 						var value = $(this).val();
+						
+						if (option === undefined) {
+							return;
+						}
 
 						var originalValue = optionElement.data('originalSelectValue');
 						if (originalValue == value) {

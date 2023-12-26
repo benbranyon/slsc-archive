@@ -140,6 +140,10 @@
 		if (heading.length > 0) {
 			var dom = (type === 'error' ? $('<div id="login_error">') : $('<p class="message">'));
 			dom.addClass('wfls-login-message');
+			dom.addClass('notice');
+			if (type === 'error') {
+				dom.addClass('notice-error');
+			}
 			dom.html(messageHtml);
 			heading.after(dom);
 			dom.get(0).scrollIntoView();
