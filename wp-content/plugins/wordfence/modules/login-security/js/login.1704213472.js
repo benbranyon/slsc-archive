@@ -423,7 +423,19 @@
 			},
 			error: function(err) {
 				if (err.status == 503 || err.status == 403) {
-					window.location.reload(true);
+					if ($('.woocommerce').length > 0) {
+						if (err.status == 503) {
+							showLoginMessage(__('<strong>ERROR</strong>: Login failed with status code 503. Please contact the site administrator.'), 'error');
+						}
+						else if (err.status == 403) {
+							showLoginMessage(__('<strong>ERROR</strong>: Login failed with status code 403. Please contact the site administrator.'), 'error');
+						}
+						blocker.unblock();
+					}
+					else {
+						window.location.reload(true);
+					}
+					
 					return;
 				}
 				showLoginMessage(__('<strong>ERROR</strong>: An error was encountered while trying to authenticate. Please try again.'), 'error');

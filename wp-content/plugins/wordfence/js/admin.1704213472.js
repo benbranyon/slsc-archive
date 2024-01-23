@@ -828,6 +828,35 @@
 					}
 				});
 			},
+			wordfenceSatisfactionChoice: function(choice) {
+				if (choice == 'yes') {
+					$('#wordfenceSatisfactionPrompt-yes').slideDown(400, function() {
+						$('#wordfenceSatisfactionPrompt-initial .wf-btn').addClass('wf-disabled').css('opacity', 0.3);
+						$('#wordfenceSatisfactionPrompt-initial .wf-btn:first-of-type').css('opacity', 0.8);
+					});
+					WFAD.ajax('wordfence_wordfenceSatisfactionChoice', {choice: choice});
+				}
+				else if (choice == 'no') {
+					$('#wordfenceSatisfactionPrompt-no').slideDown(400, function() {
+						$('#wordfenceSatisfactionPrompt-initial .wf-btn').addClass('wf-disabled').css('opacity', 0.3);
+						$('#wordfenceSatisfactionPrompt-initial .wf-btn:last-of-type').css('opacity', 0.8);
+					});
+					WFAD.ajax('wordfence_wordfenceSatisfactionChoice', {choice: choice});
+				}
+				else if (choice == 'feedback') {
+					WFAD.ajax('wordfence_wordfenceSatisfactionChoice', {
+							choice: choice,
+							feedback: $('#wordfenceSatisfactionPrompt-feedback').val(),
+						},
+						function(res) { $('#wordfenceSatisfactionPrompt-no').fadeOut(); $('#wordfenceSatisfactionPrompt-complete').fadeIn(); },
+						function() { $('#wordfenceSatisfactionPrompt-no').fadeOut(); $('#wordfenceSatisfactionPrompt-complete').fadeIn(); }
+					);
+				}
+				else if (choice == 'dismiss') {
+					$('#wordfenceSatisfactionPrompt').fadeOut();
+					WFAD.ajax('wordfence_wordfenceSatisfactionChoice', {choice: choice});
+				}
+			},
 			tourFinish: function(page) {
 				if (WFAD.currentPointer) {
 					WFAD.currentPointer.pointer('destroy');
