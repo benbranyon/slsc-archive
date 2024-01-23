@@ -1366,9 +1366,8 @@
       //	$control.removeClass('-min');
       //}
     },
-
     listenForSavedMetaBoxes: function () {
-      if (!acf.isGutenberg() || !this.get('pagination')) {
+      if (!acf.isGutenbergPostEditor() || !this.get('pagination')) {
         return;
       }
       let checkedMetaBoxes = true;
@@ -1701,7 +1700,6 @@
         }
       });
     },
-
     isCollapsed: function ($row) {
       return $row.hasClass('-collapsed');
     },

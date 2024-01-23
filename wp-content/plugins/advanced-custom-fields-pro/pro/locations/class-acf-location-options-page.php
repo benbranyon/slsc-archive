@@ -70,7 +70,9 @@ if ( ! class_exists( 'ACF_Location_Options_Page' ) ) :
 				$choices[''] = __( 'Select options page...', 'acf' );
 			}
 
-			$choices['add_new_options_page'] = __( 'Add New Options Page', 'acf' );
+			if ( acf_get_setting( 'enable_options_pages_ui' ) ) {
+				$choices['add_new_options_page'] = __( 'Add New Options Page', 'acf' );
+			}
 
 			// Return choices.
 			return $choices;
@@ -79,5 +81,4 @@ if ( ! class_exists( 'ACF_Location_Options_Page' ) ) :
 
 	// initialize
 	acf_register_location_type( 'ACF_Location_Options_Page' );
-
 endif; // class_exists check

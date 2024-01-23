@@ -229,7 +229,7 @@ if ( ! class_exists( 'acf_admin_field_group' ) ) :
 		 */
 		public function include_pro_features() {
 			// Bail if on PRO.
-			if ( acf_is_pro() ) {
+			if ( acf_is_pro() && acf_pro_is_license_active() ) {
 				return;
 			}
 
@@ -611,7 +611,6 @@ if ( ! class_exists( 'acf_admin_field_group' ) ) :
 
 			die();
 		}
-
 	}
 
 	// initialize.

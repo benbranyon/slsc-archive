@@ -1171,7 +1171,6 @@
       // the field which we query against
       rule: {} // the rule [field, operator, value]
     },
-
     events: {
       change: 'change',
       keyup: 'change',
@@ -1538,7 +1537,6 @@
       // Reference used during "change" event.
       groups: [] // The groups of condition instances.
     },
-
     setup: function (field) {
       // data
       this.data.field = field;
@@ -3686,7 +3684,8 @@
       'click .choices-list .acf-rel-item': 'onClickAdd',
       'keypress .choices-list .acf-rel-item': 'onKeypressFilter',
       'keypress .values-list .acf-rel-item': 'onKeypressFilter',
-      'click [data-name="remove_item"]': 'onClickRemove'
+      'click [data-name="remove_item"]': 'onClickRemove',
+      'touchstart .values-list .acf-rel-item': 'onTouchStartValues'
     },
     $control: function () {
       return this.$('.acf-relationship');
@@ -3857,6 +3856,10 @@
 
       // trigger change
       this.$input().trigger('change');
+    },
+    onTouchStartValues: function (e, $el) {
+      $(this.$listItems('values')).removeClass('relationship-hover');
+      $el.addClass('relationship-hover');
     },
     maybeFetch: function () {
       // vars
@@ -4095,15 +4098,34 @@
       duplicateField: 'onDuplicate'
     },
     findFields: function () {
-      let filter = '.acf-field';
-      if (this.get('key') === 'acf_field_settings_tabs') {
-        filter = '.acf-field-settings-main';
-      }
-      if (this.get('key') === 'acf_field_group_settings_tabs') {
-        filter = '.field-group-settings-tab';
-      }
-      if (this.get('key') === 'acf_browse_fields_tabs') {
-        filter = '.acf-field-types-tab';
+      let filter;
+
+      /**
+       * Tabs in the admin UI that can be extended by third
+       * parties have the child settings wrapped inside an extra div,
+       * so we need to look for that instead of an adjacent .acf-field.
+       */
+      switch (this.get('key')) {
+        case 'acf_field_settings_tabs':
+          filter = '.acf-field-settings-main';
+          break;
+        case 'acf_field_group_settings_tabs':
+          filter = '.field-group-settings-tab';
+          break;
+        case 'acf_browse_fields_tabs':
+          filter = '.acf-field-types-tab';
+          break;
+        case 'acf_post_type_tabs':
+          filter = '.acf-post-type-advanced-settings';
+          break;
+        case 'acf_taxonomy_tabs':
+          filter = '.acf-taxonomy-advanced-settings';
+          break;
+        case 'acf_ui_options_page_tabs':
+          filter = '.acf-ui-options-page-advanced-settings';
+          break;
+        default:
+          filter = '.acf-field';
       }
       return this.$el.nextUntil('.acf-field-tab', filter);
     },
@@ -7819,7 +7841,7 @@
     wait: 'prepare',
     initialize: function () {
       // Bail early if not Gutenberg.
-      if (!acf.isGutenberg()) {
+      if (!acf.isGutenbergPostEditor()) {
         return;
       }
 
@@ -10296,7 +10318,7 @@
           }
         }).then(function () {
           return savePost.apply(_this, _args);
-        }).catch(function (err) {
+        }, err => {
           // Nothing to do here, user is alerted of validation issues.
         });
       };
