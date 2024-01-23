@@ -1,14 +1,14 @@
 === FileBird - WordPress Media Library Folders & File Manager ===
 Contributors: ninjateam
-Donate link: https://codecanyon.net/item/media-folders-manager-for-wordpress/21715379
-Tags: wordpress media library folders, media library folders, media folder, file manager, folders, wp media folder, wp media folders, wordpress media folders, wordpress media library, wordpress media manager, media manager, firebird
+Donate link: https://ninjateam.org/wordpress-media-library-folders/ 
+Tags: wordpress media library folders, file manager, folders, media, gallery, media folder
 Requires at least: 3.0
-Tested up to: 6.4
-Stable tag: 5.5.8.1
+Tested up to: 6.4.2
+Stable tag: 5.6.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Organize thousands of WordPress media files in folders / categories at ease.
+Organize thousands of WordPress media files in folders / categories with ease.
 
 == Description ==
 
@@ -17,7 +17,6 @@ Organize thousands of WordPress media files in folders / categories at ease.
 Let's organize WordPress media library folders using a drag and drop organizer.
 
 [TEST DRIVE](https://media-folder.ninjateam.org/create/) | [**GO PRO (Lifetime License)**](https://1.envato.market/FileBird-Premium) 💎
-
 
 FileBird enhances your media library with a clean user interface, native icons, smooth drag & drop, dynamic gallery, and advanced sort options. With such a better organization, it becomes super easy to insert images into Gutenberg blocks, find old files, and remove unused images.
 
@@ -31,13 +30,13 @@ The free version allows you to create **unlimited main folders** and **subfolder
 
 FileBird allows you to create virtual folders to [categorize your WordPress media file uploads](https://ninjateam.org/how-to-organize-your-wordpress-media-library/). So when you move files and folders around, it won’t break the permalinks to your images in the page/post content.
 
-With FileBird Pro you can save time on WP media management, search for any files & folders, sort them out, add product image gallery, download/export media folders, etc. That’s a great way to boost your admin workflow and productivity.
+With FileBird, you can save time on WP media management, search for any files & folders, sort them out, add product image gallery, download/export media folders, etc. That’s a great way to boost your admin workflow and productivity.
 
 **NEW - Folder Tree Themes (PRO)**
 Instead of the traditional gray shade of folder icon, now you can transform your "Folderella" into **Dropbox** theme or **Windows 11** styling.
 
 **Download Media Folder (PRO)**
-Export an entire media folder including its subfolders and files in a single ZIP file. Keep the same folder structure. Backup categorized media files.
+Export an entire media folder, including its subfolders and files, in a single ZIP file. Keep the same folder structure. Backup categorized media files.
 
 **Smart Startup Folder**
 Choose a specific folder or previously opened folder upon startup. Quickly get back to work. Save more time.
@@ -49,7 +48,7 @@ Locate any file in its details modal and easily change its containing folder.
 Drag and drop to upload or bulk move files into folders. Drag and drop to arrange folders and subfolders.
 
 **Smart Context Menu**
-Right-click on FileBird folders section to quickly create, rename, cut, paste, or delete folders just the way you do on your computer.
+Right-click on any FileBird folder to quickly create a subfolder, rename, set color, cut, paste, or delete it just the way you do on your computer.
 
 **Full Control In One Toolbar**
 FileBird’s collapsible sidebar provides you with ultimate control over all WordPress media library folders.
@@ -64,7 +63,7 @@ One-click to export the whole WP media folder structure so that you can migrate 
 Enabling this mode allows admins and other users access to create their own categories/directories. A user can freely manage his/her folders without affecting others' directory structure.
 
 **Powerful Search Feature**
-You can sort and search for file and folder name not only in Media library but also in page/post editor.
+You can sort and search for files and folder names not only in the **Media library** but also while browsing images through the **page/post editor**.
 
 **Various Sort Options (PRO)**
 Go advanced with 2 ways to sort folders and 10 ways to sort files. This is a great time-saver for all busy WordPress admins & webmasters.
@@ -85,13 +84,13 @@ Easily enable the folder tree to organize your WordPress pages, posts, plugins, 
 Set a way of sorting files ascending/descending alphabetically by the file name, title, date, modified, and author.
 
 **Bulk-Delete Folders**
-Now you can bulk-select folders and delete them in a single click. All those files will be moved to the Uncategorized folder and remain intact.
+Now, you can bulk-select folders and delete them in a single click. All those files will be moved to the Uncategorized folder and remain intact.
 
 **RTL Supported**
 FileBird supports RTL languages including Hebrew, Arabic, etc.
 
 **Many Languages Supported**
-This plugin supports most popular languages such as English, Spanish, Italian, French, Germany, etc.
+This plugin supports most popular languages such as English, Spanish, Italian, French, German, Dutch, Hebrew, etc.
 
 ###🙋‍♂️DID YOU KNOW?
 That FileBird now comes with an addon to help you create a standalone WordPress document gallery using Gutenberg and FileBird folders? 
@@ -100,7 +99,7 @@ That FileBird now comes with an addon to help you create a standalone WordPress 
 ###👍 HOW DOES FILEBIRD WORK?
 Are you a WordPress website administrator?
 
-Managing a WordPress site means that you’ll be adding tons of multi-media files such as images, videos, audios, documents, etc., into your WP media library.
+Managing a WordPress site means that you’ll be adding tons of multi-media files, such as images, videos, audios, documents, etc., into your WP media library.
 
 As a result, your library has to store thousands of files and could become a total mess. WordPress default file name search function is a good thing but it will never match the ease of going directly to a folder. That’s when FileBird comes in to help with managing files in WordPress!
 
@@ -112,23 +111,25 @@ You won’t see WordPress media library not loading, as FileBird smart-loads one
 
 ###🚀 Tips to manage WP media folders like a pro with FileBird
 
-* Upload multiple folders and their files directly from computer to WordPress
-* Create gallery from folders using Gutenberg block of FileBird gallery 
+* Upload multiple folders and their files directly from your computer to WordPress
+* Create a gallery from folders using the Gutenberg block of FileBird gallery 
 * [Create WordPress document gallery](https://ninjateam.org/document-gallery-wordpress/) with shortcode
 * Resize the left sidebar to get an overview of all folders
 * Upload files to a specific folder by choosing the destination folder from the dropdown
 * Easily **search** for the name of file/folder
 * From the page/post composer, **browse** files and folders in the FileBird UI
-* While [customizing WooCommerce email](https://yaycommerce.com/woocommerce-email-template-customization/) with a drag and drop email builder, you can quickly find the images you need
-* Keep your folders uncluttered by clearing out the old files using **Sort** features
+* While [customizing WooCommerce email](https://yaycommerce.com/woocommerce-email-template-customization/) with a drag-and-drop email builder, you can quickly find the images you need
+* Keep your folders uncluttered by clearing out the old files using the **Sort by file size** feature
 * Press ESC to exit bulk select mode
 
-###⛩️ COMPATIBILITY
+###⛩️ PREMIUM COMPATIBILITY
+
+With [FileBird Pro](https://1.envato.market/FileBird-Premium), you will be able to use folders to organize posts, pages, WooCommerce products, coupons, templates, and other custom post types. These premium-only features include integrations with third-party themes and plugins.
 
 **THEMES**
 
 * Avada – #1 WordPress best selling theme of all time
-* Divi - Theme from ElegantThemes (PRO)
+* Divi - Theme from ElegantThemes
 * Enfold – The user-friendliest WordPress Theme ever made
 * Uncode – The highly anticipated Frontend Editor
 * Jupiter - Elementor Multi-Purpose Theme
@@ -136,12 +137,13 @@ You won’t see WordPress media library not loading, as FileBird smart-loads one
 * Salient - Responsive Multi-Purpose Theme
 * XStore - Responsive Multi-Purpose WooCommerce WordPress Theme
 * KLEO - Community Multi Purpose BuddyPress Theme
+* Bricks Builder
 * And a lot more +++
 
 **PLUGINS**
 
 * WPML – Best WP plugin to translate and display your website in any languages
-* Polylang – A plugin allows you to create a bilingual or multilingual WordPress site
+* Polylang – A plugin that allows you to create a bilingual or multilingual WordPress site
 * Elementor Website Builder 
 * JetEngine
 * Flatsome UX Builder
@@ -149,13 +151,12 @@ You won’t see WordPress media library not loading, as FileBird smart-loads one
 * Visual Composer
 * Beaver Builder
 * SiteOrigin Pro
-* Bricks Builder
 * KingComposer
 * Tatsu Builder
 * Oxygen
 * Thrive Architect
 * Classic Editor – Old WordPress editor to display tree view folders
-* Slider Revolution – Best selling WordPress Responsive plugin
+* Slider Revolution – Best selling WordPress responsive slider plugin
 * EWWW Image Optimizer
 * FooGallery Image Gallery – Responsive Photo Gallery
 * Smush - Compress, Image Optimizer, Lazy Load, WebP Images
@@ -175,13 +176,13 @@ You’re done. Enjoy.
 = Do all of my previously uploaded files remain the same after I first install this plugin? =
 Yes, you can find all uploads in the **All Files** folder.
 
-= When I move an image to another folder, does this action affect how the image appears in page/post? =
-No, it makes no changes to your images on the site front-end.
+= When I move an image to another folder, does this action affect how the image appears on the page/post? =
+No, it makes no changes to your images on the site's front end.
 
 = If I create a folder or category, does this override the default WordPress path `wp-content/uploads/`? =
 No, it does not. The plugin helps organize files into folders visually. Every file permalink/URL remains unchanged.
 
-= Anything happens to my site if I uninstall FileBird? =
+= What happens to my site if I uninstall FileBird? =
 No worries, your website will be completely unaffected. Upon deactivation, all your files can be found in the default WordPress media library.
 
 = How can I get support? =
@@ -207,6 +208,18 @@ Happy Organizing! 😍
 
 
 == Changelog ==
+
+= Jan 19, 2024 - Version 5.6.1 =
+- Fixed: XSS vulnerability 
+
+= Jan 9, 2024 - Version 5.6.0 =
+- Fixed: Firewall blocking (Sucuri, GoDaddy, etc.)
+
+= Jan 9, 2024 - Version 5.5.9 = 
+- Fixed: I18N issues 
+- Fixed: Support SVG file
+- Fixed: Special symbols in folder name when exported
+- Updated: POT file
 
 = Dec 7, 2023 - Version 5.5.8.1 =
 - Fixed: Folder names in document library not seen on mobile

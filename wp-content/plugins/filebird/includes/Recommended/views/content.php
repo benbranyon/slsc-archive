@@ -39,7 +39,7 @@ foreach ( (array) $recommendedPlugins as $recommendedPlugin ) {
 
 		$actionLinks = array();
 
-		$pluginStatus = '<span class="plugin-status-not-install">Not installed</span>';
+		$pluginStatus = '<span class="plugin-status-not-install">' . esc_html__( 'Not installed', 'filebird' ) . '</span>';
 
 	if ( current_user_can( 'install_plugins' ) || current_user_can( 'update_plugins' ) ) {
 		$pluginProVer = $this->check_pro_version_exists( $recommendedPlugin );
@@ -73,26 +73,26 @@ foreach ( (array) $recommendedPlugins as $recommendedPlugin ) {
 								esc_attr( $downloadLink ),
 								esc_attr( $downloadLink ),
 								/* translators: %s: Plugin name and version. */
-								esc_attr( sprintf( _x( 'Install %s now', 'plugin', 'ninjateam-whatsapp' ), $name ) ),
-								__( 'Install Now', 'ninjateam-whatsapp' )
+								esc_attr( sprintf( _x( 'Install %s now', 'plugin', 'filebird' ), $name ) ),
+								__( 'Install Now', 'filebird' )
 							);
 						} else {
 							$actionLinks[] = sprintf(
 								'<button class="install-now button button-primary" data-install-url="%s" aria-label="%s">%s</button>',
 								esc_attr( $downloadLink ),
 								/* translators: %s: Plugin name and version. */
-								esc_attr( sprintf( _x( 'Install %s now', 'plugin', 'ninjateam-whatsapp' ), $name ) ),
-								__( 'Install Now', 'ninjateam-whatsapp' )
+								esc_attr( sprintf( _x( 'Install %s now', 'plugin', 'filebird' ), $name ) ),
+								__( 'Install Now', 'filebird' )
 							);
 						}
 					} else {
 						$actionLinks[] = sprintf(
 							'<button type="button" class="button button-disabled" disabled="disabled">%s</button>',
-							_x( 'Cannot Install', 'plugin', 'ninjateam-whatsapp' )
+							_x( 'Cannot Install', 'plugin', 'filebird' )
 						);
 					}
 				}
-				$pluginStatus = '<span class="plugin-status-not-install" data-plugin-url="' . esc_attr( $downloadLink ) . '">Not installed</span>';
+				$pluginStatus = '<span class="plugin-status-not-install" data-plugin-url="' . esc_attr( $downloadLink ) . '">' . esc_html__( 'Not installed', 'filebird' ) . '</span>';
 				break;
 
 			case 'update_available':
@@ -105,9 +105,9 @@ foreach ( (array) $recommendedPlugins as $recommendedPlugin ) {
 								esc_attr( $recommendedPlugin['slug'] ),
 								esc_url( $installStatus['url'] ),
 								/* translators: %s: Plugin name and version. */
-								esc_attr( sprintf( _x( 'Update %s now', 'plugin', 'ninjateam-whatsapp' ), $name ) ),
+								esc_attr( sprintf( _x( 'Update %s now', 'plugin', 'filebird' ), $name ) ),
 								esc_attr( $name ),
-								__( 'Update Now', 'ninjateam-whatsapp' )
+								__( 'Update Now', 'filebird' )
 							);
 						} else {
 							$actionLinks[] = sprintf(
@@ -116,15 +116,15 @@ foreach ( (array) $recommendedPlugins as $recommendedPlugin ) {
 								esc_attr( $recommendedPlugin['slug'] ),
 								esc_url( $installStatus['url'] ),
 								/* translators: %s: Plugin name and version. */
-								esc_attr( sprintf( _x( 'Update %s now', 'plugin', 'ninjateam-whatsapp' ), $name ) ),
+								esc_attr( sprintf( _x( 'Update %s now', 'plugin', 'filebird' ), $name ) ),
 								esc_attr( $name ),
-								__( 'Update Now', 'ninjateam-whatsapp' )
+								__( 'Update Now', 'filebird' )
 							);
 						}
 					} else {
 						$actionLinks[] = sprintf(
 							'<button type="button" class="button button-disabled" disabled="disabled">%s</button>',
-							_x( 'Cannot Update', 'plugin', 'ninjateam-whatsapp' )
+							_x( 'Cannot Update', 'plugin', 'filebird' )
 						);
 					}
 				}
@@ -141,14 +141,14 @@ foreach ( (array) $recommendedPlugins as $recommendedPlugin ) {
 					$pluginStatus  = '<span class="plugin-status-active">Active</span>';
 					$actionLinks[] = sprintf(
 						'<button type="button" class="button button-disabled" disabled="disabled">%s</button>',
-						_x( 'Activated', 'plugin', 'ninjateam-whatsapp' )
+						_x( 'Activated', 'plugin', 'filebird' )
 					);
 				} elseif ( current_user_can( 'activate_plugin', $installStatus['file'] ) ) {
 					$pluginStatus = '<span class="plugin-status-inactive" data-plugin-file="' . esc_attr( $installStatus['file'] ) . '">Inactive</span>';
 					if ( $compatible_php && $compatible_wp ) {
-						$buttonText = __( 'Activate', 'ninjateam-whatsapp' );
+						$buttonText = __( 'Activate', 'filebird' );
 						/* translators: %s: Plugin name. */
-						$buttonLabel = _x( 'Activate %s', 'plugin', 'ninjateam-whatsapp' );
+						$buttonLabel = _x( 'Activate %s', 'plugin', 'filebird' );
 						$activateUrl = add_query_arg(
 							array(
 								'_wpnonce' => wp_create_nonce( 'activate-plugin_' . $installStatus['file'] ),
@@ -159,9 +159,9 @@ foreach ( (array) $recommendedPlugins as $recommendedPlugin ) {
 						);
 
 						if ( is_network_admin() ) {
-							$buttonText = __( 'Network Activate', 'ninjateam-whatsapp' );
+							$buttonText = __( 'Network Activate', 'filebird' );
 							/* translators: %s: Plugin name. */
-							$buttonLabel = _x( 'Network Activate %s', 'plugin', 'ninjateam-whatsapp' );
+							$buttonLabel = _x( 'Network Activate %s', 'plugin', 'filebird' );
 							$activateUrl = add_query_arg( array( 'networkwide' => 1 ), $activateUrl );
 						}
 
@@ -174,13 +174,13 @@ foreach ( (array) $recommendedPlugins as $recommendedPlugin ) {
 					} else {
 						$actionLinks[] = sprintf(
 							'<button type="button" class="button button-disabled" disabled="disabled">%s</button>',
-							_x( 'Cannot Activate', 'plugin', 'ninjateam-whatsapp' )
+							_x( 'Cannot Activate', 'plugin', 'filebird' )
 						);
 					}
 				} else {
 					$actionLinks[] = sprintf(
 						'<button type="button" class="button button-disabled" disabled="disabled">%s</button>',
-						_x( 'Installed', 'plugin', 'ninjateam-whatsapp' )
+						_x( 'Installed', 'plugin', 'filebird' )
 					);
 				}
 				break;
@@ -210,11 +210,11 @@ foreach ( (array) $recommendedPlugins as $recommendedPlugin ) {
 		if ( ! $compatible_php || ! $compatible_wp ) {
 			echo '<div class="notice inline notice-error notice-alt"><p>';
 			if ( ! $compatible_php && ! $compatible_wp ) {
-				echo esc_html__( 'This plugin doesn&#8217;t work with your versions of WordPress and PHP.', 'ninjateam-whatsapp' );
+				echo esc_html__( 'This plugin doesn&#8217;t work with your versions of WordPress and PHP.', 'filebird' );
 				if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
 					printf(
 						/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. */
-						' ' . esc_html__( '<a href="%1$s">Please update WordPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.', 'ninjateam-whatsapp' ),
+						' ' . esc_html__( '<a href="%1$s">Please update WordPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.', 'filebird' ),
 						esc_url( self_admin_url( 'update-core.php' ) ),
 						esc_url( wp_get_update_php_url() )
 					);
@@ -222,32 +222,32 @@ foreach ( (array) $recommendedPlugins as $recommendedPlugin ) {
 				} elseif ( current_user_can( 'update_core' ) ) {
 					printf(
 						/* translators: %s: URL to WordPress Updates screen. */
-						' ' . esc_html__( '<a href="%s">Please update WordPress</a>.', 'ninjateam-whatsapp' ),
+						' ' . esc_html__( '<a href="%s">Please update WordPress</a>.', 'filebird' ),
 						esc_url( self_admin_url( 'update-core.php' ) )
 					);
 				} elseif ( current_user_can( 'update_php' ) ) {
 					printf(
 						/* translators: %s: URL to Update PHP page. */
-						' ' . esc_html__( '<a href="%s">Learn more about updating PHP</a>.', 'ninjateam-whatsapp' ),
+						' ' . esc_html__( '<a href="%s">Learn more about updating PHP</a>.', 'filebird' ),
 						esc_url( wp_get_update_php_url() )
 					);
 					wp_update_php_annotation( '</p><p><em>', '</em>' );
 				}
 			} elseif ( ! $compatible_wp ) {
-				echo esc_html__( 'This plugin doesn&#8217;t work with your version of WordPress.', 'ninjateam-whatsapp' );
+				echo esc_html__( 'This plugin doesn&#8217;t work with your version of WordPress.', 'filebird' );
 				if ( current_user_can( 'update_core' ) ) {
 					printf(
 						/* translators: %s: URL to WordPress Updates screen. */
-						' ' . esc_html__( '<a href="%s">Please update WordPress</a>.', 'ninjateam-whatsapp' ),
+						' ' . esc_html__( '<a href="%s">Please update WordPress</a>.', 'filebird' ),
 						esc_url( self_admin_url( 'update-core.php' ) )
 					);
 				}
 			} elseif ( ! $compatible_php ) {
-				echo esc_html__( 'This plugin doesn&#8217;t work with your version of PHP.', 'ninjateam-whatsapp' );
+				echo esc_html__( 'This plugin doesn&#8217;t work with your version of PHP.', 'filebird' );
 				if ( current_user_can( 'update_php' ) ) {
 					printf(
 						/* translators: %s: URL to Update PHP page. */
-						' ' . esc_html__( '<a href="%s">Learn more about updating PHP</a>.', 'ninjateam-whatsapp' ),
+						' ' . esc_html__( '<a href="%s">Learn more about updating PHP</a>.', 'filebird' ),
 						esc_url( wp_get_update_php_url() )
 					);
 					wp_update_php_annotation( '</p><p><em>', '</em>' );
@@ -271,7 +271,7 @@ foreach ( (array) $recommendedPlugins as $recommendedPlugin ) {
 		</div>
 		<div class="plugin-card-bottom">
 			<div class="vers column-rating">
-				<?php echo sprintf( '<span class="plugin-status" >%s: %s</span>', esc_html( 'Status' ), wp_kses_post( $pluginStatus ) ); ?>
+				<?php echo sprintf( '<span class="plugin-status" >%s: %s</span>', esc_html__( 'Status', 'filebird' ), wp_kses_post( $pluginStatus ) ); ?>
 			</div>
 			<div class="column-updated">
 				<?php

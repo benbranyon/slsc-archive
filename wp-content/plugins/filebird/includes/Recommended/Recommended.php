@@ -32,8 +32,8 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 			$recommendedPlugins = array(
 				'filebird'          => array(
 					'slug'              => 'filebird',
-					'name'              => 'FileBird - WordPress Media Library Folders & File Manager',
-					'short_description' => 'Organize thousands of WordPress media files in folders / categories at ease.',
+					'name'              => __( 'FileBird - WordPress Media Library Folders & File Manager', 'filebird' ),
+					'short_description' => __( 'Organize thousands of WordPress media files in folders / categories at ease.', 'filebird' ),
 					'icon'              => 'https://ps.w.org/filebird/assets/icon-128x128.gif?rev=2299145',
 					'download_link'     => 'https://downloads.wordpress.org/plugin/filebird.zip',
 					'type'              => array( 'featured' ),
@@ -41,8 +41,8 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 				),
 				'yaymail'           => array(
 					'slug'              => 'yaymail',
-					'name'              => 'YayMail - WooCommerce Email Customizer',
-					'short_description' => 'Customize WooCommerce email templates with live preview & drag and drop email builder.',
+					'name'              => __( 'YayMail - WooCommerce Email Customizer', 'filebird' ),
+					'short_description' => __( 'Customize WooCommerce email templates with live preview & drag and drop email builder.', 'filebird' ),
 					'icon'              => 'https://ps.w.org/yaymail/assets/icon-256x256.gif?rev=2599198',
 					'download_link'     => 'https://downloads.wordpress.org/plugin/yaymail.zip',
 					'type'              => array( 'featured', 'woocommerce' ),
@@ -50,8 +50,8 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 				),
 				'yaycurrency'       => array(
 					'slug'              => 'yaycurrency',
-					'name'              => 'YayCurrency - WooCommerce Multi-Currency Switcher',
-					'short_description' => 'WooCommerce Multi-Currency made easy, powerful, and flexible.',
+					'name'              => __( 'YayCurrency - WooCommerce Multi-Currency Switcher', 'filebird' ),
+					'short_description' => __( 'WooCommerce Multi-Currency made easy, powerful, and flexible.', 'filebird' ),
 					'icon'              => 'https://ps.w.org/yaycurrency/assets/icon-256x256.png?rev=2550570',
 					'download_link'     => 'https://downloads.wordpress.org/plugin/yaycurrency.zip',
 					'type'              => array( 'featured', 'woocommerce' ),
@@ -59,8 +59,8 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 				),
 				'yayswatches'       => array(
 					'slug'              => 'yayswatches',
-					'name'              => 'YaySwatches - Variation Swatches for WooCommerce',
-					'short_description' => 'Optimize your variable product showcase with color swatches, image swatches, custom images, buttons, and more!',
+					'name'              => __( 'YaySwatches - Variation Swatches for WooCommerce', 'filebird' ),
+					'short_description' => __( 'Optimize your variable product showcase with color swatches, image swatches, custom images, buttons, and more!', 'filebird' ),
 					'icon'              => 'https://ps.w.org/yayswatches/assets/icon-256x256.png?rev=2757155',
 					'download_link'     => 'https://downloads.wordpress.org/plugin/yayswatches.zip',
 					'type'              => array( 'woocommerce' ),
@@ -68,8 +68,8 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 				),
 				'yayextra'          => array(
 					'slug'              => 'yayextra',
-					'name'              => 'YayExtra - WooCommerce Extra Product Options',
-					'short_description' => 'Add WooCommerce product options like personal engraving, print-on-demand items, gifts, custom canvas prints, and personalized products.',
+					'name'              => __( 'YayExtra - WooCommerce Extra Product Options', 'filebird' ),
+					'short_description' => __( 'Add WooCommerce product options like personal engraving, print-on-demand items, gifts, custom canvas prints, and personalized products.', 'filebird' ),
 					'icon'              => 'https://ps.w.org/yayextra/assets/icon-256x256.png?rev=2776349',
 					'download_link'     => 'https://downloads.wordpress.org/plugin/yayextra.zip',
 					'type'              => array( 'woocommerce' ),
@@ -77,8 +77,8 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 				),
 				'yaypricing'        => array(
 					'slug'              => 'yaypricing',
-					'name'              => 'YayPricing - WooCommerce Dynamic Pricing & Discounts',
-					'short_description' => 'Offer automatic pricing and discounts to design a powerful marketing strategy for your WooCommerce store.',
+					'name'              => __( 'YayPricing - WooCommerce Dynamic Pricing & Discounts', 'filebird' ),
+					'short_description' => __( 'Offer automatic pricing and discounts to design a powerful marketing strategy for your WooCommerce store.', 'filebird' ),
 					'icon'              => 'https://yaycommerce.com/wp-content/uploads/2022/11/yaypricing-256x256-1.png',
 					'download_link'     => 'https://yaycommerce.com/yaypricing-woocommerce-dynamic-pricing-and-discounts/',
 					'type'              => array( 'woocommerce' ),
@@ -86,8 +86,8 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 				),
 				'yaysmtp'           => array(
 					'slug'              => 'yaysmtp',
-					'name'              => 'YaySMTP - Simple WP SMTP Mail',
-					'short_description' => 'Send WordPress emails successfully with WP Mail SMTP via your favorite Mailer.',
+					'name'              => __( 'YaySMTP - Simple WP SMTP Mail', 'filebird' ),
+					'short_description' => __( 'Send WordPress emails successfully with WP Mail SMTP via your favorite Mailer.', 'filebird' ),
 					'icon'              => 'https://ps.w.org/yaysmtp/assets/icon-256x256.png?rev=2437984',
 					'download_link'     => 'https://downloads.wordpress.org/plugin/yaysmtp.zip',
 					'type'              => array( 'featured', 'marketing' ),
@@ -95,8 +95,8 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 				),
 				'wp-whatsapp'       => array(
 					'slug'              => 'wp-whatsapp',
-					'name'              => 'WP Chat App',
-					'short_description' => 'Integrate WhatsApp experience directly into your WordPress website.',
+					'name'              => __( 'WP Chat App', 'filebird' ),
+					'short_description' => __( 'Integrate WhatsApp experience directly into your WordPress website.', 'filebird' ),
 					'icon'              => 'https://ps.w.org/wp-whatsapp/assets/icon-256x256.png?rev=2725670',
 					'download_link'     => 'https://downloads.wordpress.org/plugin/wp-whatsapp.zip',
 					'type'              => array( 'featured' ),
@@ -104,8 +104,8 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 				),
 				'filester'          => array(
 					'slug'              => 'filester',
-					'name'              => 'Filester - File Manager Pro',
-					'short_description' => 'Best WordPress file manager without FTP access. Clean design. No need to upgrade because this…',
+					'name'              => __( 'Filester - File Manager Pro', 'filebird' ),
+					'short_description' => __( 'Best WordPress file manager without FTP access. Clean design. No need to upgrade because this…', 'filebird' ),
 					'icon'              => 'https://ps.w.org/filester/assets/icon-256x256.gif?rev=2305540',
 					'download_link'     => 'https://downloads.wordpress.org/plugin/filester.zip',
 					'type'              => array( 'management' ),
@@ -113,8 +113,8 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 				),
 				'cf7-multi-step'    => array(
 					'slug'              => 'cf7-multi-step',
-					'name'              => 'Multi Step for Contact Form 7',
-					'short_description' => 'Break your looooooong form into user-friendly steps.',
+					'name'              => __( 'Multi Step for Contact Form 7', 'filebird' ),
+					'short_description' => __( 'Break your looooooong form into user-friendly steps.', 'filebird' ),
 					'icon'              => 'https://ps.w.org/cf7-multi-step/assets/icon-256x256.png?rev=1994366',
 					'download_link'     => 'https://downloads.wordpress.org/plugin/cf7-multi-step.zip',
 					'type'              => array( 'management' ),
@@ -122,8 +122,8 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 				),
 				'cf7-database'      => array(
 					'slug'              => 'cf7-database',
-					'name'              => 'Database for Contact Form 7',
-					'short_description' => 'Automatically save all data submitted via Contact Form 7 to your database.',
+					'name'              => __( 'Database for Contact Form 7', 'filebird' ),
+					'short_description' => __( 'Automatically save all data submitted via Contact Form 7 to your database.', 'filebird' ),
 					'icon'              => 'https://ps.w.org/cf7-database/assets/icon-128x128.png?rev=1614091',
 					'download_link'     => 'https://downloads.wordpress.org/plugin/cf7-database.zip',
 					'type'              => array( 'management' ),
@@ -131,8 +131,8 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 				),
 				'wp-duplicate-page' => array(
 					'slug'              => 'wp-duplicate-page',
-					'name'              => 'WP Duplicate Page',
-					'short_description' => 'Clone WordPress page, post, custom post types.',
+					'name'              => __( 'WP Duplicate Page', 'filebird' ),
+					'short_description' => __( 'Clone WordPress page, post, custom post types.', 'filebird' ),
 					'icon'              => 'https://ps.w.org/wp-duplicate-page/assets/icon-256x256.gif?rev=2432962',
 					'download_link'     => 'https://downloads.wordpress.org/plugin/wp-duplicate-page.zip',
 					'type'              => array( 'management' ),
@@ -140,8 +140,8 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 				),
 				'notibar'           => array(
 					'slug'              => 'notibar',
-					'name'              => 'Notibar - Notification Bar for WordPress',
-					'short_description' => 'Customizer for sticky header, notification bar, alert, promo code, marketing campaign, top banner.',
+					'name'              => __( 'Notibar - Notification Bar for WordPress', 'filebird' ),
+					'short_description' => __( 'Customizer for sticky header, notification bar, alert, promo code, marketing campaign, top banner.', 'filebird' ),
 					'icon'              => 'https://ps.w.org/notibar/assets/icon-256x256.png?rev=2387855',
 					'download_link'     => 'https://downloads.wordpress.org/plugin/notibar.zip',
 					'type'              => array( 'marketing' ),
@@ -157,11 +157,11 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 
 		public function recommended_plugins_view() {
 			if ( function_exists( 'WC' ) ) {
-				$featuredTab = '<li class="plugin-install-tab plugin-install-featured" data-tab="featured"><a href="#" >Featured</a> </li>';
-				$wooTab      = '<li class="plugin-install-tab plugin-install-woocommerce" data-tab="woocommerce"><a href="#" class="current" aria-current="page">WooCommerce</a> </li>';
+				$featuredTab = '<li class="plugin-install-tab plugin-install-featured" data-tab="featured"><a href="#" >' . esc_html__( 'Featured', 'filebird' ) . '</a> </li>';
+				$wooTab      = '<li class="plugin-install-tab plugin-install-woocommerce" data-tab="woocommerce"><a href="#" class="current" aria-current="page">' . esc_html__( 'WooCommerce', 'filebird' ) . '</a> </li>';
 			} else {
-				$featuredTab = '<li class="plugin-install-tab plugin-install-featured" data-tab="featured"><a href="#" class="current" aria-current="page">Featured</a> </li>';
-				$wooTab      = '<li class="plugin-install-tab plugin-install-woocommerce" data-tab="woocommerce"><a href="#" >WooCommerce</a> </li>';
+				$featuredTab = '<li class="plugin-install-tab plugin-install-featured" data-tab="featured"><a href="#" class="current" aria-current="page">' . esc_html__( 'Featured', 'filebird' ) . '</a> </li>';
+				$wooTab      = '<li class="plugin-install-tab plugin-install-woocommerce" data-tab="woocommerce"><a href="#" >' . esc_html__( 'WooCommerce', 'filebird' ) . '</a> </li>';
 			}
 			?>
 			<style>
@@ -247,12 +247,12 @@ if ( ! class_exists( 'YayRecommended' ) ) {
 								<?php
 								 echo wp_kses_post( $featuredTab );
 								?>
-								<li class="plugin-install-tab plugin-install-all" data-tab="all"><a href="#">All</a></li>
+								<li class="plugin-install-tab plugin-install-all" data-tab="all"><a href="#"><?php esc_html_e( 'All', 'filebird' ); ?></a></li>
 								<?php
 								 echo wp_kses_post( $wooTab );
 								?>
-								<li class="plugin-install-tab plugin-install-management" data-tab="management"><a href="#">Management</a> </li>
-								<li class="plugin-install-tab plugin-install-marketing" data-tab="marketing"><a href="#">Marketing</a></li>
+								<li class="plugin-install-tab plugin-install-management" data-tab="management"><a href="#"><?php esc_html_e( 'Management', 'filebird' ); ?></a> </li>
+								<li class="plugin-install-tab plugin-install-marketing" data-tab="marketing"><a href="#"><?php esc_html_e( 'Marketing', 'filebird' ); ?></a></li>
 							</ul>
 						</div>
 					</div>

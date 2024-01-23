@@ -34,6 +34,19 @@ defined( 'ABSPATH' ) || exit;
     </tr>
     <tr>
         <th scope="row">
+            <label for="njt_fbv_allow_svg_upload"><?php esc_html_e( 'Allow built-in SVG upload & sanitization', 'filebird' ); ?></label>
+        </th>
+        <td>
+            <label class="njt-switch">
+                <input value="1" type="checkbox" name="njt_fbv_allow_svg_upload" class="njt-submittable" id="njt_fbv_allow_svg_upload" <?php checked( get_option( 'njt_fbv_allow_svg_upload' ), '1' ); ?> />/>
+                <span class="slider round">
+                    <span class="njt-switch-cursor"></span>
+                </span>
+            </label>
+        </td>
+    </tr>
+    <tr>
+        <th scope="row">
             <label><?php esc_html_e( 'Folder Counter', 'filebird' ); ?></label>
         </th>
         <td>

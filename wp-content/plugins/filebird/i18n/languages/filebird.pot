@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: FileBird\n"
-"POT-Creation-Date: 2023-08-01 14:08+0700\n"
+"POT-Creation-Date: 2024-01-06 10:09+0700\n"
 "PO-Revision-Date: 2020-12-18 14:31+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4.1\n"
 "X-Poedit-Basepath: ../..\n"
 "X-Poedit-Flags-xgettext: --add-comments=translators:\n"
 "X-Poedit-WPHeader: filebird.php\n"
@@ -246,27 +246,31 @@ msgstr ""
 msgid "Later"
 msgstr ""
 
+#: build/filebird-lite/includes/Classes/Svg.php:54 includes/Classes/Svg.php:57
+msgid "This file couldn't be uploaded."
+msgstr ""
+
 #: build/filebird-lite/includes/Controller/Api.php:107
 #: includes/Controller/Api.php:107
 msgid "Invalid action"
 msgstr ""
 
-#: build/filebird-lite/includes/Controller/Api.php:139
-#: build/filebird-lite/includes/Controller/Api.php:170
-#: includes/Controller/Api.php:139 includes/Controller/Api.php:170
+#: build/filebird-lite/includes/Controller/Api.php:153
+#: build/filebird-lite/includes/Controller/Api.php:184
+#: includes/Controller/Api.php:153 includes/Controller/Api.php:184
 msgid "folder_id is missing."
 msgstr ""
 
-#: build/filebird-lite/includes/Controller/Api.php:184
-#: includes/Controller/Api.php:184
+#: build/filebird-lite/includes/Controller/Api.php:198
+#: includes/Controller/Api.php:198
 msgid "Required fields are missing."
 msgstr ""
 
-#: build/filebird-lite/includes/Controller/Api.php:205
+#: build/filebird-lite/includes/Controller/Api.php:219
 #: build/filebird-lite/includes/Controller/Folder.php:501
 #: build/filebird-lite/includes/Controller/Folder.php:572
 #: build/filebird-lite/includes/Controller/Folder.php:591
-#: includes/Controller/Api.php:205 includes/Controller/Folder.php:501
+#: includes/Controller/Api.php:219 includes/Controller/Folder.php:501
 #: includes/Controller/Folder.php:572 includes/Controller/Folder.php:591
 msgid "Validation failed"
 msgstr ""
@@ -687,13 +691,13 @@ msgstr ""
 
 #: build/filebird-lite/includes/I18n.php:129
 #: build/filebird-lite/views/pages/html-settings.php:26 includes/I18n.php:129
-#: views/pages/html-settings.php:26
+#: includes/Page/Settings.php:109 views/pages/html-settings.php:26
 msgid "Settings"
 msgstr ""
 
 #: build/filebird-lite/includes/I18n.php:130
 #: build/filebird-lite/views/pages/html-settings.php:60 includes/I18n.php:130
-#: views/pages/html-settings.php:60
+#: includes/Page/Settings.php:36 views/pages/html-settings.php:60
 msgid "FileBird Settings"
 msgstr ""
 
@@ -870,6 +874,10 @@ msgstr ""
 
 #: build/filebird-lite/includes/I18n.php:173 includes/I18n.php:173
 msgid "Add Folder"
+msgstr ""
+
+#: build/filebird-lite/includes/I18n.php:174 includes/I18n.php:174
+msgid "Contact Support"
 msgstr ""
 
 #: build/filebird-lite/includes/Page/Settings.php:98
@@ -1368,36 +1376,37 @@ msgid "Show Breadcrumb"
 msgstr ""
 
 #: build/filebird-lite/views/pages/settings/tab-settings.php:37
-#: views/pages/settings/tab-settings.php:37
+#: views/pages/settings/tab-settings.php:50
 msgid "Folder Counter"
 msgstr ""
 
 #: build/filebird-lite/views/pages/settings/tab-settings.php:42
-#: views/pages/settings/tab-settings.php:42
+#: views/pages/settings/tab-settings.php:55
 msgid "Count files in each folder"
 msgstr ""
 
 #: build/filebird-lite/views/pages/settings/tab-settings.php:45
-msgid "Count files in both parent folder and subfolders"
+#: views/pages/settings/tab-settings.php:58
+msgid "Count files in both parent folder and subfolders (PRO)"
 msgstr ""
 
 #: build/filebird-lite/views/pages/settings/tab-settings.php:52
-#: views/pages/settings/tab-settings.php:52
+#: views/pages/settings/tab-settings.php:65
 msgid "FileBird Theme"
 msgstr ""
 
 #: build/filebird-lite/views/pages/settings/tab-settings.php:62
-#: views/pages/settings/tab-settings.php:62
+#: views/pages/settings/tab-settings.php:75
 msgid "FileBird Default"
 msgstr ""
 
 #: build/filebird-lite/views/pages/settings/tab-settings.php:71
-#: views/pages/settings/tab-settings.php:71
+#: views/pages/settings/tab-settings.php:84
 msgid "Windows 11"
 msgstr ""
 
 #: build/filebird-lite/views/pages/settings/tab-settings.php:80
-#: views/pages/settings/tab-settings.php:80
+#: views/pages/settings/tab-settings.php:93
 msgid "Dropbox"
 msgstr ""
 
@@ -1482,8 +1491,159 @@ msgstr ""
 msgid "Choose folder: "
 msgstr ""
 
-#: views/pages/settings/tab-settings.php:45
-msgid "Count files in both parent folder and subfolders (PRO)"
+#: includes/Recommended/Recommended.php:35
+msgid "FileBird - WordPress Media Library Folders & File Manager"
+msgstr ""
+
+#: includes/Recommended/Recommended.php:36
+msgid ""
+"Organize thousands of WordPress media files in folders / categories at ease."
+msgstr ""
+
+#: includes/Recommended/Recommended.php:44
+msgid "YayMail - WooCommerce Email Customizer"
+msgstr ""
+
+#: includes/Recommended/Recommended.php:45
+msgid ""
+"Customize WooCommerce email templates with live preview & drag and drop "
+"email builder."
+msgstr ""
+
+#: includes/Recommended/Recommended.php:53
+msgid "YayCurrency - WooCommerce Multi-Currency Switcher"
+msgstr ""
+
+#: includes/Recommended/Recommended.php:54
+msgid "WooCommerce Multi-Currency made easy, powerful, and flexible."
+msgstr ""
+
+#: includes/Recommended/Recommended.php:62
+msgid "YaySwatches - Variation Swatches for WooCommerce"
+msgstr ""
+
+#: includes/Recommended/Recommended.php:63
+msgid ""
+"Optimize your variable product showcase with color swatches, image swatches, "
+"custom images, buttons, and more!"
+msgstr ""
+
+#: includes/Recommended/Recommended.php:71
+msgid "YayExtra - WooCommerce Extra Product Options"
+msgstr ""
+
+#: includes/Recommended/Recommended.php:72
+msgid ""
+"Add WooCommerce product options like personal engraving, print-on-demand "
+"items, gifts, custom canvas prints, and personalized products."
+msgstr ""
+
+#: includes/Recommended/Recommended.php:80
+msgid "YayPricing - WooCommerce Dynamic Pricing & Discounts"
+msgstr ""
+
+#: includes/Recommended/Recommended.php:81
+msgid ""
+"Offer automatic pricing and discounts to design a powerful marketing "
+"strategy for your WooCommerce store."
+msgstr ""
+
+#: includes/Recommended/Recommended.php:89
+msgid "YaySMTP - Simple WP SMTP Mail"
+msgstr ""
+
+#: includes/Recommended/Recommended.php:90
+msgid ""
+"Send WordPress emails successfully with WP Mail SMTP via your favorite "
+"Mailer."
+msgstr ""
+
+#: includes/Recommended/Recommended.php:98
+msgid "WP Chat App"
+msgstr ""
+
+#: includes/Recommended/Recommended.php:99
+msgid "Integrate WhatsApp experience directly into your WordPress website."
+msgstr ""
+
+#: includes/Recommended/Recommended.php:107
+msgid "Filester - File Manager Pro"
+msgstr ""
+
+#: includes/Recommended/Recommended.php:108
+msgid ""
+"Best WordPress file manager without FTP access. Clean design. No need to "
+"upgrade because this…"
+msgstr ""
+
+#: includes/Recommended/Recommended.php:116
+msgid "Multi Step for Contact Form 7"
+msgstr ""
+
+#: includes/Recommended/Recommended.php:117
+msgid "Break your looooooong form into user-friendly steps."
+msgstr ""
+
+#: includes/Recommended/Recommended.php:125
+msgid "Database for Contact Form 7"
+msgstr ""
+
+#: includes/Recommended/Recommended.php:126
+msgid ""
+"Automatically save all data submitted via Contact Form 7 to your database."
+msgstr ""
+
+#: includes/Recommended/Recommended.php:134
+msgid "WP Duplicate Page"
+msgstr ""
+
+#: includes/Recommended/Recommended.php:135
+msgid "Clone WordPress page, post, custom post types."
+msgstr ""
+
+#: includes/Recommended/Recommended.php:143
+msgid "Notibar - Notification Bar for WordPress"
+msgstr ""
+
+#: includes/Recommended/Recommended.php:144
+msgid ""
+"Customizer for sticky header, notification bar, alert, promo code, marketing "
+"campaign, top banner."
+msgstr ""
+
+#: includes/Recommended/Recommended.php:160
+#: includes/Recommended/Recommended.php:163
+msgid "Featured"
+msgstr ""
+
+#: includes/Recommended/Recommended.php:161
+#: includes/Recommended/Recommended.php:164
+msgid "WooCommerce"
+msgstr ""
+
+#: includes/Recommended/Recommended.php:250
+msgid "All"
+msgstr ""
+
+#: includes/Recommended/Recommended.php:254
+msgid "Management"
+msgstr ""
+
+#: includes/Recommended/Recommended.php:255
+msgid "Marketing"
+msgstr ""
+
+#: includes/Recommended/views/content.php:42
+#: includes/Recommended/views/content.php:95
+msgid "Not installed"
+msgstr ""
+
+#: includes/Recommended/views/content.php:274
+msgid "Status"
+msgstr ""
+
+#: views/pages/settings/tab-settings.php:37
+msgid "Allow built-in SVG upload & sanitization"
 msgstr ""
 
 #. Plugin Name of the plugin/theme
