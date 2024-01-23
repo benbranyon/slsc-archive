@@ -33,7 +33,7 @@ class Settings {
 
 		add_menu_page( 'FileBird', 'FileBird', 'manage_options', 'filebird-settings', null, $filebirdIcon );
 
-		$this->settingPageSuffix = add_submenu_page( 'filebird-settings', 'FileBird Settings', 'FileBird Settings', 'manage_options', 'filebird-settings', array( $this, 'settingsPage' ), 0 );
+		$this->settingPageSuffix = add_submenu_page( 'filebird-settings', __( 'FileBird Settings', 'filebird' ), __( 'FileBird Settings', 'filebird' ), 'manage_options', 'filebird-settings', array( $this, 'settingsPage' ), 0 );
 		add_submenu_page(
 			'filebird-settings',
 			'',
@@ -106,7 +106,7 @@ class Settings {
 
 	public function addActionLinks( $links ) {
 		$settingsLinks = array(
-			'<a href="' . admin_url( 'admin.php?page=' . $this->getPageId() ) . '">Settings</a>',
+			'<a href="' . admin_url( 'admin.php?page=' . $this->getPageId() ) . '">' . esc_html__( 'Settings', 'filebird' ) . '</a>',
 		);
 
 		$links[] = '<a target="_blank" href="https://1.envato.market/FileBirdPro" style="color: #43B854; font-weight: bold">' . __( 'Go Pro', 'filebird' ) . '</a>';
@@ -123,6 +123,7 @@ class Settings {
 	public function registerSettings() {
 		$settings = array(
 			'njt_fbv_folder_per_user',
+			'njt_fbv_allow_svg_upload',
 			'njt_fbv_default_folder',
 		);
 		foreach ( $settings as $k => $v ) {

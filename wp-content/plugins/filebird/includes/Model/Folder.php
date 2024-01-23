@@ -171,6 +171,7 @@ class Folder {
 	}
 	public static function updateFolderName( $new_name, $parent, $folder_id ) {
 		global $wpdb;
+		$new_name = sanitize_text_field( wp_unslash( $new_name ) );
 		$check_name = $wpdb->get_row(
 			$wpdb->prepare(
 				"SELECT * FROM {$wpdb->prefix}fbv WHERE id != %d AND name = %s AND parent = %d",
@@ -222,7 +223,7 @@ class Folder {
 		$data = apply_filters(
 			'fbv_data_before_inserting_folder',
 			array(
-				'name'   => $name,
+				'name'   => sanitize_text_field($name),
 				'parent' => $parent,
 				'type'   => 0,
 			)

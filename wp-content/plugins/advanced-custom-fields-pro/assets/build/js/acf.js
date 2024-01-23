@@ -1345,10 +1345,6 @@
     initialize: function () {
       const $notices = $('.acf-admin-notice');
       $notices.each(function () {
-        // Move to avoid WP flicker.
-        if ($(this).length) {
-          $('h1:first').after($(this));
-        }
         if ($(this).data('persisted')) {
           let dismissed = acf.getPreference('dismissed-notices');
           if (dismissed && typeof dismissed == 'object' && dismissed.includes($(this).data('persist-id'))) {
@@ -3965,14 +3961,25 @@
    *
    *  Returns true if the Gutenberg editor is being used.
    *
-   *  @date	14/11/18
    *  @since	5.8.0
    *
-   *  @param	vois
    *  @return	bool
    */
   acf.isGutenberg = function () {
     return !!(window.wp && wp.data && wp.data.select && wp.data.select('core/editor'));
+  };
+
+  /**
+   *  acf.isGutenbergPostEditor
+   *
+   *  Returns true if the Gutenberg post editor is being used.
+   *
+   *  @since	6.2.2
+   *
+   *  @return	bool
+   */
+  acf.isGutenbergPostEditor = function () {
+    return !!(window.wp && wp.data && wp.data.select && wp.data.select('core/edit-post'));
   };
 
   /**
@@ -4244,6 +4251,19 @@
     //$el.on('acfFocus', onFocus);
     $el.on('focus', 'input, select, textarea', onFocus);
     //$el.data('acf.onFocus', true);
+  };
+
+  /**
+   * Disable form submit buttons
+   *
+   * @since 6.2.3
+   *
+   * @param event e
+   * @returns void
+   */
+  acf.disableForm = function (e) {
+    // Disable submit button.
+    if (e.submitter) e.submitter.classList.add('disabled');
   };
 
   /*

@@ -10,7 +10,7 @@ $countWpmfFolder      = count( Helpers::foldersFromWpmf( 0, true ) );
 $countRealMediaFolder = count( Helpers::foldersFromRealMedia( -1, true ) );
 $countHappyFiles      = count( Helpers::foldersFromHappyFiles( 0, true ) );
 $countPremioFolder    = count( Helpers::foldersFromPremio( 0, true ) );
-$countFemlFolder      = count( Helpers::foldersFromWpfeml(0, true ) );
+$countFemlFolder      = count( Helpers::foldersFromWpfeml( 0, true ) );
 $countFBOldFolder     = apply_filters( 'fbv_update_database_notice', false ) ? 1 : Convert::countOldFolders();
 
 $tabs        = array(
@@ -57,7 +57,7 @@ $current_tab = ( isset( $_GET['tab'] ) ? $_GET['tab'] : $tabs[0]['id'] );
 $tabs        = apply_filters( 'fbv_settings_tabs', $tabs );
 ?>
 <div class="wrap">
-  <h1><?php esc_html_e( 'FileBird Settings' ); ?></h1>
+  <h1><?php esc_html_e( 'FileBird Settings', 'filebird' ); ?></h1>
   <form action="options.php" method="POST" id="fbv-setting-form" autocomplete="off">
 	<?php settings_fields( 'njt_fbv' ); ?>
 	<?php do_settings_sections( 'njt_fbv' ); ?>
