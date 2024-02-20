@@ -76,9 +76,6 @@
 				}
 				subscribe = !!parseInt(subscriptionOption.data('value'));
 			}
-			var consent = context.find('#wf-onboarding-consent-input').prop('checked');
-			if (!consent)
-				return enable(false);
 			var attempt = context.data('attempt');
 			var optionKey = 'onboardingAttempt' + attempt;
 			var optionValueEmail = context.data('option-value-email');
@@ -95,7 +92,7 @@
 									email
 								],
 								subscribe,
-								!!consent,
+								null,
 								function(success, error) {
 									if (!success) {
 										showRegistrationModal('error', error);

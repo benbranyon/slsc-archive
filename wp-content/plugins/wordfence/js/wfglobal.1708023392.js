@@ -38,6 +38,23 @@
 					function(){ jQuery('#wordfenceMisconfiguredHowGetIPsNotice').fadeOut(); }
 				);
 			},
+			centralUrlMismatchChoice : function(choice) {
+				var payload = {};
+				switch (choice) {
+					case 'local':
+						payload['local'] = true;
+						break;
+					case 'global':
+						payload['force'] = true;
+						break;
+					case 'dismiss':
+						payload['dismiss'] = true;
+				}
+				this.ajax('wordfence_wfcentral_disconnect', payload,
+					function(res) { jQuery('#wordfenceMismatchedCentralUrlNotice').fadeOut(); },
+					function() { jQuery('#wordfenceMismatchedCentralUrlNotice').fadeOut(); }
+				);
+			},
 			switchLiveTrafficSecurityOnlyChoice: function(choice) {
 				this.ajax('wordfence_switchLiveTrafficSecurityOnlyChoice', {
 						choice: choice
