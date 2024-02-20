@@ -1,11 +1,11 @@
 === WP-CFM ===
-Contributors: mgibbs189, elvismdev, mickaelperrin, alfreddatakillen, joshlevinson, jmslbam, gbeezus, tnolte
+Contributors: forum1, mgibbs189, elvismdev, mickaelperrin, alfreddatakillen, joshlevinson, jmslbam, gbeezus, tnolte, dsteersf1, jgleisner
 Tags: configuration, settings, configuration management, features, wordpress, wp-cli
 Donate link: http://forumone.com/
 Requires at least: 4.7
-Tested up to: 6.3.2
+Tested up to: 6.4.3
 Requires PHP: 7.4
-Stable tag: 1.7.8
+Stable tag: 1.7.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -69,9 +69,10 @@ See the filters reference page at the [GitHub Wiki](https://github.com/forumone/
 
 <!-- [START AUTO UPDATE] -->
 <!-- Please keep comment here to allow auto-update -->
-= 1.7.8 =
+= 1.7.10 =
 ### :bug: Bug Fixes
-- [](https://github.com/forumone/wp-cfm/commit/4e13f08df6419656742e25f89f73dc9af826aeb5) - **deploy**: Fixes GHA for WP.org Deployments *(PR #167 by @timnolte)*
+- [](https://github.com/forumone/wp-cfm/commit/2304a6c5e4fe7c42f306af08c3fabd1de141bff5) - **Assets**: Fixes missing asset updates *(PR #177 by @timnolte)*
+  - :arrow_lower_right: *fixes issue #176 opened by @tych095*
 <!-- [END AUTO UPDATE] -->
 
 --------

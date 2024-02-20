@@ -27,6 +27,9 @@ sitemap.xml.gz
 wp-config.php
 .user.ini
 /.htaccess
+wp-content/plugins/acf-content-analysis-for-yoast-seo/.cache
+wp-content/.htaccess
+wp-content/themes/twentytwentyfour/
 
 # Logs and databases #
 ######################
