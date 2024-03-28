@@ -317,7 +317,6 @@ class Controller_Users {
 	 */
 	public function record_captcha_score($user, $score) {
 		if (!Controller_CAPTCHA::shared()->enabled()) { return; }
-		if ($this->has_2fa_active($user)) { return; } //2FA activated users do not retrieve a score
 		
 		if ($user) { update_user_meta($user->ID, 'wfls-last-captcha-score', $score); }
 		$stats = Controller_Settings::shared()->get_array(Controller_Settings::OPTION_CAPTCHA_STATS);
