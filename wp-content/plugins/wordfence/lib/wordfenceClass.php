@@ -183,13 +183,9 @@ class wordfence {
 
 		wfVersionCheckController::shared()->checkVersionsAndWarn();
 		
-		$scanLastCompletion = (int) wfScanner::shared()->lastScanTime();
-		if (time() - $scanLastCompletion > 28800 /* 8 hours */ && ((int) (wfConfig::get('lastQuickScan', 0) / 86400)) < ((int) (time() / 86400))) {
-			$next = self::getNextScanStartTimestamp();
-			if ($next - time() > 3600 && wfConfig::get('scheduledScansEnabled')) {
-				wfConfig::set('lastQuickScan', time());
-				wfScanEngine::startScan(false, wfScanner::SCAN_TYPE_QUICK);
-			}
+		if (wfScanner::shared()->shouldRunQuickScan()) {
+			wfScanner::shared()->recordLastQuickScanTime();
+			wfScanEngine::startScan(false, wfScanner::SCAN_TYPE_QUICK);
 		}
 	}
 	private static function keyAlert($msg){
@@ -1549,10 +1545,10 @@ SQL
 			}
 		}
 		flush();
-		if(!$isCrawler && array_key_exists('hid', $_GET)){
+		if (!$isCrawler && array_key_exists('hid', $_GET)) {
 			$hid = $_GET['hid'];
 			$hid = wfUtils::decrypt($hid);
-			if(! preg_match('/^\d+$/', $hid)){ exit(); }
+			if (!is_string($hid) || !preg_match('/^\d+$/', $hid)) { exit(); }
 			$db = new wfDB();
 			$table_wfHits = wfDB::networkTable('wfHits');
 			$db->queryWrite("update {$table_wfHits} set jsRun=1 where id=%d", $hid);
@@ -1903,11 +1899,15 @@ SQL
 		self::initProtection();
 
 		$wfFunc = isset($_GET['_wfsf']) ? @$_GET['_wfsf'] : false;
-		if($wfFunc == 'unlockEmail'){
-			$nonceValid = wp_verify_nonce(@$_POST['nonce'], 'wf-form');
-			if (!$nonceValid && method_exists(wfWAF::getInstance(), 'createNonce')) {
-				$nonceValid = wfWAF::getInstance()->verifyNonce(@$_POST['nonce'], 'wf-form');
+		if ($wfFunc == 'unlockEmail') {
+			$nonceValid = false;
+			if (isset($_POST['nonce']) && is_string($_POST['nonce'])) {
+				$nonceValid = wp_verify_nonce($_POST['nonce'], 'wf-form');
+				if (!$nonceValid && method_exists(wfWAF::getInstance(), 'createNonce')) {
+					$nonceValid = wfWAF::getInstance()->verifyNonce($_POST['nonce'], 'wf-form');
+				}
 			}
+			
 			if(!$nonceValid){
 				die(__("Sorry but your browser sent an invalid security token when trying to use this form.", 'wordfence'));
 			}
@@ -3869,7 +3869,7 @@ SQL
 	}
 	public static function getNextScanStartTime($nextTime = null) {
 		if ($nextTime === null) {
-			$nextTime = self::getNextScanStartTimestamp();
+			$nextTime = wfScanner::shared()->nextScheduledScanTime();
 		}
 		
 		if (!$nextTime) {

@@ -411,7 +411,7 @@ if ($q) {
 		if ($hasAll) {
 			_e('All Tables Exist', 'wordfence');
 		} else {
-			printf(/* translators: 1. WordPress table prefix. 2. Wordfence tables. */ __('Tables missing (prefix %1$s, %2$s): %s', 'wordfence'), wfDB::networkPrefix(), wfSchema::usingLowercase() ? __('lowercase', 'wordfence') : __('regular case', 'wordfence'), implode(', ', $missingTables));
+			printf(/* translators: 1. WordPress table prefix. 2. Wordfence table case. 3. List of database tables. */ __('Tables missing (prefix %1$s, %2$s): %3$s', 'wordfence'), wfDB::networkPrefix(), wfSchema::usingLowercase() ? __('lowercase', 'wordfence') : __('regular case', 'wordfence'), implode(', ', $missingTables));
 		}
 	}
 	

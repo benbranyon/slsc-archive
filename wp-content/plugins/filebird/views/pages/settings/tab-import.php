@@ -1,5 +1,5 @@
 <div id="fbv-import-setting">
-	<?php if ( ( $countEnhancedFolder + $countWpmlfFolder + $countWpmfFolder + $countRealMediaFolder + $countHappyFiles + $countPremioFolder + $countFemlFolder ) > 0 ) : ?>
+	<?php if ( ( $countEnhancedFolder + $countWpmlfFolder + $countWpmfFolder + $countRealMediaFolder + $countHappyFiles + $countPremioFolder + $countFemlFolder + $countMediamaticFolder ) > 0 ) : ?>
 		<h2><?php esc_html_e( 'Import', 'filebird' ); ?></h2>
 	<p>
 		<?php esc_html_e( 'Import categories/folders from other plugins. We import virtual folders, your website will be safe, don\'t worry ;)', 'filebird' ); ?>
@@ -160,6 +160,28 @@
                     </p>
                 </td>
             </tr>
+			<tr class="<?php echo esc_attr( $countMediamaticFolder <= 3 ? 'hidden' : '' ); ?>">
+				<th scope="row">
+					<label for="">
+						<?php esc_html_e( 'Mediamatic by Plugincraft ', 'filebird' ); ?>
+					</label>
+				</th>
+				<td>
+					<?php if ( $countMediamaticFolder > 0 ) : ?>
+					<button class="button button-primary button-large njt-fb-import njt-button-loading"
+						data-site="mediamatic" type="button"
+						data-count="<?php echo esc_attr( $countMediamaticFolder ); ?>"><?php esc_html_e( 'Import Now', 'filebird' ); ?></button>
+					<?php endif; ?>
+					<p class="description">
+						<?php
+						echo sprintf( esc_html__( 'We found you have %1$s(%2$s)%3$s categories you created from %4$sFolders%5$s plugin.', 'filebird' ), '<strong>', esc_html( $countMediamaticFolder ), '</strong>', '<strong>', '</strong>' );
+						if ( $countMediamaticFolder > 0 ) {
+							echo sprintf( esc_html__( ' Would you like to import to %1$sFileBird%2$s?', 'filebird' ), '<strong>', '</strong>' );
+						}
+						?>
+					</p>
+				</td>
+			</tr>
 		</tbody>
 	</table>
 	<div class="fbv-row-breakline">

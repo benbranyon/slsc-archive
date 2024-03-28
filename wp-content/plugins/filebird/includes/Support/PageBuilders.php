@@ -99,6 +99,11 @@ class PageBuilders {
 		if ( class_exists( 'YOOtheme\Builder' ) ) {
 			$this->registerYooTheme();
 		}
+
+		// Zion Builder
+		if ( class_exists( 'ZionBuilder\Plugin' ) || function_exists( 'znb_kallyas_integration' ) ) {
+			$this->registerZionBuilder();
+		}
 	}
 
 	public function enqueueScripts( $is_enqueue_media = false, $is_enqueue_footer = false ) {
@@ -236,5 +241,15 @@ class PageBuilders {
 
 	public function registerYooTheme() {
 		add_action( 'admin_print_footer_scripts-yootheme_customizer', array( $this, 'enqueueScripts' ) );
+	}
+
+	public function registerZionBuilder() {
+		if ( class_exists( 'ZionBuilder\Plugin' ) ) {
+			add_action( 'zionbuilder/editor/before_scripts', array( $this, 'enqueueScripts' ) );
+		}
+
+		if ( function_exists( 'znb_kallyas_integration' ) ) {
+			add_action( 'znpb_editor_after_load_scripts', array( $this, 'enqueueScripts' ) );
+		}
 	}
 }

@@ -155,6 +155,11 @@ class Convert {
 			$oldFemlFolders = $this->getOldFolders( 'feml', true );
 		}
 
+		$oldMediamaticFolders = array();
+		if ( ! $this->isUpdated( 'mediamatic' ) && ! $this->isNoThanks( 'mediamatic' ) ) {
+			$oldMediamaticFolders = $this->getOldFolders( 'mediamatic', true );
+		}
+
 		if ( count( $oldEnhancedFolders ) > 3 ) {
 			$sites[] = array(
 				'site'  => 'enhanced',
@@ -206,6 +211,14 @@ class Convert {
 			);
 		}
 
+		if ( count( $oldMediamaticFolders ) > 3 ) {
+			$sites[] = array(
+				'site'  => 'mediamatic',
+				'title' => 'Mediamatic',
+				'desc'  => $this->plugin_import_description( count( $oldMediamaticFolders ), 'Mediamatic' ),
+			);
+		}
+
 		return $sites;
 	}
 
@@ -243,6 +256,11 @@ class Convert {
 			$oldHappyFilesFolders = $this->getOldFolders( 'happyfiles', true );
 		}
 
+		$oldMediamaticFolders = array();
+		if ( ! $this->isUpdated( 'mediamatic' ) && ! $this->isNoThanks( 'mediamatic' ) ) {
+			$oldMediamaticFolders = $this->getOldFolders( 'mediamatic', true );
+		}
+
 		if ( count( $oldEnhancedFolders ) > 3 ) {
 			$sites[] = array(
 				'site'  => 'enhanced',
@@ -273,6 +291,13 @@ class Convert {
 				'title' => 'HappyFiles',
 			);
 		}
+		if ( count( $oldMediamaticFolders ) > 3 ) {
+			$sites[] = array(
+				'site'  => 'mediamatic',
+				'title' => 'Mediamatic',
+			);
+		}
+
 		foreach ( $sites as $k => $site ) :
 			$c = 0;
 			if ( $site['site'] == 'enhanced' ) {
@@ -285,6 +310,8 @@ class Convert {
 				$c = count( $oldRealMediaFolders );
 			} elseif ( $site['site'] == 'happyfiles' ) {
 				$c = count( $oldHappyFilesFolders );
+			} elseif ( $site['site'] == 'mediamatic' ) {
+				$c = count( $oldMediamaticFolders );
 			}
 			?>
 		  <div class="njt notice notice-warning <?php echo esc_attr( $site['site'] ); ?> is-dismissible">
@@ -335,6 +362,8 @@ class Convert {
 			update_option( 'njt_fb_premio_no_thanks', '1' );
 		} elseif ( $site == 'feml' ) {
 			update_option( 'njt_fb_feml_no_thanks', '1' );
+		} elseif ( $site == 'mediamatic' ) {
+			update_option( 'njt_fb_mediamatic_no_thanks', '1' );
 		} elseif ( $site == 'all' ) {
 			update_option( 'njt_fb_happyfiles_no_thanks', '1' );
 			update_option( 'njt_fb_realmedia_no_thanks', '1' );
@@ -343,6 +372,7 @@ class Convert {
 			update_option( 'njt_fb_wpmlf_no_thanks', '1' );
 			update_option( 'njt_fb_premio_no_thanks', '1' );
 			update_option( 'njt_fb_feml_no_thanks', '1' );
+			update_option( 'njt_fb_mediamatic_no_thanks', '1' );
 		}
 
 		wp_send_json_success(
@@ -401,6 +431,7 @@ class Convert {
 			update_option( 'njt_fb_updated_from_realmedia', '0' );
 			update_option( 'njt_fb_updated_from_happyfiles', '0' );
 			update_option( 'njt_fb_updated_from_feml', '0' );
+			update_option( 'njt_fb_updated_from_mediamatic', '0' );
 
 			wp_send_json_success(
 				array(
@@ -433,6 +464,8 @@ class Convert {
 			$is = get_option( 'njt_fb_updated_from_premio', '0' ) === '1';
 		} elseif ( $site == 'feml' ) {
 			$is = get_option( 'njt_fb_updated_from_feml', '0' ) === '1';
+		} elseif ( $site == 'mediamatic' ) {
+			$is = get_option( 'njt_fb_updated_from_mediamatic', '0' ) === '1';
 		}
 
 		return $is;
@@ -452,6 +485,8 @@ class Convert {
 			return get_option( 'njt_fb_premio_no_thanks', '0' ) === '1';
 		} elseif ( $site == 'feml' ) {
 			return get_option( 'njt_fb_feml_no_thanks', '0' ) === '1';
+		} elseif ( $site == 'mediamatic' ) {
+			return get_option( 'njt_fb_mediamatic_no_thanks', '0' ) === '1';
 		}
 	}
 
@@ -567,6 +602,15 @@ class Convert {
 				);
 				exit();
 			}
+		} elseif ( $site == 'mediamatic' ) {
+			if ( get_option( 'njt_fb_updated_from_mediamatic', '0' ) == '1' ) {
+				wp_send_json_success(
+					array(
+						'mess' => __( 'Already Updated', 'filebird' ),
+					)
+				);
+				exit();
+			}
 		}
 	}
 	public function getOldFolders( $site, $flat = false ) {
@@ -588,6 +632,8 @@ class Convert {
 			$folders = Helpers::foldersFromPremio( 0, $flat );
 		} elseif ( $site == 'feml' ) {
 			$folders = Helpers::foldersFromWpfeml( 0, $flat );
+		} elseif ( $site == 'mediamatic' ) {
+			$folders = Helpers::foldersFromMediamatic( 0, $flat );
 		}
 		return $folders;
 	}
@@ -639,6 +685,8 @@ class Convert {
 			$att = $wpdb->get_col( $wpdb->prepare( "SELECT object_id FROM $wpdb->term_relationships WHERE term_taxonomy_id = %d", $folder->term_taxonomy_id ) );
 		} elseif ( $site == 'feml' ) {
 			$att = $wpdb->get_col( $wpdb->prepare( "SELECT object_id FROM $wpdb->term_relationships WHERE term_taxonomy_id = %d", $folder->term_taxonomy_id ) );
+		} elseif ( $site == 'mediamatic' ) {
+			$att = $wpdb->get_col( $wpdb->prepare( "SELECT object_id FROM $wpdb->term_relationships WHERE term_taxonomy_id = %d", $folder->term_taxonomy_id ) );
 		}
 		return $att;
 	}
@@ -661,6 +709,8 @@ class Convert {
 			update_option( 'njt_fb_updated_from_premio', '1' );
 		} elseif ( 'feml' === $site ) {
 			update_option( 'njt_fb_updated_from_feml', '1' );
+		} elseif ( $site == 'mediamatic' ) {
+			update_option( 'njt_fb_updated_from_mediamatic', '1' );
 		}
 	}
 

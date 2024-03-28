@@ -3,8 +3,8 @@ Contributors: ninjateam
 Donate link: https://ninjateam.org/wordpress-media-library-folders/ 
 Tags: wordpress media library folders, file manager, folders, media, gallery, media folder
 Requires at least: 3.0
-Tested up to: 6.4.2
-Stable tag: 5.6.1
+Tested up to: 6.4.3
+Stable tag: 5.6.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -208,6 +208,15 @@ Happy Organizing! 😍
 
 
 == Changelog ==
+
+= Mar 11, 2024 - Version 5.6.3 =
+- Fixed: Compatible with PHP 8.2
+- Added: Show Buy Banner in Zion Builder
+
+= Mar 2, 2024 - Version 5.6.2 =
+- Updated: Open for Elementor free version 
+- Added: Import folder from Mediamatic plugin
+- Improved: Image gallery
 
 = Jan 19, 2024 - Version 5.6.1 =
 - Fixed: XSS vulnerability 

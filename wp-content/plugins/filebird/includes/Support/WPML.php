@@ -12,6 +12,7 @@ class WPML extends Controller {
 	private $lang;
 	private $wpdb;
 	private $table_icl_translations;
+	private $cpt_sync_options;
 
 	public function __construct() {
 		global $sitepress, $wpdb;

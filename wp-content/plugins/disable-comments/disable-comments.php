@@ -4,7 +4,7 @@
  * Plugin Name: Disable Comments
  * Plugin URI: https://wordpress.org/plugins/disable-comments/
  * Description: Allows administrators to globally disable comments on their site. Comments can be disabled according to post type. You could bulk delete comments using Tools.
- * Version: 2.4.5
+ * Version: 2.4.6
  * Author: WPDeveloper
  * Author URI: https://wpdeveloper.com
  * License: GPL-3.0+
@@ -41,7 +41,7 @@ class Disable_Comments
 
 	function __construct()
 	{
-		define('DC_VERSION', '2.4.5');
+		define('DC_VERSION', '2.4.6');
 		define('DC_PLUGIN_SLUG', 'disable_comments_settings');
 		define('DC_PLUGIN_ROOT_PATH', dirname(__FILE__));
 		define('DC_PLUGIN_VIEWS_PATH', DC_PLUGIN_ROOT_PATH . '/views/');
@@ -389,10 +389,6 @@ class Disable_Comments
 					remove_post_type_support($type, 'trackbacks');
 				}
 			}
-			add_filter('comments_array', array($this, 'filter_existing_comments'), 20, 2);
-			add_filter('comments_open', array($this, 'filter_comment_status'), 20, 2);
-			add_filter('pings_open', array($this, 'filter_comment_status'), 20, 2);
-			add_filter('get_comments_number', array($this, 'filter_comments_number'), 20, 2);
 		} elseif (is_admin() && !$this->is_configured()) {
 			/**
 			 * It is possible that $disabled_post_types is empty if other
@@ -401,6 +397,13 @@ class Disable_Comments
 			 * shouldn't be using this plugin.
 			 */
 			add_action('all_admin_notices', array($this, 'setup_notice'));
+		}
+
+		if ($this->is_remove_everywhere() || (!empty($disabled_post_types) && !$this->is_exclude_by_role())) {
+			add_filter('comments_array', array($this, 'filter_existing_comments'), 20, 2);
+			add_filter('comments_open', array($this, 'filter_comment_status'), 20, 2);
+			add_filter('pings_open', array($this, 'filter_comment_status'), 20, 2);
+			add_filter('get_comments_number', array($this, 'filter_comments_number'), 20, 2);
 		}
 
 		// Filters for the admin only.
