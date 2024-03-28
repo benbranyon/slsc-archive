@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: FileBird\n"
-"POT-Creation-Date: 2024-01-06 10:09+0700\n"
+"POT-Creation-Date: 2024-03-01 09:43+0700\n"
 "PO-Revision-Date: 2020-12-18 14:31+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
-"X-Generator: Poedit 3.4.1\n"
+"X-Generator: Poedit 3.4.2\n"
 "X-Poedit-Basepath: ../..\n"
 "X-Poedit-Flags-xgettext: --add-comments=translators:\n"
 "X-Poedit-WPHeader: filebird.php\n"
@@ -125,20 +125,20 @@ msgid "Sort Type"
 msgstr ""
 
 #: build/filebird-lite/includes/Classes/Convert.php:111
-#: build/filebird-lite/includes/Classes/Convert.php:295
-#: includes/Classes/Convert.php:111 includes/Classes/Convert.php:295
+#: build/filebird-lite/includes/Classes/Convert.php:322
+#: includes/Classes/Convert.php:111 includes/Classes/Convert.php:322
 #, php-format
 msgid ""
 "We found you have %1$s categories you created from <strong>%2$s</strong> "
 "plugin. Would you like to import it to <strong>FileBird</strong>?"
 msgstr ""
 
-#: build/filebird-lite/includes/Classes/Convert.php:292
-#: includes/Classes/Convert.php:292
+#: build/filebird-lite/includes/Classes/Convert.php:319
+#: includes/Classes/Convert.php:319
 msgid "Import categories to FileBird"
 msgstr ""
 
-#: build/filebird-lite/includes/Classes/Convert.php:309
+#: build/filebird-lite/includes/Classes/Convert.php:336
 #: build/filebird-lite/views/pages/settings/tab-import.php:19
 #: build/filebird-lite/views/pages/settings/tab-import.php:41
 #: build/filebird-lite/views/pages/settings/tab-import.php:63
@@ -146,76 +146,79 @@ msgstr ""
 #: build/filebird-lite/views/pages/settings/tab-import.php:107
 #: build/filebird-lite/views/pages/settings/tab-import.php:129
 #: build/filebird-lite/views/pages/settings/tab-import.php:151
-#: build/filebird-lite/views/pages/settings/tab-import.php:206
-#: includes/Classes/Convert.php:309 views/pages/settings/tab-import.php:19
+#: build/filebird-lite/views/pages/settings/tab-import.php:173
+#: build/filebird-lite/views/pages/settings/tab-import.php:228
+#: includes/Classes/Convert.php:336 views/pages/settings/tab-import.php:19
 #: views/pages/settings/tab-import.php:41
 #: views/pages/settings/tab-import.php:63
 #: views/pages/settings/tab-import.php:85
 #: views/pages/settings/tab-import.php:107
 #: views/pages/settings/tab-import.php:129
 #: views/pages/settings/tab-import.php:151
-#: views/pages/settings/tab-import.php:206
+#: views/pages/settings/tab-import.php:173
+#: views/pages/settings/tab-import.php:228
 msgid "Import Now"
 msgstr ""
 
-#: build/filebird-lite/includes/Classes/Convert.php:310
+#: build/filebird-lite/includes/Classes/Convert.php:337
 #: build/filebird-lite/includes/Classes/Review.php:72
-#: build/filebird-lite/includes/I18n.php:151 includes/Classes/Convert.php:310
+#: build/filebird-lite/includes/I18n.php:151 includes/Classes/Convert.php:337
 #: includes/Classes/Review.php:72 includes/I18n.php:151
 msgid "No, thanks"
 msgstr ""
 
-#: build/filebird-lite/includes/Classes/Convert.php:350
-#: includes/Classes/Convert.php:350
+#: build/filebird-lite/includes/Classes/Convert.php:380
+#: includes/Classes/Convert.php:380
 msgid "Success"
 msgstr ""
 
-#: build/filebird-lite/includes/Classes/Convert.php:369
-#: includes/Classes/Convert.php:369
+#: build/filebird-lite/includes/Classes/Convert.php:399
+#: includes/Classes/Convert.php:399
 msgid "success"
 msgstr ""
 
-#: build/filebird-lite/includes/Classes/Convert.php:371
-#: includes/Classes/Convert.php:371
+#: build/filebird-lite/includes/Classes/Convert.php:401
+#: includes/Classes/Convert.php:401
 msgid "validation failed"
 msgstr ""
 
-#: build/filebird-lite/includes/Classes/Convert.php:388
-#: includes/Classes/Convert.php:388
+#: build/filebird-lite/includes/Classes/Convert.php:418
+#: includes/Classes/Convert.php:418
 msgid "Successfully wiped."
 msgstr ""
 
-#: build/filebird-lite/includes/Classes/Convert.php:407
-#: includes/Classes/Convert.php:407
+#: build/filebird-lite/includes/Classes/Convert.php:438
+#: includes/Classes/Convert.php:438
 msgid "Successfully cleared."
 msgstr ""
 
-#: build/filebird-lite/includes/Classes/Convert.php:413
-#: build/filebird-lite/includes/I18n.php:156 includes/Classes/Convert.php:413
+#: build/filebird-lite/includes/Classes/Convert.php:444
+#: build/filebird-lite/includes/I18n.php:156 includes/Classes/Convert.php:444
 #: includes/I18n.php:156
 msgid "Please try again."
 msgstr ""
 
-#: build/filebird-lite/includes/Classes/Convert.php:498
+#: build/filebird-lite/includes/Classes/Convert.php:533
 #: build/filebird-lite/includes/Controller/Folder.php:764
-#: includes/Classes/Convert.php:498 includes/Controller/Folder.php:764
+#: includes/Classes/Convert.php:533 includes/Controller/Folder.php:764
 #, php-format
 msgid ""
 "Congratulations! We imported successfully %d folders into <strong>FileBird.</"
 "strong>"
 msgstr ""
 
-#: build/filebird-lite/includes/Classes/Convert.php:511
-#: build/filebird-lite/includes/Classes/Convert.php:520
-#: build/filebird-lite/includes/Classes/Convert.php:529
-#: build/filebird-lite/includes/Classes/Convert.php:538
-#: build/filebird-lite/includes/Classes/Convert.php:547
-#: build/filebird-lite/includes/Classes/Convert.php:556
-#: build/filebird-lite/includes/Classes/Convert.php:565
-#: includes/Classes/Convert.php:511 includes/Classes/Convert.php:520
-#: includes/Classes/Convert.php:529 includes/Classes/Convert.php:538
-#: includes/Classes/Convert.php:547 includes/Classes/Convert.php:556
-#: includes/Classes/Convert.php:565
+#: build/filebird-lite/includes/Classes/Convert.php:546
+#: build/filebird-lite/includes/Classes/Convert.php:555
+#: build/filebird-lite/includes/Classes/Convert.php:564
+#: build/filebird-lite/includes/Classes/Convert.php:573
+#: build/filebird-lite/includes/Classes/Convert.php:582
+#: build/filebird-lite/includes/Classes/Convert.php:591
+#: build/filebird-lite/includes/Classes/Convert.php:600
+#: build/filebird-lite/includes/Classes/Convert.php:609
+#: includes/Classes/Convert.php:546 includes/Classes/Convert.php:555
+#: includes/Classes/Convert.php:564 includes/Classes/Convert.php:573
+#: includes/Classes/Convert.php:582 includes/Classes/Convert.php:591
+#: includes/Classes/Convert.php:600 includes/Classes/Convert.php:609
 msgid "Already Updated"
 msgstr ""
 
@@ -246,7 +249,7 @@ msgstr ""
 msgid "Later"
 msgstr ""
 
-#: build/filebird-lite/includes/Classes/Svg.php:54 includes/Classes/Svg.php:57
+#: build/filebird-lite/includes/Classes/Svg.php:57 includes/Classes/Svg.php:57
 msgid "This file couldn't be uploaded."
 msgstr ""
 
@@ -690,14 +693,16 @@ msgid "Can not active your License, please try again."
 msgstr ""
 
 #: build/filebird-lite/includes/I18n.php:129
-#: build/filebird-lite/views/pages/html-settings.php:26 includes/I18n.php:129
-#: includes/Page/Settings.php:109 views/pages/html-settings.php:26
+#: build/filebird-lite/includes/Page/Settings.php:109
+#: build/filebird-lite/views/pages/html-settings.php:27 includes/I18n.php:129
+#: includes/Page/Settings.php:109 views/pages/html-settings.php:27
 msgid "Settings"
 msgstr ""
 
 #: build/filebird-lite/includes/I18n.php:130
-#: build/filebird-lite/views/pages/html-settings.php:60 includes/I18n.php:130
-#: includes/Page/Settings.php:36 views/pages/html-settings.php:60
+#: build/filebird-lite/includes/Page/Settings.php:36
+#: build/filebird-lite/views/pages/html-settings.php:62 includes/I18n.php:130
+#: includes/Page/Settings.php:36 views/pages/html-settings.php:62
 msgid "FileBird Settings"
 msgstr ""
 
@@ -736,9 +741,9 @@ msgstr ""
 #: build/filebird-lite/includes/I18n.php:138
 #: build/filebird-lite/includes/Page/Settings.php:40
 #: build/filebird-lite/includes/Page/Settings.php:112
-#: build/filebird-lite/views/pages/html-settings.php:19 includes/I18n.php:138
+#: build/filebird-lite/views/pages/html-settings.php:20 includes/I18n.php:138
 #: includes/Page/Settings.php:40 includes/Page/Settings.php:112
-#: views/pages/html-settings.php:19
+#: views/pages/html-settings.php:20
 msgid "Go Pro"
 msgstr ""
 
@@ -885,6 +890,152 @@ msgstr ""
 msgid "Documentation"
 msgstr ""
 
+#: build/filebird-lite/includes/Recommended/Recommended.php:35
+#: includes/Recommended/Recommended.php:35
+msgid "FileBird - WordPress Media Library Folders & File Manager"
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/Recommended.php:36
+#: includes/Recommended/Recommended.php:36
+msgid ""
+"Organize thousands of WordPress media files in folders / categories at ease."
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/Recommended.php:44
+#: includes/Recommended/Recommended.php:44
+msgid "YayMail - WooCommerce Email Customizer"
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/Recommended.php:45
+#: includes/Recommended/Recommended.php:45
+msgid ""
+"Customize WooCommerce email templates with live preview & drag and drop "
+"email builder."
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/Recommended.php:53
+#: includes/Recommended/Recommended.php:53
+msgid "YayCurrency - WooCommerce Multi-Currency Switcher"
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/Recommended.php:54
+#: includes/Recommended/Recommended.php:54
+msgid "WooCommerce Multi-Currency made easy, powerful, and flexible."
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/Recommended.php:62
+#: includes/Recommended/Recommended.php:62
+msgid "YaySwatches - Variation Swatches for WooCommerce"
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/Recommended.php:63
+#: includes/Recommended/Recommended.php:63
+msgid ""
+"Optimize your variable product showcase with color swatches, image swatches, "
+"custom images, buttons, and more!"
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/Recommended.php:71
+#: includes/Recommended/Recommended.php:71
+msgid "YayExtra - WooCommerce Extra Product Options"
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/Recommended.php:72
+#: includes/Recommended/Recommended.php:72
+msgid ""
+"Add WooCommerce product options like personal engraving, print-on-demand "
+"items, gifts, custom canvas prints, and personalized products."
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/Recommended.php:80
+#: includes/Recommended/Recommended.php:80
+msgid "YayPricing - WooCommerce Dynamic Pricing & Discounts"
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/Recommended.php:81
+#: includes/Recommended/Recommended.php:81
+msgid ""
+"Offer automatic pricing and discounts to design a powerful marketing "
+"strategy for your WooCommerce store."
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/Recommended.php:89
+#: includes/Recommended/Recommended.php:89
+msgid "YaySMTP - Simple WP SMTP Mail"
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/Recommended.php:90
+#: includes/Recommended/Recommended.php:90
+msgid ""
+"Send WordPress emails successfully with WP Mail SMTP via your favorite "
+"Mailer."
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/Recommended.php:98
+#: includes/Recommended/Recommended.php:98
+msgid "WP Chat App"
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/Recommended.php:99
+#: includes/Recommended/Recommended.php:99
+msgid "Integrate WhatsApp experience directly into your WordPress website."
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/Recommended.php:107
+#: includes/Recommended/Recommended.php:107
+msgid "Filester - File Manager Pro"
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/Recommended.php:108
+#: includes/Recommended/Recommended.php:108
+msgid ""
+"Best WordPress file manager without FTP access. Clean design. No need to "
+"upgrade because this…"
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/Recommended.php:116
+#: includes/Recommended/Recommended.php:116
+msgid "Multi Step for Contact Form 7"
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/Recommended.php:117
+#: includes/Recommended/Recommended.php:117
+msgid "Break your looooooong form into user-friendly steps."
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/Recommended.php:125
+#: includes/Recommended/Recommended.php:125
+msgid "Database for Contact Form 7"
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/Recommended.php:126
+#: includes/Recommended/Recommended.php:126
+msgid ""
+"Automatically save all data submitted via Contact Form 7 to your database."
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/Recommended.php:134
+#: includes/Recommended/Recommended.php:134
+msgid "WP Duplicate Page"
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/Recommended.php:135
+#: includes/Recommended/Recommended.php:135
+msgid "Clone WordPress page, post, custom post types."
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/Recommended.php:143
+#: includes/Recommended/Recommended.php:143
+msgid "Notibar - Notification Bar for WordPress"
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/Recommended.php:144
+#: includes/Recommended/Recommended.php:144
+msgid ""
+"Customizer for sticky header, notification bar, alert, promo code, marketing "
+"campaign, top banner."
+msgstr ""
+
 #: build/filebird-lite/includes/Recommended/Recommended.php:155
 #: build/filebird-lite/includes/Recommended/Recommended.php:245
 #: build/filebird-lite/includes/Recommended/Recommended.php:553
@@ -892,6 +1043,35 @@ msgstr ""
 #: includes/Recommended/Recommended.php:245
 #: includes/Recommended/Recommended.php:553
 msgid "Recommended Plugins"
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/Recommended.php:160
+#: build/filebird-lite/includes/Recommended/Recommended.php:163
+#: includes/Recommended/Recommended.php:160
+#: includes/Recommended/Recommended.php:163
+msgid "Featured"
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/Recommended.php:161
+#: build/filebird-lite/includes/Recommended/Recommended.php:164
+#: includes/Recommended/Recommended.php:161
+#: includes/Recommended/Recommended.php:164
+msgid "WooCommerce"
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/Recommended.php:250
+#: includes/Recommended/Recommended.php:250
+msgid "All"
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/Recommended.php:254
+#: includes/Recommended/Recommended.php:254
+msgid "Management"
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/Recommended.php:255
+#: includes/Recommended/Recommended.php:255
+msgid "Marketing"
 msgstr ""
 
 #: build/filebird-lite/includes/Recommended/Recommended.php:294
@@ -944,6 +1124,13 @@ msgstr ""
 #: build/filebird-lite/includes/Recommended/Recommended.php:553
 #: includes/Recommended/Recommended.php:553
 msgid "Recommended"
+msgstr ""
+
+#: build/filebird-lite/includes/Recommended/views/content.php:42
+#: build/filebird-lite/includes/Recommended/views/content.php:95
+#: includes/Recommended/views/content.php:42
+#: includes/Recommended/views/content.php:95
+msgid "Not installed"
 msgstr ""
 
 #. translators: %s: Plugin name and version.
@@ -1078,6 +1265,11 @@ msgstr ""
 msgid "This plugin doesn&#8217;t work with your version of PHP."
 msgstr ""
 
+#: build/filebird-lite/includes/Recommended/views/content.php:274
+#: includes/Recommended/views/content.php:274
+msgid "Status"
+msgstr ""
+
 #: build/filebird-lite/includes/Support/ACF/acf-field-filebird-v4.php:20
 #: build/filebird-lite/includes/Support/ACF/acf-field-filebird-v5.php:19
 #: includes/Support/ACF/acf-field-filebird-v4.php:20
@@ -1137,13 +1329,13 @@ msgstr ""
 msgid "Update now"
 msgstr ""
 
-#: build/filebird-lite/views/pages/html-settings.php:33
-#: views/pages/html-settings.php:33
+#: build/filebird-lite/views/pages/html-settings.php:34
+#: views/pages/html-settings.php:34
 msgid "Tools"
 msgstr ""
 
-#: build/filebird-lite/views/pages/html-settings.php:41
-#: views/pages/html-settings.php:41
+#: build/filebird-lite/views/pages/html-settings.php:42
+#: views/pages/html-settings.php:42
 msgid "Import/Export"
 msgstr ""
 
@@ -1234,6 +1426,7 @@ msgstr ""
 #: build/filebird-lite/views/pages/settings/tab-import.php:113
 #: build/filebird-lite/views/pages/settings/tab-import.php:135
 #: build/filebird-lite/views/pages/settings/tab-import.php:157
+#: build/filebird-lite/views/pages/settings/tab-import.php:179
 #: views/pages/settings/tab-import.php:25
 #: views/pages/settings/tab-import.php:47
 #: views/pages/settings/tab-import.php:69
@@ -1241,6 +1434,7 @@ msgstr ""
 #: views/pages/settings/tab-import.php:113
 #: views/pages/settings/tab-import.php:135
 #: views/pages/settings/tab-import.php:157
+#: views/pages/settings/tab-import.php:179
 #, php-format
 msgid " Would you like to import to %1$sFileBird%2$s?"
 msgstr ""
@@ -1303,7 +1497,9 @@ msgid "Folders by Premio"
 msgstr ""
 
 #: build/filebird-lite/views/pages/settings/tab-import.php:133
+#: build/filebird-lite/views/pages/settings/tab-import.php:177
 #: views/pages/settings/tab-import.php:133
+#: views/pages/settings/tab-import.php:177
 #, php-format
 msgid ""
 "We found you have %1$s(%2$s)%3$s categories you created from %4$sFolders%5$s "
@@ -1323,45 +1519,50 @@ msgid ""
 "Folders%5$s plugin."
 msgstr ""
 
-#: build/filebird-lite/views/pages/settings/tab-import.php:169
-#: views/pages/settings/tab-import.php:169
+#: build/filebird-lite/views/pages/settings/tab-import.php:166
+#: views/pages/settings/tab-import.php:166
+msgid "Mediamatic by Plugincraft "
+msgstr ""
+
+#: build/filebird-lite/views/pages/settings/tab-import.php:191
+#: views/pages/settings/tab-import.php:191
 msgid "Export"
 msgstr ""
 
-#: build/filebird-lite/views/pages/settings/tab-import.php:175
-#: views/pages/settings/tab-import.php:175
+#: build/filebird-lite/views/pages/settings/tab-import.php:197
+#: views/pages/settings/tab-import.php:197
 msgid "Export CSV"
 msgstr ""
 
-#: build/filebird-lite/views/pages/settings/tab-import.php:182
-#: views/pages/settings/tab-import.php:182
+#: build/filebird-lite/views/pages/settings/tab-import.php:204
+#: views/pages/settings/tab-import.php:204
 msgid "Export Now"
 msgstr ""
 
-#: build/filebird-lite/views/pages/settings/tab-import.php:187
-#: views/pages/settings/tab-import.php:187
+#: build/filebird-lite/views/pages/settings/tab-import.php:209
+#: views/pages/settings/tab-import.php:209
 msgid "The current folder structure will be exported."
 msgstr ""
 
-#: build/filebird-lite/views/pages/settings/tab-import.php:194
-#: views/pages/settings/tab-import.php:194
+#: build/filebird-lite/views/pages/settings/tab-import.php:216
+#: views/pages/settings/tab-import.php:216
 msgid "Import CSV"
 msgstr ""
 
-#: build/filebird-lite/views/pages/settings/tab-import.php:211
-#: views/pages/settings/tab-import.php:211
+#: build/filebird-lite/views/pages/settings/tab-import.php:233
+#: views/pages/settings/tab-import.php:233
 msgid "Choose FileBird CSV file to import."
 msgstr ""
 
-#: build/filebird-lite/views/pages/settings/tab-import.php:212
-#: views/pages/settings/tab-import.php:212
+#: build/filebird-lite/views/pages/settings/tab-import.php:234
+#: views/pages/settings/tab-import.php:234
 msgid ""
 "(Please check to make sure that there is no duplicated name. The current "
 "folder structure is preserved.)"
 msgstr ""
 
-#: build/filebird-lite/views/pages/settings/tab-import.php:213
-#: views/pages/settings/tab-import.php:213
+#: build/filebird-lite/views/pages/settings/tab-import.php:235
+#: views/pages/settings/tab-import.php:235
 msgid "Learn more"
 msgstr ""
 
@@ -1376,36 +1577,41 @@ msgid "Show Breadcrumb"
 msgstr ""
 
 #: build/filebird-lite/views/pages/settings/tab-settings.php:37
+#: views/pages/settings/tab-settings.php:37
+msgid "Allow built-in SVG upload & sanitization"
+msgstr ""
+
+#: build/filebird-lite/views/pages/settings/tab-settings.php:50
 #: views/pages/settings/tab-settings.php:50
 msgid "Folder Counter"
 msgstr ""
 
-#: build/filebird-lite/views/pages/settings/tab-settings.php:42
+#: build/filebird-lite/views/pages/settings/tab-settings.php:55
 #: views/pages/settings/tab-settings.php:55
 msgid "Count files in each folder"
 msgstr ""
 
-#: build/filebird-lite/views/pages/settings/tab-settings.php:45
+#: build/filebird-lite/views/pages/settings/tab-settings.php:58
 #: views/pages/settings/tab-settings.php:58
 msgid "Count files in both parent folder and subfolders (PRO)"
 msgstr ""
 
-#: build/filebird-lite/views/pages/settings/tab-settings.php:52
+#: build/filebird-lite/views/pages/settings/tab-settings.php:65
 #: views/pages/settings/tab-settings.php:65
 msgid "FileBird Theme"
 msgstr ""
 
-#: build/filebird-lite/views/pages/settings/tab-settings.php:62
+#: build/filebird-lite/views/pages/settings/tab-settings.php:75
 #: views/pages/settings/tab-settings.php:75
 msgid "FileBird Default"
 msgstr ""
 
-#: build/filebird-lite/views/pages/settings/tab-settings.php:71
+#: build/filebird-lite/views/pages/settings/tab-settings.php:84
 #: views/pages/settings/tab-settings.php:84
 msgid "Windows 11"
 msgstr ""
 
-#: build/filebird-lite/views/pages/settings/tab-settings.php:80
+#: build/filebird-lite/views/pages/settings/tab-settings.php:93
 #: views/pages/settings/tab-settings.php:93
 msgid "Dropbox"
 msgstr ""
@@ -1489,161 +1695,6 @@ msgstr ""
 #: build/filebird-lite/views/particle/folder_dropdown.php:2
 #: views/particle/folder_dropdown.php:2
 msgid "Choose folder: "
-msgstr ""
-
-#: includes/Recommended/Recommended.php:35
-msgid "FileBird - WordPress Media Library Folders & File Manager"
-msgstr ""
-
-#: includes/Recommended/Recommended.php:36
-msgid ""
-"Organize thousands of WordPress media files in folders / categories at ease."
-msgstr ""
-
-#: includes/Recommended/Recommended.php:44
-msgid "YayMail - WooCommerce Email Customizer"
-msgstr ""
-
-#: includes/Recommended/Recommended.php:45
-msgid ""
-"Customize WooCommerce email templates with live preview & drag and drop "
-"email builder."
-msgstr ""
-
-#: includes/Recommended/Recommended.php:53
-msgid "YayCurrency - WooCommerce Multi-Currency Switcher"
-msgstr ""
-
-#: includes/Recommended/Recommended.php:54
-msgid "WooCommerce Multi-Currency made easy, powerful, and flexible."
-msgstr ""
-
-#: includes/Recommended/Recommended.php:62
-msgid "YaySwatches - Variation Swatches for WooCommerce"
-msgstr ""
-
-#: includes/Recommended/Recommended.php:63
-msgid ""
-"Optimize your variable product showcase with color swatches, image swatches, "
-"custom images, buttons, and more!"
-msgstr ""
-
-#: includes/Recommended/Recommended.php:71
-msgid "YayExtra - WooCommerce Extra Product Options"
-msgstr ""
-
-#: includes/Recommended/Recommended.php:72
-msgid ""
-"Add WooCommerce product options like personal engraving, print-on-demand "
-"items, gifts, custom canvas prints, and personalized products."
-msgstr ""
-
-#: includes/Recommended/Recommended.php:80
-msgid "YayPricing - WooCommerce Dynamic Pricing & Discounts"
-msgstr ""
-
-#: includes/Recommended/Recommended.php:81
-msgid ""
-"Offer automatic pricing and discounts to design a powerful marketing "
-"strategy for your WooCommerce store."
-msgstr ""
-
-#: includes/Recommended/Recommended.php:89
-msgid "YaySMTP - Simple WP SMTP Mail"
-msgstr ""
-
-#: includes/Recommended/Recommended.php:90
-msgid ""
-"Send WordPress emails successfully with WP Mail SMTP via your favorite "
-"Mailer."
-msgstr ""
-
-#: includes/Recommended/Recommended.php:98
-msgid "WP Chat App"
-msgstr ""
-
-#: includes/Recommended/Recommended.php:99
-msgid "Integrate WhatsApp experience directly into your WordPress website."
-msgstr ""
-
-#: includes/Recommended/Recommended.php:107
-msgid "Filester - File Manager Pro"
-msgstr ""
-
-#: includes/Recommended/Recommended.php:108
-msgid ""
-"Best WordPress file manager without FTP access. Clean design. No need to "
-"upgrade because this…"
-msgstr ""
-
-#: includes/Recommended/Recommended.php:116
-msgid "Multi Step for Contact Form 7"
-msgstr ""
-
-#: includes/Recommended/Recommended.php:117
-msgid "Break your looooooong form into user-friendly steps."
-msgstr ""
-
-#: includes/Recommended/Recommended.php:125
-msgid "Database for Contact Form 7"
-msgstr ""
-
-#: includes/Recommended/Recommended.php:126
-msgid ""
-"Automatically save all data submitted via Contact Form 7 to your database."
-msgstr ""
-
-#: includes/Recommended/Recommended.php:134
-msgid "WP Duplicate Page"
-msgstr ""
-
-#: includes/Recommended/Recommended.php:135
-msgid "Clone WordPress page, post, custom post types."
-msgstr ""
-
-#: includes/Recommended/Recommended.php:143
-msgid "Notibar - Notification Bar for WordPress"
-msgstr ""
-
-#: includes/Recommended/Recommended.php:144
-msgid ""
-"Customizer for sticky header, notification bar, alert, promo code, marketing "
-"campaign, top banner."
-msgstr ""
-
-#: includes/Recommended/Recommended.php:160
-#: includes/Recommended/Recommended.php:163
-msgid "Featured"
-msgstr ""
-
-#: includes/Recommended/Recommended.php:161
-#: includes/Recommended/Recommended.php:164
-msgid "WooCommerce"
-msgstr ""
-
-#: includes/Recommended/Recommended.php:250
-msgid "All"
-msgstr ""
-
-#: includes/Recommended/Recommended.php:254
-msgid "Management"
-msgstr ""
-
-#: includes/Recommended/Recommended.php:255
-msgid "Marketing"
-msgstr ""
-
-#: includes/Recommended/views/content.php:42
-#: includes/Recommended/views/content.php:95
-msgid "Not installed"
-msgstr ""
-
-#: includes/Recommended/views/content.php:274
-msgid "Status"
-msgstr ""
-
-#: views/pages/settings/tab-settings.php:37
-msgid "Allow built-in SVG upload & sanitization"
 msgstr ""
 
 #. Plugin Name of the plugin/theme

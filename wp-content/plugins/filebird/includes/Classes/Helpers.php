@@ -163,6 +163,26 @@ class Helpers {
 		}
 		return $folders;
 	}
+	public static function foldersFromMediamatic( $parent = 0, $flat = false ) {
+		global $wpdb;
+		$folders = $wpdb->get_results( $wpdb->prepare( 'SELECT t.term_id as id, t.name as title, tt.term_taxonomy_id FROM %1$s as t  INNER JOIN %2$s as tt ON (t.term_id = tt.term_id) WHERE tt.taxonomy = \'mediamatic_wpfolder\' AND tt.parent = %3$d', $wpdb->terms, $wpdb->term_taxonomy, $parent ) );
+		foreach ( $folders as $k => $folder ) {
+			$folders[ $k ]->parent = $parent;
+		}
+		if ( $flat ) {
+			foreach ( $folders as $k => $folder ) {
+				$children = self::foldersFromMediamatic( $folder->id, $flat );
+				foreach ( $children as $k2 => $v2 ) {
+					$folders[] = $v2;
+				}
+			}
+		} else {
+			foreach ( $folders as $k => $folder ) {
+				$folders[ $k ]->children = self::foldersFromMediamatic( $folder->id, $flat );
+			}
+		}
+		return $folders;
+	}
 	public static function sanitize_array( $var ) {
 		if ( is_array( $var ) ) {
 			return array_map( 'self::sanitize_array', $var );
