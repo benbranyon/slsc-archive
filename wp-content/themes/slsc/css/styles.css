@@ -1250,6 +1250,7 @@ h1, h2, h3, h4, h5, h6 {
 .single-archive .l-sidebar__main {
   background-color: #000;
   margin-left: 0px;
+  margin-right: 0px;
   max-height: calc(100vh - 70px); }
   @media (min-width: 56.25em) {
     .single-archive .l-sidebar__main {
@@ -1263,6 +1264,12 @@ h1, h2, h3, h4, h5, h6 {
     .single-archive .pdfemb-viewer {
       margin: 0 auto;
       margin-top: 40px; } }
+
+.single-archive .book-widget {
+  height: 500px !important; }
+  @media (min-width: 50em) {
+    .single-archive .book-widget {
+      height: initial !important; } }
 
 .single-archive-sidebar__content {
   padding: 40px; }
