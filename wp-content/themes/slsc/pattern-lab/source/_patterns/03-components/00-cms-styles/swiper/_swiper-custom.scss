@@ -42,7 +42,14 @@
   position: relative;
   width: 100%;
   img {
+    object-fit: cover;
     width: 100%;
+    height: 250px;
+    width: 100%;
+    @include breakpoint($bp-medium) {
+      height: auto;
+      object-fit: initial;
+    }
   }
   @include breakpoint($bp-medium) {
     max-height:400px;
