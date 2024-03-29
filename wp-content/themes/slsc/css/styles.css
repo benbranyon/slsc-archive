@@ -1244,6 +1244,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .single-archive .l-sidebar__sidebar {
   background-color: #fff;
+  max-width: 540px;
   padding: 0px; }
 
 .single-archive .l-sidebar__main {
