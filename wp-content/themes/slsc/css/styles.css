@@ -1265,11 +1265,9 @@ h1, h2, h3, h4, h5, h6 {
       margin: 0 auto;
       margin-top: 40px; } }
 
-.single-archive .book-widget {
-  height: 500px !important; }
-  @media (min-width: 50em) {
-    .single-archive .book-widget {
-      height: initial !important; } }
+@media only screen and (max-width: 667px) {
+  .single-archive .book-widget {
+    height: 500px !important; } }
 
 .single-archive-sidebar__content {
   padding: 40px; }

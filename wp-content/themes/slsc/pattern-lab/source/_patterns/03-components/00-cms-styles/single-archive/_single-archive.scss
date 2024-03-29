@@ -31,9 +31,8 @@
     }
   }
   .book-widget {
-    height: 500px!important;
-    @include breakpoint($bp-medium) {
-      height: initial!important;
+    @media only screen and (max-width: 667px) {
+      height: 500px!important;
     }
   }
 }
