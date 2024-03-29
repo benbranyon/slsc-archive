@@ -1,4 +1,17 @@
-.searchform__input {
-  height: 46px;
-  padding-left: 5px;
+.searchform {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  label {
+    display: none;
+  }
+  .searchform__input {
+    border: 1px solid #000;
+    height: 46px;
+    padding-left: 5px;
+    width: 175px;
+    @include breakpoint($bp-small) {
+      width: auto;
+    }
+  }
 }

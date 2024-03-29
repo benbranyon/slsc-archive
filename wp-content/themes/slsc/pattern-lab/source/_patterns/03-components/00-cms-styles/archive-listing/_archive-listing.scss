@@ -1,6 +1,13 @@
 .cbp-vm-view-grid {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 40px;
+  @include breakpoint($bp-small) {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+  }
   hr {
     display: none;
   }
@@ -8,7 +15,6 @@
     display: flex;
     justify-content: center;
     flex-basis: 25%;
-    margin-bottom: 70px;
     .l-media {
       display: flex;
       flex-direction: column;
@@ -65,13 +71,23 @@
       flex-direction: row-reverse;
     }
     .l-sidebar__sidebar {
+      background: #fff;
       width: 100%;
       @include breakpoint($bp-small) {
+        background-color: #dcd2c7;
         padding: 0px;
         width: auto;
       }
       @include breakpoint($bp-xlarge) {
         padding: 30px;
+      }
+    }
+    .l-sidebar__main {
+      margin-left: initial;
+      margin-right: initial;
+      @include breakpoint($bp-small) {
+        margin-left: auto;
+        margin-right: auto;
       }
     }
   }
