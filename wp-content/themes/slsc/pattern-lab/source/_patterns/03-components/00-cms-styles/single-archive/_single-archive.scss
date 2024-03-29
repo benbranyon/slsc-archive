@@ -15,6 +15,7 @@
   .l-sidebar__main {
     background-color: #000;
     margin-left: 0px;
+    margin-right: 0px;
     max-height: calc(100vh - 70px);
     @include breakpoint($bp-large) {
       position: sticky;
@@ -29,7 +30,12 @@
       margin-top: 40px;
     }
   }
-
+  .book-widget {
+    height: 500px!important;
+    @include breakpoint($bp-medium) {
+      height: initial!important;
+    }
+  }
 }
 
 .single-archive-sidebar__content {
