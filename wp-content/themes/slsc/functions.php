@@ -268,6 +268,13 @@ function gesso_bem_gallery( $gallery, $attr ) {
 }
 add_filter( 'post_gallery', 'gesso_bem_gallery', 10, 2 );
 
+function change_archive_order( $query ) {
+    if ( $query->is_post_type_archive( 'archive' )) {
+        $query->set( 'order', 'ASC' );
+    }
+}
+add_action( 'pre_get_posts', 'change_archive_order' );
+
 /**
  * Replace the default excerpt with our new custom excerpt
  * @param string $excerpt The original announcement excerpt.

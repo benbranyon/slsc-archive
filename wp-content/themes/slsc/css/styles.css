@@ -1277,8 +1277,11 @@ h1, h2, h3, h4, h5, h6 {
 
 .single-archive__title {
   color: #330000;
-  font-size: 40px;
+  font-size: 35px;
   font-weight: bold; }
+  @media (min-width: 50em) {
+    .single-archive__title {
+      font-size: 40px; } }
 
 .single-archive-download {
   margin-bottom: 40px; }
@@ -1479,6 +1482,9 @@ h1, h2, h3, h4, h5, h6 {
   margin-right: -20px; }
   @media (min-width: 50em) {
     .archive-toolbar {
+      -webkit-box-align: center;
+          -ms-flex-align: center;
+              align-items: center;
       display: -webkit-box;
       display: -ms-flexbox;
       display: flex;
