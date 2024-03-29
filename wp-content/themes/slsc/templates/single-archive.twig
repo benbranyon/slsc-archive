@@ -15,8 +15,10 @@
             </div>
           {% endif %}
 
-          <label class="form-item__label">Description</label>
-          <div class="single-archive-description">{{ post.preview.read_more(false) }}</div>
+          {% if post.preview is not empty %}
+            <label class="form-item__label">Description</label>
+            <div class="single-archive-description">{{ post.preview.read_more(false) }}</div>
+          {% endif %}
 
           {% set topics = post.terms('topic') %}
           {% if topics %}

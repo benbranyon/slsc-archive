@@ -47,8 +47,11 @@
 
 .single-archive__title {
   color: #330000;
-  font-size: 40px;
+  font-size: 35px;
   font-weight: bold;
+  @include breakpoint($bp-medium) {
+    font-size: 40px;
+  }
 }
 
 .single-archive-download {

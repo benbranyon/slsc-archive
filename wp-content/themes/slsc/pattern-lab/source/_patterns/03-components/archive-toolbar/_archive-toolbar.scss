@@ -5,6 +5,7 @@
   margin-left: -20px;
   margin-right: -20px;
   @include breakpoint($bp-medium) {
+    align-items: center;
     display: flex;
     justify-content: space-between;
     padding: 30px;
