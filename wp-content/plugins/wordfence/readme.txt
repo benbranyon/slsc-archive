@@ -4,7 +4,7 @@ Tags: security, waf, malware, 2fa, two factor, login security, firewall, brute f
 Requires at least: 3.9
 Requires PHP: 5.5
 Tested up to: 6.5
-Stable tag: 7.11.4
+Stable tag: 7.11.5
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -188,6 +188,11 @@ Secure your website with Wordfence.
 9. Logging in is easy with Wordfence 2FA.
 
 == Changelog ==
+
+= 7.11.5 - April 3, 2024 =
+* Fix: Revised the behavior of the reCAPTCHA verification to use the documented expiration period of the token and response to avoid sending verification requests too frequently, which could artificially lower scores in some circumstances
+* Fix: Addressed PHP 8 deprecation notices in the file differ used by file changed scan results
+* Fix: Reduced the frequency of Wordfence Central status update callbacks in sections of the scan that occur quickly in sequence
 
 = 7.11.4 - March 11, 2024 =
 * Change: CAPTCHA verification when enabled now additionally applies to 2FA logins (may send an email verification on low scores) and no longer reveals whether a user exists for the submitted account credentials (credit: Raxis)

@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Wordfence Security 7.11.4\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wordfence-zip-0H0vQX4ZS\n"
+"Project-Id-Version: Wordfence Security 7.11.5\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wordfence-zip-8lMCyXlaj\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-03-11T15:22:25+00:00\n"
+"POT-Creation-Date: 2024-04-03T15:14:56+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: wordfence\n"
@@ -237,7 +237,7 @@ msgstr ""
 #: lib/menu_tools_twoFactor.php:51
 #: lib/menu_wordfence_central.php:56
 #: lib/wf503.php:390
-#: lib/wfCentralAPI.php:905
+#: lib/wfCentralAPI.php:906
 #: lib/wfScanEngine.php:307
 #: lib/wfScanEngine.php:642
 #: lib/wfScanEngine.php:655
@@ -463,7 +463,7 @@ msgstr ""
 #: lib/dashboard/widget_notifications.php:59
 #: lib/dashboard/widget_notifications.php:64
 #: lib/menu_wordfence_central.php:65
-#: lib/wfCentralAPI.php:897
+#: lib/wfCentralAPI.php:898
 msgid "Disconnect This Site"
 msgstr ""
 
@@ -2380,7 +2380,7 @@ msgstr ""
 
 #: lib/menu_scanner.php:81
 #: lib/menu_scanner_options.php:135
-#: models/scanner/wfScanner.php:829
+#: models/scanner/wfScanner.php:848
 msgid "Enable Premium Scan Signatures."
 msgstr ""
 
@@ -2651,8 +2651,8 @@ msgstr ""
 #: lib/menu_tools_twoFactor.php:14
 #: lib/menu_tools_twoFactor.php:23
 #: models/page/wfPage.php:117
-#: modules/login-security/classes/controller/wordfencels.php:888
-#: modules/login-security/classes/controller/wordfencels.php:889
+#: modules/login-security/classes/controller/wordfencels.php:902
+#: modules/login-security/classes/controller/wordfencels.php:903
 msgid "Two-Factor Authentication"
 msgstr ""
 
@@ -2824,7 +2824,7 @@ msgstr ""
 #: lib/menu_tools_diagnostic.php:372
 #: lib/menu_tools_diagnostic.php:428
 #: lib/menu_tools_diagnostic.php:471
-#: modules/login-security/classes/controller/users.php:538
+#: modules/login-security/classes/controller/users.php:542
 #: modules/login-security/classes/controller/wordfencels.php:490
 #: views/diagnostics/text.php:203
 #: views/diagnostics/text.php:241
@@ -2836,7 +2836,7 @@ msgstr ""
 #: lib/menu_tools_diagnostic.php:331
 #: lib/menu_tools_diagnostic.php:430
 #: lib/menu_tools_diagnostic.php:473
-#: modules/login-security/classes/controller/users.php:547
+#: modules/login-security/classes/controller/users.php:551
 #: modules/login-security/classes/controller/wordfencels.php:490
 #: views/diagnostics/text.php:205
 #: views/diagnostics/text.php:283
@@ -4010,7 +4010,7 @@ msgstr ""
 
 #: lib/wf503.php:385
 #: lib/wfLockedOut.php:394
-msgid "Wordfence is a security plugin installed on over 4 million WordPress sites. The owner of this site is using Wordfence to manage access to their site."
+msgid "Wordfence is a security plugin installed on over 5 million WordPress sites. The owner of this site is using Wordfence to manage access to their site."
 msgstr ""
 
 #: lib/wf503.php:386
@@ -4088,7 +4088,7 @@ msgid "Unknown"
 msgstr ""
 
 #: lib/wfAdminNoticeQueue.php:193
-#: lib/wfCentralAPI.php:903
+#: lib/wfCentralAPI.php:904
 #: lib/wfSupportController.php:433
 #: lib/wordfenceClass.php:6303
 #: lib/wordfenceClass.php:6558
@@ -5266,19 +5266,19 @@ msgstr ""
 msgid "Invalid response received from Wordfence Central when fetching token."
 msgstr ""
 
-#: lib/wfCentralAPI.php:890
+#: lib/wfCentralAPI.php:891
 msgid "Your site is currently linked to Wordfence Central under a different site URL."
 msgstr ""
 
-#: lib/wfCentralAPI.php:892
+#: lib/wfCentralAPI.php:893
 msgid "This may cause duplicated scan issues if both sites are currently active and reporting and is generally caused by duplicating the database from one site to another (e.g., from a production site to staging). We recommend disconnecting this site only, which will leave the matching site still connected."
 msgstr ""
 
-#: lib/wfCentralAPI.php:894
+#: lib/wfCentralAPI.php:895
 msgid "If this is a single site with multiple domains or subdomains, you can dismiss this message."
 msgstr ""
 
-#: lib/wfCentralAPI.php:900
+#: lib/wfCentralAPI.php:901
 msgid "Disconnect All"
 msgstr ""
 
@@ -8861,7 +8861,7 @@ msgstr ""
 
 #: lib/wordfenceClass.php:6335
 #: modules/login-security/classes/controller/wordfencels.php:490
-#: modules/login-security/classes/controller/wordfencels.php:855
+#: modules/login-security/classes/controller/wordfencels.php:869
 #: modules/login-security/views/manage/grace-period.php:22
 msgid "Locked Out"
 msgstr ""
@@ -10312,72 +10312,72 @@ msgstr ""
 msgid "Support"
 msgstr ""
 
-#: models/scanner/wfScanner.php:116
+#: models/scanner/wfScanner.php:118
 msgid "Quick"
 msgstr ""
 
-#: models/scanner/wfScanner.php:118
+#: models/scanner/wfScanner.php:120
 msgid "Limited"
 msgstr ""
 
-#: models/scanner/wfScanner.php:120
+#: models/scanner/wfScanner.php:122
 #: views/scanner/scan-type.php:32
 msgid "High Sensitivity"
 msgstr ""
 
-#: models/scanner/wfScanner.php:122
+#: models/scanner/wfScanner.php:124
 #: views/scanner/scan-scheduling.php:50
 msgid "Custom"
 msgstr ""
 
-#: models/scanner/wfScanner.php:125
+#: models/scanner/wfScanner.php:127
 msgid "Standard"
 msgstr ""
 
-#: models/scanner/wfScanner.php:139
+#: models/scanner/wfScanner.php:141
 msgid "Low resource utilization, limited detection capability"
 msgstr ""
 
-#: models/scanner/wfScanner.php:141
+#: models/scanner/wfScanner.php:143
 msgid "Standard detection capability, chance of false positives"
 msgstr ""
 
-#: models/scanner/wfScanner.php:143
+#: models/scanner/wfScanner.php:145
 msgid "Custom scan options selected"
 msgstr ""
 
-#: models/scanner/wfScanner.php:146
+#: models/scanner/wfScanner.php:148
 msgid "Standard detection capability"
 msgstr ""
 
-#: models/scanner/wfScanner.php:838
+#: models/scanner/wfScanner.php:857
 msgid "Enable Premium Reputation Checks."
 msgstr ""
 
-#: models/scanner/wfScanner.php:846
+#: models/scanner/wfScanner.php:865
 msgid "Enable %d scan option."
 msgid_plural "Enable %d scan options."
 msgstr[0] ""
 msgstr[1] ""
 
-#: models/scanner/wfScanner.php:888
+#: models/scanner/wfScanner.php:907
 msgid "Enable scan option to check if this website is being \"Spamvertised\"."
 msgstr ""
 
-#: models/scanner/wfScanner.php:889
+#: models/scanner/wfScanner.php:908
 msgid "Enable scan option to check if your website IP is generating spam."
 msgstr ""
 
-#: models/scanner/wfScanner.php:890
+#: models/scanner/wfScanner.php:909
 msgid "Enable scan option to check if your website is on a domain blocklist."
 msgstr ""
 
-#: models/scanner/wfScanner.php:994
+#: models/scanner/wfScanner.php:1013
 msgid "User defined scan pattern"
 msgstr ""
 
 #. translators: 1. Day of week. 2. Hour of day. 3. Localized date.
-#: models/scanner/wfScanner.php:1272
+#: models/scanner/wfScanner.php:1291
 msgid "Scheduled time for day %s hour %s is: %s"
 msgstr ""
 
@@ -10597,54 +10597,54 @@ msgstr ""
 msgid "An error was encountered while validating the reCAPTCHA site key: %s"
 msgstr ""
 
-#: modules/login-security/classes/controller/users.php:517
+#: modules/login-security/classes/controller/users.php:521
 #: modules/login-security/classes/controller/wordfencels.php:486
 msgid "2FA Status"
 msgstr ""
 
-#: modules/login-security/classes/controller/users.php:521
+#: modules/login-security/classes/controller/users.php:525
 msgid "Last Login"
 msgstr ""
 
-#: modules/login-security/classes/controller/users.php:523
+#: modules/login-security/classes/controller/users.php:527
 msgid "Last CAPTCHA"
 msgstr ""
 
-#: modules/login-security/classes/controller/users.php:533
+#: modules/login-security/classes/controller/users.php:537
 msgid "Not Allowed"
 msgstr ""
 
-#: modules/login-security/classes/controller/users.php:541
+#: modules/login-security/classes/controller/users.php:545
 msgid "Inactive<small class=\"wfls-sub-status\">(Grace Period)</small>"
 msgstr ""
 
-#: modules/login-security/classes/controller/users.php:544
+#: modules/login-security/classes/controller/users.php:548
 msgid "Locked Out<small class=\"wfls-sub-status\">(Grace Period Disabled)</small>"
 msgstr ""
 
-#: modules/login-security/classes/controller/users.php:544
+#: modules/login-security/classes/controller/users.php:548
 msgid "Locked Out<small class=\"wfls-sub-status\">(Grace Period Exceeded)</small>"
 msgstr ""
 
-#: modules/login-security/classes/controller/users.php:560
+#: modules/login-security/classes/controller/users.php:564
 msgid "(not required)"
 msgstr ""
 
-#: modules/login-security/classes/controller/users.php:654
+#: modules/login-security/classes/controller/users.php:658
 msgid "Edit two-factor authentication for %s"
 msgstr ""
 
-#: modules/login-security/classes/controller/users.php:654
+#: modules/login-security/classes/controller/users.php:658
 #: modules/login-security/views/settings/options.php:9
 msgid "2FA"
 msgstr ""
 
-#: modules/login-security/classes/controller/users.php:665
+#: modules/login-security/classes/controller/users.php:669
 #: modules/login-security/views/settings/user-stats.php:25
 msgid "2FA Active"
 msgstr ""
 
-#: modules/login-security/classes/controller/users.php:666
+#: modules/login-security/classes/controller/users.php:670
 #: modules/login-security/views/settings/user-stats.php:26
 msgid "2FA Inactive"
 msgstr ""
@@ -10792,96 +10792,100 @@ msgstr ""
 msgid "Manage 2FA Settings"
 msgstr ""
 
-#: modules/login-security/classes/controller/wordfencels.php:671
+#: modules/login-security/classes/controller/wordfencels.php:645
+msgid "<strong>CAPTCHA EXPIRED</strong>: The CAPTCHA verification for this login attempt has expired. Please try again."
+msgstr ""
+
+#: modules/login-security/classes/controller/wordfencels.php:685
 msgid "Login Verification Required"
 msgstr ""
 
-#: modules/login-security/classes/controller/wordfencels.php:676
+#: modules/login-security/classes/controller/wordfencels.php:690
 msgid "<strong>VERIFICATION REQUIRED</strong>: Additional verification is required for login. If there is a valid account for the provided login credentials, please check the email address associated with it for a verification link to continue logging in."
 msgstr ""
 
-#: modules/login-security/classes/controller/wordfencels.php:692
+#: modules/login-security/classes/controller/wordfencels.php:706
 msgid "<strong>CODE INVALID</strong>: The 2FA code provided is either expired or invalid. Please try again."
 msgstr ""
 
-#: modules/login-security/classes/controller/wordfencels.php:701
+#: modules/login-security/classes/controller/wordfencels.php:715
 msgid "<strong>CODE REQUIRED</strong>: Please enter your 2FA code immediately after your password in the same field."
 msgstr ""
 
-#: modules/login-security/classes/controller/wordfencels.php:703
+#: modules/login-security/classes/controller/wordfencels.php:717
 msgid "<strong>CODE REQUIRED</strong>: Please provide your 2FA code when prompted."
 msgstr ""
 
-#: modules/login-security/classes/controller/wordfencels.php:706
+#: modules/login-security/classes/controller/wordfencels.php:720
 msgid "<strong>LOGIN BLOCKED</strong>: 2FA is required to be active on your account. Please contact the site administrator."
 msgstr ""
 
-#: modules/login-security/classes/controller/wordfencels.php:709
+#: modules/login-security/classes/controller/wordfencels.php:723
 msgid "You do not currently have two-factor authentication active on your account, which will be required beginning %s. <a href=\"%s\">Configure 2FA</a>"
 msgstr ""
 
-#: modules/login-security/classes/controller/wordfencels.php:759
+#: modules/login-security/classes/controller/wordfencels.php:773
 msgid "Email verification succeeded. Please continue logging in."
 msgstr ""
 
-#: modules/login-security/classes/controller/wordfencels.php:762
+#: modules/login-security/classes/controller/wordfencels.php:776
 msgid "Email verification invalid or expired. Please try again."
 msgstr ""
 
-#: modules/login-security/classes/controller/wordfencels.php:816
-#: modules/login-security/classes/controller/wordfencels.php:819
+#: modules/login-security/classes/controller/wordfencels.php:830
+#: modules/login-security/classes/controller/wordfencels.php:833
 msgid "Login Security"
 msgstr ""
 
-#: modules/login-security/classes/controller/wordfencels.php:847
+#: modules/login-security/classes/controller/wordfencels.php:861
 #: modules/login-security/views/settings/options.php:23
 #: modules/login-security/views/settings/user-stats.php:33
 msgid "Super Administrator"
 msgstr ""
 
-#: modules/login-security/classes/controller/wordfencels.php:851
+#: modules/login-security/classes/controller/wordfencels.php:865
 #: modules/login-security/views/manage/grace-period.php:22
 #: modules/login-security/views/options/option-roles.php:57
 msgid "Grace Period"
 msgstr ""
 
-#: modules/login-security/classes/controller/wordfencels.php:870
+#: modules/login-security/classes/controller/wordfencels.php:884
 msgid "Users without 2FA active (%s)"
 msgstr ""
 
-#: modules/login-security/classes/controller/wordfencels.php:889
+#: modules/login-security/classes/controller/wordfencels.php:903
 msgid "Learn more<span class=\"wfls-hidden-xs\"> about Two-Factor Authentication</span>"
 msgstr ""
 
-#: modules/login-security/classes/controller/wordfencels.php:898
+#: modules/login-security/classes/controller/wordfencels.php:912
 msgid "Settings"
 msgstr ""
 
-#: modules/login-security/classes/controller/wordfencels.php:899
+#: modules/login-security/classes/controller/wordfencels.php:913
 msgid "Login Security Settings"
 msgstr ""
 
-#: modules/login-security/classes/controller/wordfencels.php:899
+#: modules/login-security/classes/controller/wordfencels.php:913
 msgid "Learn more<span class=\"wfls-hidden-xs\"> about Login Security</span>"
 msgstr ""
 
-#: modules/login-security/classes/controller/wordfencels.php:925
+#: modules/login-security/classes/controller/wordfencels.php:939
 msgid "<strong>REGISTRATION ATTEMPT BLOCKED</strong>: This site requires a security token created when the page loads for all registration attempts. Please ensure JavaScript is enabled and try again."
 msgstr ""
 
-#: modules/login-security/classes/controller/wordfencels.php:932
+#: modules/login-security/classes/controller/wordfencels.php:946
 msgid "<strong>REGISTRATION ATTEMPT BLOCKED</strong>: The security token for the login attempt was invalid or expired. Please reload the page and try again."
 msgstr ""
 
-#: modules/login-security/classes/controller/wordfencels.php:945
+#: modules/login-security/classes/controller/wordfencels.php:959
 msgid "<strong>REGISTRATION BLOCKED</strong>: The registration request was blocked because it was flagged as spam. Please try again or <a href=\"#\" class=\"wfls-registration-captcha-contact\" data-token=\"%s\">contact the site owner</a> for help."
 msgstr ""
 
-#: modules/login-security/classes/controller/wordfencels.php:948
+#: modules/login-security/classes/controller/wordfencels.php:962
 msgid "<strong>REGISTRATION BLOCKED</strong>: The registration request was blocked because it was flagged as spam. Please try again or contact the site owner for help."
 msgstr ""
 
-#: modules/login-security/classes/controller/wordfencels.php:1018
+#: modules/login-security/classes/controller/wordfencels.php:1032
 msgid "Wordfence 2FA"
 msgstr ""
 
