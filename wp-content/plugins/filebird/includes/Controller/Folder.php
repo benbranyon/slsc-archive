@@ -511,7 +511,11 @@ class Folder extends Controller {
 		$id     = isset( $id ) ? sanitize_text_field( $id ) : '';
 		$parent = isset( $parent ) ? intval( sanitize_text_field( $parent ) ) : '';
 		$name   = isset( $name ) ? sanitize_text_field( wp_unslash( $name ) ) : '';
-		if ( is_numeric( $id ) && is_numeric( $parent ) && $name != '' ) {
+
+		$current_user_id = get_current_user_id();
+		$folder_per_user = get_option( 'njt_fbv_folder_per_user', '0' ) === '1';
+
+		if ( is_numeric( $id ) && is_numeric( $parent ) && !empty( $name ) && FolderModel::verifyAuthor( $id, $current_user_id, $folder_per_user ) ) {
 			$update = FolderModel::updateFolderName( $name, $parent, $id );
 			if ( $update === true ) {
 				wp_send_json_success();
@@ -544,8 +548,11 @@ class Folder extends Controller {
 			}
 			$ids = array_map( 'intval', $ids );
 
+			$current_user_id = get_current_user_id();
+			$folder_per_user = get_option( 'njt_fbv_folder_per_user', '0' ) === '1';
+
 			foreach ( $ids as $k => $v ) {
-				if ( $v > 0 ) {
+				if ( $v > 0 && FolderModel::verifyAuthor( $v, $current_user_id, $folder_per_user ) ) {
 					FolderModel::deleteFolderAndItsChildren( $v );
 				}
 			}
@@ -622,8 +629,11 @@ class Folder extends Controller {
 			'folder_id' => 0,
 			'name'      => __( 'Uncategorized', 'filebird' ),
 		);
+		$folder_name = esc_attr( $fbv_folder->name );
+		$folder_id = (int)$fbv_folder->folder_id;
+		$post_id = (int)$post->ID;
 		$form_fields['fbv'] = array(
-			'html'  => "<div class='fbv-attachment-edit-wrapper' data-folder-id='{$fbv_folder->folder_id}' data-attachment-id='{$post->ID}'><input readonly type='text' value='{$fbv_folder->name}'/></div>",
+			'html'  => "<div class='fbv-attachment-edit-wrapper' data-folder-id='{$folder_id}' data-attachment-id='{$post_id}'><input readonly type='text' value='{$folder_name}'/></div>",
 			'label' => esc_html__( 'FileBird folder:', 'filebird' ),
 			'helps' => esc_html__( 'Click on the button to move this file to another folder', 'filebird' ),
 			'input' => 'html',

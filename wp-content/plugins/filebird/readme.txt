@@ -3,8 +3,8 @@ Contributors: ninjateam
 Donate link: https://ninjateam.org/wordpress-media-library-folders/ 
 Tags: wordpress media library folders, file manager, folders, media, gallery, media folder
 Requires at least: 3.0
-Tested up to: 6.4.3
-Stable tag: 5.6.3
+Tested up to: 6.5
+Stable tag: 5.6.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -208,6 +208,9 @@ Happy Organizing! 😍
 
 
 == Changelog ==
+
+= Mar 29, 2024 - Version 5.6.4 =
+- Fixed: Wordfence bug report
 
 = Mar 11, 2024 - Version 5.6.3 =
 - Fixed: Compatible with PHP 8.2

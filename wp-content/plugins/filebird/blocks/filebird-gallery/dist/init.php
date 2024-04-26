@@ -191,9 +191,13 @@ function filebird_gutenberg_get_images() {
 		array(
 			'methods'             => 'POST',
 			'callback'            => 'filebird_gutenberg_render_callback',
-			'permission_callback' => '__return_true',
+			'permission_callback' => 'filebird_gutenberg_get_images_permission_callback',
 		)
 	);
+}
+
+function filebird_gutenberg_get_images_permission_callback(){
+	return current_user_can( 'upload_files' );
 }
 
 function filebird_gutenberg_render_callback( $request ) {

@@ -68,6 +68,14 @@ class Folder {
 			array( '%d' )
 		);
 	}
+	public static function verifyAuthor( $folder_id, $current_user_id, $folder_per_user = false ) {
+		global $wpdb;
+		if( $folder_per_user ) {
+			$created_by = (int)$wpdb->get_var( $wpdb->prepare( "SELECT `created_by` FROM {$wpdb->prefix}fbv WHERE `id` = %d", $folder_id) );
+			return $created_by == $current_user_id;
+		}
+		return true;
+	}
 	public static function updateAuthor( $from_author, $to_author ) {
 		global $wpdb;
 		$wpdb->update(
@@ -148,7 +156,7 @@ class Folder {
 	}
 	public static function detail( $name, $parent ) {
 		global $wpdb;
-
+		$name = wp_kses_post( $name );
 		$user_has_own_folder = get_option( 'njt_fbv_folder_per_user', '0' ) === '1';
 		if ( $user_has_own_folder ) {
 			$created = get_current_user_id();
@@ -171,7 +179,7 @@ class Folder {
 	}
 	public static function updateFolderName( $new_name, $parent, $folder_id ) {
 		global $wpdb;
-		$new_name = sanitize_text_field( wp_unslash( $new_name ) );
+		$new_name = sanitize_text_field( wp_unslash( wp_kses_post( $new_name ) ) );
 		$check_name = $wpdb->get_row(
 			$wpdb->prepare(
 				"SELECT * FROM {$wpdb->prefix}fbv WHERE id != %d AND name = %s AND parent = %d",
@@ -223,7 +231,7 @@ class Folder {
 		$data = apply_filters(
 			'fbv_data_before_inserting_folder',
 			array(
-				'name'   => sanitize_text_field($name),
+				'name'   => sanitize_text_field( wp_kses_post( $name ) ),
 				'parent' => $parent,
 				'type'   => 0,
 			)
