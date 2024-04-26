@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb683ad61fcc80d4d0d0de13a961dcd13
+class ComposerStaticInit6650a0496bf9e7ce57139eeab0fbdede
 {
     public static $prefixLengthsPsr4 = array (
         'C' => 
@@ -681,6 +681,16 @@ class ComposerStaticInitb683ad61fcc80d4d0d0de13a961dcd13
         'Yoast\\WP\\SEO\\Content_Type_Visibility\\Application\\Content_Type_Visibility_Watcher_Actions' => __DIR__ . '/../..' . '/src/content-type-visibility/application/content-type-visibility-watcher-actions.php',
         'Yoast\\WP\\SEO\\Content_Type_Visibility\\User_Interface\\Content_Type_Visibility_Dismiss_New_Route' => __DIR__ . '/../..' . '/src/content-type-visibility/user-interface/content-type-visibility-dismiss-new-route.php',
         'Yoast\\WP\\SEO\\Context\\Meta_Tags_Context' => __DIR__ . '/../..' . '/src/context/meta-tags-context.php',
+        'Yoast\\WP\\SEO\\Editors\\Application\\Analysis_Features\\Enabled_Analysis_Features_Repository' => __DIR__ . '/../..' . '/src/editors/application/analysis-features/enabled-analysis-features-repository.php',
+        'Yoast\\WP\\SEO\\Editors\\Domain\\Analysis_Features\\Analysis_Feature' => __DIR__ . '/../..' . '/src/editors/domain/analysis-features/analysis-feature.php',
+        'Yoast\\WP\\SEO\\Editors\\Domain\\Analysis_Features\\Analysis_Features_List' => __DIR__ . '/../..' . '/src/editors/domain/analysis-features/analysis-features-list.php',
+        'Yoast\\WP\\SEO\\Editors\\Framework\\Analysis_Feature_Interface' => __DIR__ . '/../..' . '/src/editors/framework/analysis-feature-interface.php',
+        'Yoast\\WP\\SEO\\Editors\\Framework\\Cornerstone_Content' => __DIR__ . '/../..' . '/src/editors/framework/cornerstone-content.php',
+        'Yoast\\WP\\SEO\\Editors\\Framework\\Inclusive_Language_Analysis' => __DIR__ . '/../..' . '/src/editors/framework/inclusive-language-analysis.php',
+        'Yoast\\WP\\SEO\\Editors\\Framework\\Keyphrase_Analysis' => __DIR__ . '/../..' . '/src/editors/framework/keyphrase-analysis.php',
+        'Yoast\\WP\\SEO\\Editors\\Framework\\Previously_Used_Keyphrase' => __DIR__ . '/../..' . '/src/editors/framework/previously-used-keyphrase.php',
+        'Yoast\\WP\\SEO\\Editors\\Framework\\Readability_Analysis' => __DIR__ . '/../..' . '/src/editors/framework/readability-analysis.php',
+        'Yoast\\WP\\SEO\\Editors\\Framework\\Word_Form_Recognition' => __DIR__ . '/../..' . '/src/editors/framework/word-form-recognition.php',
         'Yoast\\WP\\SEO\\Exceptions\\Addon_Installation\\Addon_Activation_Error_Exception' => __DIR__ . '/../..' . '/src/exceptions/addon-installation/addon-activation-error-exception.php',
         'Yoast\\WP\\SEO\\Exceptions\\Addon_Installation\\Addon_Already_Installed_Exception' => __DIR__ . '/../..' . '/src/exceptions/addon-installation/addon-already-installed-exception.php',
         'Yoast\\WP\\SEO\\Exceptions\\Addon_Installation\\Addon_Installation_Error_Exception' => __DIR__ . '/../..' . '/src/exceptions/addon-installation/addon-installation-error-exception.php',
@@ -1069,6 +1079,7 @@ class ComposerStaticInitb683ad61fcc80d4d0d0de13a961dcd13
         'Yoast\\WP\\SEO\\Values\\Robots\\Directive' => __DIR__ . '/../..' . '/src/values/robots/directive.php',
         'Yoast\\WP\\SEO\\Values\\Robots\\User_Agent' => __DIR__ . '/../..' . '/src/values/robots/user-agent.php',
         'Yoast\\WP\\SEO\\Values\\Robots\\User_Agent_List' => __DIR__ . '/../..' . '/src/values/robots/user-agent-list.php',
+        'Yoast\\WP\\SEO\\Values\\Twitter\\Images' => __DIR__ . '/../..' . '/src/values/twitter/images.php',
         'Yoast\\WP\\SEO\\WordPress\\Wrapper' => __DIR__ . '/../..' . '/src/wordpress/wrapper.php',
         'Yoast\\WP\\SEO\\Wrappers\\WP_Query_Wrapper' => __DIR__ . '/../..' . '/src/wrappers/wp-query-wrapper.php',
         'Yoast\\WP\\SEO\\Wrappers\\WP_Remote_Handler' => __DIR__ . '/../..' . '/src/wrappers/wp-remote-handler.php',
@@ -1096,9 +1107,9 @@ class ComposerStaticInitb683ad61fcc80d4d0d0de13a961dcd13
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb683ad61fcc80d4d0d0de13a961dcd13::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb683ad61fcc80d4d0d0de13a961dcd13::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitb683ad61fcc80d4d0d0de13a961dcd13::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit6650a0496bf9e7ce57139eeab0fbdede::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit6650a0496bf9e7ce57139eeab0fbdede::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit6650a0496bf9e7ce57139eeab0fbdede::$classMap;
 
         }, null, ClassLoader::class);
     }
