@@ -7,6 +7,7 @@
 {% endblock %}
 
 	<body class="{{body_class}}" data-template="base.twig">
+		{{ function('wp_body_open') }}
 		<a class="skip-link screen-reader-text" href="#content">{{ _e( 'Skip to content') }}</a>
 		<header class="header" >
 			{% block header %}
@@ -23,7 +24,7 @@
 
 		<section id="content" role="main" class="content-wrapper">
 			{% if title %}<h1>{{title}}</h1>{% endif %}
-			<div class="wrapper {{sidebar_class}}">
+			<div class="wrapper">
 				{% block content %}
 					Sorry, no content
 				{% endblock %}

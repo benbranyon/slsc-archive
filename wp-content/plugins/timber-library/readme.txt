@@ -1,8 +1,8 @@
 === Timber ===
 Contributors: jarednova
 Tags: template engine, templates, twig
-Tested up to: 6.3.2
-Stable tag: 1.23.0
+Tested up to: 6.5.2
+Stable tag: 1.23.1
 Requires PHP: 7.2.5
 Requires at least: 5.3.0
 License: GPLv2 or later
@@ -40,6 +40,10 @@ _Twig is the template language powering Timber; if you need a little background 
 * [GitHub issues](https://github.com/timber/timber/issues) are for reporting bugs and errors
 
 == Changelog ==
+
+= 1.23.1 =
+
+* Fix a security vulnerability where a file processed through Timber image operations could possibly execute arbitrary code in certain circumstances. This vulnerability only exists for websites running on PHP 7.4 or lower.
 
 = 1.23.0 =
 
