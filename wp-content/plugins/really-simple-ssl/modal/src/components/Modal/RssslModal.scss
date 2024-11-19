@@ -1,6 +1,8 @@
 @import '../../../../assets/css/variables.scss';
 .rsssl-modal {
+  overflow: visible;
   width: 700px;
+  max-width: 700px;
   //background:var(--rsp-grey-100);
   padding:var(--rsp-spacing-m) var(--rsp-spacing-l);
   box-shadow:var(--rsp-box-shadow);
@@ -63,6 +65,15 @@
     position: absolute;
     left: 0;
     right: 0;
+    .rsssl-modal-footer-buttons {
+      display: flex;
+      .rsssl-activate-license-text {
+        margin-right: 10px;
+        color: var(--rsp-red);
+      }
+    }
+    border-bottom-left-radius: var(--rsp-border-radius) var(--rsp-border-radius);
+    border-bottom-right-radius: var(--rsp-border-radius) var(--rsp-border-radius);
     img {
       width: 150px;
 
@@ -90,6 +101,7 @@
     button + a {
       margin-left: 10px;
     }
+
     button {
       &:not(.is-primary) {
         border: 1px solid var(--wp-admin-theme-color, #3858e9);

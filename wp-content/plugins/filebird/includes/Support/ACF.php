@@ -5,7 +5,6 @@ namespace FileBird\Support;
 defined( 'ABSPATH' ) || exit;
 
 class ACF {
-
 	public function __construct() {
 		add_action( 'acf/include_field_types', array( $this, 'include_field' ) ); // v5
 		add_action( 'acf/register_fields', array( $this, 'include_field' ) ); // v4

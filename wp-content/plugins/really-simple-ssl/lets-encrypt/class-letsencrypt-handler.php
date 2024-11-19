@@ -2,6 +2,8 @@
 defined('ABSPATH') or die("you do not have access to this page!");
 
 require_once rsssl_le_path . 'vendor/autoload.php';
+require_once rsssl_path . 'lib/admin/class-encryption.php';
+use RSSSL\lib\admin\Encryption;
 use LE_ACME2\Account;
 use LE_ACME2\Authorizer\AbstractDNSWriter;
 use LE_ACME2\Authorizer\DNS;
@@ -12,6 +14,7 @@ use LE_ACME2\Utilities\Certificate;
 use LE_ACME2\Utilities\Logger;
 
 class rsssl_letsencrypt_handler {
+	use Encryption;
 
 	private static $_this;
 	/**
@@ -27,8 +30,10 @@ class rsssl_letsencrypt_handler {
 	function __construct() {
 
 		if ( isset( self::$_this ) ) {
-			wp_die( sprintf( __( '%s is a singleton class and you cannot create a second instance.', 'really-simple-ssl' ), get_class( $this ) ) );
+			wp_die();
 		}
+
+		add_action('admin_init', array($this, 'upgrade'));
 
 		//loading of these hooks is stricter. The class can be used in the notices, which are needed on the generic dashboard
 		//These functionality is not needed on the dashboard, so should only be loaded in strict circumstances
@@ -51,6 +56,7 @@ class rsssl_letsencrypt_handler {
 			}
 
 			// General configs
+			//$use_staging = defined('RSSSL_LE_DEBUG');
 			Connector::getInstance()->useStagingServer( false );
 			Logger::getInstance()->setDesiredLevel( Logger::LEVEL_DISABLED );
 
@@ -60,7 +66,6 @@ class rsssl_letsencrypt_handler {
 
 			Order::setPreferredChain('ISRG Root X1');
 			$this->subjects = $this->get_subjects();
-			$this->verify_dns();
 		}
 
 		self::$_this = $this;
@@ -95,16 +100,16 @@ class rsssl_letsencrypt_handler {
 		$htaccess = file_get_contents( $htaccess_file );
 
 		//if it's already inserted, skip.
-		if ( strpos($htaccess, 'Really Simple SSL LETS ENCRYPT') !== FALSE ) {
+		if ( strpos($htaccess, 'Really Simple Security LETS ENCRYPT') !== FALSE ) {
 			return;
 		}
 
-		$htaccess = preg_replace("/#\s?BEGIN\s?Really Simple SSL LETS ENCRYPT.*?#\s?END\s?Really Simple SSL LETS ENCRYPT/s", "", $htaccess);
+		$htaccess = preg_replace("/#\s?BEGIN\s?Really Simple Security LETS ENCRYPT.*?#\s?END\s?Really Simple Security LETS ENCRYPT/s", "", $htaccess);
 		$htaccess = preg_replace("/\n+/", "\n", $htaccess);
 
-		$rules = '#BEGIN Really Simple SSL LETS ENCRYPT'."\n";
+		$rules = '#BEGIN Really Simple Security LETS ENCRYPT'."\n";
 		$rules .= 'RewriteRule ^.well-known/(.*)$ - [L]'."\n";
-		$rules .= '#END Really Simple SSL LETS ENCRYPT'."\n";
+		$rules .= '#END Really Simple Security LETS ENCRYPT'."\n";
 		$htaccess = $rules . $htaccess;
 		file_put_contents($htaccess_file, $htaccess);
 
@@ -157,10 +162,21 @@ class rsssl_letsencrypt_handler {
 	public function after_save_field(
 		$fieldname, $fieldvalue, $prev_value, $type
 	) {
-		rsssl_progress_add('domain');
+		rsssl_progress_add( 'domain' );
 		//only run when changes have been made
 		if ( $fieldvalue === $prev_value ) {
 			return;
+		}
+
+		$options = [
+			'directadmin_password',
+			'cpanel_password',
+			'cloudways_api_key',
+			'plesk_password',
+		];
+
+		if ( in_array($fieldname, $options) && strpos( $fieldvalue, 'rsssl_' ) === false ) {
+			rsssl_update_option($fieldname, $this->encrypt_with_prefix($fieldvalue) );
 		}
 
 		if ( $fieldname==='other_host_type' ){
@@ -199,11 +215,11 @@ class rsssl_letsencrypt_handler {
 		    rsssl_progress_remove('system-status');
 		    $action = 'stop';
 		    $status = 'error';
-		    $message = __("It is not possible to install Let's Encrypt on a subfolder configuration.", "really-simple-ssl" ).rsssl_le_read_more('https://really-simple-ssl.com/install-ssl-on-subfolders');
+		    $message = __("It is not possible to install Let's Encrypt on a subfolder configuration.", "really-simple-ssl" ).rsssl_le_read_more(rsssl_link('install-ssl-on-subfolders') );
 	    } elseif ( rsssl_caa_record_prevents_le() ) {
 		    $action = 'stop';
 		    $status = 'error';
-		    $message = __("Please adjust the CAA records via your DNS provider to allow Let’s Encrypt SSL certificates", "really-simple-ssl" ).rsssl_le_read_more('https://really-simple-ssl.com/instructions/edit-dns-caa-records-to-allow-lets-encrypt-ssl-certificates/');
+		    $message = __("Please adjust the CAA records via your DNS provider to allow Let’s Encrypt SSL certificates", "really-simple-ssl" ).rsssl_le_read_more(rsssl_link('instructions/edit-dns-caa-records-to-allow-lets-encrypt-ssl-certificates/') );
 	    } else {
 		    $action = 'continue';
 		    $status = 'success';
@@ -219,7 +235,7 @@ class rsssl_letsencrypt_handler {
 
     public function search_ssl_installation_url(){
     	//start with most generic, then more specific if possible.
-	    $url = 'https://really-simple-ssl.com/install-ssl-certificate';
+	    $url = rsssl_link('install-ssl-certificate');
 	    $host = 'enter-your-dashboard-url-here';
 
 	    if (function_exists('wp_get_direct_update_https_url') && !empty(wp_get_direct_update_https_url())) {
@@ -298,7 +314,7 @@ class rsssl_letsencrypt_handler {
 	 * @return bool
 	 */
 
-	public function certificate_about_to_expire(){
+	public function certificate_about_to_expire() {
 		$about_to_expire = RSSSL()->certificate->about_to_expire();
 		if ( !$about_to_expire ) {
 			//if the certificate is valid, stop any attempt to renew.
@@ -340,8 +356,8 @@ class rsssl_letsencrypt_handler {
 	 * @return RSSSL_RESPONSE
 	 */
 
-    public function curl_exists(){
-	    if(function_exists('curl_init') === false){
+    public function curl_exists() {
+	    if( function_exists('curl_init') === false ){
 		    $action = 'stop';
 		    $status = 'error';
 		    $message = __("The PHP function CURL is not available on your server, which is required. Please contact your hosting provider.", "really-simple-ssl" );
@@ -358,7 +374,7 @@ class rsssl_letsencrypt_handler {
 	 * Get or create an account
 	 * @return RSSSL_RESPONSE
 	 */
-    public function get_account(){
+    public function get_account() {
 	    $account_email = $this->account_email();
         if ( is_email($account_email) ) {
 	        try {
@@ -421,7 +437,7 @@ class rsssl_letsencrypt_handler {
 							    $response = new RSSSL_RESPONSE(
 								    'success',
 								    'continue',
-								    __( "Token successfully retrieved.", 'really-simple-ssl' ),
+								    __( "Token successfully retrieved. Click the refresh button if it's not visible yet.", 'really-simple-ssl' ),
 								    $this->get_dns_tokens()
 							    );
 						    } else {
@@ -429,7 +445,7 @@ class rsssl_letsencrypt_handler {
 								    $response = new RSSSL_RESPONSE(
 									    'success',
 									    'continue',
-									    __( "Token successfully retrieved.", 'really-simple-ssl' ),
+									    __( "Token successfully retrieved. Click the refresh button if it's not visible yet.", 'really-simple-ssl' ),
 									    $this->get_dns_tokens()
 								    );
 							    } else {
@@ -445,15 +461,18 @@ class rsssl_letsencrypt_handler {
 						    $error = $this->get_error( $e );
 						    if ( strpos( $error, 'No challenge found with given type')!==false ) {
 							    //Maybe it was first set to HTTP challenge. retry after clearing the order.
-							    $order->clear();
+							    $this->clear_order(true);
+						    } else if (strpos($error, 'Keys exist already')!==false) {
+							    $this->clear_order(true);
+							    $error = __("DNS token not retrieved.", 'really-simple-ssl').' '.__("There are existing keys, the order had to be cleared first.","really-simple-ssl")." ".__("Please start at the previous step.","really-simple-ssl");
 						    } else if (strpos($error, 'Order has status "invalid"')!==false) {
-							    $order->clear();
-							    $error = __("The order is invalid, possibly due to too many failed authorization attempts. Please start at the previous step.","really-simple-ssl");
+							    $this->clear_order();
+							    $error = __("DNS token not retrieved.", 'really-simple-ssl').' '.__("The order is invalid, possibly due to too many failed authorization attempts. Please start at the previous step.","really-simple-ssl");
 						    } else
 						    //fixing a plesk bug
 						    if ( strpos($error, 'No order for ID ') !== FALSE){
 							    $error .= '&nbsp;'.__("Order ID mismatch, regenerate order.","really-simple-ssl");
-							    $order->clear();
+							    $this->clear_order();
 							    rsssl_progress_remove('dns-verification');
 							    $error .= '&nbsp;'.__("If you entered your DNS records before, they need to be changed.","really-simple-ssl");
 						    }
@@ -463,6 +482,12 @@ class rsssl_letsencrypt_handler {
 							    $error
 						    );
 					    }
+				    } else {
+					    if (strpos($response->message, 'Keys exist already')!==false) {
+						    $this->clear_order(true);
+						    $response->message = __("DNS token not retrieved.", 'really-simple-ssl').' '.__("There are existing keys, the order had to be cleared first.","really-simple-ssl")." ".__("Please start at the previous step.","really-simple-ssl");
+					    }
+					    return $response;
 				    }
 			    } catch ( Exception $e ) {
 				    rsssl_progress_remove( 'dns-verification' );
@@ -525,7 +550,7 @@ class rsssl_letsencrypt_handler {
 			foreach ($tokens as $identifier => $token){
 				if (strpos($identifier, '*') !== false) continue;
 				set_error_handler(array($this, 'custom_error_handling'));
-
+				ini_set('dns_cache_expiry', 0);
 				$response = dns_get_record( "_acme-challenge.$identifier", DNS_TXT );
 				restore_error_handler();
 				if ( isset($response[0]['txt']) ){
@@ -537,11 +562,14 @@ class rsssl_letsencrypt_handler {
 						);
 						update_option('rsssl_le_dns_records_verified', true, false );
 					} else {
+						$ttl = $response[0]['ttl'] ?? 0;
+						$ttl = $this->format_duration($ttl);
 						$action = get_option('rsssl_skip_dns_check') ? 'continue' : 'stop';
 						$response = new RSSSL_RESPONSE(
 							'error',
 							$action,
-							sprintf(__('The DNS response for %s was %s, while it should be %s.', "really-simple-ssl"), "_acme-challenge.$identifier", $response[0]['txt'], $token )
+							sprintf(__('The DNS response for %s was %s, while it should be %s.', "really-simple-ssl"), "_acme-challenge.$identifier", $response[0]['txt'], $token ). ' '.
+							sprintf(__("Please wait %s before trying again, as this is the expiration of the DNS record currently.", 'really-simple-ssl'), $ttl)
 						);
 						break;
 					}
@@ -566,14 +594,33 @@ class rsssl_letsencrypt_handler {
 		return $response;
 	}
 
+	private function format_duration($seconds) {
+		$seconds = (int) $seconds;
+		if ($seconds >= 3600) {
+			$hours = floor($seconds / 3600);
+			$minutes = floor(($seconds % 3600) / 60);
+			$secs = $seconds % 3600 % 60;
+			return sprintf(__("%d:%02d:%02d hours", 'really-simple-ssl'), $hours, $minutes, $secs);
+		} elseif ($seconds >= 60) {
+			$minutes = floor($seconds / 60);
+			$secs = $seconds % 60;
+			return sprintf(__("%d:%02d minutes", 'really-simple-ssl'), $minutes, $secs);
+		} else {
+			return sprintf(__("%d seconds", 'really-simple-ssl'), $seconds);
+		}
+	}
+
 	/**
 	 * Clear an existing order
 	 */
-	public function clear_order(){
+	public function clear_order( $clear_keys = false ) {
+		if ( $clear_keys ) {
+			$this->clear_keys_directory();
+		}
 		$this->get_account();
 		if ( $this->account ) {
 			$response = $this->get_order();
-			$order = $response->output;
+			$order    = $response->output;
 			if ( $order ) {
 				$order->clear();
 			}
@@ -589,9 +636,9 @@ class rsssl_letsencrypt_handler {
 	    $bundle_completed = false;
     	$use_dns = rsssl_dns_verification_required();
 	    $attempt_count = (int) get_transient( 'rsssl_le_generate_attempt_count' );
-	    if ( $attempt_count>5 ){
+	    if ( $attempt_count>10 ){
 		    delete_option("rsssl_le_start_renewal");
-		    $message = __("The certificate generation was rate limited for 10 minutes because the authorization failed.",'really-simple-ssl');
+		    $message = __("The certificate generation was rate limited for 5 minutes because the authorization failed.",'really-simple-ssl');
 		    if ($use_dns){
 			    $message .= '&nbsp;'.__("Please double check your DNS txt record.",'really-simple-ssl');
 		    }
@@ -612,9 +659,14 @@ class rsssl_letsencrypt_handler {
 	        }
 	    }
 
-	    if (rsssl_is_ready_for('generation') ) {
+	    if ( rsssl_is_ready_for('generation') ) {
+
 		    $this->get_account();
 			if ( $use_dns ) {
+				if ( defined('WP_DEBUG') && WP_DEBUG ) {
+					error_log( "DNS verified: " . get_option( 'rsssl_le_dns_records_verified' ) );
+					error_log( "Skip DNS check: " . get_option( 'rsssl_skip_dns_check' ) );
+				}
 				$dnsWriter = new class extends AbstractDNSWriter {
 					public function write( Order $order, string $identifier, string $digest): bool {
 						$status = false;
@@ -678,15 +730,21 @@ class rsssl_letsencrypt_handler {
 				    } catch ( Exception $e ) {
 					    $this->count_attempt();
 					    $message = $this->get_error( $e );
+						if ( defined('WP_DEBUG') && WP_DEBUG ) {
+							error_log("Really Simple Security: ".$message);
+						}
 					    $response = new RSSSL_RESPONSE(
 						    'error',
 						    'stop',
 						    $message
 					    );
-
-					    if (strpos($message, 'Order has status "invalid"')!==false) {
-					    	$order->clear();
-						    $response->message = __("The order is invalid, possibly due to too many failed authorization attempts. Please start at the previous step.","really-simple-ssl");
+					    if ( strpos( $message, 'No challenge found with given type')!==false ) {
+						    //Maybe it was first set to HTTP challenge. retry after clearing the order.
+						    $response->message = __("Due to a change in challenge type, the order had to be reset. Please start at the previous step.","really-simple-ssl");
+						    $this->clear_order(true);
+					    } else if ( strpos($message, 'Order has status "invalid"')!==false) {
+						    $this->clear_order();
+						    $response->message = __("Certificate not created.", 'really-simple-ssl').' '.__("The order is invalid, possibly due to too many failed authorization attempts. Please start at the previous step.","really-simple-ssl");
 					        if ($use_dns) {
 					        	rsssl_progress_remove('dns-verification');
 						        $response->message .= '&nbsp;'.__("As your order will be regenerated, you'll need to update your DNS text records.","really-simple-ssl");
@@ -846,9 +904,9 @@ class rsssl_letsencrypt_handler {
 	 * Keep track of certain request counts, to prevent rate limiting by LE
 	 */
     public function count_attempt(){
-	    $attempt_count = intval(get_transient('rsssl_le_generate_attempt_count'));
+	    $attempt_count = (int) get_transient( 'rsssl_le_generate_attempt_count' );
 	    $attempt_count++;
-	    set_transient('rsssl_le_generate_attempt_count', $attempt_count, 10 * MINUTE_IN_SECONDS);
+	    set_transient('rsssl_le_generate_attempt_count', $attempt_count, 5 * MINUTE_IN_SECONDS);
     }
 
 	public function reset_attempt(){
@@ -1009,7 +1067,6 @@ class rsssl_letsencrypt_handler {
 	    try {
 	        $this->account->update($new_email);
         } catch (Exception $e) {
-            //error_log(print_r($e, true));
         }
     }
 
@@ -1149,7 +1206,7 @@ class rsssl_letsencrypt_handler {
 				$action = 'continue';
 				$status = 'error';
 				$message = sprintf(__("According to our information, your hosting provider supplies your account with an SSL certificate by default. Please contact your %shosting support%s if this is not the case.","really-simple-ssl"), '<a target="_blank" href="'.$url.'">', '</a>').'&nbsp'.
-				       __("After completing the installation, you can let Really Simple SSL automatically configure your site for SSL by using the 'Activate SSL' button.","really-simple-ssl");
+				       __("After completing the installation, you can let Really Simple Security automatically configure your site for SSL by using the 'Activate SSL' button.","really-simple-ssl");
 			}
 		}
 		return new RSSSL_RESPONSE($status, $action, $message);
@@ -1255,7 +1312,7 @@ class rsssl_letsencrypt_handler {
 			return false;
 		}
 
-		fwrite($test_file, 'file to test writing permissions for Really Simple SSL');
+		fwrite($test_file, 'file to test writing permissions for Really Simple Security');
 		fclose( $test_file );
 		restore_error_handler();
 		if (!file_exists($directory . "/really-simple-ssl-permissions-check.txt")) {
@@ -1277,7 +1334,7 @@ class rsssl_letsencrypt_handler {
 		$url = str_replace('https://', 'http://', site_url('.well-known/acme-challenge/really-simple-ssl-permissions-check.txt'));
 
 		$error_message = sprintf(__( "Could not reach challenge directory over %s.", "really-simple-ssl"), '<a target="_blank" href="'.$url.'">'.$url.'</a>');
-		$test_string = 'Really Simple SSL';
+		$test_string = 'Really Simple Security';
 		$folders = $this->directories_without_writing_permissions();
 		if ( !$this->challenge_directory() || count($folders) !==0 ) {
 			$status  = 'error';
@@ -1296,11 +1353,11 @@ class rsssl_letsencrypt_handler {
 			if (get_option('rsssl_skip_challenge_directory_request')) {
 				$status  = 'warning';
 				$action = 'continue';
-				$message = $error_message.' '.sprintf( __( "Error code %s.", "really-simple-ssl" ), $status_code );
+				$message = $error_message.' '.sprintf( __( "Error code %s", "really-simple-ssl" ), $status_code );
 			} else {
 				$status  = 'error';
 				$action = 'stop';
-				$message = $error_message.' '.sprintf( __( "Error code %s.", "really-simple-ssl" ), $status_code );
+				$message = $error_message.' '.sprintf( __( "Error code %s", "really-simple-ssl" ), $status_code );
 				rsssl_progress_remove('directories');
 			}
 		} else {
@@ -1513,7 +1570,7 @@ class rsssl_letsencrypt_handler {
 		            . '<ifModule !mod_authz_core.c>' . "\n"
 		            . '    Deny from all' . "\n"
 		            . '</ifModule>';
-		insert_with_markers($path, 'Really Simple SSL LETS ENCRYPT', $htaccess);
+		insert_with_markers($path, 'Really Simple Security LETS ENCRYPT', $htaccess);
 
 		$htaccess = file_get_contents( $path );
 		if ( strpos($htaccess, 'deny from all') !== FALSE ) {
@@ -1540,7 +1597,7 @@ class rsssl_letsencrypt_handler {
 		if ($is_subdomain) {
 			$status  = 'error';
 			$action  = 'stop';
-			$message = sprintf(__("This is a multisite configuration with subdomains. You should generate a wildcard certificate on the root domain.",'really-simple-ssl'), '<a href="https://really-simple-ssl.com/pro/?mtm_campaign=error&mtm_kwd=multisite&mtm_source=free&mtm_medium=letsencrypt&mtm_content=upgrade" target="_blank">','</a>');
+			$message = sprintf(__("This is a multisite configuration with subdomains. You should generate a wildcard certificate on the root domain.",'really-simple-ssl'), '<a href="'.rsssl_link('pro','error', 'letsencrypt').'" target="_blank">','</a>');
 			rsssl_progress_remove('system-status');
 		} else {
 			$status  = 'success';
@@ -1770,6 +1827,36 @@ class rsssl_letsencrypt_handler {
 		return new RSSSL_RESPONSE($status, $action, $message);
 	}
 
+	public function upgrade(){
+		if ( get_option('rsssl_upgrade_le_key') ) {
+			// Check if the encryption key is not empty before upgrading. On slow servers, the write to wp-config.php can be
+			// incomplete before the plugin gets here
+			$key = $this->get_encryption_key();
+			if ( empty( $key ) ) {
+				return;
+			}
+			delete_option('rsssl_upgrade_le_key');
+			$site_key = get_site_option( 'rsssl_le_key');
+			if ( $site_key ) {
+				$options = [
+					'directadmin_password',
+					'cpanel_password',
+					'cloudways_api_key',
+					'plesk_password',
+				];
+				foreach ( $options as $option ) {
+					$option_value = rsssl_get_option( $option );
+					if ( $option_value ) {
+						$decrypted = $this->decrypt_if_prefixed( $option_value, 'rsssl_', $site_key);
+						$encrypted = $this->encrypt_with_prefix($decrypted);
+						rsssl_update_option($option, $encrypted);
+					}
+				}
+				delete_site_option( 'rsssl_le_key');
+			}
+		}
+	}
+
 	/**
 	 * Cleanup the default message a bit
 	 *
@@ -1783,33 +1870,4 @@ class rsssl_letsencrypt_handler {
 			'Error creating new order ::',
 		), '', $msg);
     }
-
-	/**
-	 * Decode a string
-	 * @param $string
-	 *
-	 * @return string
-	 */
-    public function decode($string){
-		if ( !wp_doing_cron() && !rsssl_user_can_manage() ) {
-			return '';
-		}
-
-		if ( strpos( $string , 'rsssl_') !== FALSE ) {
-			$key = get_site_option( 'rsssl_key' );
-			$string = str_replace('rsssl_', '', $string);
-
-			// To decrypt, split the encrypted data from our IV
-			$ivlength = openssl_cipher_iv_length('aes-256-cbc');
-			$iv = substr(base64_decode($string), 0, $ivlength);
-			$encrypted_data = substr(base64_decode($string), $ivlength);
-
-			$decrypted =  openssl_decrypt($encrypted_data, 'aes-256-cbc', $key, 0, $iv);
-			return $decrypted;
-		}
-
-		//not encoded, return
-		return $string;
-	}
-
 }

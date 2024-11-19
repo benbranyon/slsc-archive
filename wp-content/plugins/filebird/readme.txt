@@ -1,10 +1,10 @@
 === FileBird - WordPress Media Library Folders & File Manager ===
 Contributors: ninjateam
 Donate link: https://ninjateam.org/wordpress-media-library-folders/ 
-Tags: wordpress media library folders, file manager, folders, media, gallery, media folder
+Tags: wordpress media library folders, folders, media, media folders, category, file manager
 Requires at least: 3.0
-Tested up to: 6.5
-Stable tag: 5.6.4
+Tested up to: 6.6
+Stable tag: 6.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -69,22 +69,22 @@ You can sort and search for files and folder names not only in the **Media libra
 Go advanced with 2 ways to sort folders and 10 ways to sort files. This is a great time-saver for all busy WordPress admins & webmasters.
 
 **Sort Files by File Size (PRO)**
-Now you can calculate your attachment size in a single click and be able to sort files by filesize.
+Now you can calculate your attachment size in a single click and sort files by file size.
 
 **Custom Folder Color (PRO)**
 Right-click on a specific folder to pick a distinct color. This helps differentiate it between numerous folders.
 
 **Multiple Tree View Styles (PRO)**
-Apart from the hierarchical tree view, you have an option to hide levels from the tree view, too. This flat tree view is very useful for those with a large number of folders.
+Apart from the hierarchical tree view, you have the option to hide levels from the tree view, too. This flat tree view is very useful for those with a large number of folders.
 
 **Categorize Pages, Posts, and Custom Post Types (PRO)**
 Easily enable the folder tree to organize your WordPress pages, posts, plugins, WooCommerce coupons, discounts, and other CPTs.
 
 **Customizable Default File Order**
-Set a way of sorting files ascending/descending alphabetically by the file name, title, date, modified, and author.
+Set a way of sorting files alphabetically by ascending/descending the file name, title, date, modified, and author.
 
 **Bulk-Delete Folders**
-Now, you can bulk-select folders and delete them in a single click. All those files will be moved to the Uncategorized folder and remain intact.
+Now, you can bulk-select File Bird folders and delete them in a single click. All those files will be moved to the Uncategorized folder and remain intact.
 
 **RTL Supported**
 FileBird supports RTL languages including Hebrew, Arabic, etc.
@@ -163,9 +163,9 @@ With [FileBird Pro](https://1.envato.market/FileBird-Premium), you will be able 
 * And a lot more +++
 
 == Installation ==
-Setup is easy and takes fewer than one minute.
+Setup FileBird (or File Bird) is easy and takes less than one minute.
 
-1. Download the plugin from wordpress.org, unpack it and upload the **[FileBird]** folder to your **wp-content/plugins/** directory.
+1. Download the plugin from wordpress.org, unpack it, and upload the **[FileBird]** folder to your **wp-content/plugins/** directory.
 2. Activate the plugin through the ‘Plugins‘ menu in WordPress.
 3. Go to your main **WordPress menu > Media** to create a folder to manage your files.
 
@@ -208,6 +208,55 @@ Happy Organizing! 😍
 
 
 == Changelog ==
+
+= Oct 17, 2024 - Version 6.4.2 =
+- Added: Auto Select Previous Folder in Upload New Media Page
+- Added: Change some user settings to global settings, not belong to each user anymore (Folder counter, Theme, Breadcrumb)
+- Updated: Polish pl_PL language
+- Added: Some new filter hooks
+- Fixed: Laggy text selection when using with Divi Builder
+- Fixed: Sort folders (display wrong order) in custom post types
+- Fixed: An issue where the script sometimes doesn't load
+
+= Aug 23, 2024 - Version 6.3.4 =
+- Fixed: CSV Export Vulnerability
+- Fixed: Change to use Translations files from wp.org (https://wordpress.org/support/topic/translation-conflict-with-filebird-plugin/)
+- Fixed: Exclude trashed posts out of folder count
+
+= Jun 25, 2024 - Version 6.3.3 =
+- Fixed: Plugin dependencies
+
+= Jun 25, 2024 - Version 6.3.2 =
+- Fixed: Issue with loading media in Add New Media File page
+- Fixed: CSS hiding all admin notices
+
+= Jun 24, 2024 - Version 6.3 =
+- Added: FileBird folder column in Media list and Post Type table (PRO)
+- Improved: WordPress TableList Drag/Drop
+- Fixed: WordPress VIP service doesn't load FileBird styles
+- Fixed: WPML/Polylang not sync file to folder when add new attachment (PRO)
+
+= Jun 14, 2024 - Version 6.2.5 =
+- Fixed: Folder dropdown not showing in Featured Image upload tab when Elementor is activated
+
+= May 23, 2024 - Version 6.2.3 =
+- New: Full compatibility of folders for pages, posts, custom post types with WPML, Polylang, etc.
+- New: SVG upload & sanitization
+- New: Each user can now experience new folder skins in different themes
+- New: Quickly display folder ID
+- New: File counter options for each user
+- New: UI/UX & icon design
+- Required: At least PHP 7.4
+- Improved: Unstyled component
+- Improved: Smooth resizeable folder sidebar
+- Improved: Lightweight plugin bundle with minified packages
+- Improved: Faster performance
+- Improved: Smart load assets per task
+- Improved: File search scope in list view
+- Improved: Performance
+- Fixed: Default folder settings not working in Elementor
+- Fixed: Default folder settings not saved in some CPTs
+- Fixed: PHP 8.0 auto-update library 
 
 = Mar 29, 2024 - Version 5.6.4 =
 - Fixed: Wordfence bug report

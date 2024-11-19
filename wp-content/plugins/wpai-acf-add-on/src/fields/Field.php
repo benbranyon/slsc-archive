@@ -270,8 +270,8 @@ abstract class Field implements FieldInterface {
             $value = ( $this->isNotEmpty() ) ? true : '';
         } else {
             $value = $this->getFieldValue();
-        }		
-		
+        }
+
         if ($value === '' && ! in_array($this->getType(), ['group', 'repeater', 'clone', 'flexible_content', 'button_group'])) {
             $is_import_empty_acf_fields = apply_filters("wp_all_import_is_import_empty_acf_fields", true, $this->parsingData['import']->id);
             if (empty($is_import_empty_acf_fields)) {
@@ -281,6 +281,7 @@ abstract class Field implements FieldInterface {
 
         switch ($this->getImportType()) {
             case 'import_users':
+            case 'shop_customer':
                 update_user_meta($this->getPostID(), "_" . $this->getFieldName(), $this->getFieldKey());
                 break;
             case 'taxonomies':
@@ -519,7 +520,7 @@ abstract class Field implements FieldInterface {
             $parents = $this->getParents();
             if (!empty($parents)){
                 foreach ($parents as $key => $parent) {
-                    if ($parent['delimiter'] !== FALSE) {
+                    if ($parent['delimiter'] !== FALSE && !is_array($value)) {
                         $value = explode($parent['delimiter'], $value);
                         $value = isset($value[$parent['index']]) ? $value[$parent['index']] : '';
                     }
@@ -774,9 +775,6 @@ abstract class Field implements FieldInterface {
                 }
                 if ($parent['delimiter'] !== FALSE) {
                     $value = explode($parent['delimiter'], $value);
-                    if (is_array($value)) {
-                        $value = array_filter($value);
-                    }
                     $parentIndex = $parent['index'];
                 }
             }

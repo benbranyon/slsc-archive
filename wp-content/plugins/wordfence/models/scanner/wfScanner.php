@@ -780,6 +780,27 @@ class wfScanner {
 	}
 	
 	/**
+	 * Returns the display name for the selected type of the scan.
+	 *
+	 * @return string
+	 */
+	public function scanTypeName() {
+		switch ($this->_scanType) {
+			case self::SCAN_TYPE_QUICK:
+				return __('Quick Scan', 'wordfence');
+			case self::SCAN_TYPE_LIMITED:
+				return __('Limited Scan', 'wordfence');
+			case self::SCAN_TYPE_HIGH_SENSITIVITY:
+				return __('High Sensitivity', 'wordfence');
+			case self::SCAN_TYPE_CUSTOM:
+				return __('Custom Scan', 'wordfence');
+			case self::SCAN_TYPE_STANDARD:
+			default:
+				return __('Standard Scan', 'wordfence');
+		}
+	}
+	
+	/**
 	 * Returns a normalized percentage (i.e., in the range [0, 1]) to the corresponding display percentage
 	 * based on license type.
 	 *

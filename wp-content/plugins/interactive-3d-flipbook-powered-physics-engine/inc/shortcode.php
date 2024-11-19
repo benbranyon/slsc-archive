@@ -160,7 +160,8 @@
       'cols'=> '3',
       'style'=> '',
       'query'=> '',
-      'book-template'=> 'default'
+      'book-template'=> 'default',
+      'trigger'=> ''
     ], $atts);
 
     if($atts['tax']==='null') {

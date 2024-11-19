@@ -4,29 +4,21 @@ global $rsssl_integrations_list;
 $rsssl_integrations_list = apply_filters( 'rsssl_integrations', array(
 	'user-registration' => array(
 		'folder'               => 'wordpress',
-		'impact'               => 'medium',
-		'risk'                 => 'medium',
 		'option_id'            => 'disable_anyone_can_register',
 	),
 
 	'file-editing' => array(
 		'folder'               => 'wordpress',
-		'impact'               => 'medium',
-		'risk'                 => 'low',
 		'option_id'            => 'disable_file_editing',
 	),
 
 	'hide-wp-version' => array(
 		'folder'               => 'wordpress',
-		'impact'               => 'low',
-		'risk'                 => 'low',
 		'option_id'            => 'hide_wordpress_version',
 	),
 
 	'user-enumeration' => array(
 		'folder'               => 'wordpress',
-		'impact'               => 'low',
-		'risk'                 => 'medium',
 		'option_id'            => 'disable_user_enumeration',
 	),
 
@@ -39,45 +31,37 @@ $rsssl_integrations_list = apply_filters( 'rsssl_integrations', array(
 
 	'prevent-login-info-leakage' => array(
 		'folder'               => 'wordpress',
-		'impact'               => 'low',
-		'risk'                 => 'high',
 		'option_id'            => 'disable_login_feedback',
 	),
 	'disable-indexing' => array(
 		'folder'               => 'server',
-		'impact'               => 'low',
-		'risk'                 => 'medium',
 		'option_id'            => 'disable_indexing',
 		'has_deactivation'     => true,
 	),
 
 	'rename-admin-user' => array(
 		'folder'               => 'wordpress',
-		'impact'               => 'high',
-		'risk'                 => 'high',
 		'option_id'            => 'rename_admin_user',
 	),
 	'display-name-is-login-name' => array(
 		'folder'               => 'wordpress',
-		'impact'               => 'low',
-		'risk'                 => 'medium',
 		'option_id'            => 'block_display_is_login',
 	),
 
 	'disable-xmlrpc' => array(
 		'folder'               => 'wordpress',
-		'impact'               => 'medium',
-		'risk'                 => 'low',
 		'option_id'            => 'disable_xmlrpc',
 		'always_include'       => false,
 	),
-
 	'vulnerabilities' => array(
 		'folder'               => 'wordpress',
-		'impact'               => 'medium',
-		'risk'                 => 'medium',
 		'option_id'            => 'enable_vulnerability_scanner',
 		'admin_only'           => true,
+	),
+	'class-rsssl-two-factor' => array(
+		'folder'         => 'wordpress/two-fa',
+		'option_id'      => 'login_protection_enabled',
+		'always_include' => false,
 	),
 ) );
 
@@ -112,9 +96,19 @@ if ( ! function_exists('rsssl_is_integration_enabled') ) {
 		$field_value  = $details['option_value'] ?? false;
 		$stored_value = rsssl_get_option( $field_id );
 		if ( $field_value ) {
-			if ( $stored_value === $field_value ) {
-				return true;
+			$invert = false;
+			$condition_met = false;
+			if (strpos($field_value, 'NOT') === 0) {
+				$invert = true;
+				$field_value = str_replace( 'NOT ', '', $field_value);
 			}
+			if ( $stored_value === $field_value ) {
+				$condition_met = true;
+			}
+			if ( $invert ) {
+				$condition_met = !$condition_met;
+			}
+			return $condition_met;
 		} else if ( $stored_value ) {
 			return true;
 		}
@@ -135,6 +129,7 @@ if ( ! function_exists('rsssl_integrations') ) {
 					'always_include' => false,
 					'folder'         => false,
 					'admin_only'     => false,
+					'is_pro'         => false,
 				]
 			);
 
@@ -143,9 +138,10 @@ if ( ! function_exists('rsssl_integrations') ) {
 			}
 
 			if ( rsssl_is_integration_enabled( $plugin, $details ) ) {
-				$path = apply_filters( 'rsssl_integrations_path', rsssl_path, $plugin );
+				$path = apply_filters( 'rsssl_integrations_path', rsssl_path, $plugin, $details );
+
 				$file = $path . 'security/' . $details['folder'] . "/" . $plugin . '.php';
-				if ( ! file_exists( $file ) ) {
+				if ( ! file_exists( $file ) && $safe_mode ) {
 					continue;
 				}
 				require_once( $file );

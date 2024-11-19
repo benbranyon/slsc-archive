@@ -18,58 +18,81 @@ function filebird_gallery_block_assets() {
 		NJFB_VERSION
 	);
 
+	wp_enqueue_style( 'filebird_gallery-fb-block-css' );
+
+	wp_register_style( 'fbv-photoswipe', NJFB_PLUGIN_URL . 'assets/css/photoswipe/photoswipe.css', array(), NJFB_VERSION );
+	wp_register_style( 'fbv-photoswipe-default-skin', NJFB_PLUGIN_URL . 'assets/css/photoswipe/default-skin.css', array(), NJFB_VERSION );
+
+	wp_register_script( 'fbv-photoswipe', NJFB_PLUGIN_URL . 'assets/js/photoswipe/photoswipe.min.js', array(), NJFB_VERSION, true );
+	wp_register_script( 'fbv-photoswipe-ui-default', NJFB_PLUGIN_URL . 'assets/js/photoswipe/photoswipe-ui-default.min.js', array(), NJFB_VERSION, true );
+	wp_register_script( 'filebird-gallery', NJFB_PLUGIN_URL . 'assets/js/photoswipe/fbv-photoswipe.min.js', array(), NJFB_VERSION, true );
+
 	register_block_type(
 		'filebird/block-filebird-gallery',
 		array(
-			'editor_script'   => 'filebird_gallery-block-js',
-			'render_callback' => 'filebird_gallery_render',
-			'editor_style'    => 'filebird_gallery-block-css',
-			'attributes'      => array(
-				'selectedFolder' => array(
+			'editor_script_handles' => array( 'filebird_gallery-block-js' ),
+			'render_callback'       => 'filebird_gallery_render',
+			'editor_style'          => 'filebird_gallery-block-css',
+			'attributes'            => array(
+				'selectedFolder'   => array(
 					'type'    => 'array',
 					'default' => array(),
 				),
-				'hasCaption'     => array(
+				'hasCaption'       => array(
 					'type'    => 'boolean',
 					'default' => false,
 				),
-				'captions'       => array(
+				'hasLightbox'      => array(
+					'type'    => 'boolean',
+					'default' => false,
+				),
+				'captions'         => array(
 					'type'    => 'object',
 					'default' => array(),
 				),
-				'imagesRemoved'  => array(
+				'imagesRemoved'    => array(
 					'type'    => 'array',
 					'default' => array(),
 				),
-				'images'         => array(
+				'images'           => array(
 					'type'    => 'array',
 					'default' => array(),
 				),
-				'columns'        => array(
+				'columns'          => array(
 					'type'    => 'integer',
 					'default' => 3,
 				),
-				'isCropped'      => array(
+				'isCropped'        => array(
 					'type'    => 'boolean',
 					'default' => true,
 				),
-				'linkTo'         => array(
+				'linkTo'           => array(
 					'type'    => 'string',
 					'default' => 'none',
 				),
-				'sortBy'         => array(
+				'sortBy'           => array(
 					'type'    => 'string',
 					'default' => 'date',
 				),
-				'sortType'       => array(
+				'sortType'         => array(
 					'type'    => 'string',
 					'default' => 'DESC',
+				),
+				'layout'           => array(
+					'type'    => 'string',
+					'default' => 'flex',
+				),
+				'spaceAroundImage' => array(
+					'type'    => 'integer',
+					'default' => 0,
+				),
+				'imgMinWidth'      => array(
+					'type'    => 'integer',
+					'default' => 0,
 				),
 			),
 		)
 	);
-
-	wp_set_script_translations( 'filebird_gallery-block-js', 'filebird', NJFB_PLUGIN_PATH . 'i18n/languages/' );
 }
 
 function filebird_gallery_prepare_ids( $ids ) {
@@ -125,7 +148,17 @@ function filebird_gallery_render( $attributes ) {
 			);
 		}
 	}
-	$ulClass  = 'wp-block-filebird-block-filebird-gallery wp-block-gallery blocks-gallery-grid';
+
+	$ulClass = 'filebird-block-filebird-gallery';
+
+	if ( 'flex' === $attributes['layout'] ) {
+		$ulClass .= ' wp-block-gallery blocks-gallery-grid';
+	} elseif ( 'grid' === $attributes['layout'] ) {
+		$ulClass .= ' layout-grid';
+	} elseif ( 'masonry' === $attributes['layout'] ) {
+		$ulClass .= ' layout-masonry';
+	}
+
 	$ulClass .= ! empty( $attributes['className'] ) ? ' ' . esc_attr( $attributes['className'] ) : '';
 	$ulClass .= ' columns-' . esc_attr( $attributes['columns'] );
 	$ulClass .= $attributes['isCropped'] ? ' is-cropped' : '';
@@ -134,8 +167,12 @@ function filebird_gallery_render( $attributes ) {
 		return '';
 	}
 
+	$styles  = '--columns: ' . esc_attr( $attributes['columns'] ) . ';';
+	$styles .= '--space: ' . esc_attr( $attributes['spaceAroundImage'] ) . 'px;';
+	$styles .= '--min-width: ' . esc_attr( $attributes['imgMinWidth'] ) . 'px;';
+
 	$html  = '';
-	$html .= '<ul class="' . esc_attr( $ulClass ) . '">';
+	$html .= '<ul class="' . esc_attr( $ulClass ) . '" style="' . $styles . '">';
 
 	foreach ( $posts as $post ) {
 		if ( ! wp_attachment_is_image( $post ) ) {
@@ -167,7 +204,7 @@ function filebird_gallery_render( $attributes ) {
 		$li .= empty( $href ) ? $img : '<a href="' . esc_attr( $href ) . '">' . $img . '</a>';
 
 		if ( $attributes['hasCaption'] ) {
-			$li .= empty( $post->post_excerpt ) ? '' : '<figcaption class="blocks-gallery-item__caption">' . esc_html( $post->post_excerpt ) . '</figcaption>';
+			$li .= empty( $post->post_excerpt ) ? '' : '<figcaption class="blocks-gallery-item__caption">' . wp_kses_post( $post->post_excerpt ) . '</figcaption>';
 		}
 
 		$li .= '</figure>';
@@ -178,9 +215,18 @@ function filebird_gallery_render( $attributes ) {
 
 	$html .= '</ul>';
 
-	wp_enqueue_style( 'filebird_gallery-block-css' );
-	wp_enqueue_style('wp-block-gallery');
+	if ( $attributes['hasLightbox'] ) {
+		wp_enqueue_style( 'fbv-photoswipe' );
+		wp_enqueue_style( 'fbv-photoswipe-default-skin' );
 
+		wp_enqueue_script( 'fbv-photoswipe' );
+		wp_enqueue_script( 'fbv-photoswipe-ui-default' );
+
+		wp_enqueue_script( 'filebird-gallery' );
+	}
+
+	wp_enqueue_style( 'wp-block-gallery' );
+	wp_enqueue_style( 'filebird_gallery-block-css' );
 	return $html;
 }
 
@@ -196,7 +242,7 @@ function filebird_gutenberg_get_images() {
 	);
 }
 
-function filebird_gutenberg_get_images_permission_callback(){
+function filebird_gutenberg_get_images_permission_callback() {
 	return current_user_can( 'upload_files' );
 }
 

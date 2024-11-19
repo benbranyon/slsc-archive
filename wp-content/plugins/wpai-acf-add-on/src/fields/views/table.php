@@ -52,7 +52,7 @@
 				<div class="input">
 					<p>
 						<?php printf(__("For each %s do ..."), '<input type="text" name="fields' . $field_name . '[' . $field["key"] . '][foreach]" value="'. esc_html($current_field["foreach"]) .'" class="pmai_foreach widefat rad4"/>'); ?>
-						<a href="http://www.wpallimport.com/documentation/advanced-custom-fields/repeater-fields/" target="_blank"><?php _e('(documentation)', 'wp_all_import_acf_add_on'); ?></a>
+						<a href="http://www.wpallimport.com/documentation/import-acf-repeater/" target="_blank"><?php _e('(documentation)', 'wp_all_import_acf_add_on'); ?></a>
 					</p>
 				</div>
 			</div>

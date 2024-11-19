@@ -6,11 +6,9 @@ jQuery(document).ready(function () {
     var fieldValue = jQuery(thisElement).attr("data");
     var proLink =
       "https://codecanyon.net/item/media-folders-manager-for-wordpress/reviews/21715379?utf8=%E2%9C%93&reviews_controls%5Bsort%5D=ratings_descending";
-    var freeLink =
-      "https://wordpress.org/support/plugin/filebird/reviews/#new-post";
     var hidePopup = true;
     if (fieldValue == "rateNow") {
-      window.open(freeLink, "_blank");
+      window.open(proLink, "_blank");
     } else {
       hidePopup = true;
     }
@@ -24,6 +22,7 @@ jQuery(document).ready(function () {
         dataType: "json",
         url: window.ajaxurl,
         type: "post",
+        cache: false,
         data: {
           action: "fbv_save_review",
           field: fieldValue,
@@ -63,6 +62,7 @@ jQuery(document).ready(function () {
           ),
           contentType: "application/json",
           type: "POST",
+          cache: false,
           dataType: "json",
           data: JSON.stringify({ field: fieldValue }),
         })

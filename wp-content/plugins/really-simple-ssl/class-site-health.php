@@ -16,6 +16,7 @@ if ( ! class_exists( 'rsssl_site_health' ) ) {
 			return self::$_this;
 		}
 
+
 		/**
 		 * Add SSL dedicated health check
 		 * @param array $tests
@@ -42,21 +43,126 @@ if ( ! class_exists( 'rsssl_site_health' ) ) {
 					);
 				}
 
-				if ( defined( 'WP_DEBUG' ) && WP_DEBUG && defined( 'WP_DEBUG_DISPLAY' ) && WP_DEBUG_DISPLAY ) {
-					$tests['direct']['rsssl_debug_display'] = array(
-						'test' => array( $this, 'site_health_debug_display_test' ),
+				if ( rsssl_get_option( 'enable_vulnerability_scanner' ) ) {
+					$tests['direct']['rsssl_vulnerabilities'] = array(
+						'label' => __( 'Vulnerability detection', 'really-simple-ssl' ),
+						'test' => array( $this, 'vulnerabilities_test' ),
 					);
 				}
 
-				if ( rsssl_get_option( 'enable_vulnerability_scanner' ) ) {
-					$vulnerabilities                          = new rsssl_vulnerabilities();
-					$tests['direct']['rsssl_vulnerabilities'] = array(
-						'test' => [ $vulnerabilities, 'get_site_health_notice' ],
-					);
-				}
+				// Two-Factor Authentication (2FA) test
+				$tests['direct']['rsssl_2fa_test'] = array(
+					'label' => __( 'Two-Factor Authentication', 'really-simple-ssl' ),
+					'test'  => array( $this, 'two_factor_auth_test' ),
+				);
+
+				// Limit Login Attempts (LLA) test
+				$tests['direct']['rsssl_lla_test'] = array(
+					'label' => __( 'Limit Login Attempts Protection', 'really-simple-ssl' ),
+					'test'  => array( $this, 'limit_login_attempts_test' ),
+				);
+
+				// Firewall Protection test
+				$tests['direct']['rsssl_firewall_test'] = array(
+					'label' => __( 'Firewall Protection', 'really-simple-ssl' ),
+					'test'  => array( $this, 'firewall_test' ),
+				);
 			}
 
 			return $tests;
+		}
+
+		/**
+		 * Test for Two-Factor Authentication (2FA)
+		 * @return array
+		 */
+		public function two_factor_auth_test() {
+			$status = 'recommended';
+			$description = __( 'We recommend to enable Two-Factor Authentication at least for administrators.', 'really-simple-ssl' );
+
+			// Check if RSSSL 2FA, WordFence, Solid Security, AIOS are installed and 2FA is enabled
+			if ( rsssl_get_option('login_protection_enabled') == '1' || is_plugin_active('wordfence/wordfence.php') || is_plugin_active('two-factor/two-factor.php') || is_plugin_active('all-in-one-wp-security-and-firewall/wp-security.php') || is_plugin_active('better-wp-security/better-wp-security.php')  ) {
+				$status = 'good';
+				$description = __( 'Your site is protected by Two-Factor Authentication (2FA).', 'really-simple-ssl' );
+			}
+
+			return array(
+				'label' => __( 'Protect your user logins with Two-Factor Authentication (at least for Administrator accounts)', 'really-simple-ssl' ),
+				'status' => $status,
+				'badge' => array(
+					'label' => __( 'Security', 'really-simple-ssl' ),
+					'color' => 'blue',
+				),
+				'description' => sprintf( '<p>%s</p>', $description ),
+				'actions' => sprintf(
+					'<p><a href="%s" target="_blank">%s</a></p>',
+					esc_url( admin_url( 'admin.php?page=really-simple-security#settings/two-fa' ) ),
+					__( 'Read more', 'really-simple-ssl' )
+				),
+				'test' => 'rsssl_2fa_test',
+			);
+		}
+
+		/**
+		 * Test for Limit Login Attempts (LLA)
+		 * @return array
+		 */
+		public function limit_login_attempts_test() {
+			$status = 'recommended';
+			$description = __( 'Enable Limit Login Attempts to protect the login form against brute-force attacks.', 'really-simple-ssl' );
+
+			// Check if RSSSL LLA or Limit Login Attempts Reloaded is installed and active
+			if ( rsssl_get_option('enable_limited_login_attempts') == '1' || is_plugin_active('wordfence/wordfence.php') || is_plugin_active('limit-login-attempts-reloaded/limit-login-attempts-reloaded.php') ) {
+				$status = 'good';
+				$description = __( 'Your site is protected by Limit Login Attempts.', 'really-simple-ssl' );
+			}
+
+			return array(
+				'label' => __( 'Protect your login form with Limit Login Attempts', 'really-simple-ssl' ),
+				'status' => $status,
+				'badge' => array(
+					'label' => __( 'Security', 'really-simple-ssl' ),
+					'color' => 'blue',
+				),
+				'description' => sprintf( '<p>%s</p>', $description ),
+				'actions' => sprintf(
+					'<p><a href="%s" target="_blank">%s</a></p>',
+					esc_url( admin_url( 'admin.php?page=really-simple-security#settings/limit_login_attempts' ) ),
+					__( 'Read more', 'really-simple-ssl' )
+				),
+				'test' => 'rsssl_lla_test',
+			);
+		}
+
+		/**
+		 * Test for Firewall Protection
+		 * @return array
+		 */
+		public function firewall_test() {
+			$status = 'recommended';
+			$description = __( 'Secure your site with the performant Firewall.', 'really-simple-ssl' );
+
+			// Check if WordFence, AIOS, or Solid Security is installed
+			if ( rsssl_get_option('enable_firewall') || is_plugin_active('wordfence/wordfence.php') || is_plugin_active('all-in-one-wp-security-and-firewall/wp-security.php') || is_plugin_active('better-wp-security/better-wp-security.php') ) {
+				$status = 'good';
+				$description = __( 'Your site is protected by a firewall.', 'really-simple-ssl' );
+			}
+
+			return array(
+				'label' => __( 'Secure your site with a Firewall', 'really-simple-ssl' ),
+				'status' => $status,
+				'badge' => array(
+					'label' => __( 'Security', 'really-simple-ssl' ),
+					'color' => 'blue',
+				),
+				'description' => sprintf( '<p>%s</p>', $description ),
+				'actions' => sprintf(
+					'<p><a href="%s" target="_blank">%s</a></p>',
+					esc_url( admin_url( 'admin.php?page=really-simple-security#settings/firewall' ) ),
+					__( 'Read more', 'really-simple-ssl' )
+				),
+				'test' => 'rsssl_firewall_test',
+			);
 		}
 
 		/**
@@ -66,7 +172,7 @@ if ( ! class_exists( 'rsssl_site_health' ) ) {
 		public function site_health_debug_log_test() {
 			$result = array(
 				'label'       => __( 'Your site is set to log errors to a potentially public file' ), // phpcs:ignore WordPress.WP.I18n.MissingArgDomain
-				'status'      => 'critical',
+				'status'      => 'recommended',
 				'badge'       => array(
 					'label' => __( 'Security' ), // phpcs:ignore WordPress.WP.I18n.MissingArgDomain
 					'color' => 'blue',
@@ -78,42 +184,12 @@ if ( ! class_exists( 'rsssl_site_health' ) ) {
 				'actions'     => sprintf(
 					'<p><a href="%s" target="_blank" rel="noopener noreferrer">%s <span class="screen-reader-text">%s</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a></p>',
 					/* translators: Documentation explaining debugging in WordPress. */
-					esc_url( add_query_arg( array( 'page' => 'really-simple-security#settings/hardening' ), rsssl_admin_url() ) ),
-					__( 'Remove from public location with Really Simple SSL', 'really-simple-ssl' ),
+					esc_url( rsssl_admin_url([], '#settings/hardening') ),
+					__( 'Remove from public location with Really Simple Security', 'really-simple-ssl' ),
 					/* translators: Accessibility text. */
 					__( '(opens in a new tab)' )// phpcs:ignore WordPress.WP.I18n.MissingArgDomain
 				),
 				'test'        => 'rsssl_debug_log',
-			);
-
-			return $result;
-		}
-
-		/**
-		 * Explain users about risks of debug display
-		 *
-		 */
-		public function site_health_debug_display_test() {
-			$result = array(
-				'label'       => __( 'Your site is set to display errors on your website', 'really-simple-ssl' ),
-				'status'      => 'critical',
-				'badge'       => array(
-					'label' => __( 'Security' ), // phpcs:ignore WordPress.WP.I18n.MissingArgDomain
-					'color' => 'blue',
-				),
-				'description' => sprintf(
-					'<p>%s</p>',
-					__( 'The value, WP_DEBUG_DISPLAY, has either been enabled by WP_DEBUG or added to your configuration file. This will make errors display on the front end of your site.', 'really-simple-ssl' )
-				),
-				'actions'     => sprintf(
-					'<p><a href="%s" target="_blank" rel="noopener noreferrer">%s <span class="screen-reader-text">%s</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a></p>',
-					/* translators: Documentation explaining debugging in WordPress. */
-					esc_url( 'https://really-simple-ssl.com/security/debug-display-enabled' ),
-					__( 'Read more about security concerns with debug display enabled', 'really-simple-ssl' ),
-					/* translators: Accessibility text. */
-					__( '(opens in a new tab)' )// phpcs:ignore WordPress.WP.I18n.MissingArgDomain
-				),
-				'test'        => 'rsssl_debug_display',
 			);
 
 			return $result;
@@ -126,7 +202,7 @@ if ( ! class_exists( 'rsssl_site_health' ) ) {
 
 		public function headers_test() {
 			$result = array(
-				'label'       => __( 'Recommended security headers installed', 'really-simple-ssl' ),
+				'label'       => __( 'Essential security headers installed', 'really-simple-ssl' ),
 				'status'      => 'good',
 				'badge'       => array(
 					'label' => __( 'Security' ), // phpcs:ignore WordPress.WP.I18n.MissingArgDomain
@@ -134,7 +210,7 @@ if ( ! class_exists( 'rsssl_site_health' ) ) {
 				),
 				'description' => sprintf(
 					'<p>%s</p>',
-					__( 'The recommended security headers are detected on your site.', 'really-simple-ssl' )
+					__( 'The essential security headers are detected on your site.', 'really-simple-ssl' )
 				),
 				'actions'     => '',
 				'test'        => 'headers_test',
@@ -146,12 +222,12 @@ if ( ! class_exists( 'rsssl_site_health' ) ) {
 				$style                 = '<style>.rsssl-sec-headers-list li {list-style-type:disc;margin-left:20px;}</style>';
 				$list                  = '<ul class="rsssl-sec-headers-list"><li>' . implode( '</li><li>', $recommended_headers ) . '</li></ul>';
 				$result['status']      = 'recommended';
-				$result['label']       = __( 'Not all recommended security headers are installed', 'really-simple-ssl' );
-				$result['description'] = sprintf( '<p>%s</p>', __( 'Your website does not send all recommended security headers.', 'really-simple-ssl' ) . $style . $list );
+				$result['label']       = __( 'Not all essential security headers are installed', 'really-simple-ssl' );
+				$result['description'] = sprintf( '<p>%s</p>', __( 'Your website does not send all essential security headers.', 'really-simple-ssl' ) . $style . $list );
 				$result['actions']     = sprintf(
 					'<p><a href="%s" target="_blank" rel="noopener noreferrer">%s</a></p>',
-					'https://really-simple-ssl.com/site-health-recommended-security-headers/',
-					__( 'Learn more about security headers', 'really-simple-ssl' )
+					rsssl_link('site-health-recommended-security-headers/'),
+					__( 'Read more', 'really-simple-ssl' )
 				);
 			}
 
@@ -163,7 +239,7 @@ if ( ! class_exists( 'rsssl_site_health' ) ) {
 		 * @return array
 		 */
 		public function ssl_tests() {
-			$url = add_query_arg( array( 'page' => 'really-simple-security' ), rsssl_admin_url() );
+			$url = rsssl_admin_url();
 
 			$result = array(
 				'label'       => __( '301 SSL redirect enabled', 'really-simple-ssl' ),
@@ -182,12 +258,12 @@ if ( ! class_exists( 'rsssl_site_health' ) ) {
 
 			if ( ! rsssl_get_option( 'ssl_enabled' ) ) {
 				if ( rsssl_get_option( 'site_has_ssl' ) ) {
-					$result['status']      = 'critical';
+					$result['status']      = 'recommended';
 					$result['label']       = __( 'SSL is not enabled.', 'really-simple-ssl' );
 					$result['description'] = sprintf(
 						'<p>%s</p>',
 						__(
-							'Really Simple SSL detected an SSL certificate, but has not been configured to enforce SSL.',
+							'Really Simple Security detected an SSL certificate, but has not been configured to enforce SSL.',
 							'really-simple-ssl'
 						)
 					);
@@ -197,11 +273,11 @@ if ( ! class_exists( 'rsssl_site_health' ) ) {
 						__( 'Activate SSL', 'really-simple-ssl' )
 					);
 				} else {
-					$result['status']      = 'critical';
-					$result['label']       = __( 'No SSL detected.', 'really-simple-ssl' );
+					$result['status']      = 'recommended';
+					$result['label']       = __( 'No SSL detected', 'really-simple-ssl' );
 					$result['description'] = sprintf(
 						'<p>%s</p>',
-						__( 'Really Simple SSL is installed, but no valid SSL certificate is detected.', 'really-simple-ssl' )
+						__( 'Really Simple Security is installed, but no valid SSL certificate is detected.', 'really-simple-ssl' )
 					);
 				}
 			} else {

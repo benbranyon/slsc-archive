@@ -3,7 +3,7 @@
 Plugin Name: WP All Import - ACF Add-On
 Plugin URI: http://www.wpallimport.com/
 Description: Import to Advanced Custom Fields. Requires WP All Import & Advanced Custom Fields.
-Version: 3.3.8
+Version: 3.3.9
 Author: Soflyy
 */
 /**
@@ -24,7 +24,7 @@ define('PMAI_ROOT_URL', rtrim(plugin_dir_url(__FILE__), '/'));
  */
 define('PMAI_PREFIX', 'pmai_');
 
-define('PMAI_VERSION', '3.3.8');
+define('PMAI_VERSION', '3.3.9');
 
 if ( class_exists('PMAI_Plugin') and PMAI_EDITION == "free"){
 
@@ -416,6 +416,7 @@ else {
 						        foreach ($fields as $key => $field) {
 							        if ( ! empty($field['name']) ) {
 								        self::$all_acf_fields[] = $field['name'];
+								        self::$all_acf_fields[] = '_' . $field['name'];
 							        }
 						        }
 					        }
@@ -473,9 +474,18 @@ else {
 	// retrieve our license key from the DB
 	$wpai_acf_addon_options = get_option('PMXI_Plugin_Options');
 
-	if (!empty($wpai_acf_addon_options['info_api_url'])){
+	// Favor new API URL, but fallback to old if needed.
+	if( !empty($wpai_acf_addon_options['info_api_url_new'])){
+		$api_url = $wpai_acf_addon_options['info_api_url_new'];
+	}elseif( !empty($wpai_acf_addon_options['info_api_url'])){
+		$api_url = $wpai_acf_addon_options['info_api_url'];
+	}else{
+		$api_url = null;
+	}
+
+	if (!empty($api_url)){
 		// setup the updater
-		$updater = new PMAI_Updater( $wpai_acf_addon_options['info_api_url'], __FILE__, array(
+		$updater = new PMAI_Updater( $api_url, __FILE__, array(
 				'version' 	=> PMAI_VERSION,		// current version number
 				'license' 	=> false, // license key (used get_option above to retrieve from DB)
 				'item_name' => PMAI_Plugin::getEddName(), 	// name of this plugin

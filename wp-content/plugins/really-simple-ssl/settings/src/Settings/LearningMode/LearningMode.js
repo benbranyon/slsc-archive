@@ -148,7 +148,7 @@ const LearningMode = (props) => {
     let disabledString = __("%s has been disabled.", "really-simple-ssl").replace('%s', field.label);
     let enforcedString = __("%s is enforced.", "really-simple-ssl").replace('%s', field.label);
     let enforceDisabled = !lmEnabledOnce;
-    if (enforcedByThirdparty) disabledString = __("%s is already set outside Really Simple SSL.", "really-simple-ssl").replace('%s', field.label);
+    if (enforcedByThirdparty) disabledString = __("%s is already set outside Really Simple Security.", "really-simple-ssl").replace('%s', field.label);
     let highLightClass = 'rsssl-field-wrap';
     if ( highLightField===props.field.id ) {
         highLightClass = 'rsssl-field-wrap rsssl-highlight';
@@ -160,7 +160,8 @@ const LearningMode = (props) => {
             name: item.name,
             sortable: item.sortable,
             width: item.width,
-            selector: row => row[item.column],
+            selector: item.column === 'documenturi' || item.column === 'method'
+                ? row => <span title={row[item.column]}>{row[item.column]}</span>: row => row[item.column],
         }
         columns.push(newItem);
     });
@@ -276,6 +277,13 @@ const LearningMode = (props) => {
                         theme={theme}
                         customStyles={customStyles}
                         conditionalRowStyles={conditionalRowStyles}
+                        paginationComponentOptions={{
+                            rowsPerPageText: __('Rows per page:', 'really-simple-ssl'),
+                            rangeSeparatorText: __('of', 'really-simple-ssl'),
+                            noRowsPerPage: false,
+                            selectAllRowsItem: false,
+                            selectAllRowsItemText: __('All', 'really-simple-ssl'),
+                        }}
                         selectableRows
                         selectableRowsHighlight={true}
                         onSelectedRowsChange={handleSelection}

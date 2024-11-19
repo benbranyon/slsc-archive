@@ -1,6 +1,6 @@
 import {__} from '@wordpress/i18n';
-import React, {useEffect, useState, useRef} from 'react';
-import DataTable, {createTheme, ExpanderComponentProps} from "react-data-table-component";
+import {useEffect, useState} from '@wordpress/element';
+import DataTable, {createTheme} from "react-data-table-component";
 import EventLogDataTableStore from "./EventLogDataTableStore";
 import FilterData from "../FilterData";
 import * as rsssl_api from "../../utils/api";
@@ -8,6 +8,7 @@ import useMenu from "../../Menu/MenuData";
 import Flag from "../../utils/Flag/Flag";
 import Icon from "../../utils/Icon";
 import useFields from "../FieldsData";
+import SearchBar from "../DynamicDataTable/SearchBar";
 
 const EventLogDataTable = (props) => {
     const {
@@ -33,10 +34,13 @@ const EventLogDataTable = (props) => {
         setProcessingFilter,
     } = FilterData();
 
-    const moduleName = 'rsssl-group-filter-limit_login_attempts_event_log';
+
 
     const {fields, fieldAlreadyEnabled, getFieldValue} = useFields();
-
+    const [tableHeight, setTableHeight] = useState(600);  // Starting height
+    const rowHeight = 50; // Height of each row.
+    const moduleName = 'rsssl-group-filter-' + props.field.id;
+    let field = props.field;
     useEffect(() => {
         const currentFilter = getCurrentFilter(moduleName);
 
@@ -52,7 +56,7 @@ const EventLogDataTable = (props) => {
     useEffect(() => {
         //we make sure the dataActions are changed in the store before we fetch the data
         if (dataActions) {
-            fetchDynamicData(field.action, dataActions)
+            fetchDynamicData(field.action, field.event_type, dataActions)
         }
     }, [dataActions.sortDirection, dataActions.filterValue, dataActions.search, dataActions.page, dataActions.currentRowsPerPage]);
 
@@ -60,16 +64,15 @@ const EventLogDataTable = (props) => {
 
     //we create the columns
     let columns = [];
-    //getting the fields from the propsß
-    let field = props.field;
+    //getting the fields from the props
+
     //we loop through the fields
     field.columns.forEach(function (item, i) {
         let newItem = buildColumn(item)
         columns.push(newItem);
     });
 
-
-    let enabled = getFieldValue('enable_limited_login_attempts');
+    let enabled = fieldAlreadyEnabled('event_log_enabled');
 
     const customStyles = {
         headCells: {
@@ -173,28 +176,24 @@ const EventLogDataTable = (props) => {
         )
     }
 
-    let paginationSet = true;
-    if (typeof pagination === 'undefined') {
-        paginationSet = false;
-    }
+    let paginationSet;
+    paginationSet = typeof pagination !== 'undefined';
+
+    useEffect(() => {
+        if (Object.keys(data).length === 0 ) {
+            setTableHeight(100); // Adjust depending on your UI measurements
+        } else {
+            setTableHeight(rowHeight * (paginationSet ? pagination.perPage + 2 : 12)); // Adjust depending on your UI measurements
+        }
+
+    }, [paginationSet, pagination?.perPage, data]);
 
     return (
         <>
             <div className="rsssl-container">
                 <div></div>
                 {/*Display the search bar*/}
-                <div className="rsssl-search-bar">
-                    <div className="rsssl-search-bar__inner">
-                        <div className="rsssl-search-bar__icon"></div>
-                        <input
-                            type="text"
-                            className="rsssl-search-bar__input"
-                            placeholder={__("Search", "really-simple-ssl")}
-                            disabled={processing}
-                            onChange={event => handleEventTableSearch(event.target.value, searchableColumns)}
-                        />
-                    </div>
-                </div>
+                <SearchBar handleSearch={handleEventTableSearch} searchableColumns={searchableColumns}/>
             </div>
             {/*Display the datatable*/}
             <DataTable

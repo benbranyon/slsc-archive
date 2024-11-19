@@ -3,29 +3,27 @@
  * Plugin Name: FileBird Lite
  * Plugin URI: https://ninjateam.org/wordpress-media-library-folders/
  * Description: Organize thousands of WordPress media files into folders/ categories at ease.
- * Version: 5.6.4
+ * Version: 6.4.2
  * Author: Ninja Team
  * Author URI: https://ninjateam.org
  * Text Domain: filebird
  * Domain Path: /i18n/languages/
- *
- * @package FileBirdPlugin
  */
+
 namespace FileBird;
 
 defined( 'ABSPATH' ) || exit;
 
+$php_version_valid = \version_compare( phpversion(), '7.4', '>=' );
+
 if ( function_exists( 'FileBird\\init' ) ) {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/Fallback.php';
-	if ( isset( $_GET['activate'] ) ) { // phpcs:ignore
-		unset( $_GET['activate'] ); // phpcs:ignore
-	}
 	add_action(
-         'admin_init',
-        function() {
+		'admin_init',
+		function() {
 			deactivate_plugins( plugin_basename( __FILE__ ) );
 		}
-        );
+	);
 	return;
 }
 
@@ -34,7 +32,7 @@ if ( ! defined( 'NJFB_PREFIX' ) ) {
 }
 
 if ( ! defined( 'NJFB_VERSION' ) ) {
-	define( 'NJFB_VERSION', '5.6.4' );
+	define( 'NJFB_VERSION', '6.4.2' );
 }
 
 if ( ! defined( 'NJFB_PLUGIN_FILE' ) ) {
@@ -65,27 +63,26 @@ if ( ! defined( 'NJFB_UPLOAD_DIR' ) ) {
 	define( 'NJFB_UPLOAD_DIR', 'filebird-uploads' );
 }
 
-if ( file_exists( NJFB_PLUGIN_PATH . '/vendor/autoload.php' ) ) {
+if ( file_exists( NJFB_PLUGIN_PATH . '/vendor/autoload.php' ) && $php_version_valid ) {
 	require_once NJFB_PLUGIN_PATH . '/vendor/autoload.php';
+}
+
+if ( ! defined( 'NJFB_DEVELOPMENT' ) ) {
+	define( 'NJFB_DEVELOPMENT', false );
 }
 
 spl_autoload_register(
 	function ( $class ) {
-		$prefix   = __NAMESPACE__; // project-specific namespace prefix
-		$base_dir = __DIR__ . '/includes'; // base directory for the namespace prefix
+		$prefix   = __NAMESPACE__;
+		$base_dir = __DIR__ . '/includes';
 
 		$len = strlen( $prefix );
-		if ( strncmp( $prefix, $class, $len ) !== 0 ) { // does the class use the namespace prefix?
-			return; // no, move to the next registered autoloader
+		if ( strncmp( $prefix, $class, $len ) !== 0 ) {
+			return;
 		}
 
 		$relative_class_name = substr( $class, $len );
-
-		// replace the namespace prefix with the base directory, replace namespace
-		// separators with directory separators in the relative class name, append
-		// with .php
-		$file = $base_dir . str_replace( '\\', '/', $relative_class_name ) . '.php';
-
+		$file                = $base_dir . str_replace( '\\', '/', $relative_class_name ) . '.php';
 		if ( file_exists( $file ) ) {
 			require $file;
 		}
@@ -94,27 +91,32 @@ spl_autoload_register(
 
 if ( ! function_exists( 'FileBird\\init' ) ) {
 	function init() {
-		Plugin::prepareRun();
-		I18n::loadPluginTextdomain();
-
+		Plugin::getInstance();
+		new I18n();
 		new Classes\Feedback();
 		new Classes\Review();
-		new Classes\Svg();
-		Page\Settings::getInstance();
+		new Classes\ActivePro();
 
+		Admin\Settings::getInstance();
 		Classes\Convert::getInstance();
-		Controller\Folder::getInstance();
+		Classes\Core::getInstance();
+		Rest\RestApi::getInstance();
 
+		// Support 3rd plugins
 		new Support\SupportController();
+
+		// Import from 3rd plugins
+		new Controller\Import\ImportController();
+
+		// Schedule
 		new Classes\Schedule();
+
+		// Gutenberg Blocks
 		new Blocks\BlockController();
 
 		if ( function_exists( 'register_block_type' ) ) {
 			require plugin_dir_path( __FILE__ ) . 'blocks/filebird-gallery/dist/init.php';
 		}
-
-		require_once plugin_dir_path( __FILE__ ) . 'includes/YC.php';
-		require_once plugin_dir_path( __FILE__ ) . 'includes/Recommended/Recommended.php';
 	}
 }
 add_action( 'plugins_loaded', 'FileBird\\init' );

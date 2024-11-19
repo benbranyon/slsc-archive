@@ -28,8 +28,8 @@ if ( ! class_exists( 'rsssl_mailer' ) ) {
 
 		public function __construct() {
 
-			$this->sent_by_text  = __( "This email is part of the Really Simple SSL Notification System", "really-simple-ssl" );
-			$this->subject       = __( "Notification by Really Simple SSL", "really-simple-ssl" );
+			$this->sent_by_text  = __( "This email is part of the Really Simple Security Notification System", "really-simple-ssl" );
+			$this->subject       = __( "Notification by Really Simple Security", "really-simple-ssl" );
 			$this->button_text   = __( "Learn more", "really-simple-ssl" );
 			$this->to            = rsssl_get_option( 'notifications_email_address', get_bloginfo( 'admin_email' ) );
 			$this->title         = __( "Learn more about our features!", "really-simple-ssl" );
@@ -60,13 +60,13 @@ if ( ! class_exists( 'rsssl_mailer' ) ) {
 					'message' => __( 'Email address not valid', "really-simple-ssl" ),
 				];
 			}
-			$this->title          = __( "Really Simple SSL - Notification Test", "really-simple-ssl" );
+			$this->title          = __( "Really Simple Security - Notification Test", "really-simple-ssl" );
 			$this->message        = __( "This email is confirmation that any security notices are likely to reach your inbox.", "really-simple-ssl" );
 			$this->warning_blocks = [
 				[
 					'title'   => __( "About notifications", "really-simple-ssl" ),
 					'message' => __( "Email notifications are only sent for important updates, security notices or when certain features are enabled.", "really-simple-ssl" ),
-					'url'     => 'https://really-simple-ssl.com/email-notifications/',
+					'url'     => rsssl_link('email-notifications/'),
 				]
 			];
 
@@ -108,12 +108,12 @@ if ( ! class_exists( 'rsssl_mailer' ) ) {
 					'rsssl_nonce'             => wp_create_nonce( 'rsssl_email_verification_' . $user_id ),
 					'rsssl_verification_code' => $verification_code,
 				),
-				rsssl_admin_url() . '#settings/general'
+				rsssl_admin_url([], '#settings/general')
 			);
 
-			$this->subject          = __( "Really Simple SSL - Verify your email address", "really-simple-ssl" );
+			$this->subject          = __( "Really Simple Security - Verify your email address", "really-simple-ssl" );
 			$this->title            = __( "Please verify your email", "really-simple-ssl" );
-			$this->message          = __('To use certain features in Really Simple SSL we need to confirm emails are delivered without issues.', 'really-simple-ssl');
+			$this->message          = __('To use certain features in Really Simple Security we need to confirm emails are delivered without issues.', 'really-simple-ssl');
 			$this->button_text      = __( "Verify email", "really-simple-ssl" );
 			$this->warning_blocks[] = [
 				'title'   => '',
@@ -164,7 +164,9 @@ if ( ! class_exists( 'rsssl_mailer' ) ) {
 				}
 			}
 			$username  = rsssl_get_option( 'new_admin_user_login' );
-			$login_url = wp_login_url();
+			$login_url = ! empty( rsssl_get_option( 'change_login_url' ) )
+				? trailingslashit( site_url() ) . rsssl_get_option( 'change_login_url' )
+				: wp_login_url();
 			$body      = str_replace(
 				[
 					'{title}',

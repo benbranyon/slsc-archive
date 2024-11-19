@@ -33,9 +33,11 @@ class FieldGroupV5 extends Field {
         parent::parse($xpath, $parsingData, $args);
         /** @var Field $subField */
         foreach ($this->getSubFields() as $subField){
-            $subField->parse($xpath[$subField->getFieldKey()], $parsingData, array(
-                'field_path' => $this->getOption('field_path') . "[" . $this->getFieldKey() . "]"
-            ));
+	        if (!empty($subField) && $subField instanceof Field && isset( $xpath[ $subField->getFieldKey() ])) {
+		        $subField->parse( $xpath[ $subField->getFieldKey() ], $parsingData, array(
+			        'field_path' => $this->getOption( 'field_path' ) . "[" . $this->getFieldKey() . "]"
+		        ) );
+	        }
         }
     }
 

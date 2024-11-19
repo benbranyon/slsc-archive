@@ -43,7 +43,7 @@ if ( !class_exists('rsp_upgrade_to_pro') ){
 					case "rsssl_pro":
 						$rsssl_admin_url = is_multisite() ? network_admin_url('settings.php') : admin_url("options-general.php");
 						$this->slug = is_multisite() ? "really-simple-ssl-pro-multisite/really-simple-ssl-pro-multisite.php" :  "really-simple-ssl-pro/really-simple-ssl-pro.php";
-						$this->plugin_name = "Really Simple SSL Pro";
+						$this->plugin_name = "Really Simple Security Pro";
 						$this->plugin_constant = "rsssl_pro";
 						$this->prefix = "rsssl_";
 						$this->api_url = "https://really-simple-ssl.com";
@@ -170,12 +170,12 @@ if ( !class_exists('rsp_upgrade_to_pro') ){
 				$suggestion = [
 					'icon_url' => $dir_url.'really-simple-ssl.png',
 					'constant' => 'rsssl_version',
-					'title' => 'Really Simple SSL',
+					'title' => 'Really Simple Security',
 					'description_short' => __('One click SSL optimization', "really-simple-ssl"),
 					'disabled' => '',
 					'button_text' => __("Install", "really-simple-ssl"),
 					'slug' => 'really-simple-ssl',
-					'description' => __('Really Simple SSL automatically detects your settings and configures your website to run over HTTPS. To keep it lightweight, we kept the options to a minimum. Your website will move to SSL with one click.', "really-simple-ssl"),
+					'description' => __('Easily improve site security with WordPress Hardening, Two-Factor Authentication (2FA), Login Protection, Vulnerability Detection and SSL certificate generation.', "really-simple-ssl"),
 					'install_url' => 'ssl%20really%20simple%20plugins%20complianz+HSTS&tab=search&type=term',
 				];
 				if ( $current_plugin==='really-simple-ssl' ) {
@@ -369,8 +369,8 @@ if ( !class_exists('rsp_upgrade_to_pro') ){
                             <a href="<?php echo $plugins_url ?>" role="button" class="button-primary rsp-red rsp-hidden rsp-btn rsp-cancel">
 								<?php echo __("Cancel", "really-simple-ssl") ?>
                             </a>
-                            <div class="rsp-error-message rsp-folder rsp-package rsp-install rsp-activate rsp-hidden"><span><?php _e('An Error Occurred:',"really-simple-ssl")?></span>&nbsp;<?php printf(__('Install %sManually%s.',"really-simple-ssl").'&nbsp;', '<a target="_blank" rel="noopener noreferrer" href="'.$this->account_url.'">','</a>')?></div>
-                            <div class="rsp-error-message rsp-license rsp-hidden"><span><?php _e('An Error Occurred:',"really-simple-ssl")?></span>&nbsp;<?php printf(__('Check your %slicense%s.',"really-simple-ssl").'&nbsp;', '<a target="_blank" rel="noopener noreferrer" href="'.$this->instructions.'">','</a>')?></div>
+                            <div class="rsp-error-message rsp-folder rsp-package rsp-install rsp-activate rsp-hidden"><span><?php _e('An error occurred:',"really-simple-ssl")?></span>&nbsp;<?php printf(__('Install %sManually%s.',"really-simple-ssl").'&nbsp;', '<a target="_blank" rel="noopener noreferrer" href="'.$this->account_url.'">','</a>')?></div>
+                            <div class="rsp-error-message rsp-license rsp-hidden"><span><?php _e('An error occurred:',"really-simple-ssl")?></span>&nbsp;<?php printf(__('Check your %slicense%s.',"really-simple-ssl").'&nbsp;', '<a target="_blank" rel="noopener noreferrer" href="'.$this->instructions.'">','</a>')?></div>
                         </div>
                     </div>
                 </div>

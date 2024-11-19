@@ -3,12 +3,14 @@ defined( 'ABSPATH' ) or die();
 
 add_action( 'plugins_loaded', 'rsssl_upgrade', 20 );
 function rsssl_upgrade() {
+
 	#only run upgrade check if cron, or if admin.
 	if ( ! rsssl_admin_logged_in() ) {
 		return;
 	}
 
 	$prev_version = get_option( 'rsssl_current_version', false );
+
 	//no version change, skip upgrade.
 	if ( $prev_version && version_compare( $prev_version, rsssl_version, '==' ) ) {
 		return;
@@ -41,8 +43,8 @@ function rsssl_upgrade() {
 			$htaccess      = file_get_contents( RSSSL()->admin->htaccess_file() );
 			$pattern_start = '/rlrssslReallySimpleSSL rsssl_version\[.*.]/';
 			if ( preg_match_all( $pattern_start, $htaccess ) ) {
-				$htaccess = preg_replace( $pattern_start, 'Really Simple SSL Redirect ' . rsssl_version, $htaccess );
-				$htaccess = str_replace( 'rlrssslReallySimpleSSL', 'Really Simple SSL Redirect', $htaccess );
+				$htaccess = preg_replace( $pattern_start, 'Really Simple Security Redirect ' . rsssl_version, $htaccess );
+				$htaccess = str_replace( 'rlrssslReallySimpleSSL', 'Really Simple Security Redirect', $htaccess );
 				file_put_contents( RSSSL()->admin->htaccess_file(), $htaccess );
 			}
 		}
@@ -180,6 +182,51 @@ function rsssl_upgrade() {
 	if ( $prev_version && version_compare( $prev_version, '7.1.0', '<' ) ) {
 		do_action( 'rsssl_update_rules' );
 	}
+
+	// Update the config to auto prepend
+	if ( $prev_version && version_compare( $prev_version, '8.0', '<' ) ) {
+		RSSSL_SECURITY()->firewall_manager->update_wp_config_rule();
+	}
+	//free
+	if ( $prev_version && version_compare( $prev_version, '8.1.2', '<' ) ) {
+		do_action('rsssl_update_rules');
+	}
+
+	if ( $prev_version && version_compare( $prev_version, '8.3.0', '<' ) ) {
+		wp_clear_scheduled_hook('rsssl_pro_every_hour_hook');
+		wp_clear_scheduled_hook('rsssl_pro_every_day_hook');
+		wp_clear_scheduled_hook('rsssl_pro_five_minutes_hook');
+		wp_clear_scheduled_hook('rsssl_le_every_week_hook');
+		wp_clear_scheduled_hook('rsssl_le_every_day_hook');
+
+		//split rsssl_key in two options so we can upgrade separately
+		$key = get_option( 'rsssl_key');
+		$site_key = get_site_option( 'rsssl_key');
+		if ( $key ) {
+			update_option( 'rsssl_license_key', $key, false );
+		}
+		if ( $site_key ) {
+			update_site_option( 'rsssl_le_key', $site_key );
+		}
+
+		delete_site_option('rsssl_key');
+		delete_option('rsssl_key');
+		update_option('rsssl_upgrade_le_key', true, false);
+	}
+
+	if ( $prev_version && version_compare( $prev_version, '9.0', '<' ) ) {
+		// Replace Really Simple SSL with Really Simple Security in wp-config.php, .htaccess,
+		// advanced-headers.php
+		RSSSL()->admin->update_branding_in_files();
+		RSSSL()->admin->clear_admin_notices_cache();
+	}
+
+	if ( $prev_version && version_compare( $prev_version, '9.1.1', '<' ) ) {
+		do_action('rsssl_update_rules');
+	}
+    if ( $prev_version && version_compare( $prev_version, '9.1.1.1', '<=' ) ) {
+        update_option('rsssl_reset_fix', true, false);
+    }
 
 	//don't clear on each update.
 	//RSSSL()->admin->clear_admin_notices_cache();

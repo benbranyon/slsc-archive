@@ -82,7 +82,6 @@
       __('binder texture', POST_ID),
       __('Deep linking URL parameter name', POST_ID),
       __('items pre page', POST_ID),
-      __('3D Flip Book', POST_ID),
       __('View mode', POST_ID),
       __('Advanced', POST_ID),
       __('Thumbnail', POST_ID),
@@ -90,7 +89,7 @@
       __('Lightbox activation link', POST_ID),
       __('Fullscreen', POST_ID),
       __('Inline on page (fullscreen)', POST_ID),
-      __('Select skin', POST_ID),
+      __('Skin of controls', POST_ID),
       __('3D FlipBook container CSS classes', POST_ID),
       __('Lightbox theme', POST_ID),
       __('Light', POST_ID),
@@ -310,7 +309,20 @@
       __('mixed', POST_ID),
       __('color', POST_ID),
       __('transparent', POST_ID),
-      __('3d lighting', POST_ID)
+      __('3d lighting', POST_ID),
+      __('Goto first page', POST_ID),
+      __('Goto last page', POST_ID),
+      __('of', POST_ID),
+      __('Set all pages interactive', POST_ID),
+      __('Book templates', POST_ID),
+      __('start pdf search', POST_ID),
+      __('how to display the book in the single page mode', POST_ID),
+      __('focus current page', POST_ID),
+      __('just single page', POST_ID),
+      __('Trigger', POST_ID),
+      __('coma separated CSS classes of any elements that can launch lightbox', POST_ID),
+      __('open book on page', POST_ID),
+      __('stretch source images / pdf pages / htmls on book pages', POST_ID)
     );
   }
 ?>

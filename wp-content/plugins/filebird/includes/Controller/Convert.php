@@ -1,6 +1,8 @@
 <?php
 namespace FileBird\Controller;
 
+use FileBird\Classes\Helpers;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -8,17 +10,15 @@ defined( 'ABSPATH' ) || exit;
  */
 
 class Convert {
-
 	private static $folder_table   = 'fbv';
 	private static $relation_table = 'fbv_attachment_folder';
-
 	public function __construct() {
 	}
 
 	public static function insertToNewTable( $folders = null ) {
 		global $wpdb;
 		if ( is_null( $folders ) ) {
-			$folders = self::getOldFolers();
+			$folders = self::getOldFolders();
 		}
 		foreach ( $folders as $k => $folder ) {
 			if ( is_array( $folder ) ) {
@@ -35,7 +35,7 @@ class Convert {
 				$wpdb->insert(
 					self::getTable( self::$folder_table ),
 					array(
-						'name'       => $folder->name,
+						'name'       => Helpers::sanitize_for_excel( $folder->name ),
 						'parent'     => $parent,
 						'created_by' => $folder->created_by,
 						'type'       => 0,
@@ -56,9 +56,9 @@ class Convert {
 			}
 			//update new_fbv_id for this term
 			update_term_meta( $folder->id, 'new_fbv_id', $insert_id );
-
 		}
 	}
+
 	private static function setFolder( $ids, $folder, $delete_first = false ) {
 		global $wpdb;
 		if ( is_numeric( $ids ) ) {
@@ -106,8 +106,8 @@ class Convert {
 		return $wpdb->prefix . $table;
 	}
 
-	public static function getOldFolers() {
-		$folders = self::_getOldFolers( 0 );
+	public static function getOldFolders() {
+		$folders = self::_getOldFolders( 0 );
 		return $folders;
 	}
 
@@ -119,18 +119,17 @@ class Convert {
 		return intval( $oldFolders );
 	}
 
-	private static function _getOldFolers( $parent ) {
+	private static function _getOldFolders( $parent ) {
 		global $wpdb;
 		$folders = array();
-		$query   = $wpdb->prepare( "SELECT t.term_id as id, t.name FROM $wpdb->terms as t LEFT JOIN $wpdb->term_taxonomy as tt ON (t.term_id = tt.term_id) WHERE parent = %d and taxonomy = 'nt_wmc_folder'", $parent );
-		$folders = $wpdb->get_results( $query );
+		$folders = $wpdb->get_results( $wpdb->prepare( "SELECT t.term_id as id, t.name FROM $wpdb->terms as t LEFT JOIN $wpdb->term_taxonomy as tt ON (t.term_id = tt.term_id) WHERE parent = %d and taxonomy = 'nt_wmc_folder'", $parent ) );
 		foreach ( $folders as $k => $v ) {
 			$folders[ $k ]->parent      = $parent;
-			$folders[ $k ]->created_by  = (int) $wpdb->get_var( "SELECT meta_value FROM {$wpdb->termmeta} WHERE meta_key = 'fb_created_by' AND term_id = " . (int) $v->id );
+			$folders[ $k ]->created_by  = (int) $wpdb->get_var( $wpdb->prepare( "SELECT meta_value FROM {$wpdb->termmeta} WHERE meta_key = 'fb_created_by' AND term_id = %d", $v->id ) );
 			$folders[ $k ]->attachments = self::_getAttachments( $v->id );
 		}
 		foreach ( $folders as $k => $v ) {
-			$children = self::_getOldFolers( $v->id );
+			$children = self::_getOldFolders( $v->id );
 			foreach ( $children as $k2 => $v2 ) {
 				$folders[] = $v2;
 			}

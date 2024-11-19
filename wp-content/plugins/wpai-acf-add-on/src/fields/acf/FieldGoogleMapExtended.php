@@ -22,8 +22,8 @@ class FieldGoogleMapExtended extends FieldGoogleMap {
         $values = $this->getOption('values');
         return array(
             'address' => $values['address'][$this->getPostIndex()],
-            'lat' => $values['lat'][$this->getPostIndex()],
-            'lng' => $values['lng'][$this->getPostIndex()],
+            'lat' => floatval($values['lat'][$this->getPostIndex()]),
+            'lng' => floatval($values['lng'][$this->getPostIndex()]),
             'zoom' => $values['zoom'][$this->getPostIndex()],
             'center_lat' => $values['center_lat'][$this->getPostIndex()],
             'center_lng' => $values['center_lng'][$this->getPostIndex()]
