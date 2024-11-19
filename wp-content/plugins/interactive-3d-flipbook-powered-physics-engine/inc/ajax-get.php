@@ -219,11 +219,16 @@
   add_action('wp_ajax_fb3d_send_media_image', '\iberezansky\fb3d\send_media_image_json');
   add_action('wp_ajax_nopriv_fb3d_send_media_image', '\iberezansky\fb3d\send_media_image_json');
 
+  function get_unserialized_option($name, $def) {
+    $op = get_option($name);
+    $op = gettype($op)==='string'? unserialize($op): $op;
+    return $op? $op: $def;
+  }
+
   function get_book_templates() {
     global $fb3d;
     if(!isset($fb3d['jsData']['bookTemplates'])) {
-      $templates = unserialize(get_option(META_PREFIX.'book_templates'));
-      $fb3d['jsData']['bookTemplates'] = $templates? $templates: [];
+      $fb3d['jsData']['bookTemplates'] = get_unserialized_option(META_PREFIX.'book_templates', []);
     }
     return $fb3d['jsData']['bookTemplates'];
   }
@@ -231,9 +236,7 @@
   function client_book_control_props() {
     global $fb3d;
     if(!isset($fb3d['jsData']['bookCtrlProps'])) {
-      $props = get_option(META_PREFIX.'book_control_props');
-      $props = unserialize($props);
-      $fb3d['jsData']['bookCtrlProps'] = $props? $props: [];
+      $fb3d['jsData']['bookCtrlProps'] = get_unserialized_option(META_PREFIX.'book_control_props', []);
     }
     return $fb3d['jsData']['bookCtrlProps'];
   }

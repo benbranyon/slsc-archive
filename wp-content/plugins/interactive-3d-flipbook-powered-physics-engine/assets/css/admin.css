@@ -3,6 +3,15 @@
   line-height: 1.4em;
 }
 
+.fb3d .disabled {
+  opacity: .75;
+  pointer-events: none;
+}
+
+.fb3d .li-text {
+  font-size: 14px;
+}
+
 .fb3d .manual a {
   color: #f00;
   text-decoration: underline;

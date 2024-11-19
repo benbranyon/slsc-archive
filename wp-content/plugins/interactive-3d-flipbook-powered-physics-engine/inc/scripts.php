@@ -6,8 +6,8 @@
       wp_register_script('react', ASSETS_JS.'react.min.js', null, '17.0.2', true);
       wp_register_script('react-dom', ASSETS_JS.'react-dom.min.js', array('react'), '17.0.2', true);
     }
-    wp_register_script(POST_ID.'-pdf-js', ASSETS_JS.'pdf.min.js', null, '2.5.207', true);
-    wp_register_script(POST_ID.'-three', ASSETS_JS.'three.min.js', null, '108', true);
+    wp_register_script(POST_ID.'-pdf-js', ASSETS_JS.'pdf.null.js', null, '1.0.0', true);
+    wp_register_script(POST_ID.'-three', ASSETS_JS.'three.min.js', null, '125', true);
     wp_register_script(POST_ID.'-html2canvas', ASSETS_JS.'html2canvas.min.js', null, '0.5', true);
 
     wp_register_script(POST_ID.'-colorpicker', ASSETS_JS.'colorpicker.js', array('jquery'), '1.1.1', true);
@@ -52,7 +52,10 @@
     global $fb3d;
 
     wp_localize_script(POST_ID.'-pdf-js', 'PDFJS_LOCALE', array(
-      'pdfJsWorker'=> ASSETS_JS.'pdf.worker.js',
+      'pdfJsLib'=> ASSETS_JS.'pdf.min.js?ver=4.3.136',
+      'pdfJsWorker'=> ASSETS_JS.'pdf.worker.js?ver=4.3.136',
+      'stablePdfJsLib'=> ASSETS_JS.'stable/pdf.min.js?ver=2.5.207',
+      'stablePdfJsWorker'=> ASSETS_JS.'stable/pdf.worker.js?ver=2.5.207',
       'pdfJsCMapUrl'=> ASSETS_CMAPS
     ));
 
@@ -86,6 +89,7 @@
     wp_localize_script(POST_ID.'-insert', 'FB3D_ADMIN_LOCALE', array(
       'key'=> POST_ID,
       'templates'=> $fb3d['templates'],
+      'bookTemplates'=> $bookTemplates,
       'lightboxes'=> $fb3d['lightboxes'],
       'dictionary'=> $fb3d['dictionary'],
       'shortcodeGeneratorMountNode'=> POST_ID.'-shortcode-generator'

@@ -17,7 +17,7 @@ tinymce.PluginManager.add('3dfbInsert', function(editor) {
 					items: [
 						{
 							minWidth: 450,
-							minHeight: 550,
+							minHeight: 620,
 							type: 'container',
 							html: '<div id="3dfb-insert">Mount node</div>'
 						},

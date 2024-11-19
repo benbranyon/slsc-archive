@@ -593,6 +593,9 @@ a.disabled, .cmd.disabled {
 .search {
   padding: 0 10px;
 }
+.search .inpQuery {
+  padding: 3px;
+}
 .search .results {
   margin-bottom: 10px;
 }
@@ -615,6 +618,9 @@ a.disabled, .cmd.disabled {
 }
 .search .result>a>div {
   overflow: hidden;
+}
+.search .hit {
+  background-color: rgba(255,255,0,.15);
 }
 .search .query {
   padding: 10px;
