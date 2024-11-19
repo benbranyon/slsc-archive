@@ -68,12 +68,12 @@ class FieldTaxonomy extends Field {
                         }
                         $count_cats = count($values[$tx_name][$i]);
 
-                        $delimetedTaxonomies = $this->getParent() ? array($tx_raw) : explode($xpath['delim'], $tx_raw);
+                        $delimetedTaxonomies = $this->getParent() ? array($tx_raw) : explode($xpath['delim'] ?? ',', $tx_raw);
 
                         if ('' != $tx_raw) {
                             foreach ($delimetedTaxonomies as $j => $cc) {
                                 if ('' != $cc) {
-                                    $terms = explode($xpath['delim'], $cc);
+                                    $terms = explode($xpath['delim'] ?? ',', $cc);
                                     if (!empty($terms)) {
                                         $terms = array_map('trim', $terms);
                                         foreach ($terms as $term) {

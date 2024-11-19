@@ -33,7 +33,8 @@ class FieldLink extends Field {
         parent::parse($xpath, $parsingData, $args);
         $values = array();
         foreach ($this->keys as $key){
-            $values[$key] = $this->getByXPath($xpath[$key]);
+            $key_xpath = $xpath[$key] ?? '';
+            $values[$key] = $this->getByXPath($key_xpath);
         }
         $this->setOption('values', $values);
     }

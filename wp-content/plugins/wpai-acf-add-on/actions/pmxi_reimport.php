@@ -6,7 +6,16 @@
 function pmai_pmxi_reimport($entry, $post){
 	global $acf;
 	if ($acf and version_compare($acf->settings['version'], '5.0.0') >= 0) {
-		$groups = acf_get_field_groups();
+        // Only list ACF fields for the imported post type when possible.
+        if( !in_array($entry, ['taxonomies','shop_customer','import_users'])) {
+	        $groups = acf_get_field_groups( [ 'post_type' => $entry ] );
+        }
+
+        // Fallback to including all groups if nothing is found to account for non-post-type display logic.
+        if( empty($groups) ) {
+	        $groups = acf_get_field_groups();
+        }
+
 		if ( ! empty($groups) ) {
 			foreach ($groups as $group) {
 				$fields = acf_get_fields($group);

@@ -90,7 +90,7 @@ abstract class Group implements GroupInterface {
     protected function renderHeader(){
         $filePath = __DIR__ . '/templates/header.php';
         if (is_file($filePath)) {
-            extract($this->group);
+            is_array($this->group) && extract($this->group);
             include $filePath;
         }
     }

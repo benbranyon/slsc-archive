@@ -90,15 +90,26 @@ class FieldGallery extends Field {
         }
 
         $gallery_ids = $is_append_new ? ACFService::get_post_meta($this, $this->getPostID(), $this->getFieldName()) : array();
-        if (empty($gallery_ids)){
+        if (empty($gallery_ids) || ! is_array( $gallery_ids ) ) {
             $gallery_ids = array();
         }
         if (!empty($values[$this->getPostIndex()])) {
             $search_in_gallery = empty($xpath['search_in_media']) ? 0 : 1;
             $search_in_files = empty($xpath['search_in_files']) ? 0 : 1;
             foreach ($values[$this->getPostIndex()] as $url) {
-                if ("" != $url and $attid = ACFService::import_image(trim($url), $this->getPostID(), $parsingData['logger'], $search_in_gallery, $search_in_files, $this->importData) and !in_array($attid, $gallery_ids)) {
-                    $gallery_ids[] = $attid;
+                if (!empty($url)) {
+                    $ext = pmxi_getExtensionFromStr($url);
+                    if (empty($ext) || !in_array($ext, ['jpeg', 'jpg', 'png', 'gif', 'svg', 'webp'])) {
+                        $ext = pmxi_get_remote_image_ext($url);
+                    }
+                    if (empty($ext) || !in_array($ext, ['jpeg', 'jpg', 'png', 'gif', 'svg', 'webp'])) {
+                        $attid = ACFService::import_file(trim($url), $this->getPostID(), $parsingData['logger'], $search_in_gallery, $search_in_files, $this->importData);
+                    } else {
+                        $attid = ACFService::import_image(trim($url), $this->getPostID(), $parsingData['logger'], $search_in_gallery, $search_in_files, $this->importData);
+                    }
+                    if ($attid && !in_array($attid, $gallery_ids)) {
+                        $gallery_ids[] = $attid;
+                    }
                 }
             }
         }

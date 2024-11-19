@@ -29,7 +29,7 @@ final class FieldFactory {
      */
     public static function create($fieldData, $post, $fieldName = "", $fieldParent = false) {
         $field = FALSE;
-        $class_suffix = str_replace(" ", "", ucwords(str_replace("_", " ", $fieldData['type'])));
+        $class_suffix = str_replace(" ", "", ucwords(str_replace(array("_","-"), " ", $fieldData['type'])));
         $class = '\\wpai_acf_add_on\\fields\\acf\\Field' . $class_suffix;
         if (!class_exists($class)) {
             $class = '\\wpai_acf_add_on\\fields\\acf\\' . $fieldData['type'] . '\\Field' . $class_suffix;

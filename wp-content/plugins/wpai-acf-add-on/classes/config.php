@@ -20,7 +20,7 @@ class PMAI_Config implements IteratorAggregate {
 	 * Static method to create config instance from file on disc
 	 * @param string $filePath
 	 * @param string[optional] $section
-	 * @return PMXI_Config
+	 * @return PMAI_Config
 	 */
 	public static function createFromFile($filePath, $section = NULL) {
 		$config = new self();
@@ -29,9 +29,11 @@ class PMAI_Config implements IteratorAggregate {
 	
 	/**
 	 * Load config file
+	 *
 	 * @param string $filePath
 	 * @param string[optional] $section
-	 * @return PMXI_Config
+	 *
+	 * @return PMAI_Config
 	 */
 	public function loadFromFile($filePath, $section = NULL) {
 		if ( ! is_null($section)) {
