@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 ?>
 
-<div class="notice notice-info is-dismissible" id="filebird-empty-folder-notice">
+<div class="notice notice-info is-dismissible filebird-notice" id="filebird-empty-folder-notice">
     <p>
         <?php esc_html_e( 'Create your first folder for media library now.', 'filebird' ); ?>
         <a href="<?php echo esc_url( admin_url( '/upload.php' ) ); ?>">

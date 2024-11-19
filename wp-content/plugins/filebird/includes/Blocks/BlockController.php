@@ -25,7 +25,11 @@ final class BlockController {
 
         foreach ( $blocks as $block ) {
             $block_class = __NAMESPACE__ . "\\{$block}";
-            new $block_class();
+            if ( class_exists( $block_class ) ) {
+                new $block_class();
+            } else {
+                error_log( "Block class {$block_class} not found" );
+            }
         }
     }
 }

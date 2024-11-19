@@ -57,22 +57,22 @@ class Review {
 			if ( get_current_screen()->id == 'upload' || get_current_screen()->id == 'plugins' ) {
 				$this->enqueue_scripts();
 				?>
-<div class="notice notice-success is-dismissible" id="njt-FileBird-review">
-	<h3><?php esc_html_e( 'Give FileBird a review', 'filebird' ); ?></h3>
-	<p>
-				<?php esc_html_e( 'Thank you for choosing FileBird. We hope you love it. Could you take a couple of seconds posting a nice review to share your happy experience?', 'filebird' ); ?>
-	</p>
-	<p>
-				<?php esc_html_e( 'We will be forever grateful. Thank you in advance ;)', 'filebird' ); ?>
-	</p>
-	<p>
-		<a href="javascript:;" data="rateNow"
-			class="button button-primary"><?php esc_html_e( 'Rate now', 'filebird' ); ?></a>
-		<a href="javascript:;" data="later" class="button"><?php esc_html_e( 'Later', 'filebird' ); ?></a>
-		<a href="javascript:;" data="alreadyDid" class="button"><?php esc_html_e( 'No, thanks', 'filebird' ); ?></a>
-	</p>
+<div class="notice notice-success is-dismissible filebird-notice" id="njt-FileBird-review">
+    <h3><?php esc_html_e( 'Give FileBird a review', 'filebird' ); ?></h3>
+    <p>
+        <?php esc_html_e( 'Thank you for choosing FileBird. We hope you love it. Could you take a couple of seconds posting a nice review to share your happy experience?', 'filebird' ); ?>
+    </p>
+    <p>
+        <?php esc_html_e( 'We will be forever grateful. Thank you in advance ;)', 'filebird' ); ?>
+    </p>
+    <p>
+        <a href="javascript:;" data="rateNow"
+            class="button button-primary"><?php esc_html_e( 'Rate now', 'filebird' ); ?></a>
+        <a href="javascript:;" data="later" class="button"><?php esc_html_e( 'Later', 'filebird' ); ?></a>
+        <a href="javascript:;" data="alreadyDid" class="button"><?php esc_html_e( 'No, thanks', 'filebird' ); ?></a>
+    </p>
 </div>
-				<?php
+<?php
 			}
 		}
 	}

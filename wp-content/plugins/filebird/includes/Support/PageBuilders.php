@@ -1,15 +1,15 @@
 <?php
 namespace FileBird\Support;
 
-use FileBird\Controller\Folder;
+use FileBird\Classes\Core;
 
 defined( 'ABSPATH' ) || exit;
 
 class PageBuilders {
-	protected $folderController;
+	protected $core;
 
 	public function __construct() {
-		$this->folderController = Folder::getInstance();
+		$this->core = Core::getInstance();
 		add_action( 'init', array( $this, 'prepareRegister' ) );
 	}
 
@@ -116,12 +116,12 @@ class PageBuilders {
 			add_action(
                 'wp_footer',
                 function() {
-					$this->folderController->enqueueAdminScripts( 'pagebuilders' );
+					$this->core->enqueueAdminScripts( 'pagebuilders' );
 				}
             );
 		}
 
-		$this->folderController->enqueueAdminScripts( 'pagebuilders' );
+		$this->core->enqueueAdminScripts( 'pagebuilders' );
 	}
 
 	public function registerForElementor() {
@@ -187,6 +187,7 @@ class PageBuilders {
 		add_action(
              'wp_ajax_tb_load_editor',
             function() {
+				wp_enqueue_script( 'filebird-themify', NJFB_PLUGIN_URL . 'assets/js/themify.js', array(), NJFB_VERSION, true );
 				$this->enqueueScripts( true );
 			},
             9
@@ -204,29 +205,14 @@ class PageBuilders {
 	}
 
 	public function registerBeBuilder() {
-		add_action(
-             'admin_enqueue_scripts',
-            function() {
-				if ( ! wp_script_is( 'mfn-vbscripts', 'enqueued' ) ) {
-					return;
+		if ( is_admin() ) {
+			add_action(
+				'mfn_footer_enqueue',
+				function() {
+					$this->enqueueScripts();
 				}
-
-				$this->enqueueScripts();
-			},
-            PHP_INT_MAX
-        );
-
-		add_action(
-             'wp_enqueue_scripts',
-            function() {
-				if ( ! wp_script_is( 'mfn-vbscripts', 'enqueued' ) ) {
-					return;
-				}
-
-				$this->enqueueScripts();
-			},
-            PHP_INT_MAX
-        );
+			);
+		}
 	}
 
 	public function registerLearnPress() {
