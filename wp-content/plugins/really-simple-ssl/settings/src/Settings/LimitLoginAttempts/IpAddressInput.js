@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import {useState} from '@wordpress/element';
 import {__} from "@wordpress/i18n";
 import Icon from "../../utils/Icon";
 import IpAddressDataTableStore from "./IpAddressDataTableStore";
@@ -19,10 +19,12 @@ const IpAddressInput = (props) => {
 
     return (
         <>
+        {props.label &&
             <label
                 htmlFor={props.id}
                 className="rsssl-label"
             >{props.label}</label>
+        }
             <br></br>
             <div className="input-container">
                 <input

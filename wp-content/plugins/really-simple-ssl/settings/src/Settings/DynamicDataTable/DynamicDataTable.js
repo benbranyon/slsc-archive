@@ -1,7 +1,6 @@
 import {__} from '@wordpress/i18n';
-import React, {useRef, useEffect, useState} from 'react';
+import {useRef, useEffect, useState} from '@wordpress/element';
 import DataTable, {createTheme} from "react-data-table-component";
-import apiFetch from '@wordpress/api-fetch';
 import useFields from "../FieldsData";
 import DynamicDataTableStore from "./DynamicDataTableStore";
 
@@ -166,7 +165,7 @@ const DynamicDataTable = (props) => {
             { !enabled &&
                 <div className="rsssl-locked">
                     <div className="rsssl-locked-overlay"><span
-                        className="rsssl-task-status rsssl-open">{__('Disabled', 'really-simple-ssl')}</span><span>{__('Activate login protection to enable this block.', 'really-simple-ssl')}</span>
+                        className="rsssl-task-status rsssl-open">{__('Disabled', 'really-simple-ssl')}</span><span>{__('Activate Two-Factor Authentication to enable this block.', 'really-simple-ssl')}</span>
                     </div>
                 </div>
             }

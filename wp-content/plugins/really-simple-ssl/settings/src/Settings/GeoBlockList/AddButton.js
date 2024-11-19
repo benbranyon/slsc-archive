@@ -1,15 +1,15 @@
-import React from 'react';
+import Icon from "../../utils/Icon";
 
-const AddButton = ({ getCurrentFilter, moduleName, handleOpen, processing, blockedText, allowedText }) => {
+const AddButton = ({ getCurrentFilter, moduleName, handleOpen, processing, blockedText, allowedText, disabled }) => {
     return (
         <div className="rsssl-add-button">
                 <div className="rsssl-add-button__inner">
                     <button
                         className="button button-secondary button-datatable rsssl-add-button__button"
                         onClick={handleOpen}
-                        disabled={processing}
+                        disabled={disabled}
                     >
-                        {allowedText}
+                        {allowedText}{processing && <Icon name = "loading" color = 'grey' />}
                     </button>
                 </div>
         </div>

@@ -12,7 +12,7 @@ if ( ! class_exists( 'rsssl_placeholder' ) ) {
 			add_filter( "rsssl_run_test", array( $this, 'mixed_content_scan' ), 9, 3 );
 			add_filter( 'rsssl_do_action', array( $this, 'learningmode_table_data' ), 10, 3 );
 
-			add_filter( 'rsssl_do_action', array( $this, 'two_factor_users_data' ), 11, 3 );
+//			add_filter( 'rsssl_do_action', array( $this, 'two_factor_users_data' ), 11, 3 );
 
                 // really-simple-ssl-pro plugin is active
             add_filter( 'rsssl_do_action', array( $this, 'limit_login_attempts_data' ), 11, 3 );
@@ -332,7 +332,7 @@ if ( ! class_exists( 'rsssl_placeholder' ) ) {
 					'description' => [],
 					'view'        => '#',
 					'edit'        => '#',
-					'help'        => "https://really-simple-ssl.com/knowledge-base/fix-blocked-resources-content-files",
+					'help'        => "knowledge-base/fix-blocked-resources-content-files",
 					'action'      => 'ignore_url',
 				],
 			];
@@ -349,7 +349,7 @@ if ( ! class_exists( 'rsssl_placeholder' ) ) {
 					'description' => [],
 					'view'        => '#',
 					'edit'        => '#',
-					'help'        => "https://really-simple-ssl.com/knowledge-base/fix-css-and-js-files-with-mixed-content",
+					'help'        => "knowledge-base/fix-css-and-js-files-with-mixed-content",
 					'action'      => 'ignore_url',
 				],
 				'fix'         => [
@@ -373,7 +373,7 @@ if ( ! class_exists( 'rsssl_placeholder' ) ) {
 					'description' => [],
 					'view'        => '',
 					'edit'        => '',
-					'help'        => "https://really-simple-ssl.com/knowledge-base/fix-css-js-files-mixed-content-domains/",
+					'help'        => "knowledge-base/fix-css-js-files-mixed-content-domains/",
 					'action'      => 'ignore_url',
 				]
 			];
@@ -390,7 +390,7 @@ if ( ! class_exists( 'rsssl_placeholder' ) ) {
 					'description' => [],
 					'view'        => '',
 					'edit'        => get_admin_url( null, 'post.php?post=1&action=edit' ),
-					'help'        => "https://really-simple-ssl.com/fix-posts-with-blocked-resources-domains-without-ssl-certificate/",
+					'help'        => "fix-posts-with-blocked-resources-domains-without-ssl-certificate/",
 					'action'      => 'ignore_url'
 				],
 				'fix'         => [
@@ -416,7 +416,7 @@ if ( ! class_exists( 'rsssl_placeholder' ) ) {
 					'description' => [],
 					'view'        => '#',
 					'edit'        => get_admin_url( null, 'post.php?post=1&action=edit' ),
-					'help'        => "https://really-simple-ssl.com/knowledge-base/fix-blocked-resources-content-postmeta",
+					'help'        => "knowledge-base/fix-blocked-resources-content-postmeta",
 					'action'      => 'ignore_url'
 				],
 				'fix'         => [
@@ -441,7 +441,7 @@ if ( ! class_exists( 'rsssl_placeholder' ) ) {
 					'description' => [],
 					'view'        => '',
 					'edit'        => get_admin_url( null, '/widgets.php' ),
-					'help'        => "https://really-simple-ssl.com/knowledge-base/locating-mixed-content-in-widgets/",
+					'help'        => "knowledge-base/locating-mixed-content-in-widgets/",
 					'action'      => 'ignore_url'
 				],
 				'fix'         => [
@@ -482,35 +482,35 @@ if ( ! class_exists( 'rsssl_placeholder' ) ) {
 					[
 						'id'                  => 1,
 						'user'                => 'JaneDoe',
-						'rsssl_two_fa_status' => 'Active',
+						'rsssl_two_fa_providers' => 'email',
 						'user_role'           => 'Administrator',
-						'status_for_user'     => 'Enabled'
+						'status_for_user'     => 'active'
 					],
 					[
 						'id'                  => 2,
 						'user'                => 'JohnDoe',
-						'rsssl_two_fa_status' => 'open',
+						'rsssl_two_fa_providers' => 'email',
 						'user_role'           => 'Editor',
 						'status_for_user'     => 'open'
 					],
 					[
 						'id'                  => 3,
 						'user'                => 'JanieDoe',
-						'rsssl_two_fa_status' => 'disabled',
+						'rsssl_two_fa_providers' => 'disabled',
 						'user_role'           => 'Subscriber',
 						'status_for_user'     => 'Disabled'
 					],
 					[
 						'id'                  => 4,
 						'user'                => 'JonnyDoe',
-						'rsssl_two_fa_status' => 'Active',
+						'rsssl_two_fa_providers' => 'Active',
 						'user_role'           => 'Contributor',
 						'status_for_user'     => 'Active'
 					],
 					[
 						'id'                  => 5,
 						'user'                => 'BabyDoe',
-						'rsssl_two_fa_status' => 'open',
+						'rsssl_two_fa_providers' => 'open',
 						'user_role'           => 'Author',
 						'status_for_user'     => 'open'
 					],

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from '@wordpress/element';
 import Select from 'react-select';
 import useFields from "./FieldsData";
 import useRolesData from './TwoFA/RolesStore';
@@ -69,7 +69,12 @@ const RolesDropDown = ({ field }) => {
                 color: 'initial',
                 opacity: '1',
             },
-        })
+        }),
+        menuList: (provided) => ({
+            ...provided,
+            height: '125px',
+            zIndex: 999
+        }),
     };
 
     return (
@@ -86,7 +91,7 @@ const RolesDropDown = ({ field }) => {
             {! enabled &&
                 <div className="rsssl-locked">
                     <div className="rsssl-locked-overlay"><span
-                        className="rsssl-task-status rsssl-open">{__('Disabled', 'really-simple-ssl')}</span><span>{__('Activate login protection to enable this block.', 'really-simple-ssl')}</span>
+                        className="rsssl-task-status rsssl-open">{__('Disabled', 'really-simple-ssl')}</span><span>{__('Activate Two-Factor Authentication to enable this block.', 'really-simple-ssl')}</span>
                     </div>
                 </div>
             }

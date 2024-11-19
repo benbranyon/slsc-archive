@@ -1,12 +1,12 @@
 <?php
 /**
- * Plugin Name: Really Simple SSL
+ * Plugin Name: Really Simple Security
  * Plugin URI: https://really-simple-ssl.com
- * Description: Lightweight SSL & Hardening Plugin
- * Version: 8.0.0
+ * Description: Easily improve site security with WordPress Hardening, Two-Factor Authentication (2FA), Login Protection, Vulnerability Detection and SSL certificate generation.
+ * Version: 9.1.2
  * Requires at least: 5.9
- * Requires PHP: 7.2
- * Author: Really Simple Plugins
+ * Requires PHP: 7.4
+ * Author: Really Simple Security
  * Author URI: https://really-simple-plugins.com
  * License: GPL2
  * Text Domain: really-simple-ssl
@@ -100,11 +100,10 @@ if ( !class_exists('REALLY_SIMPLE_SSL')) {
 			define('rsssl_path', trailingslashit(plugin_dir_path(__FILE__)));
 			define('rsssl_template_path', trailingslashit(plugin_dir_path(__FILE__)).'grid/templates/');
 			define('rsssl_plugin', plugin_basename(__FILE__));
-			define('rsssl_add_on_version_requirement', '8.0.0');
 			if ( !defined('rsssl_file') ){
 				define('rsssl_file', __FILE__);
 			}
-			define('rsssl_version', '8.0.0');
+			define('rsssl_version', '9.1.2');
 			define('rsssl_le_cron_generation_renewal_check', 20);
 			define('rsssl_le_manual_generation_renewal_check', 15);
 		}
@@ -142,6 +141,7 @@ if ( !class_exists('REALLY_SIMPLE_SSL')) {
 
 			require_once( rsssl_path . 'lets-encrypt/cron.php' );
 			require_once( rsssl_path . '/security/security.php');
+            require_once( rsssl_path . '/rsssl-auto-loader.php' );
 		}
 
 		private function hooks()
@@ -263,23 +263,3 @@ if ( !function_exists('rsssl_is_logged_in_rest')){
 		return is_user_logged_in();
 	}
 }
-
-/**
- * Add rsssl_two_fa_status usermeta field
- *
- * @return void
- */
-function rsssl_register_user_meta() {
-	register_meta('user', 'rsssl_two_fa_status', [
-		'show_in_rest' => true,
-		'single' => true,
-		'type' => 'string',
-		'description' => 'The method of two-factor authentication for the user.',
-		'default' => 'disabled',
-		'auth_callback' => function() {
-			return rsssl_user_can_manage();
-		},
-	]);
-}
-
-add_action( 'init' , 'rsssl_register_user_meta' );

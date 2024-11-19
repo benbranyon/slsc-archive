@@ -39,15 +39,16 @@ class RSSSL_LETSENCRYPT {
 	public $letsencrypt_handler;
 
 	private function __construct() {
-
 	}
+
+
 
 	public static function instance() {
 		if ( ! isset( self::$instance ) && ! ( self::$instance instanceof RSSSL_LETSENCRYPT ) ) {
 			self::$instance = new RSSSL_LETSENCRYPT;
 			self::$instance->setup_constants();
 			self::$instance->includes();
-			if (rsssl_letsencrypt_generation_allowed() ) {
+			if ( rsssl_letsencrypt_generation_allowed() ) {
 				self::$instance->hosts = new rsssl_le_hosts();
 				self::$instance->letsencrypt_handler = new rsssl_letsencrypt_handler();
 				self::$instance->le_restapi = new rsssl_le_restapi();

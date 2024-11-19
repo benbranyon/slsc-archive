@@ -27,6 +27,9 @@ function rsssl_le_read_more( $url, $add_character = ' ' ) {
  */
 function rsssl_dns_verification_required(){
 
+	if ( get_option('rsssl_manually_changed_verification_type') ) {
+		return rsssl_get_option( 'verification_type' ) === 'dns';
+	}
 	/**
 	 * If our current hosting provider does not allow or require local SSL certificate generation,
 	 * We do not need to DNS verification either.
@@ -41,9 +44,13 @@ function rsssl_dns_verification_required(){
 	}
 
 	if ( rsssl_wildcard_certificate_required() ) {
+		//if the user hasn't manually forced the verification type to anything else, we set it to dns now.
+		//otherwise we get a difference between this requirement, and the actual verification type that could be 'dir'
+		if ( !get_option('rsssl_manually_changed_verification_type') && rsssl_get_option('verification_type')!=='dns' ) {
+			rsssl_update_option('verification_type', 'dns');
+		}
 		return true;
 	}
-
 	return false;
 }
 
@@ -362,7 +369,7 @@ if ( !function_exists('rsssl_get_manual_instructions_text')) {
 	 * @return string
 	 */
 	function rsssl_get_manual_instructions_text( $url ) {
-		$default_url = 'https://really-simple-ssl.com/install-ssl-certificate';
+		$default_url = rsssl_link('install-ssl-certificate');
 		$dashboard_activation_required = rsssl_activation_required();
 		$activated_by_default = rsssl_activated_by_default();
 		$paid_only = rsssl_paid_only();
@@ -392,7 +399,7 @@ if ( !function_exists('rsssl_get_manual_instructions_text')) {
 		} else if ( $paid_only ) {
 			$msg
 				= sprintf( __( "According to our information, your hosting provider does not allow any kind of SSL installation, other then their own paid certificate. For an alternative hosting provider with SSL, see this %sarticle%s.",
-				"really-simple-ssl" ), '<a target="_blank" rel="noopener noreferrer" href="https://really-simple-ssl.com/hosting-providers-with-free-ssl">', '</a>' );
+				"really-simple-ssl" ), '<a target="_blank" rel="noopener noreferrer" href='.rsssl_link("hosting-providers-with-free-ssl").'>', '</a>' );
 		} else {
 			$msg = __( "Your hosting environment does not allow automatic SSL installation.", "really-simple-ssl" ) . ' ' .
 			       $complete_manually . ' ' .

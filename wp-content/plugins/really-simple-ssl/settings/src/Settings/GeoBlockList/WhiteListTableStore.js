@@ -1,18 +1,17 @@
 /* Creates A Store For Risk Data using Zustand */
 import {create} from 'zustand';
 import * as rsssl_api from "../../utils/api";
-import {__} from "@wordpress/i18n";
-import {produce} from "immer";
-import React from "react";
-import GeoDatatable from "./GeoDatatable";
 
 const WhiteListTableStore = create((set, get) => ({
 
     processing: false,
+    processing_block: false,
     dataLoaded: false,
+    dataLoaded_block: false,
     pagination: {},
     dataActions: {},
     WhiteListTable: [],
+    BlockListData: [],
     rowCleared: false,
     maskError: false,
     ipAddress: '',
@@ -43,6 +42,33 @@ const WhiteListTableStore = create((set, get) => ({
         }
     },
 
+    fetchData: async (action, filter) => {
+//we check if the processing is already true, if so we return
+        set({processing_block: true});
+        set({rowCleared: true});
+
+        try {
+            const response = await rsssl_api.doAction(
+                action,
+                {
+                    filterValue: filter
+                }
+            );
+            //now we set the EventLog
+            if (response && response.request_success) {
+                set({BlockListData: response, dataLoaded: true, processing: false, pagination: response.pagination});
+            }
+            set({ rowCleared: true });
+        } catch (e) {
+            console.error(e);
+        } finally {
+            set({dataLoaded_block: true})
+            set({processing_block: false});
+            set({rowCleared: false});
+
+        }
+    },
+
     resetRow: async (id, dataActions) => {
         set({processing: true});
         let data = {
@@ -67,19 +93,19 @@ const WhiteListTableStore = create((set, get) => ({
         }
     }
     ,
-    updateRow: async (ip, note, dataActions) => {
+    updateRow: async (ip, note, status, filter) => {
         set({processing: true});
         let data = {
             ip_address: ip,
-            note: note
+            note: note,
+            status: status
         };
         try {
             const response = await rsssl_api.doAction('geo_block_add_white_list_ip', data);
             // Consider checking the response structure for any specific success or failure signals
             if (response && response.request_success) {
-                await get().fetchWhiteListData('rsssl_geo_white_list');
-                // Potentially notify the user of success, if needed.
-                return { success: true, message: response.message, response };
+                    await get().fetchWhiteListData('rsssl_geo_white_list');
+                    return { success: true, message: response.message, response };
             } else {
                 // Handle any unsuccessful response if needed.
                 return { success: false, message: response?.message || 'Failed to add Ip', response };
@@ -103,6 +129,7 @@ const WhiteListTableStore = create((set, get) => ({
             // Consider checking the response structure for any specific success or failure signals
             if (response && response.request_success) {
                 await get().fetchCountryData('rsssl_geo_white_list');
+                await get().fetchData('rsssl_geo_block_list', {filterValue: 'all'});
                 // Potentially notify the user of success, if needed.
                 return { success: true, message: response.message, response };
             } else {
@@ -164,6 +191,11 @@ const WhiteListTableStore = create((set, get) => ({
         set({ipAddress: ''});
         set({maskError: false});
     },
+
+    setDataLoaded: (dataLoaded) => {
+        set({dataLoaded});
+        set({dataLoaded_block: dataLoaded});
+    }
 
 }));
 

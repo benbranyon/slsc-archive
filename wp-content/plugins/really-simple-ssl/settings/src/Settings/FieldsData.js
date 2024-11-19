@@ -26,7 +26,7 @@ const useFields = create(( set, get ) => ({
     refreshTests:false,
     highLightField: '',
     setHighLightField: (highLightField) => {
-        set(state => ({ highLightField }))
+        set({ highLightField });
     },
 
     setRefreshTests: (refreshTests) => set(state => ({ refreshTests })),
@@ -53,8 +53,8 @@ const useFields = create(( set, get ) => ({
             })
         )
     },
-    showSavedSettingsNotice : (text) => {
-        handleShowSavedSettingsNotice(text);
+    showSavedSettingsNotice : (text , type = 'success') => {
+        handleShowSavedSettingsNotice(text, type);
     },
 
     updateField: (id, value) => {
@@ -149,7 +149,7 @@ const useFields = create(( set, get ) => ({
         }
         return false;
     },
-    saveFields: async (skipRefreshTests, showSavedNotice) => {
+    saveFields: async (skipRefreshTests, showSavedNotice, force = false) => {
         let refreshTests = typeof skipRefreshTests !== 'undefined' ? skipRefreshTests : true;
         showSavedNotice = typeof showSavedNotice !== 'undefined' ? showSavedNotice : true;
         let fields = get().fields;
@@ -161,7 +161,7 @@ const useFields = create(( set, get ) => ({
             let fieldIsIncluded = changedFields.filter(changedField => changedField.id === field.id).length > 0;
             //also check if there's no saved value yet for radio fields, by checking the never_saved attribute.
             //a radio or select field looks like it's completed, but won't save if it isn't changed.
-            //this should not be the case for disabled fields, as these fields often are enabled server side because they're enabled outside Really Simple SSL.
+            //this should not be the case for disabled fields, as these fields often are enabled server side because they're enabled outside Really Simple Security.
             let select_or_radio = field.type === 'select' || field.type === 'radio';
             if (fieldIsIncluded || (field.never_saved && !field.disabled && select_or_radio)) {
                 saveFields.push(field);
@@ -169,7 +169,7 @@ const useFields = create(( set, get ) => ({
         }
 
         //if no fields were changed, do nothing.
-        if (saveFields.length > 0) {
+        if (saveFields.length > 0 || force === true) {
             let response = rsssl_api.setFields(saveFields).then((response) => {
                 return response;
             })
@@ -278,15 +278,31 @@ const updateFieldsListWithConditions = (fields) => {
     return newFields;
 }
 
-const handleShowSavedSettingsNotice = (text) => {
+const handleShowSavedSettingsNotice = ( text, type ) => {
     if (typeof text === 'undefined') {
-        text = __( 'Settings Saved', 'really-simple-ssl' );
+        text = __( 'Settings saved', 'really-simple-ssl' );
     }
 
-    toast.success(text);
+    if (typeof type === 'undefined') {
+        type = 'success';
+    }
+
+    if (type === 'error') {
+        toast.error(text);
+    }
+
+    if (type === 'warning') {
+        toast.warning(text);
+    }
+
+    if (type === 'info') {
+        toast.info(text);
+    }
+
+    if (type === 'success') {
+        toast.success(text);
+    }
 }
-
-
 
 const validateConditions = (conditions, fields, fieldId) => {
     let relation = conditions[0].relation === 'OR' ? 'OR' : 'AND';

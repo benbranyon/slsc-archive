@@ -8,9 +8,10 @@ const DynamicDataTableStore = create((set, get) => ({
     processing: false,
     dataLoaded: false,
     pagination: {},
-    dataActions: {currentPage:1, currentRowsPerPage:5, filterValue: 'active',filterColumn: 'rsssl_two_fa_status'},
+    dataActions: {currentPage:1, currentRowsPerPage:5, filterValue: 'all',filterColumn: 'rsssl_two_fa_status'},
     totalRecords:0,
     DynamicDataTable: [],
+
     setDataLoaded: (dataLoaded) => set((state) => ({ ...state, dataLoaded: dataLoaded })),
     resetUserMethod: async (id, optionalRoles, currentRole) => {
         if (get().processing) {
@@ -18,18 +19,42 @@ const DynamicDataTableStore = create((set, get) => ({
         }
         if ( optionalRoles.includes(currentRole) ) {
             set({processing: true});
+            set({dataLoaded: false});
             const response = await apiFetch({
                 path: `/wp/v2/users/${id}`,
                 method: 'POST',
                 data: {
                     meta: {
-                        rsssl_two_fa_status: 'open',
+                        rsssl_two_fa_status_email: 'open',
+                        rsssl_two_fa_status_totp: 'open',
                     },
+                    _wpnonce: rsssl_settings.nonce,
                 },
             }).catch((error) => {
                 console.error(error);
             });
             set({processing: false});
+            set({dataLoaded: true});
+        }
+    },
+    hardResetUser: async (id) => {
+        if (get().processing) return;
+        set({processing: true});
+        try {
+            const response = await rsssl_api.doAction(
+                'two_fa_reset_user',
+                {id}
+            );
+            if (response) {
+                set(state => ({
+                    ...state,
+                    processing: false,
+                }));
+                // Return the response for the calling function to use
+                return response;
+            }
+        } catch (e) {
+            console.log(e);
         }
     },
     fetchDynamicData: async () => {
@@ -40,7 +65,7 @@ const DynamicDataTableStore = create((set, get) => ({
                 'two_fa_table',
                 get().dataActions
             );
-            if (response) {
+            if (response && response.data) {
                 set(state => ({
                     ...state,
                     DynamicDataTable: response.data,
@@ -51,6 +76,12 @@ const DynamicDataTableStore = create((set, get) => ({
                 }));
                 // Return the response for the calling function to use
                 return response;
+            } else {
+                set(state => ({
+                    ...state,
+                    processing: false,
+                    dataLoaded: true,
+                }));
             }
         } catch (e) {
             console.log(e);
@@ -104,7 +135,7 @@ const DynamicDataTableStore = create((set, get) => ({
                 state.dataActions = {...state.dataActions, filterColumn: column, filterValue};
             })
         );
-        // We fetch the data again
+        // Fetch the data again
         await get().fetchDynamicData();
     },
 

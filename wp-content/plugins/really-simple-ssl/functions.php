@@ -5,10 +5,10 @@ defined( 'ABSPATH' ) or die();
  */
 
 /**
- * Get a Really Simple SSL option by name
+ * Get a Really Simple Security option by name
  *
- * @param string $name
- * @param mixed  $default_value
+ * @param string $name The name of the option to retrieve.
+ * @param mixed  $default_value The default value to return if the option does not exist.
  *
  * @return mixed
  */
@@ -74,6 +74,8 @@ function rsssl_is_networkwide_active() {
  */
 function rsssl_get_legacy_option( $options, string $name ): array {
 	$old_options = is_multisite() ? get_site_option( 'rlrsssl_network_options' ) : get_option( 'rlrsssl_options' );
+	$options     = [];
+
 	if ( $old_options ) {
 		if ( 'ssl_enabled' === $name && isset( $old_options['ssl_enabled'] ) ) {
 			$options['ssl_enabled'] = $old_options['ssl_enabled'];
@@ -97,7 +99,7 @@ function rsssl_get_legacy_option( $options, string $name ): array {
 function rsssl_check_if_email_essential_feature() {
 	$essential_features = array(
 		'limit_login_attempts' => rsssl_get_option( 'enable_limited_login_attempts' ) == 1,//phpcs:ignore
-		'two_fa_enabled'       => rsssl_get_option( 'two_fa_enabled' ) == 1,//phpcs:ignore
+		'login_protection_enabled'       => rsssl_get_option( 'login_protection_enabled' ) == 1,//phpcs:ignore
 	);
 
 	// Check if the current feature is in the essential features array
@@ -108,4 +110,139 @@ function rsssl_check_if_email_essential_feature() {
 	}
 
 	return false;
+}
+
+/**
+ * Retrieves the path to a template file.
+ *
+ * @param string $template The name of the template to retrieve.
+ * @param string $path (Optional) The path to look for the template file. If not specified, the default path will be used.
+ *
+ * @return string The full path to the template file.
+ * @throws \RuntimeException Throws a runtime exception if the template file cannot be found.
+ */
+function rsssl_get_template( string $template, string $path = '' ): string {
+	// Define the path in the theme where templates can be overridden.
+	$theme_template_path = get_stylesheet_directory() . '/really-simple-ssl-templates/' . $template;
+
+	// Check if the theme has an override for the template.
+	if ( file_exists( $theme_template_path ) ) {
+		return $theme_template_path;
+	}
+	// If $path is not set, use the default path
+	if ( $path === '' ) {
+		$path = rsssl_path . 'templates/'; // Remember this only works in free version, for pro we need to add the $path parameter/argument
+	} else {
+		// Ensure the path ends with a slash
+		$path = trailingslashit( $path );
+	}
+
+	// Full path to the template file
+	$full_path = $path . $template;
+
+	// Check if the template exists in the specified path.
+	if ( ! file_exists( $full_path ) ) {
+		throw new \RuntimeException( 'Template not found: ' . $full_path );
+	}
+
+	return $full_path;
+}
+
+/**
+ * Loads a template file and includes it.
+ *
+ * @param string $template The name of the template to load.
+ * @param array  $vars (Optional) An associative array of variables to make available in the template scope.
+ * @param string $path (Optional) The path to look for the template file. If not specified, the default path will be used.
+ *
+ * @return void
+ * @throws Exception Throws an exception if the template file cannot be found.
+ */
+function rsssl_load_template( string $template, array $vars = array(), string $path = '' ) {
+	// Extract variables to be available in the template scope.
+	if ( is_array( $vars ) ) {
+		extract( $vars );
+	}
+
+	// Get the template file, checking for theme overrides.
+	$template_file = rsssl_get_template( $template, $path );
+
+	// Include the template file.
+	include $template_file;
+}
+
+/**
+ * @return string
+ *
+ * Get wp-config.php path
+ */
+if ( ! function_exists('rsssl_wpconfig_path' ) ) {
+	function rsssl_wpconfig_path(): string {
+		$location_of_wp_config = ABSPATH;
+		if ( ! file_exists( ABSPATH . 'wp-config.php' ) && file_exists( dirname( ABSPATH ) . '/wp-config.php' ) ) {
+			$location_of_wp_config = dirname( ABSPATH );
+		}
+		$location_of_wp_config = trailingslashit( $location_of_wp_config );
+		$wpconfig_path         = $location_of_wp_config . 'wp-config.php';
+		if ( file_exists( $wpconfig_path ) ) {
+			return $wpconfig_path;
+		}
+
+		return '';
+	}
+}
+/**
+ * @return void
+ *
+ * Set encryption keys
+ */
+if ( ! function_exists('rsssl_set_encryption_key')) {
+	function rsssl_set_encryption_key(): void {
+
+		// Return if key has been set
+		if ( get_site_option( 'rsssl_encryption_keys_set' ) ) {
+			return;
+		}
+
+		$wp_config_path = rsssl_wpconfig_path();
+
+		// Check if we already have a key defined
+		if ( defined( 'RSSSL_KEY' ) ) {
+			return;
+		}
+
+		$key           = get_site_option( 'rsssl_main_key' );
+		$new_generated = false;
+
+		// If we don't have a key, generate one
+		if ( ! $key ) {
+			$new_generated = true;
+			$key           = wp_generate_password( 64, false );
+		}
+
+		if ( is_writable( $wp_config_path ) ) {
+			// Add the key to the wp-config file
+			$rule         = "//Begin Really Simple Security key\n";
+			$rule         .= "define('RSSSL_KEY', '" . $key . "');\n";
+			$rule         .= "//END Really Simple Security key\n";
+			$insert_after = '<?php';
+
+			$contents = file_get_contents( $wp_config_path );
+			$pos      = strpos( $contents, $insert_after );
+			if ( false !== $pos && strpos( $contents, 'RSSSL_KEY' ) === false ) {
+				$contents = substr_replace( $contents, $rule, $pos + 1 + strlen( $insert_after ), 0 );
+				file_put_contents( $wp_config_path, $contents );
+			}
+
+			// If the wp-config was just set to writable, we can delete the key from the database now.
+			delete_site_option( 'rsssl_main_key' );
+		} elseif ( $new_generated ) {
+			// If we can't write to the wp-config file, store the key in the database
+			// When wp-config is set to writable, auto upgrade to constant
+			update_site_option( 'rsssl_main_key', $key, false );
+		}
+
+		update_site_option( 'rsssl_encryption_keys_set', true );
+	}
+	rsssl_set_encryption_key();
 }
