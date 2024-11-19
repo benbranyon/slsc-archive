@@ -229,6 +229,15 @@ class Controller_Users {
 		global $wpdb;
 		$table = Controller_DB::shared()->secrets;
 		$wpdb->query($wpdb->prepare("DELETE FROM `{$table}` WHERE `user_id` = %d", $user->ID));
+		
+		/**
+		 * Fires when 2FA is disabled for a user.
+		 *
+		 * @since 1.1.13
+		 *
+		 * @param \WP_User $user The user.
+		 */
+		do_action('wordfence_ls_2fa_deactivated', $user);
 	}
 
 	private function has_admin_with_2fa_active() {
@@ -560,14 +569,9 @@ SQL
 				break;
 			case 'wfls_last_captcha':
 				$user = new \WP_User($user_id);
-				if (Controller_Users::shared()->can_activate_2fa($user) && Controller_Users::shared()->has_2fa_active($user)) {
-					$value = __('(not required)', 'wordfence');
-				}
-				else {
-					$value = '-';
-					if (($last = get_user_meta($user_id, 'wfls-last-captcha-score', true))) {
-						$value = number_format($last, 1);
-					}
+				$value = '-';
+				if (($last = get_user_meta($user_id, 'wfls-last-captcha-score', true))) {
+					$value = number_format($last, 1);
 				}
 				break;
 		}
