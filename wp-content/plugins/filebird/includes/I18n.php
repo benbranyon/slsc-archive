@@ -60,6 +60,7 @@ class I18n {
 			'all_files'                         => __( 'All Files', 'filebird' ),
 			'uncategorized'                     => __( 'Uncategorized', 'filebird' ),
 			'previous_folder_selected'          => __( 'Previous folder selected', 'filebird' ),
+			'most_recent_folder' 				=> __( 'Most recent folder', 'filebird' ),
 			'rename'                            => __( 'Rename', 'filebird' ),
 			'are_you_sure_delete_this_folder'   => __( 'Are you sure you want to delete this folder? Those files will be moved to <strong>Uncategorized</strong> folder.', 'filebird' ),
 			'sort_ascending'                    => __( 'Sort Ascending', 'filebird' ),

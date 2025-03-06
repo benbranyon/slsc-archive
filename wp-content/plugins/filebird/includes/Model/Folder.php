@@ -75,11 +75,14 @@ class Folder {
 	}
 	public static function verifyAuthor( $folder_id, $current_user_id, $folder_per_user = false ) {
 		global $wpdb;
+		if( $folder_id == 0 ) {
+			return true;
+		}
+		$created_by = (int) $wpdb->get_var( $wpdb->prepare( "SELECT `created_by` FROM {$wpdb->prefix}fbv WHERE `id` = %d", $folder_id ) );
 		if ( $folder_per_user ) {
-			$created_by = (int) $wpdb->get_var( $wpdb->prepare( "SELECT `created_by` FROM {$wpdb->prefix}fbv WHERE `id` = %d", $folder_id ) );
 			return $created_by == $current_user_id;
 		}
-		return true;
+		return $created_by == 0;
 	}
 	public static function updateAuthor( $from_author, $to_author ) {
 		global $wpdb;

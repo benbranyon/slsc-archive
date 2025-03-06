@@ -36,7 +36,8 @@ class PageBuilders {
 		}
 
 		// Compatible for Divi
-		if ( class_exists( 'ET_Builder_Element' ) ) {
+		$is_divi_active = class_exists( 'ET_Builder_Element' ) || function_exists( 'et_builder_d5_enabled' );
+		if ( $is_divi_active ) {
 			$this->registerForDivi();
 		}
 
@@ -148,6 +149,12 @@ class PageBuilders {
 	public function registerForDivi() {
 		add_action(
 			'et_fb_enqueue_assets',
+			function() {
+				$this->enqueueScripts();
+			}
+		);
+		add_action(
+			'divi_visual_builder_assets_before_enqueue_scripts',
 			function() {
 				$this->enqueueScripts();
 			}

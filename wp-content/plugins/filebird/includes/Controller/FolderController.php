@@ -276,6 +276,11 @@ class FolderController extends Controller {
 
 		$ids = array_map( 'intval', apply_filters( 'fbv_ids_assigned_to_folder', $ids ) );
 
+		$current_user_id = get_current_user_id();
+		$user_has_own_folder = get_option( 'njt_fbv_folder_per_user', '0' ) === '1';
+		if( ! FolderModel::verifyAuthor( $folderId, $current_user_id, $user_has_own_folder ) ) {
+			return new \WP_Error( 'validation_failed', __( 'Permisson Denied.', 'filebird' ) );
+		}
 		$folderCounter = FolderModel::assignFolder( $folderId, $ids, $lang );
 
 		return rest_ensure_response( $folderCounter );
