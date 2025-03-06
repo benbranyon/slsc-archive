@@ -8,13 +8,13 @@
  * Plugin Name: ACF Content Analysis for Yoast SEO
  * Plugin URI:  https://wordpress.org/plugins/acf-content-analysis-for-yoast-seo/
  * Description: Ensure that Yoast SEO analyzes all Advanced Custom Fields 5.7+ content including Flexible Content and Repeaters.
- * Version:     3.1
+ * Version:     3.2
  * Author:      Thomas Kräftner, ViktorFroberg, marol87, pekz0r, angrycreative, Team Yoast
  * Author URI:  https://yoa.st/team-yoast-acf
  * License:     GPL v3
  * Text Domain: acf-content-analysis-for-yoast-seo
  * Domain Path: /languages/
- * Requires at least: 6.1
+ * Requires at least: 6.6
  * Requires PHP: 7.2.5
  */
 
@@ -49,15 +49,33 @@ else {
 
 /**
  * Show admin notice when ACF is missing.
+ *
+ * @return void
  */
 function yoast_acf_report_missing_acf() {
-	echo '<div class="error"><p>';
-	printf(
-		/* translators: %1$s resolves to ACF Content Analysis for Yoast SEO */
-		esc_html__( '%1$s could not be loaded because of missing files.', 'acf-content-analysis-for-yoast-seo' ),
-		'ACF Content Analysis for Yoast SEO'
+	echo (
+		'<div class="error yoast-migrated-notice">'
+			. '<h4 class="yoast-notice-migrated-header">'
+			. sprintf(
+				/* translators: %1$s: ACF Content Analysis for Yoast SEO */
+				esc_html__( 'Unable to load %1$s', 'acf-content-analysis-for-yoast-seo' ),
+				'ACF Content Analysis for Yoast SEO'
+			)
+			. '</h4>'
+			. '<div class="notice-yoast-content">'
+				. '<p>'
+				. sprintf(
+					/* translators: %1$s resolves to ACF Content Analysis for Yoast SEO */
+					esc_html__(
+						'%1$s could not be loaded because of missing files.',
+						'acf-content-analysis-for-yoast-seo'
+					),
+					'ACF Content Analysis for Yoast SEO'
+				)
+				. '</p>'
+			. '</div>'
+		. '</div>'
 	);
-	echo '</p></div>';
 }
 
 /* ********************* DEPRECATED FUNCTIONS ********************* */
@@ -67,6 +85,8 @@ function yoast_acf_report_missing_acf() {
  *
  * @deprecated 2.0.1
  * @codeCoverageIgnore
+ *
+ * @return void
  */
 function yoast_acf_analysis_load_textdomain() {
 	// As we require WordPress 4.6 and higher, we don't need to load the translation files manually anymore.

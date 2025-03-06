@@ -1,6 +1,6 @@
 <?php
 
-namespace Yoast\WP\ACF\Tests\Configuration;
+namespace Yoast\WP\ACF\Tests\Unit\Configuration;
 
 use Brain\Monkey\Filters;
 use Brain\Monkey\Functions;
@@ -14,7 +14,7 @@ use Yoast_ACF_Analysis_String_Store;
  *
  * @covers Yoast_ACF_Analysis_Configuration
  */
-class Configuration_Test extends TestCase {
+final class Configuration_Test extends TestCase {
 
 	/**
 	 * Tests empty configurations.
@@ -161,14 +161,12 @@ class Configuration_Test extends TestCase {
 
 		$this->assertSame( $blacklist_name, $configuration->get_blacklist_name() );
 
-
 		Filters\expectApplied( 'ysacf_exclude_fields' )
 			->once()
 			->with( [] )
 			->andReturn( [] );
 
 		$this->assertSame( [], $configuration->get_blacklist_name()->to_array() );
-
 
 		Filters\expectApplied( 'ysacf_exclude_fields' )
 			->once()

@@ -1,30 +1,18 @@
 <?php
 
-namespace Yoast\WP\ACF\Tests\Dependencies;
+namespace Yoast\WP\ACF\Tests\Unit\Dependencies;
 
 use Yoast\WPTestUtils\BrainMonkey\TestCase;
 use Yoast_ACF_Analysis_Dependency_Yoast_SEO;
 
 /**
- * Class Yoast_SEO_Dependency_Test.
+ * Class Dependency_Yoast_SEO_Test.
  *
  * @covers Yoast_ACF_Analysis_Dependency_Yoast_SEO
+ *
+ * @runTestsInSeparateProcesses
  */
-class Yoast_SEO_Dependency_Test extends TestCase {
-
-	/**
-	 * Whether or not to preserve the global state.
-	 *
-	 * @var bool
-	 */
-	protected $preserveGlobalState = false;
-
-	/**
-	 * Whether or not to run each test in a separate process.
-	 *
-	 * @var bool
-	 */
-	protected $runTestInSeparateProcess = true;
+final class Dependency_Yoast_SEO_Test extends TestCase {
 
 	/**
 	 * Tests that requirements are not met when Yoast SEO can't be found.
@@ -43,7 +31,7 @@ class Yoast_SEO_Dependency_Test extends TestCase {
 	 * @return void
 	 */
 	public function testPass() {
-		\define( 'WPSEO_VERSION', '20.8' );
+		\define( 'WPSEO_VERSION', '24.6' );
 
 		$testee = new Yoast_ACF_Analysis_Dependency_Yoast_SEO();
 		$this->assertTrue( $testee->is_met() );
@@ -55,7 +43,7 @@ class Yoast_SEO_Dependency_Test extends TestCase {
 	 * @return void
 	 */
 	public function testOldVersion() {
-		\define( 'WPSEO_VERSION', '20.7' );
+		\define( 'WPSEO_VERSION', '24.5' );
 
 		$testee = new Yoast_ACF_Analysis_Dependency_Yoast_SEO();
 		$this->assertFalse( $testee->is_met() );
@@ -79,7 +67,7 @@ class Yoast_SEO_Dependency_Test extends TestCase {
 	 * @return void
 	 */
 	public function testAdminNoticeMinimumVersion() {
-		\define( 'WPSEO_VERSION', '2.0.0' );
+		\define( 'WPSEO_VERSION', '24.5' );
 
 		$testee = new Yoast_ACF_Analysis_Dependency_Yoast_SEO();
 		$testee->register_notifications();

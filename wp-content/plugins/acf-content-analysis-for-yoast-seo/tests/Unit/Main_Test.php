@@ -1,6 +1,6 @@
 <?php
 
-namespace Yoast\WP\ACF\Tests;
+namespace Yoast\WP\ACF\Tests\Unit;
 
 use AC_Yoast_SEO_ACF_Content_Analysis;
 use Yoast\WPTestUtils\BrainMonkey\TestCase;
@@ -10,7 +10,7 @@ use Yoast_ACF_Analysis_Facade;
 /**
  * Class Main_Test.
  */
-class Main_Test extends TestCase {
+final class Main_Test extends TestCase {
 
 	/**
 	 * Tests invalid configurations.
