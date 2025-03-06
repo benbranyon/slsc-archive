@@ -3,9 +3,9 @@ Contributors: iberezansky
 Donate link: https://3dflipbook.net/download-wp
 Tags: flipbook, flip book, pdf viewer, pdf flipbook, pdf to flip book
 Requires at least: 4.3
-Tested up to: 6.6
+Tested up to: 6.7
 Requires PHP: 5.3
-Stable tag: 1.16.6
+Stable tag: 1.16.15
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -224,6 +224,81 @@ This will open your PDF Flipbook or Image Flipbook at page 10 when it starts.
 17. Tilted unrolling flipping pages & flexible corners
 
 == Changelog ==
+
+<h4>1.16.15</h4>
+<ul>
+  <li>
+    Added normalization of url protocol for client locale loader
+  </li>
+</ul>
+
+<h4>1.16.14</h4>
+<ul>
+  <li>
+    Fixed Wordfence Security warning
+  </li>
+</ul>
+
+<h4>1.16.13</h4>
+<ul>
+  <li>
+    Fixed fullScreen background urls
+  </li>
+</ul>
+
+<h4>1.16.12</h4>
+<ul>
+  <li>
+    Fixed book overlapping with toolbar
+  </li>
+  <li>
+    Removed extra margin when the toolbar is hidden
+  </li>
+  <li>
+    Fixed wrong current page when pages are turning
+  </li>
+  <li>
+    Fixed displaying unprocessed books
+  </li>
+</ul>
+
+<h4>1.16.11</h4>
+<ul>
+  <li>
+    Fixed issue with WooCommerce
+  </li>
+</ul>
+
+<h4>1.16.10</h4>
+<ul>
+  <li>
+    Fixed incompatibility with a SEO plugin
+  </li>
+</ul>
+
+<h4>1.16.9</h4>
+<ul>
+  <li>
+    Fixed jQuery.get is not a function
+  </li>
+</ul>
+
+<h4>1.16.8</h4>
+<ul>
+  <li>
+    Improved page with plugin loading speed
+  </li>
+  <li>
+    Fixed gray boxes instead of shadows in Safari
+  </li>
+</ul>
+
+<h4>1.16.7</h4>
+<ul>
+  <li>
+    Fixed Notice: Function _load_textdomain_just_in_time was called incorrectly
+  </li>
+</ul>
 
 <h4>1.16.6</h4>
 <ul>

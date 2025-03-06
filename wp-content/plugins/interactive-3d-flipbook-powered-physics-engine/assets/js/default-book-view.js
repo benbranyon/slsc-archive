@@ -72,10 +72,6 @@ function init(container) {
         container.find('.float-wnd .head').off('mousedown', pickFloatWnd);
       },
       appLoaded: function(scene) {
-        var hoverHeight = scene.view.getStyleData()['hover-height'] || 0;
-        if(hoverHeight) {
-          scene.ctrl.bookWatcher.setPadding((container.find('.tbox').css('bottom')==='10px'? -1: 1)*(hoverHeight+20));
-        }
       },
       linkLoaded: function(link) {
       }

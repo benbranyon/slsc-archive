@@ -115,36 +115,23 @@
           $a['lightbox'] = 'dark-shadow';
         }
       }
-      $template = $fb3d['templates'][$template];
-      fetch_url_to_js_data($template['html']);
-      fetch_url_to_js_data($template['script']);
-      foreach($template['styles'] as $style) {
-        fetch_url_to_js_data($style);
-      }
     }
 
     return ['atts'=> $a, 'jsData'=> $jsData];
   }
 
-  function enqueue_client_scripts() {
-    global $fb3d;
-    if(isset($fb3d['load_client_scripts']) && !isset($fb3d['enqueued_client_scripts'])) {
-      $fb3d['enqueued_client_scripts'] = TRUE;
+  function enqueue_client_locale_loader() {
       register_scripts_and_styles();
-      wp_enqueue_style(POST_ID.'-client');
-      wp_enqueue_script(POST_ID.'-client');
-    }
+      wp_enqueue_script(POST_ID.'-client-locale-loader');
   }
+
+  add_action('wp_enqueue_scripts', '\iberezansky\fb3d\enqueue_client_locale_loader');
 
   function to_single_quotes($s) {
     return str_replace('"', '\'', $s);
   }
 
-  add_action('wp_footer', '\iberezansky\fb3d\enqueue_client_scripts');
-
   function shortcode_handler($atts, $content='') {
-    global $fb3d;
-    $fb3d['load_client_scripts'] = TRUE;
     $atts = shortcode_atts([
       'id'=> '0',
       'mode'=> 'fullscreen',
@@ -192,8 +179,8 @@
       $res = ($is_link? $r.'>'.$content.'</a>' :$r.'></div>'.$content).($jsData? implode([
       '<script type="text/javascript">',
         'window.FB3D_CLIENT_DATA = window.FB3D_CLIENT_DATA || [];',
-        'window.FB3D_CLIENT_DATA.push(\''.base64_encode(json_encode($jsData)).'\');',
-        'window.FB3D_CLIENT_LOCALE && window.FB3D_CLIENT_LOCALE.render();',
+        'FB3D_CLIENT_DATA.push(\''.base64_encode(json_encode($jsData)).'\');',
+        'window.FB3D_CLIENT_LOCALE && FB3D_CLIENT_LOCALE.render && FB3D_CLIENT_LOCALE.render();',
       '</script>']): '');
     }
     else {

@@ -1,6 +1,3 @@
-/*json-data: {
-  "hover-height": 52
-}*/
 
 .main {
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -81,6 +78,15 @@ a.disabled, .cmd.disabled {
   height: 100%;
   background: no-repeat 50%;
   background-size:cover;
+}
+.view .render {
+  height: 100%;
+}
+.view.toolbar-en .render {
+  height: calc(100% - 40px);
+}
+.view.toolbar-en.zoom-en .render {
+  height: 100%;
 }
 
 @keyframes loader {

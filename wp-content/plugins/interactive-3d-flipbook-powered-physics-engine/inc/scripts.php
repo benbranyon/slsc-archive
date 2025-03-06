@@ -7,7 +7,6 @@
       wp_register_script('react-dom', ASSETS_JS.'react-dom.min.js', array('react'), '17.0.2', true);
     }
     wp_register_script(POST_ID.'-pdf-js', ASSETS_JS.'pdf.null.js', null, '1.0.0', true);
-    wp_register_script(POST_ID.'-three', ASSETS_JS.'three.min.js', null, '125', true);
     wp_register_script(POST_ID.'-html2canvas', ASSETS_JS.'html2canvas.min.js', null, '0.5', true);
 
     wp_register_script(POST_ID.'-colorpicker', ASSETS_JS.'colorpicker.js', array('jquery'), '1.1.1', true);
@@ -16,8 +15,7 @@
     wp_register_script(POST_ID.'-settings', ASSETS_JS.'settings.min.js', array('react', 'react-dom', 'jquery'), VERSION, true);
     wp_register_script(POST_ID.'-shortcode-generator', ASSETS_JS.'shortcode-generator.js', array('react', 'react-dom', 'jquery', POST_ID.'-insert'), VERSION, true);
 
-    wp_register_script(POST_ID, ASSETS_JS.'3d-flip-book.min.js', array('jquery', POST_ID.'-pdf-js', POST_ID.'-html2canvas', POST_ID.'-three'), VERSION, true);
-    wp_register_script(POST_ID.'-client', ASSETS_JS.'client.min.js', array('jquery', POST_ID.'-pdf-js', POST_ID.'-html2canvas', POST_ID), VERSION, true);
+    wp_register_script(POST_ID.'-client-locale-loader', ASSETS_JS.'client-locale-loader.js', ['jquery'], VERSION, ['strategy'=> 'async']);
 
     localize_scripts();
   }
@@ -48,26 +46,30 @@
     return array_keys($r);
   }
 
-  function localize_scripts() {
-    global $fb3d;
-
-    wp_localize_script(POST_ID.'-pdf-js', 'PDFJS_LOCALE', array(
+  function get_pdf_js_locale() {
+    return [
       'pdfJsLib'=> ASSETS_JS.'pdf.min.js?ver=4.3.136',
       'pdfJsWorker'=> ASSETS_JS.'pdf.worker.js?ver=4.3.136',
       'stablePdfJsLib'=> ASSETS_JS.'stable/pdf.min.js?ver=2.5.207',
       'stablePdfJsWorker'=> ASSETS_JS.'stable/pdf.worker.js?ver=2.5.207',
       'pdfJsCMapUrl'=> ASSETS_CMAPS
-    ));
+    ];
+  }
 
-    wp_localize_script(POST_ID, 'FB3D_LOCALE', array(
-      'dictionary'=> $fb3d['dictionary']
-    ));
-
+  function get_thumbnail_size() {
     $thumbnail_size_h = aa(aa(client_book_control_props(), 'plugin'), 'autoThumbnailHeight', 'auto');
-    $thumbnailSize = [
+    return [
       'width'=> get_option('thumbnail_size_w'),
       'height'=> $thumbnail_size_h==='auto'? get_option('thumbnail_size_h'): $thumbnail_size_h
     ];
+  }
+
+  function localize_scripts() {
+    global $fb3d;
+
+    wp_localize_script(POST_ID.'-pdf-js', 'PDFJS_LOCALE', get_pdf_js_locale());
+
+    $thumbnailSize = get_thumbnail_size();
 
     $bookTemplates = [
       'none'=> ['caption'=> __('None', POST_ID)]
@@ -106,14 +108,20 @@
       'nonce'=> wp_create_nonce(NONCE)
     ));
 
-    wp_localize_script(POST_ID.'-client', 'FB3D_CLIENT_LOCALE_ENCODED', ['data'=> base64_encode(json_encode(array(
-      'key'=> POST_ID,
+    wp_localize_script(POST_ID.'-client-locale-loader', 'FB3D_CLIENT_LOCALE', [
       'ajaxurl'=> admin_url('admin-ajax.php'),
-      'templates'=> $fb3d['templates'],
+      'dictionary'=> get_client_dictionary(),
       'images'=> ASSETS_IMAGES,
       'jsData'=> $fb3d['jsData'],
-      'thumbnailSize'=> $thumbnailSize
-    )))]);
+      'key'=> POST_ID,
+      'pdfJS'=> get_pdf_js_locale(),
+      'cacheurl'=> get_cache_url(),
+      'pluginsurl'=> substr(URL, 0, strpos(URL, '/plugins/')+9),
+      'pluginurl'=> URL,
+      'thumbnailSize'=> $thumbnailSize,
+      'version'=> VERSION
+    ]);
+
   }
 
 ?>
