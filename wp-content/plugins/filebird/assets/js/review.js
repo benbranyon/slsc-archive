@@ -60,6 +60,7 @@ jQuery(document).ready(function () {
           url: atob(
             "aHR0cHM6Ly9wcmV2aWV3Lm5pbmphdGVhbS5vcmcvZmlsZWJpcmQvd3AtanNvbi9maWxlYmlyZC92NC9hZGRSZXZpZXc="
           ),
+          beforeSend: () => { },
           contentType: "application/json",
           type: "POST",
           cache: false,

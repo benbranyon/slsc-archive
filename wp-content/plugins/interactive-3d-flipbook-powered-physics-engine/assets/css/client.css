@@ -281,7 +281,9 @@ table.fb3d-categories h3 {
 }
 
 .fb3d-modal .cmd-close {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 24px;
+  font-weight: bolder;
   color: #ccc;
   position: absolute;
   right: 10px;

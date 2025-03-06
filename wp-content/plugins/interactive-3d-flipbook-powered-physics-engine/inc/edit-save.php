@@ -218,7 +218,7 @@
 
   function get_auto_thumbnail_url($id) {
     $r = NULL;
-    if(file_exists(get_auto_thumbnail_dir().'/'.$id.'.png')) {
+    if(file_exists(get_auto_thumbnail_dir().$id.'.png')) {
       $dir = wp_upload_dir();
       $r = $dir['baseurl'].'/'.POST_ID.'/auto-thumbnails/'.$id.'.png';
     }
@@ -227,12 +227,12 @@
 
   function get_auto_thumbnail_dir() {
     $dir = wp_upload_dir();
-    return $dir['basedir'].'/'.POST_ID.'/auto-thumbnails';
+    return $dir['basedir'].'/'.POST_ID.'/auto-thumbnails/';
   }
 
   function post_auto_thumbnail_save($id, $b64) {
     $dir = get_auto_thumbnail_dir();
-    $fn = $dir.'/'.$id.'.png';
+    $fn = $dir.$id.'.png';
     if($b64!=='') {
       if(!file_exists($dir)) {
         mkdir($dir, 0777, TRUE);

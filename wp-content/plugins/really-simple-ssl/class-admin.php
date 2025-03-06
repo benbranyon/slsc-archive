@@ -73,10 +73,13 @@ class rsssl_admin {
 		$plugin = rsssl_plugin;
 		add_filter( "plugin_action_links_$plugin", array( $this, 'plugin_settings_link' ) );
 		add_filter( "network_admin_plugin_action_links_$plugin", array($this,'plugin_settings_link' ) );
+		add_filter( 'rsssl_clear_test_caches', array( $this, 'clear_404_test_cache'), 10, 1 );
 
 		add_action( 'rsssl_upgrade', array( $this, 'run_table_init_hook'), 10, 1);
 		add_action( 'upgrader_process_complete', array( $this, 'run_table_init_hook'), 10, 1);
 		add_action( 'wp_initialize_site', array( $this, 'run_table_init_hook'), 10, 1);
+		add_action( "rsssl_after_save_field", array($this, 'maybe_delete_permission_detection_option'), 101, 4 );
+
 	}
 
 	public static function this() {
@@ -342,39 +345,58 @@ class rsssl_admin {
 			return;
 		}
 
+		do_action( 'rsssl_deactivate' );
+
+		rsssl_clear_scheduled_hooks();
+
 		if ( isset( $_GET['action'] ) && 'uninstall_keep_ssl' === $_GET['action'] ) {
-			//deactivate plugin, but don't revert to http.
-			$plugin = $this->get_current_rsssl_dirname() . '/' . $this->plugin_filename;
-			$plugin = plugin_basename( trim( $plugin ) );
-
-			if ( is_multisite() ) {
-				$network_current = get_site_option( 'active_sitewide_plugins', array() );
-				if ( is_plugin_active_for_network( $plugin ) ) {
-					unset( $network_current[ $plugin ] );
-				}
-				update_site_option( 'active_sitewide_plugins', $network_current );
-				//remove plugin one by one on each site
-				$sites = get_sites();
-				foreach ( $sites as $site ) {
-					switch_to_blog( $site->blog_id );
-					$current = get_option( 'active_plugins', array() );
-					$current = $this->remove_plugin_from_array( $plugin, $current );
-					update_option( 'active_plugins', $current );
-					restore_current_blog(); //switches back to previous blog, not current, so we have to do it each loop
-				}
-			} else {
-				$current = get_option( 'active_plugins', array() );
-				$current = $this->remove_plugin_from_array( $plugin, $current );
-				update_option( 'active_plugins', $current );
-			}
-			do_action( 'rsssl_deactivate' );
-
-			rsssl_clear_scheduled_hooks();
-
-			wp_redirect( admin_url( 'plugins.php' ) );
-            exit;
+			$this->deactivate_plugin();
 		}
+
+		if ( isset( $_GET['action'] ) && 'uninstall_revert_ssl' === $_GET['action'] ) {
+			// Update site url from https:// to http://
+			$this->remove_ssl_from_siteurl();
+            if ( ! is_multisite() ) {
+	            $this->remove_ssl_from_siteurl_in_wpconfig();
+            }
+            $this->deactivate_plugin();
+		}
+
+		wp_redirect( admin_url( 'plugins.php' ) );
+		exit;
 	}
+
+	/**
+	 * @return void
+     *
+     * Deactivate plugin logic
+	 */
+    private function deactivate_plugin() {
+	    //deactivate plugin, but don't revert to http.
+	    $plugin = $this->get_current_rsssl_dirname() . '/' . $this->plugin_filename;
+	    $plugin = plugin_basename( trim( $plugin ) );
+
+	    if ( is_multisite() ) {
+		    $network_current = get_site_option( 'active_sitewide_plugins', array() );
+		    if ( is_plugin_active_for_network( $plugin ) ) {
+			    unset( $network_current[ $plugin ] );
+		    }
+		    update_site_option( 'active_sitewide_plugins', $network_current );
+		    //remove plugin one by one on each site
+		    $sites = get_sites();
+		    foreach ( $sites as $site ) {
+			    switch_to_blog( $site->blog_id );
+			    $current = get_option( 'active_plugins', array() );
+			    $current = $this->remove_plugin_from_array( $plugin, $current );
+			    update_option( 'active_plugins', $current );
+			    restore_current_blog(); //switches back to previous blog, not current, so we have to do it each loop
+		    }
+	    } else {
+		    $current = get_option( 'active_plugins', array() );
+		    $current = $this->remove_plugin_from_array( $plugin, $current );
+		    update_option( 'active_plugins', $current );
+	    }
+    }
 
 	/**
 	 * Remove the plugin from the active plugins array when called from listen_for_deactivation
@@ -423,10 +445,16 @@ class rsssl_admin {
 	 * Used in a form in the dashboard notices.
 	 * @return void
 	 */
-	public function recheck_certificate() {
+	public function recheck_certificate(): void
+    {
 		if ( ! rsssl_user_can_manage() ) {
 			return;
 		}
+        if ( ! isset($_POST['rsssl_recheck_nonce_field']) ||
+            ! wp_verify_nonce(sanitize_text_field( wp_unslash( $_POST['rsssl_recheck_nonce_field' ])) , 'rsssl_recheck_nonce')
+        ) {
+            return; // nonce failed, do not proceed
+        }
 		if ( isset( $_POST['rsssl_recheck_certificate'] ) ) {
 			delete_transient( 'rsssl_certinfo' );
 		}
@@ -435,7 +463,6 @@ class rsssl_admin {
 	/**
 	 *  Activate the SSL for this site
 	 */
-
     public function activate_ssl($data) {
         //skip activation if safe mode
 	    if ( defined( 'RSSSL_SAFE_MODE' ) && RSSSL_SAFE_MODE ) {
@@ -946,7 +973,7 @@ class rsssl_admin {
 		}
 	}
 
-	/**]
+	/**
 	 * Deactivate SSL for the currently loaded site
 	 *
 	 * @param bool $ssl_was_enabled
@@ -1104,7 +1131,12 @@ class rsssl_admin {
 			}
 		}
 		$this->check_for_siteurl_in_wpconfig();
-		rsssl_update_option( 'site_has_ssl', $site_has_ssl );
+        //check againt current status, to prevent unnecessary loading of fields array during update_option
+        $current_ssl_status = rsssl_get_option( 'site_has_ssl' );
+        if ( (bool) $current_ssl_status !== (bool) $site_has_ssl ) {
+	        rsssl_update_option( 'site_has_ssl', $site_has_ssl );
+        }
+
 	}
 
 	/**
@@ -1635,7 +1667,13 @@ class rsssl_admin {
 			update_option( 'rsssl_before_review_notice_user', true, false );
 		}
 
-		if ( ! rsssl_get_option( 'review_notice_shown' ) && get_option( 'rsssl_activation_timestamp' ) && get_option( 'rsssl_activation_timestamp' ) < strtotime( '-1 month' ) ) {
+        $reviewNoticeHasNotBeenShownBefore = (rsssl_get_option( 'review_notice_shown' ) === false );
+        $activationLongerThanOneMonthAgo = (
+                get_option( 'rsssl_activation_timestamp' )
+                && (get_option( 'rsssl_activation_timestamp' ) < strtotime( '-1 month' ))
+        );
+
+		if ( $reviewNoticeHasNotBeenShownBefore && $activationLongerThanOneMonthAgo ) {
 
 			//checking legacy options, just in case.
 			$options = get_option( 'rlrsssl_options' );
@@ -1748,7 +1786,7 @@ class rsssl_admin {
 		if ( isset( $_GET['rsssl_review_notice'] ) && 'dismiss' === $_GET['rsssl_review_notice'] ) {
 			rsssl_update_option( 'review_notice_shown', true );
 		}
-		if ( isset( $_GET['rsssl_review_notice'] ) && 'dismiss' === $_GET['rsssl_review_notice'] ) {
+		if ( isset( $_GET['rsssl_review_notice'] ) && 'later' === $_GET['rsssl_review_notice'] ) {
 			//Reset activation timestamp, notice will show again in one month.
 			update_option( 'rsssl_activation_timestamp', time(), false );
 		}
@@ -2009,8 +2047,9 @@ class rsssl_admin {
 					'no-ssl-detected' => array(
 						'title'       => __( 'No SSL detected', 'really-simple-ssl' ),
 						'msg'         => __( 'No SSL detected. Use the retry button to check again.', 'really-simple-ssl' ) .
-								'<form class="rsssl-task-form"  action="" method="POST"><a href="' .
-									rsssl_admin_url(['letsencrypt' => '1'], '#letsencrypt')
+								'<form class="rsssl-task-form"  action="" method="POST">' .
+                            wp_nonce_field( 'rsssl_recheck_nonce', 'rsssl_recheck_nonce_field', true, false ) .
+                            '<a href="' . rsssl_admin_url(['letsencrypt' => '1'], '#letsencrypt')
 								 . '" type="submit" class="button button-default  rsssl-button-small">' . __( 'Install SSL certificate', 'really-simple-ssl' ) . '</a>' .
 								'<input type="submit" class="button button-default rsssl-button-small" value="' . __( 'Retry', 'really-simple-ssl' ) . '" id="rsssl_recheck_certificate" name="rsssl_recheck_certificate"></form>',
 						'icon'        => 'warning',
@@ -2317,6 +2356,23 @@ class rsssl_admin {
                     ),
                 ),
             ),
+
+			'test_404s' => array(
+                'condition' => array(
+                    'wp_option_rsssl_homepage_contains_404_resources',
+                ),
+				'callback' => '_true_',
+				'output'   => array(
+					'true' => array(
+						'msg'         => __("404 errors detected on your homepage. 404 blocking is unavailable, to prevent blocking of legitimate visitors. It is strongly recommended to resolve these errors.", 'really-simple-ssl'),
+						'url'         => '404-not-found-errors',
+						'icon'        => 'warning',
+						'dismissible' => true,
+						'plusone'     => false,
+						'clear_cache_id' => 'rsssl_homepage_contains_404_resources',
+					),
+				),
+			),
         );
 
 		//on multisite, don't show the notice on subsites.
@@ -2506,7 +2562,8 @@ class rsssl_admin {
 		}
 
 		if ( false !== strpos( $func, 'wp_option_' ) ) {
-			$output = get_option( str_replace( 'wp_option_', '', $func ) ) !== false;
+            // False when: no option - option is bool false - option is string false
+			$output = get_option( str_replace( 'wp_option_', '', $func ) ) !== false && get_option( str_replace( 'wp_option_', '', $func ) ) !== 'false';
 		} elseif ( false !== strpos( $func, 'option_' ) ) {
 			$output = rsssl_get_option( str_replace( 'option_', '', $func ) ) == 1; //phpcs:ignore
 		} elseif ( '_true_' === $func ) {
@@ -2661,6 +2718,7 @@ class rsssl_admin {
 		//only if cookie settings were not inserted yet
 		if ( $this->secure_cookie_settings_status() !== 'set' ) {
 			$wpconfig_path = $this->wpconfig_path();
+
 			if ( empty( $wpconfig_path ) ) {
 				return;
 			}
@@ -2869,6 +2927,62 @@ class rsssl_admin {
 	   }
     }
 
+	/**
+	 * Delete the permission detection options when the setting is disabled.
+	 *
+	 * @param string $field_id
+	 * @param mixed  $field_value
+	 * @param mixed  $prev_value
+	 * @param string $field_type
+	 *
+	 * @return void
+	 */
+	public function maybe_delete_permission_detection_option( string $field_id, $field_value, $prev_value, $field_type ): void {
+		if ( ! rsssl_user_can_manage() ) {
+			return;
+		}
+
+		if ( $field_value === $prev_value ) {
+			return;
+		}
+
+		if ( $field_id === 'permission_detection' ) {
+			// If permission_detection option is disabled, reset options
+			if ( ! $field_value ) {
+				delete_option( 'rsssl_permission_check_completed' );
+				delete_option( 'rsssl_files_with_wrong_permissions' );
+				delete_option( 'rsssl_permission_check_next_index' );
+			}
+		}
+
+	}
+
+    /**
+     * @param $data
+     *
+	 * @return array
+	 *
+	 * Clear 404 test cache
+	 */
+	public function clear_404_test_cache( $data ) {
+
+		if ( ! rsssl_user_can_manage() ) {
+			return [];
+		}
+
+		$cache_id = sanitize_title($data['cache_id']);
+
+        if ( 'rsssl_homepage_contains_404_resources' !== $cache_id ) {
+            return [];
+        }
+
+		delete_option( 'rsssl_homepage_contains_404_resources' );
+		delete_option( 'rsssl_404_resources_to_check' );
+		$this->clear_admin_notices_cache();
+
+		return [];
+	}
+
 } //class closure
 
 if ( ! function_exists( 'rsssl_ssl_enabled' ) ) {
@@ -3075,8 +3189,37 @@ if ( ! function_exists('rsssl_upgrade_to_nine_notice' ) ) {
 }
 
 /**
- * Do not show notice after 2024-10-01
+ * RSSSL Pro Trial Notice
+ */
+if ( ! function_exists('rsssl_pro_trial_notice' ) ) {
+	function rsssl_pro_trial_notice() {
 
+        $link = rsssl_link( 'checkout/?edd_action=add_to_cart&download_id=860&edd_options%5Bprice_id%5D=4&currency=EUR', 'notification', 'free' );
+        $msg  = sprintf(
+                __( "Thank you for being a long-time user! As a token of our gratitude, we want to offer you %s6 months Really Simple Security Pro, 100%% Free!%s", 'really-simple-ssl' ),
+                '<strong>',
+                '</strong>',
+            );
+
+        $msg .= "<br><br>" . __('Discover:', 'really-simple-ssl');
+
+        $msg .= "<br><ul style='list-style-type: disc; margin-left: 20px;'>
+            <li>" . __('Performant Firewall', 'really-simple-ssl') . "</li>
+            <li>" . __('Advanced Hardening', 'really-simple-ssl') . "</li>
+            <li>" . __('Two-Factor Authentication', 'really-simple-ssl') . "</li>
+            <li>" . __('Security Headers', 'really-simple-ssl') . "</li>
+            <li>" . __('And many more powerful Security features..', 'really-simple-ssl') . "</li>
+        </ul>";
+
+        $msg .= "<a href='" . esc_url($link) . "' class='button button-primary' target='_blank'>" . __('Claim your 6 Free months', 'really-simple-ssl') . "</a>";
+
+        return $msg;
+
+    }
+}
+
+/**
+ * Do not show notice after 2024-10-01
  */
 if ( ! function_exists('rsssl_show_upgrade_to_nine_notice' ) ) {
 	function rsssl_show_upgrade_to_nine_notice() {

@@ -213,7 +213,11 @@ class Core {
 
 			$ids = array_map( 'intval', apply_filters( 'fbv_ids_assigned_to_folder', array( $post_id ) ) );
 
-			FolderModel::setFoldersForPosts( $ids, $parent );
+			$user_has_own_folder = get_option( 'njt_fbv_folder_per_user', '0' ) === '1';
+			$current_user_id     = get_current_user_id();
+			if( FolderModel::verifyAuthor( $parent, $current_user_id, $user_has_own_folder ) ){
+				FolderModel::setFoldersForPosts( $ids, $parent );
+			}
 		}
 	}
 

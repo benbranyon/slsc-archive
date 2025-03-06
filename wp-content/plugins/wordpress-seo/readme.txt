@@ -5,7 +5,7 @@ License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 Tags: SEO, XML sitemap, Content analysis, Readability, Schema
 Tested up to: 6.7
-Stable tag: 23.8
+Stable tag: 24.6
 Requires PHP: 7.2.5
 
 Improve your WordPress SEO: Write better content and have a fully optimized WordPress site using the Yoast SEO plugin.
@@ -274,44 +274,43 @@ Your question has most likely been answered on our help center: [yoast.com/help/
 
 == Changelog ==
 
-= 23.8 =
+= 24.6 =
 
-Release date: 2024-11-05
+Release date: 2025-03-04
 
-Yoast SEO 23.8 brings more enhancements and bugfixes. [Find more information about our software releases and updates here](https://yoa.st/release-5-11-24).
-
-#### Enhancements
-
-* Introduces a new, redesigned General page.
-* Adds a notification to inform the user when an error occurs while changing the visibility of a notification or a problem.
-
-#### Bugfixes
-
-* Fixes a bug in our Elementor integration where previously saved slug values of drafts would be ignored.
-
-#### Other
-
-* Sets the _WordPress tested up to_ version to 6.7.
-
-= 23.7 =
-
-Release date: 2024-10-22
-
-Yoast SEO 23.7 brings more enhancements and bugfixes. [Find more information about our software releases and updates here](https://yoa.st/release-22-10-24).
+Yoast SEO 24.6 brings more enhancements and bugfixes. [Find more information about our software releases and updates here](https://yoa.st/releases).
 
 #### Enhancements
 
-* Removes the _keyphrase in slug_ assessment for static home pages.
+* Provides support for the Optimized Markup feature in Elementor.
+* Removes the breadcrumbs from the Search snippet preview in Mobile mode.
 
 #### Bugfixes
 
-* Fixes a bug where a database error would occur when there were no public taxonomies available for indexing.
-* Fixes a bug where another plugin running the `exit()` function inside the `plugin_loaded` hook would result in a fatal error. Props to [menno-ll](https://github.com/menno-ll).
+* Fixes a bug where invalid inner blocks would be removed when saving a post in the block editor.
 
 #### Other
 
-* Removes translation strings that are not meant for the Yoast SEO Free version from the plugin.
-* Resets the notice for search engines discouraged when changing Search engine visibility to visible.
+* Sets the minimum supported WordPress version to 6.6.
+
+= 24.5 =
+
+Release date: 2025-02-18
+
+Yoast SEO 24.5 brings more enhancements and bugfixes. [Find more information about our software releases and updates here](https://yoa.st/releases).
+
+#### Enhancements
+
+* Issues a warning message when the image automatically selected for a post social preview is in the unsupported AVIF format.
+
+#### Bugfixes
+
+* Fixes a bug where the canonical presenter would throw a deprecation notice when the environments run PHP >= 8.1. Props to [aanduque](https://github.com/aanduque).
+
+#### Other
+
+* Simplifies calculating the `date` replacement variable before displaying it in the frontend. Props to [apermo](https://github.com/apermo).
+* Updates the Yoast WooCommerce SEO integration cards with the latest Woo logo.
 
 = Earlier versions =
 For the changelog of earlier versions, please refer to [the changelog on yoast.com](https://yoa.st/yoast-seo-changelog).

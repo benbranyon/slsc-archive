@@ -31,7 +31,7 @@ class Rsssl_Two_Factor_Totp extends Rsssl_Two_Factor_Provider implements Rsssl_T
 	 *
 	 * @var string
 	 */
-	public const LAST_SUCCESSFUL_LOGIN_META_KEY = '_two_factor_totp_last_successful_login';
+	public const LAST_SUCCESSFUL_LOGIN_META_KEY = '_rsssl_two_factor_totp_last_successful_login';
 
 	public const DEFAULT_KEY_BIT_SIZE        = 160;
 	public const DEFAULT_CRYPTO              = 'sha1';
@@ -220,7 +220,7 @@ class Rsssl_Two_Factor_Totp extends Rsssl_Two_Factor_Provider implements Rsssl_T
 			return new WP_Error( 'db_error', __( 'Unable to save Two Factor Authentication code. Please re-scan the QR code and enter the code provided by your application.', 'really-simple-ssl' ), array( 'status' => 500 ) );
 		}
 
-		if ( $request->get_param( 'enable_provider' ) && ! Rsssl_Two::enable_provider_for_user( $user_id, 'Two_Factor_Totp' ) ) {
+		if ( $request->get_param( 'enable_provider' ) && ! Rsssl_Two_Factor::enable_provider_for_user( $user_id, 'Two_Factor_Totp' ) ) {
 			return new WP_Error( 'db_error', __( 'Unable to enable TOTP provider for this user.', 'really-simple-ssl' ), array( 'status' => 500 ) );
 		}
 
@@ -507,7 +507,7 @@ class Rsssl_Two_Factor_Totp extends Rsssl_Two_Factor_Provider implements Rsssl_T
 			return true;
 		}
 
-		$code = $this->sanitize_code_from_request( 'authcode', self::DEFAULT_DIGIT_COUNT );
+		$code = self::sanitize_code_from_request( 'authcode', self::DEFAULT_DIGIT_COUNT );
 		if ( ! $code ) {
 			return false;
 		}
@@ -536,12 +536,14 @@ class Rsssl_Two_Factor_Totp extends Rsssl_Two_Factor_Provider implements Rsssl_T
 
 		$last_totp_login = (int) get_user_meta( $user->ID, self::LAST_SUCCESSFUL_LOGIN_META_KEY, true );
 
-		// The TOTP authentication is not valid, if we've seen the same or newer code.
-		if ( $last_totp_login && $last_totp_login >= $valid_timestamp ) {
-			return false;
-		}
+//		// The TOTP authentication is not valid, if we've seen the same or newer code.
+//		if ( $last_totp_login && $last_totp_login >= $valid_timestamp ) {
+//			return false;
+//		}
 
 		update_user_meta( $user->ID, self::LAST_SUCCESSFUL_LOGIN_META_KEY, $valid_timestamp );
+        delete_user_meta( $user->ID, '_rsssl_two_factor_failed_login_attempts');
+        delete_user_meta( $user->ID, '_rsssl_two_factor_last_login_failure');
 
 		return true;
 	}
@@ -951,33 +953,39 @@ class Rsssl_Two_Factor_Totp extends Rsssl_Two_Factor_Provider implements Rsssl_T
 	 * @return bool Returns true if two-factor authentication is enabled for the user, false otherwise.
 	 */
 	public static function is_enabled( WP_User $user ): bool {
-        // if the pro is defined, return false and if the licence is not active.
-        if(defined('rsssl_pro') && !rsssl_pro ) {
+        $freeVersionActive = ( !defined('rsssl_pro') || ( rsssl_pro == false ));
+        if( $freeVersionActive || ! $user->exists()) {
             return false;
         }
-		if ( ! $user->exists()) {
-			return false;
-		}
 
-		// Get all the user roles.
+		// Get and normalize the user roles.
 		$user_roles = $user->roles;
-		// Then get the enabled roles.
-		$enabled_roles = rsssl_get_option( 'two_fa_enabled_roles_totp' );
-        if( is_multisite() ) {
+        if ( ! is_array( $user_roles ) ) {
+            $user_roles = array();
+        }
+
+        $firstKey = ( empty($user_roles) ? 0 : array_key_first($user_roles) );
+        $firstFoundRole = $user_roles[$firstKey];
+
+        if ( is_multisite() ) {
             $user_roles = Rsssl_Two_Factor_Settings::get_strictest_role_across_sites($user->ID, ['totp']);
         }
 
-        // if the user has the role that is enabled, return true.
+        // Get and normalize enabled roles.
+        $enabled_roles = rsssl_get_option( 'two_fa_enabled_roles_totp' );
         if ( ! is_array( $enabled_roles ) ) {
             $enabled_roles = array();
         }
 
-        if(is_multisite()) {
-            //compare the user roles with the enabled roles and if there is a match, return true
+        // Return true if one of the user roles is in the enabled roles.
+        if ( (count($user_roles) > 1) || is_multisite() ) {
             return count(array_intersect($user_roles, $enabled_roles)) > 0;
         }
-		// if the user has the role that is enabled, return true.
-		return in_array( $user_roles[0], $enabled_roles, true );
+
+		// If the user role is in the enabled roles, return true.
+        $firstKey = ( empty($user_roles) ? 0 : array_key_first($user_roles) );
+        $firstFoundRole = $user_roles[$firstKey];
+		return in_array( $firstFoundRole, $enabled_roles, true );
 	}
 
 	/**

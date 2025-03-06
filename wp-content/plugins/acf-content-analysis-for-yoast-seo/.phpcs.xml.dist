@@ -8,14 +8,14 @@
 	<!--
 	#############################################################################
 	COMMAND LINE ARGUMENTS
-	https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml
+	https://github.com/PHPCSStandards/PHP_CodeSniffer/wiki/Annotated-ruleset.xml
 	#############################################################################
 	-->
 
 	<file>.</file>
 
 	<exclude-pattern>tests/js/system/data/acf*\.php$</exclude-pattern><!-- Code exported from ACF. -->
-	<exclude-pattern>tests/php/unit/Dependencies/acf\.php$</exclude-pattern><!-- ACF mock class. -->
+	<exclude-pattern>tests/Unit/Doubles/acf\.php$</exclude-pattern><!-- ACF mock class. -->
 
 	<!-- Only check PHP files. -->
 	<arg name="extensions" value="php"/>
@@ -45,6 +45,10 @@
 			<property name="prefixes" type="array">
 				<element value="Yoast\WP\ACF"/>
 				<element value="yoast_acf"/>
+			</property>
+
+			<property name="psr4_paths" type="array">
+				<element key="Yoast\WP\ACF\Tests\\" value="tests/"/>
 			</property>
 		</properties>
 	</rule>
@@ -80,43 +84,6 @@
 		</properties>
 	</rule>
 
-	<rule ref="Yoast.NamingConventions.NamespaceName">
-		<properties>
-			<!-- Treat the "tests/php/unit" directory as a project root for path to namespace translations. -->
-			<property name="src_directory" type="array">
-				<element value="tests/php/unit"/>
-			</property>
-
-			<property name="prefixes" type="array" extend="true">
-				<element value="Yoast\WP\ACF\Tests"/>
-			</property>
-		</properties>
-	</rule>
-
-	<!-- Whitelist a few non-snakecase PHPUnit properties. -->
-	<rule ref="WordPress.NamingConventions.ValidVariableName">
-		<properties>
-			<property name="customPropertiesWhitelist" type="array">
-				<element value="preserveGlobalState"/>
-				<element value="runTestInSeparateProcess"/>
-			</property>
-		</properties>
-	</rule>
-
-
-	<!--
-	#############################################################################
-	SELECTIVE EXCLUSIONS
-	Exclude specific files for specific sniffs and/or exclude sub-groups in sniffs.
-	#############################################################################
-	-->
-
-	<!-- Valid usage: For testing purposes, some non-prefixed globals are being created. -->
-	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
-		<exclude-pattern>/integration-tests/bootstrap\.php$</exclude-pattern>
-		<exclude-pattern>/tests/bootstrap\.php$</exclude-pattern>
-	</rule>
-
 
 	<!--
 	#############################################################################
@@ -136,10 +103,9 @@
 	</rule>
 
 	<!-- Namespaced test classes imported via a use statement are not yet correctly excluded
-		 by WPCS. This will most likely be fixed once PHPCS 3.5.0 has been released and
-		 WPCS has upgraded to that version. -->
+		 by WPCS. -->
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound">
-		<exclude-pattern>/tests/php/unit/Dependencies/yoast-seo-dependency-test\.php$</exclude-pattern>
+		<exclude-pattern>/tests/Unit/Dependencies/Dependency_Yoast_SEO_Test\.php$</exclude-pattern>
 	</rule>
 
 </ruleset>

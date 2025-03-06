@@ -19,7 +19,24 @@
       $fb3d['dictionary'][$keys[$i]] = $values[$i];
     }
   }
-  add_action('plugins_loaded', '\iberezansky\fb3d\load_textdomain');
+  add_action('init', '\iberezansky\fb3d\load_textdomain');
+
+  function get_client_dictionary() {
+    global $fb3d;
+    $us = [];
+    foreach($fb3d['templates'] as $t) {
+      $us[$t['html']] = 1;
+    }
+    $d = [];
+    foreach($us as $u=>$v) {
+      $html = file_get_contents(template_url_to_path($u));
+      preg_match_all('/<\$tr>(.*?)<\/\$tr>/', $html, $matches);
+      foreach ($matches[1] as $t) {
+        $d[$t] = aa($fb3d['dictionary'], $t, $t);
+      }
+    }
+    return $d;
+  }
 
   function load_dictionary() {
     return array(
@@ -322,7 +339,8 @@
       __('Trigger', POST_ID),
       __('coma separated CSS classes of any elements that can launch lightbox', POST_ID),
       __('open book on page', POST_ID),
-      __('stretch source images / pdf pages / htmls on book pages', POST_ID)
+      __('stretch source images / pdf pages / htmls on book pages', POST_ID),
+      __('Item is not found', POST_ID)
     );
   }
 ?>

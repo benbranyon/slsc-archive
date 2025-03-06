@@ -1,13 +1,46 @@
 /*
 * The tooltip can't be included in the native toggleControl, so we have to build our own.
 */
-import { useState, useEffect } from "@wordpress/element";
+import { useState, useRef, useEffect } from "@wordpress/element";
 import { __experimentalConfirmDialog as ConfirmDialog } from '@wordpress/components';
+import hoverTooltip from "../utils/hoverTooltip";
+import {__} from '@wordpress/i18n';
 
 const CheckboxControl = (props) => {
+
+    const checkboxRef = useRef(null);
+
+    let disabledCheckboxPropBoolean = (props.disabled === true);
+    let disabledCheckboxViaFieldConfig = (props.field.disabled === true);
+
+    let checkboxDisabled = (
+        disabledCheckboxViaFieldConfig
+        || disabledCheckboxPropBoolean
+    );
+
+    let tooltipText = '';
+    let emptyValues = [undefined, null, ''];
+
+    if (checkboxDisabled
+        && props.field.hasOwnProperty('disabledTooltipHoverText')
+        && !emptyValues.includes(props.field.disabledTooltipHoverText)
+    ) {
+        tooltipText = props.field.disabledTooltipHoverText;
+    }
+
+    hoverTooltip(
+        checkboxRef,
+        (checkboxDisabled && (tooltipText !== '')),
+        tooltipText
+    );
+
+    // const tooltipText = __("404 errors detected on your home page. 404 blocking is unavailable, to prevent blocking of legitimate visitors. It is strongly recommended to resolve these errors.", "really-simple-ssl");
+    // // Pass props.disabled as the condition
+    // hoverTooltip(checkboxRef, props.disabled, tooltipText);
+
     const [ isOpen, setIsOpen ] = useState( false );
         const onChangeHandler = (e) => {
-        //wordpress <6.0 does not have the confirmdialog component
+        // WordPress <6.0 does not have the confirmdialog component
         if ( !ConfirmDialog ) {
             executeAction();
             return;
@@ -56,11 +89,12 @@ const CheckboxControl = (props) => {
                     <div data-wp-component="HStack" className="components-flex components-h-stack">
                         <span className={ "components-form-toggle "+is_checked + ' ' +is_disabled}>
                             <input
+                                ref={checkboxRef}
                                 onKeyDown={(e) => handleKeyDown(e)}
-                                checked={field.value}
+                                checked={props.value}
                                 className="components-form-toggle__input"
                                 onChange={ ( e ) => onChangeHandler(e) }
-                                id={field.id}
+                                id={props.id}
                                 type="checkbox"
                                 disabled={props.disabled}
                             />

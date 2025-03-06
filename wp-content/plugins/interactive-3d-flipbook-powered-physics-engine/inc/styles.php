@@ -10,7 +10,6 @@
     wp_register_style(POST_ID.'-insert', ASSETS_CSS.'insert.css', array(POST_ID.'-admin'), VERSION);
     wp_register_style(POST_ID.'-settings', ASSETS_CSS.'settings.css', array(POST_ID.'-admin'), VERSION);
 
-    wp_register_style(POST_ID.'-client', ASSETS_CSS.'client.css', array(POST_ID.'-font-awesome'), VERSION);
   }
 
 ?>
