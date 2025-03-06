@@ -683,7 +683,7 @@ function CreatePatternModalContents({
 function getTermLabels(pattern, categories) {
   // Theme patterns rely on core pattern categories.
   if (pattern.type !== PATTERN_TYPES.user) {
-    return categories.core?.filter(category => pattern.categories.includes(category.name)).map(category => category.label);
+    return categories.core?.filter(category => pattern.categories?.includes(category.name)).map(category => category.label);
   }
   return categories.user?.filter(category => pattern.wp_pattern_category.includes(category.id)).map(category => category.label);
 }
@@ -1573,6 +1573,7 @@ const copy = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(exter
 /* harmony default export */ const library_copy = (copy);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/patterns/build-module/components/pattern-overrides-block-controls.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
