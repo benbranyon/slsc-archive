@@ -207,13 +207,13 @@ class rsssl_onboarding {
 			[
 				"id"       => 'plugins',
 				"title"    => __( "We think you will like this", "really-simple-ssl" ),
-				"subtitle" => __( "Really Simple Plugins is also the author of the below privacy-focused plugins, including consent management, legal documents and analytics!", "really-simple-ssl" ),
+				"subtitle" => __( "Really Simple Plugins is also the author of the below privacy-focused plugins including consent management and legal documents!", "really-simple-ssl" ),
 				"items"    => $this->plugins(),
 				"button"   => __( "Install", "really-simple-ssl" ),
 			],
 			[
 				"id"       => 'pro',
-				"title"    => __( "Really Simple Security Pro", "really-simple-ssl" ),
+				"title"    => "Really Simple Security Pro",
 				"subtitle" => __( "Heavyweight security features, in a lightweight performant plugin from Really Simple Plugins. Get started with below features and get the latest and greatest updates for peace of mind!", "really-simple-ssl" ),
 				"items"    => $this->pro_features(),
 				"button"   => __( "Install", "really-simple-ssl" ),
@@ -303,12 +303,6 @@ class rsssl_onboarding {
 	public function plugins(): array {
 		$items = [];
 		$plugins_to_install = [
-			[
-				"slug" => "burst-statistics",
-				'constant_premium' => 'burst_pro',
-				"title" => "Burst Statistics",
-				"description" => __("Privacy-friendly analytics tool.", "really-simple-ssl"),
-			],
 			[
 				"slug" => "complianz-gdpr",
 				'constant_premium' => 'cmplz_premium',
