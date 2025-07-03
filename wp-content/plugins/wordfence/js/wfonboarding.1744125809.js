@@ -99,19 +99,21 @@
 										enable();
 										return;
 									}
+									var modalType = 'free';
 									if (licenseResponse.isPaid) {
-										var modalType;
+										modalType = 'premium';
 										if (licenseResponse.type === 'care' || licenseResponse.type === 'response') {
 											modalType = licenseResponse.type;
 										}
-										else {
-											modalType = 'premium';
-										}
-										showRegistrationModal('success-' + modalType);
+									}
+									
+									if (licenseResponse.inUse) {
+										showRegistrationModal('inuse-' + modalType);
 									}
 									else {
-										showRegistrationModal('success-free');
+										showRegistrationModal('success-' + modalType);
 									}
+									
 									enable();
 								}
 							);
