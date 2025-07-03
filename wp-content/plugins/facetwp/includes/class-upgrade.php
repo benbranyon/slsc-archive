@@ -2,6 +2,11 @@
 
 class FacetWP_Upgrade
 {
+
+    public $version;
+    public $last_version;
+
+
     function __construct() {
         $this->version = FACETWP_VERSION;
         $this->last_version = get_option( 'facetwp_version' );
@@ -56,6 +61,10 @@ class FacetWP_Upgrade
 
         $table = sanitize_key( $wpdb->prefix . 'facetwp_index' );
 
+        $changed = false;
+        $settings = get_option( 'facetwp_settings' );
+        $settings = json_decode( $settings, true );
+
         if ( version_compare( $this->last_version, '3.1.0', '<' ) ) {
             $wpdb->query( "ALTER TABLE $table MODIFY facet_name VARCHAR(50)" );
             $wpdb->query( "ALTER TABLE $table MODIFY facet_value VARCHAR(50)" );
@@ -72,18 +81,13 @@ class FacetWP_Upgrade
         if ( version_compare( $this->last_version, '3.3.3', '<' ) ) {
             if ( function_exists( 'SWP' ) ) {
                 $engines = array_keys( SWP()->settings['engines'] );
-                $settings = get_option( 'facetwp_settings' );
-                $settings = json_decode( $settings, true );
 
                 foreach ( $settings['facets'] as $key => $facet ) {
-                    if ( 'search' == $facet['type'] ) {
-                        if ( in_array( $facet['search_engine'], $engines ) ) {
-                            $settings['facets'][ $key ]['search_engine'] = 'swp_' . $facet['search_engine'];
-                        }
+                    if ( 'search' == $facet['type'] && in_array( $facet['search_engine'], $engines ) ) {
+                        $settings['facets'][ $key ]['search_engine'] = 'swp_' . $facet['search_engine'];
+                        $changed = true;
                     }
                 }
-
-                update_option( 'facetwp_settings', json_encode( $settings ) );
             }
         }
 
@@ -93,14 +97,31 @@ class FacetWP_Upgrade
         }
 
         if ( version_compare( $this->last_version, '3.5.4', '<' ) ) {
-            $settings = get_option( 'facetwp_settings' );
-            $settings = json_decode( $settings, true );
-
             if ( ! isset( $settings['settings']['prefix'] ) ) {
                 $settings['settings']['prefix'] = 'fwp_';
-
-                update_option( 'facetwp_settings', json_encode( $settings ) );
+                $changed = true;
             }
+        }
+
+        if ( version_compare( $this->last_version, '4.1.8', '<' ) ) {
+            foreach ( $settings['facets'] as $key => $facet ) {
+                if ( 'hierarchy' == $facet['type'] ) {
+                    $settings['facets'][ $key ]['soft_limit'] = $settings['facets'][ $key ]['count'];
+                    unset( $settings['facets'][ $key ]['count'] );
+                    $changed = true;
+                }
+            }
+        }
+        
+        if ( version_compare( $this->last_version, '4.3.4', '<' ) ) {
+            if ( ! isset( $settings['settings']['enable_indexer'] ) ) {
+                $settings['settings']['enable_indexer'] = 'yes';
+                $changed = true;
+            }
+        }
+
+        if ( $changed ) {
+            update_option( 'facetwp_settings', json_encode( $settings ) );
         }
     }
 }
