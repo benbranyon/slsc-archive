@@ -22,49 +22,49 @@ class Rsssl_Two_FA_Data_Parameters {
 	 *
 	 * @var string $page The current page name.
 	 */
-	public $page;
+	public string $page;
 	/**
 	 * The number of items to display per page.
 	 *
 	 * @var int $page_size The number of items to display per page.
 	 */
-	public $page_size;
+	public int $page_size;
 	/**
 	 * The search term entered by the user.
 	 *
 	 * @var string $search_term The search term entered by the user
 	 */
-	public $search_term;
+	public string $search_term;
 	/**
 	 * The value used for filtering.
 	 *
 	 * @var string|null $filter_value This variable stores the value used for filtering.
 	 */
-	public $filter_value;
+	public string $filter_value;
 	/**
 	 * The column used for filtering.
 	 *
 	 * @var string|null $filter_column This variable stores the column used for filtering.
 	 */
-	public $filter_column;
+	public string $filter_column;
 	/**
 	 * The column used for sorting.
 	 *
 	 * @var string|null $sort_column This variable stores the column used for sorting.
 	 */
-	public $sort_column;
+	public string $sort_column;
 	/**
 	 * The direction of the sorting, can be 'asc' or 'desc'.
 	 *
 	 * @var string $sort_direction The direction of the sorting, can be 'asc' or 'desc'
 	 */
-	public $sort_direction;
+	public string $sort_direction;
 	/**
 	 * The HTTP method used for the current request, can be 'GET', 'POST', 'PUT', 'DELETE', etc.
 	 *
 	 * @var string $method The HTTP method used for the current request, can be 'GET', 'POST', 'PUT', 'DELETE', etc.
 	 */
-	public $method;
+	public string $method;
 
 	/**
 	 * The allowed filters.

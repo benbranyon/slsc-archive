@@ -4,9 +4,9 @@ Donate link: https://www.paypal.me/reallysimplessl
 Tags: security, ssl, 2fa, vulnerabilities, two factor
 Requires at least: 5.9
 License: GPL2
-Tested up to: 6.7
+Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 9.3.2
+Stable tag: 9.4.1
 
 Easily improve site security with WordPress Hardening, Two-Factor Authentication (2FA), Login Protection, Vulnerability Detection and SSL certificate.
 
@@ -151,6 +151,35 @@ The plugin checks your certificate before enabling, but if, for example, you mig
 If you can't deactivate, do not just remove the plugin folder to uninstall! Follow these [instructions](https://really-simple-ssl.com/knowledge-base/uninstall-websitebackend-not-accessible/) instead.
 
 == Changelog ==
+= 9.4.1 =
+ * Fix: fixed a translations error where text domain was loaded too early.
+
+= 9.4.0 =
+ * Improvement: More detailed feedback when using CLI commands.
+ * Improvement: On activation, detect `EXTENDIFY_PARTNER_ID` constant and run `wp rsssl activate_recommended_features`.
+ * Improvement: Standardize RSS onboarding hoster list to brand names.
+ * Improvement: "Disable user enumeration" now returns 401 Unauthorized (instead of 404 Not Found) for non-authenticated requests to the /wp/v2/users/ endpoint.
+ * Include SimplyBook in “onboarding” and “other plugins” sections.
+ * Fix: Adjust plugin initialization timing to prevent a textdomain warning.
+ * Fix: Fixed the feedback when an email is resend during Two-Factor Authentication setup.
+ * Fix: Fixed the Single Sign on link to support custom login urls.
+
+= 9.3.5 =
+* April 29th, 2025
+* Improvement: Tested up to WordPress 6.8
+* Improvement: Some translation updates
+* Improvement: Check for autoloader in cron
+* Fix: 2FA methods can now be set on profile page
+
+= 9.3.3 =
+* April 2nd, 2025
+* Improvement: Added multiple WP-CLI commands to better align with recent plugin features
+* Improvement: Added support for custom/multiple roles in Two Factor Authentication
+
+= 9.3.2.1 =
+* March 20th, 2025
+* Fix: Properly handle unknown plugins in upgrade requests, preventing unintended behavior.
+
 = 9.3.2 =
 * March 5th, 2025
 * Improvement: Added filters to customize Let's Encrypt Wizard behavior

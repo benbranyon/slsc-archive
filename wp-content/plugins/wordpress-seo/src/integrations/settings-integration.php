@@ -93,6 +93,7 @@ class Settings_Integration implements Integration_Interface {
 			'deny_ccbot_crawling',
 			'deny_google_extended_crawling',
 			'deny_gptbot_crawling',
+			'enable_llms_txt',
 		],
 	];
 
@@ -516,6 +517,7 @@ class Settings_Integration implements Integration_Interface {
 			'upsellSettings'                => $this->get_upsell_settings(),
 			'siteRepresentsPerson'          => $this->get_site_represents_person( $settings ),
 			'siteBasicsPolicies'            => $this->get_site_basics_policies( $settings ),
+			'llmsTxtUrl'                    => \home_url( 'llms.txt' ),
 		];
 	}
 
@@ -571,7 +573,7 @@ class Settings_Integration implements Integration_Interface {
 	 * @param int    $policy   The policy id to check.
 	 * @param string $key      The option key name.
 	 *
-	 * @return array<int,string> The policy data.
+	 * @return array<int, string> The policy data.
 	 */
 	private function maybe_add_policy( $policies, $policy, $key ) {
 		$policy_array = [

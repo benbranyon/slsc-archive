@@ -130,6 +130,7 @@ class Polylang extends Controller {
 		if ( $lang ) {
 			$lang_id = $this->get_preferred_language( $lang );
 		}
+		$check_author = apply_filters( 'fbv_will_check_author', true );
 
 		$select = '';
 		$join   = '';
@@ -148,7 +149,10 @@ class Polylang extends Controller {
 		$join .= " INNER JOIN {$wpdb->posts} as posts ON posts.ID = fbva.attachment_id ";
 
 		$where .= " WHERE posts.post_type = 'attachment' AND (posts.post_status = 'inherit' OR posts.post_status = 'private') ";
-		$where .= $wpdb->prepare( ' AND fbv.created_by = %d GROUP BY fbva.folder_id', apply_filters( 'fbv_folder_created_by', '0' ) );
+		if( $check_author ) {
+			$where .= $wpdb->prepare( ' AND fbv.created_by = %d', apply_filters( 'fbv_folder_created_by', '0' ) );
+		}
+		$where .= ' GROUP BY fbva.folder_id';
 
 		$query = $select . $join . $where;
 		return $query;

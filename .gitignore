@@ -39,3 +39,8 @@ wp-content/themes/twentytwentyfour/
 # SASS #
 ##########
 .sass-cache
+
+# Hosting #
+##############
+.well-known/
+ 
