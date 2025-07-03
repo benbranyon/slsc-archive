@@ -2,17 +2,17 @@
 /**
  * Search results page
  *
- * Methods for TimberHelper can be found in the /lib sub-directory
- *
- * @package  WordPress
- * @subpackage  Timber
- * @since   Timber 0.1
+ * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
  */
 
-$templates = array( 'search.twig', 'archive.twig', 'index.twig' );
+use Timber\Timber;
 
-$context          = Timber::context();
-$context['title'] = 'Search results for ' . get_search_query();
-$context['posts'] = Timber::get_posts();
+$templates = [ 'templates/search.twig', 'templates/archive.twig', 'templates/index.twig' ];
+
+$context = Timber::context(
+	[
+		'title' => 'Search results for ' . get_search_query(),
+	]
+);
 
 Timber::render( $templates, $context );

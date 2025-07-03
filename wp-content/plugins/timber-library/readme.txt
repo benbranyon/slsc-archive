@@ -1,8 +1,8 @@
 === Timber ===
 Contributors: jarednova
 Tags: template engine, templates, twig
-Tested up to: 6.5.2
-Stable tag: 1.23.1
+Tested up to: 6.8.1
+Stable tag: 1.23.4
 Requires PHP: 7.2.5
 Requires at least: 5.3.0
 License: GPLv2 or later
@@ -16,7 +16,7 @@ You will find an extensive list with guides and the reasons why we are not going
 
 ### Switching to the Composer based version
 * Announcement: [Dropping support for the plugin version of Timber](https://github.com/timber/timber/discussions/2804)
-* Guide: [How do I switch over from the plugin version to the Composer based version of Timber?](https://timber.github.io/docs/getting-started/switch-to-composer/)
+* Guide: [How do I switch over from the plugin version to the Composer based version of Timber?](https://timber.github.io/docs/v1/getting-started/switch-to-composer/)
 * Backstory: [Why we are dropping support for the plugin in the first place](https://github.com/timber/timber/pull/2005)
 * GitHub issue: [Roadmap for Timber 2.0](https://github.com/timber/timber/issues/2741)
 
@@ -40,6 +40,12 @@ _Twig is the template language powering Timber; if you need a little background 
 * [GitHub issues](https://github.com/timber/timber/issues) are for reporting bugs and errors
 
 == Changelog ==
+
+= 1.23.4 =
+* Correct issues with faulty build script in order to implement security fix for 1.23.3
+
+= 1.23.3 =
+* Fix security vulnerabilities in Twig. See GHSA-6j75-5wfj-gh66. This updates the minimum required Twig version for the plugin version of Timber to ^1.44.8 to fix the issue.
 
 = 1.23.1 =
 
