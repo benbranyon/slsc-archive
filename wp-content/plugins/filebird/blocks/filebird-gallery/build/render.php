@@ -71,6 +71,7 @@ $styles .= '--min-width: ' . esc_attr( $attributes['imgMinWidth'] ) . 'px;';
 $html  = '';
 $html .= '<ul class="' . esc_attr( $ulClass ) . '" style="' . $styles . '">';
 
+$lis = array();
 foreach ( $posts as $post ) {
     if ( ! wp_attachment_is_image( $post ) ) {
         continue;
@@ -107,9 +108,13 @@ foreach ( $posts as $post ) {
     $li .= '</figure>';
     $li .= '</li>';
 
-    $html .= $li;
+    $lis[] = $li;
 }
-
+if(count($lis) == 0) {
+    $html .= '<li><div class="components-notice is-error"><div class="components-notice__content"><p>'.__('This folder has no images, please choose another one.', 'filebird').'</p></div></div></li>';
+} else {
+    $html .= implode( '', $lis );
+}
 $html .= '</ul>';
 
 if ( $attributes['hasLightbox'] ) {

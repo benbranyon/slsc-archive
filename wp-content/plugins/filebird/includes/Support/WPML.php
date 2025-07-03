@@ -108,6 +108,8 @@ class WPML extends Controller {
 
 	public function all_folders_and_count_query( $query, $lang ) {
 		global $wpdb;
+		$check_author = apply_filters( 'fbv_will_check_author', true );
+
 		$query = "SELECT fbva.folder_id as folder_id, count(fbva.attachment_id) as counter FROM {$wpdb->prefix}fbv_attachment_folder AS fbva 
     INNER JOIN {$wpdb->prefix}fbv as fbv ON fbv.id = fbva.folder_id 
     INNER JOIN {$this->table_icl_translations} AS wpml_translations ON fbva.attachment_id = wpml_translations.element_id 
@@ -119,7 +121,10 @@ class WPML extends Controller {
 			$where  = $this->specific_lang_where( $lang );
 			$query .= $where;
 		}
-		$query .= $wpdb->prepare( 'AND fbv.created_by = %d GROUP BY fbva.folder_id', apply_filters( 'fbv_folder_created_by', '0' ) );
+		if( $check_author ) {
+			$query .= $wpdb->prepare( ' AND fbv.created_by = %d ', apply_filters( 'fbv_folder_created_by', '0' ) );
+		}
+		$query .= ' GROUP BY fbva.folder_id ';
 
 		return $query;
 	}
