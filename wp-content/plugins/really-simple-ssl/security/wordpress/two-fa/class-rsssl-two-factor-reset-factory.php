@@ -30,8 +30,7 @@ class RSSSL_Two_Factor_Reset_Factory {
         }
     }
 
-    public function get_expired_users_query()
-    {
+    public function get_expired_users_query(): ?string {
         global $wpdb;
         $days_threshold = rsssl_get_option('two_fa_grace_period', 30);
         $filter_value = 'expired';

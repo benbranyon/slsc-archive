@@ -3,7 +3,7 @@
  * Plugin Name: Really Simple Security
  * Plugin URI: https://really-simple-ssl.com
  * Description: Easily improve site security with WordPress Hardening, Two-Factor Authentication (2FA), Login Protection, Vulnerability Detection and SSL certificate generation.
- * Version: 9.3.2
+ * Version: 9.4.1
  * Requires at least: 5.9
  * Requires PHP: 7.4
  * Author: Really Simple Security
@@ -113,7 +113,7 @@ if ( class_exists('REALLY_SIMPLE_SSL') ) {
             if ( !defined('rsssl_file') ){
                 define('rsssl_file', __FILE__);
             }
-            define('rsssl_version', '9.3.2');
+            define('rsssl_version', '9.4.1');
             define('rsssl_le_cron_generation_renewal_check', 20);
             define('rsssl_le_manual_generation_renewal_check', 15);
         }
@@ -275,4 +275,25 @@ if ( !function_exists('rsssl_is_logged_in_rest')){
         }
         return is_user_logged_in();
     }
+}
+
+if ( ! function_exists( 'rsssl_maybe_activate_recommended_features_extendify' ) ) {
+	function rsssl_maybe_activate_recommended_features_extendify() {
+		if ( get_option( 'rsssl_activated_recommended_features_extendify' ) || ! defined( 'EXTENDIFY_PARTNER_ID' ) || defined( 'rsssl_pro' ) ) {
+			return;
+		}
+
+		try {
+			RSSSL()->admin->activate_recommended_features();
+		} catch ( Exception $e ) {
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log( 'Really Simple Security: recommended features activation failed: ' . $e->getMessage() );
+				return;
+			}
+		}
+
+		update_option( 'rsssl_activated_recommended_features_extendify', true );
+	}
+
+	add_action( 'admin_init', 'rsssl_maybe_activate_recommended_features_extendify', 99 );
 }
