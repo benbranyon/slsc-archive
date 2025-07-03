@@ -60,7 +60,16 @@ class FacetWP_Settings
                         'notes' => 'After enabling, type "FWP.settings.debug" into the browser console on your front-end facet page',
                         'html' => $this->get_setting_html( 'debug_mode', 'toggle', [
                             'true_value' => 'on',
-                            'false_value' => 'off'
+                            'false_value' => 'off',
+                            'message' => 'Debug Mode exposes some of your settings and can influence loading speeds.<br />Make sure to disable it when not needed for troubleshooting.'
+                        ]),
+                    ],
+                    'enable_indexer' => [
+                        'label' => __( 'Enable automatic indexing', 'fwp' ),
+                        'notes' => 'Disable to prevent editing posts and terms from updating the indexing table.',
+                        'html' => $this->get_setting_html( 'enable_indexer', 'toggle', [
+                            'true_value' => 'yes',
+                            'false_value' => 'no'
                         ])
                     ]
                 ]
@@ -74,7 +83,7 @@ class FacetWP_Settings
                         'html' => $this->get_setting_html( 'wc_enable_variations', 'toggle' )
                     ],
                     'wc_index_all' => [
-                        'label' => __( 'Include all products?', 'fwp' ),
+                        'label' => __( 'Index out-of-stock products?', 'fwp' ),
                         'notes' => __( 'Show facet choices for out-of-stock products?', 'fwp' ),
                         'html' => $this->get_setting_html( 'wc_index_all', 'toggle' )
                     ]
@@ -116,7 +125,8 @@ class FacetWP_Settings
             'label_any' => [
                 'label' => __( 'Default label', 'fwp' ),
                 'notes' => 'Customize the "Any" label',
-                'default' => __( 'Any', 'fwp' )
+                'default' => __( 'Any', 'fwp' ),
+                'show' => "facet.ui_type != 'checkboxes'"
             ],
             'placeholder' => [
                 'label' => __( 'Placeholder text', 'fwp' )
@@ -130,18 +140,19 @@ class FacetWP_Settings
                 'type' => 'toggle',
                 'label' => __( 'Hierarchical', 'fwp' ),
                 'notes' => 'Is this a hierarchical taxonomy?',
-                'show' => "facet.source.substr(0, 3) == 'tax'"
+                'show' => "facet.source.substr(0, 3) == 'tax' && facet.ui_type != 'radio'"
             ],
             'show_expanded' => [
                 'type' => 'toggle',
                 'label' => __( 'Show expanded', 'fwp' ),
                 'notes' => 'Should child terms be visible by default?',
-                'show' => "facet.hierarchical == 'yes'"
+                'show' => "facet.hierarchical == 'yes' && !['radio','fselect','dropdown'].includes(facet.ui_type)"
             ],
             'multiple' => [
                 'type' => 'toggle',
                 'label' => __( 'Multi-select', 'fwp' ),
-                'notes' => 'Allow multiple selections?'
+                'notes' => 'Allow multiple selections?',
+                'show' => "!['radio','checkboxes', 'dropdown'].includes(facet.ui_type)"
             ],
             'ghosts' => [
                 'type' => 'alias',
@@ -186,12 +197,14 @@ class FacetWP_Settings
                 'notes' => 'How should multiple selections affect the results?',
                 'choices' => [
                     'and' => __( 'AND (match all)', 'fwp' ),
-                    'or' => __( 'OR (match any)', 'fwp' )
-                ]
+                    'or' => __( 'OR (match any)', 'fwp' ),
+                ],
+                'show' => "facet.ui_type == 'checkboxes' || facet.multiple == 'yes' || facet.type == 'checkboxes'"
             ],
             'orderby' => [
                 'type' => 'select',
                 'label' => __( 'Sort by', 'fwp' ),
+                'default' => 'count',
                 'choices' => [
                     'count' => __( 'Highest count', 'fwp' ),
                     'display_value' => __( 'Display value', 'fwp' ),
@@ -208,7 +221,7 @@ class FacetWP_Settings
                 'label' => __( 'Soft limit', 'fwp' ),
                 'notes' => 'Show a toggle link after this many choices',
                 'default' => 5,
-                'show' => "facet.hierarchical != 'yes'"
+                'show' => "facet.hierarchical != 'yes' && !['radio','fselect', 'dropdown'].includes(facet.ui_type)"
             ],
             'source_other' => [
                 'label' => __( 'Other data source', 'fwp' ),
@@ -223,11 +236,23 @@ class FacetWP_Settings
                     '' => __( 'Basic', 'fwp' ),
                     'enclose' => __( 'Enclose', 'fwp' ),
                     'intersect' => __( 'Intersect', 'fwp' )
-                ]
+                ],
+                'show' => "'undefined' != typeof facet.source_other && facet.source_other != ''"
             ],
             'ui_type' => [
                 'label' => __( 'UI type', 'fwp' ),
-                'html' => '<ui-type :facet="facet"></ui-type>'
+                'type' => 'select',
+                'choices' => [
+                    'checkboxes' => __( 'Checkboxes', 'fwp' ),
+                    'radio' => __( 'Radio', 'fwp' ),
+                    'dropdown' => __( 'Dropdown', 'fwp' ),
+                    'fselect' => __( 'fSelect', 'fwp' )
+                ]
+            ],
+            'ui_ghosts' => [
+                'type' => 'toggle',
+                'label' => __( 'Show ghosts', 'fwp' ),
+                'notes' => 'Show choices that would return zero results?'
             ],
             'reset_text' => [
                 'label' => __( 'Reset text', 'fwp' ),
@@ -284,6 +309,7 @@ class FacetWP_Settings
         $show = isset( $field['show'] ) ? ' v-show="' . $field['show'] . '"' : '';
         $default = isset( $field['default'] ) ? ' value="' . $field['default'] . '"' : '';
         $label = empty( $field['label'] ) ? '' : $field['label'];
+        $checked = ( isset( $field['default'] ) && 'checked' == $field['default'] ) ? ' checked="checked"' : '';
 
         if ( isset( $field['notes'] ) ) {
             $label = '<div class="facetwp-tooltip">' . $label . '<div class="facetwp-tooltip-content">' . $field['notes'] . '</div></div>';
@@ -305,9 +331,9 @@ class FacetWP_Settings
 <?php
         }
         elseif ( 'toggle' == $type ) {
-?>
+            ?>
                 <label class="facetwp-switch">
-                    <input type="checkbox" class="facet-<?php echo $name; ?>" true-value="yes" false-value="no" />
+                    <input type="checkbox" class="facet-<?php echo $name; ?>" true-value="yes" false-value="no"<?php echo $checked; ?> />
                     <span class="facetwp-slider"></span>
                 </label>
 <?php
@@ -361,9 +387,10 @@ class FacetWP_Settings
 
         <select class="export-items" multiple="multiple">
             <?php foreach ( $this->get_export_choices() as $val => $label ) : ?>
-            <option value="<?php echo $val; ?>"><?php echo $label; ?></option>
+                <option value="<?php echo $val; ?>"><?php echo $label; ?></option>
             <?php endforeach; ?>
         </select>
+        <div class="select-all-none">Select: <span class="export-all"><?php _e( 'All', 'fwp' ); ?></span> | <span class="export-all" data-value="facet"><?php _e( 'All facet', 'fwp' ); ?></span> | <span class="export-all" data-value="template"><?php _e( 'All listings', 'fwp' ); ?></span> | <span class="export-none"><?php _e( 'Reset', 'fwp' ); ?></span></div>
         <div class="btn-normal export-submit">
             <?php _e( 'Export', 'fwp' ); ?>
         </div>
@@ -389,6 +416,7 @@ class FacetWP_Settings
 
 $true_value = $atts['true_value'] ?? 'yes';
 $false_value = $atts['false_value'] ?? 'no';
+$message = $atts['message'] ?? '';
 
 ?>
         <label class="facetwp-switch">
@@ -400,6 +428,10 @@ $false_value = $atts['false_value'] ?? 'no';
             />
             <span class="facetwp-slider"></span>
         </label>
+
+        <?php if ( '' != $message ) { ?>
+            <div v-if="app.settings.<?php echo $setting_name; ?> == '<?php echo $true_value; ?>'" class="facetwp-toggle-status field-notes"><?php echo $message; ?></div>
+        <?php } ?>
 
 <?php endif;
 
@@ -421,7 +453,7 @@ $false_value = $atts['false_value'] ?? 'no';
         }
 
         foreach ( $settings['templates'] as $template ) {
-            $export['template-' . $template['name']] = 'Template - '. $template['label'];
+            $export['template-' . $template['name']] = 'Listing - '. $template['label'];
         }
 
         return $export;
@@ -459,6 +491,7 @@ $false_value = $atts['false_value'] ?? 'no';
         return [
             'Number of grid columns' => __( 'Number of grid columns', 'fwp' ),
             'Spacing between results' => __( 'Spacing between results', 'fwp' ),
+            'No results text' => __( 'No results text', 'fwp' ),
             'Text style' => __( 'Text style', 'fwp' ),
             'Text color' => __( 'Text color', 'fwp' ),
             'Font size' => __( 'Font size', 'fwp' ),

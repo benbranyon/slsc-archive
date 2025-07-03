@@ -41,8 +41,8 @@
                 $(this).attr('aria-label', $(this).find('option:selected').text());
             });
 
-            // search, date
-            $('.facetwp-search, .facetwp-date').each(function() {
+            // search, date, number range
+            $('.facetwp-search, .facetwp-date, .facetwp-number').each(function() {
                 $(this).attr('aria-label', $(this).attr('placeholder'));
             });
 
@@ -58,6 +58,7 @@
                 $(this).attr('role', 'button');
                 $(this).attr('aria-haspopup', 'true');
                 $(this).attr('aria-expanded', $(this).hasClass('fs-open') ? 'true' : 'false');
+                $(this).attr('aria-label', $(this).find('.fs-label').html());
             });
 
             $('.facetwp-type-fselect .facetwp-dropdown').attr('aria-hidden', 'true');

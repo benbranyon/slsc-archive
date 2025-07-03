@@ -15,7 +15,8 @@
 
         // We need useCapture, so add the event listeners manually
         // useCapture handles outer elements first (unlike event bubbling)
-        this.addEventListener('click', function() {
+        // use mousedown instead of click for better dropdown support
+        this.addEventListener('mousedown', function() {
             var $items = $('.facetwp-facet-' + $(this).attr('data-name'));
             if (1 < $items.len()) {
                 $items.addClass('facetwp-ignore');
@@ -295,7 +296,7 @@
             else {
                 opts.minDate = settings.range.minDate;
                 opts.maxDate = settings.range.maxDate;
-            }      
+            }
 
             opts = FWP.hooks.applyFilters('facetwp/set_options/date_range', opts, {
                 'facet_name': facet_name,
@@ -304,7 +305,14 @@
 
             $this.addClass('ready'); // add class before fDate()
 
-            new fDate(this, opts);
+            if (opts.minDate.length && opts.maxDate.length) {
+                new fDate(this, opts);
+            } else {
+                this.value = '';
+                let emptyText = $this.attr('data-empty');
+                $this.attr('placeholder', emptyText).attr('disabled','disabled').addClass('disabled');
+            }
+
         });
     });
 
@@ -555,7 +563,8 @@
 
         FWP_MAP.placesService.getDetails({
             placeId: place_id,
-            fields: ['geometry']
+            fields: ['geometry'],
+            sessionToken: FWP_MAP.sessionToken,
         }, function(place, status) {
             if (status === google.maps.places.PlacesServiceStatus.OK) {
                 $facet.find('.facetwp-lat').val(place.geometry.location.lat());
@@ -839,14 +848,25 @@
 
                 var slider = this;
                 noUiSlider.create(slider, slider_opts);
+
+                // Only trigger a refresh if slider handles have actually moved
+                slider.noUiSlider.on('slide', function () {
+                    $this.attr('data-has-moved', 'true');
+                });
+
                 slider.noUiSlider.on('update', function(values, handle) {
                     FWP.settings[facet_name]['lower'] = values[0];
                     FWP.settings[facet_name]['upper'] = values[1];
                     FWP.hooks.doAction('facetwp/set_label/slider', $parent);
                 });
+
+                // This runs after click or handle slide
                 slider.noUiSlider.on('set', function() {
-                    FWP.active_facet = $this.closest('.facetwp-facet');
-                    FWP.autoload();
+                    if ('true' === $this.attr('data-has-moved')) {
+                        $this.attr('data-has-moved', '');
+                        FWP.active_facet = $this.closest('.facetwp-facet');
+                        FWP.autoload();
+                    }
                 });
 
                 $this.addClass('ready');
@@ -880,7 +900,7 @@
         FWP.facets[facet_name] = selected_values;
     });
 
-    $().on('mouseover', '.facetwp-star', function() {
+    $().on('mouseover', '.facetwp-star:not(.disabled)', function() {
         var $facet = $(this).closest('.facetwp-facet');
 
         if ($(this).hasClass('selected')) {
@@ -893,13 +913,13 @@
         }
     });
 
-    $().on('mouseout', '.facetwp-star', function() {
+    $().on('mouseout', '.facetwp-star:not(.disabled)', function() {
         var $facet = $(this).closest('.facetwp-facet');
         $facet.find('.facetwp-star-label').text('');
         $facet.find('.facetwp-counter').text('');
     });
 
-    $().on('click', '.facetwp-star', function() {
+    $().on('click', '.facetwp-star:not(.disabled)', function() {
         var $facet = $(this).closest('.facetwp-facet');
         var is_selected = $(this).hasClass('selected');
         $facet.find('.facetwp-star').removeClass('selected');
@@ -939,7 +959,7 @@
             // layout builder
             if ( 0 < $('.fwpl-layout').len() ) {
                 var layout = $(params.html).find('.fwpl-layout').html();
-                $('.fwpl-layout').append(layout);
+                $('.facetwp-template .fwpl-layout').append(layout);
             }
             // other
             else {
@@ -1005,7 +1025,7 @@
             let $this = $(this);
             let $wrap = $this.closest('.facetwp-facet');
             let facets = $this.nodes[0]._facets;
-            let all_empty = facets.every(val => FWP.facets[val].length < 1);
+            let all_empty = facets.every(val => 'undefined' === typeof FWP.facets[val] || FWP.facets[val].length < 1);
             all_empty ? $wrap.addClass('facetwp-hidden') : $wrap.removeClass('facetwp-hidden');
         });
     });

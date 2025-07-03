@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FacetWP\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-15 12:40+0000\n"
+"POT-Creation-Date: 2023-01-30 17:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Matt Gibbs <hello@facetwp.com>\n"
 "Language-Team: \n"
@@ -15,11 +15,11 @@ msgstr ""
 "X-Generator: Loco https://localise.biz/\n"
 "X-Loco-Version: 2.4.1; wp-5.4.2"
 
-#: includes/class-settings.php:338
+#: includes/class-settings.php:345
 msgid "Activate"
 msgstr ""
 
-#: includes/class-settings.php:546
+#: includes/class-settings.php:554
 msgid "Activating"
 msgstr ""
 
@@ -27,11 +27,11 @@ msgstr ""
 msgid "Add new"
 msgstr ""
 
-#: includes/class-settings.php:516
+#: includes/class-settings.php:524
 msgid "Add query filter"
 msgstr ""
 
-#: includes/class-settings.php:515
+#: includes/class-settings.php:523
 msgid "Add query sort"
 msgstr ""
 
@@ -39,23 +39,23 @@ msgstr ""
 msgid "Advanced Filtering for WordPress"
 msgstr ""
 
-#: includes/class-settings.php:500
+#: includes/class-settings.php:508
 msgid "All post types"
 msgstr ""
 
-#: includes/class-settings.php:180
+#: includes/class-settings.php:188
 msgid "AND (match all)"
 msgstr ""
 
-#: includes/class-settings.php:501
+#: includes/class-settings.php:509
 msgid "and show"
 msgstr ""
 
-#: includes/class-settings.php:111
+#: includes/class-settings.php:119
 msgid "Any"
 msgstr ""
 
-#: includes/class-settings.php:476
+#: includes/class-settings.php:484
 msgid "Author field"
 msgstr ""
 
@@ -71,27 +71,27 @@ msgstr ""
 msgid "Autocomplete"
 msgstr ""
 
-#: includes/class-settings.php:458
+#: includes/class-settings.php:466
 msgid "Background color"
 msgstr ""
 
-#: includes/class-settings.php:215
+#: includes/class-settings.php:223
 msgid "Basic"
 msgstr ""
 
-#: includes/class-settings.php:459
+#: includes/class-settings.php:467
 msgid "Border"
 msgstr ""
 
-#: includes/class-settings.php:466
+#: includes/class-settings.php:474
 msgid "Border color"
 msgstr ""
 
-#: includes/class-settings.php:460
+#: includes/class-settings.php:468
 msgid "Border style"
 msgstr ""
 
-#: includes/class-settings.php:467
+#: includes/class-settings.php:475
 msgid "Border width"
 msgstr ""
 
@@ -99,19 +99,19 @@ msgstr ""
 msgid "Button"
 msgstr ""
 
-#: includes/class-settings.php:497
+#: includes/class-settings.php:505
 msgid "Button border"
 msgstr ""
 
-#: includes/class-settings.php:470
+#: includes/class-settings.php:478
 msgid "Button padding"
 msgstr ""
 
-#: includes/class-settings.php:468
+#: includes/class-settings.php:476
 msgid "Button text"
 msgstr ""
 
-#: includes/class-settings.php:469
+#: includes/class-settings.php:477
 msgid "Button text color"
 msgstr ""
 
@@ -119,43 +119,43 @@ msgstr ""
 msgid "Checkboxes"
 msgstr ""
 
-#: includes/class-settings.php:517
+#: includes/class-settings.php:525
 msgid "Clear"
 msgstr ""
 
-#: includes/class-settings.php:524
+#: includes/class-settings.php:532
 msgid "Column"
 msgstr ""
 
-#: includes/class-settings.php:473
+#: includes/class-settings.php:481
 msgid "Column widths"
 msgstr ""
 
-#: includes/class-settings.php:510
+#: includes/class-settings.php:518
 msgid "Comment Count"
 msgstr ""
 
-#: includes/class-settings.php:212
+#: includes/class-settings.php:220
 msgid "Compare type"
 msgstr ""
 
-#: includes/class-settings.php:474 includes/class-settings.php:521
+#: includes/class-settings.php:482 includes/class-settings.php:529
 msgid "Content"
 msgstr ""
 
-#: includes/class-settings.php:551
+#: includes/class-settings.php:559
 msgid "Convert to query args"
 msgstr ""
 
-#: includes/class-settings.php:544
+#: includes/class-settings.php:552
 msgid "Copied!"
 msgstr ""
 
-#: includes/class-settings.php:529
+#: includes/class-settings.php:537
 msgid "Copy shortcode"
 msgstr ""
 
-#: includes/class-settings.php:195
+#: includes/class-settings.php:203
 msgid "Count"
 msgstr ""
 
@@ -171,35 +171,35 @@ msgstr ""
 msgid "Count text (singular)"
 msgstr ""
 
-#: includes/class-settings.php:496
+#: includes/class-settings.php:504
 msgid "CSS class"
 msgstr ""
 
-#: includes/class-settings.php:472
+#: includes/class-settings.php:480
 msgid "Custom CSS"
 msgstr ""
 
-#: includes/class-helper.php:492 includes/class-settings.php:512
+#: includes/class-helper.php:495 includes/class-settings.php:520
 msgid "Custom Fields"
 msgstr ""
 
-#: includes/class-settings.php:490
+#: includes/class-settings.php:498
 msgid "Custom URL"
 msgstr ""
 
-#: includes/class-settings.php:463
+#: includes/class-settings.php:471
 msgid "Dashed"
 msgstr ""
 
-#: includes/class-settings.php:530
+#: includes/class-settings.php:538
 msgid "Data source"
 msgstr ""
 
-#: includes/class-settings.php:482
+#: includes/class-settings.php:490
 msgid "Date"
 msgstr ""
 
-#: includes/class-settings.php:484
+#: includes/class-settings.php:492
 msgid "Date format"
 msgstr ""
 
@@ -207,7 +207,7 @@ msgstr ""
 msgid "Date Range"
 msgstr ""
 
-#: includes/class-settings.php:51
+#: includes/class-settings.php:59
 msgid "Debug mode"
 msgstr ""
 
@@ -215,28 +215,24 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
-#: includes/class-settings.php:109 includes/facets/sort.php:56
+#: includes/class-settings.php:117 includes/facets/sort.php:55
 #: includes/facets/pager.php:265
 msgid "Default label"
 msgstr ""
 
-#: includes/facets/proximity.php:232
+#: includes/facets/proximity.php:236
 msgid "Default radius"
 msgstr ""
 
-#: includes/class-settings.php:552
-msgid "Delete item?"
-msgstr ""
-
-#: includes/class-settings.php:533
+#: includes/class-settings.php:541
 msgid "Display"
 msgstr ""
 
-#: includes/class-settings.php:536
+#: includes/class-settings.php:544
 msgid "Display Code"
 msgstr ""
 
-#: includes/facets/date_range.php:133
+#: includes/facets/date_range.php:137
 msgid "Display format"
 msgstr ""
 
@@ -244,11 +240,11 @@ msgstr ""
 msgid "Display mode"
 msgstr ""
 
-#: includes/class-settings.php:477
+#: includes/class-settings.php:485
 msgid "Display name"
 msgstr ""
 
-#: includes/class-settings.php:189
+#: includes/class-settings.php:197
 msgid "Display value"
 msgstr ""
 
@@ -260,35 +256,35 @@ msgstr ""
 msgid "Dots label"
 msgstr ""
 
-#: includes/class-settings.php:464
+#: includes/class-settings.php:472
 msgid "Dotted"
 msgstr ""
 
-#: includes/class-settings.php:465
+#: includes/class-settings.php:473
 msgid "Double"
 msgstr ""
 
-#: includes/facets/proximity.php:210 includes/facets/dropdown.php:7
+#: includes/facets/proximity.php:214 includes/facets/dropdown.php:7
 msgid "Dropdown"
 msgstr ""
 
-#: includes/class-settings.php:65
+#: includes/class-settings.php:73
 msgid "Enable if your store uses variable products."
 msgstr ""
 
-#: includes/class-settings.php:216
+#: includes/class-settings.php:224
 msgid "Enclose"
 msgstr ""
 
-#: includes/facets/date_range.php:124
+#: includes/facets/date_range.php:128
 msgid "End Date"
 msgstr ""
 
-#: includes/class-settings.php:518
+#: includes/class-settings.php:526
 msgid "Enter term slugs"
 msgstr ""
 
-#: includes/class-settings.php:519
+#: includes/class-settings.php:527
 msgid "Enter values"
 msgstr ""
 
@@ -304,23 +300,23 @@ msgstr ""
 msgid "Exact"
 msgstr ""
 
-#: includes/facets/date_range.php:122
+#: includes/facets/date_range.php:126
 msgid "Exact Date"
 msgstr ""
 
-#: includes/class-settings.php:163
+#: includes/class-settings.php:171
 msgid "Exclude these values"
 msgstr ""
 
-#: includes/class-settings.php:79 includes/class-settings.php:361
+#: includes/class-settings.php:87 includes/class-settings.php:368
 msgid "Export"
 msgstr ""
 
-#: includes/class-settings.php:177
+#: includes/class-settings.php:185
 msgid "Facet logic"
 msgstr ""
 
-#: includes/class-settings.php:528
+#: includes/class-settings.php:536
 msgid "Facet type"
 msgstr ""
 
@@ -333,14 +329,14 @@ msgstr ""
 msgid "FacetWP"
 msgstr ""
 
-#: index.php:72
+#: index.php:67
 #, php-format
 msgid ""
 "FacetWP requires PHP %s or above. Please contact your host and request a PHP "
 "upgrade."
 msgstr ""
 
-#: includes/class-request.php:356
+#: includes/class-request.php:364
 msgid "FacetWP was unable to auto-detect the post listing"
 msgstr ""
 
@@ -348,19 +344,19 @@ msgstr ""
 msgid "FacetWP, LLC"
 msgstr ""
 
-#: includes/class-settings.php:499
+#: includes/class-settings.php:507
 msgid "Fetch"
 msgstr ""
 
-#: includes/class-settings.php:480
+#: includes/class-settings.php:488
 msgid "Field type"
 msgstr ""
 
-#: includes/facets/number_range.php:112 includes/facets/date_range.php:119
+#: includes/facets/number_range.php:112 includes/facets/date_range.php:123
 msgid "Fields to show"
 msgstr ""
 
-#: includes/class-settings.php:457
+#: includes/class-settings.php:465
 msgid "Font size"
 msgstr ""
 
@@ -372,7 +368,7 @@ msgstr ""
 msgid "fSelect"
 msgstr ""
 
-#: includes/class-settings.php:596
+#: includes/class-settings.php:603
 msgid "full"
 msgstr ""
 
@@ -380,7 +376,7 @@ msgstr ""
 msgid "General"
 msgstr ""
 
-#: includes/class-settings.php:344
+#: includes/class-settings.php:351
 msgid "Get an API key"
 msgstr ""
 
@@ -388,15 +384,15 @@ msgstr ""
 msgid "Google Maps API key"
 msgstr ""
 
-#: includes/class-settings.php:535
+#: includes/class-settings.php:543
 msgid "Help"
 msgstr ""
 
-#: includes/class-settings.php:494
+#: includes/class-settings.php:502
 msgid "Hide item?"
 msgstr ""
 
-#: includes/class-settings.php:123
+#: includes/class-settings.php:131
 msgid "Hierarchical"
 msgstr ""
 
@@ -404,11 +400,11 @@ msgstr ""
 msgid "Hierarchy"
 msgstr ""
 
-#: includes/class-settings.php:188
+#: includes/class-settings.php:196
 msgid "Highest count"
 msgstr ""
 
-#: includes/class-settings.php:514
+#: includes/class-settings.php:522
 msgid "Hit Enter"
 msgstr ""
 
@@ -416,15 +412,15 @@ msgstr ""
 msgid "https://facetwp.com/"
 msgstr ""
 
-#: includes/class-settings.php:475
+#: includes/class-settings.php:483
 msgid "Image size"
 msgstr ""
 
-#: includes/class-settings.php:83 includes/class-settings.php:369
+#: includes/class-settings.php:91 includes/class-settings.php:376
 msgid "Import"
 msgstr ""
 
-#: includes/class-settings.php:76
+#: includes/class-settings.php:84
 msgid "Import / Export"
 msgstr ""
 
@@ -432,11 +428,11 @@ msgstr ""
 msgid "Imported"
 msgstr ""
 
-#: includes/class-settings.php:550
+#: includes/class-settings.php:558
 msgid "Importing"
 msgstr ""
 
-#: includes/class-builder.php:233
+#: includes/class-builder.php:241
 msgid "In Stock"
 msgstr ""
 
@@ -444,15 +440,15 @@ msgstr ""
 msgid "Include / exclude"
 msgstr ""
 
-#: includes/class-settings.php:69
-msgid "Include all products?"
+#: includes/class-settings.php:77
+msgid "Index out-of-stock products?"
 msgstr ""
 
-#: includes/class-settings.php:539
+#: includes/class-settings.php:547
 msgid "Indexing"
 msgstr ""
 
-#: includes/class-settings.php:541
+#: includes/class-settings.php:549
 msgid "Indexing complete"
 msgstr ""
 
@@ -460,24 +456,24 @@ msgstr ""
 msgid "Inner size"
 msgstr ""
 
-#: includes/class-settings.php:485
+#: includes/class-settings.php:493
 msgid "Input format"
 msgstr ""
 
-#: includes/class-settings.php:217
+#: includes/class-settings.php:225
 msgid "Intersect"
 msgstr ""
 
-#: includes/facets/proximity.php:203
+#: includes/facets/proximity.php:207
 msgid "Kilometers"
 msgstr ""
 
-#: includes/class-settings.php:526 templates/page-settings.php:159
+#: includes/class-settings.php:534 templates/page-settings.php:159
 #: templates/page-settings.php:187
 msgid "Label"
 msgstr ""
 
-#: includes/class-settings.php:520
+#: includes/class-settings.php:528
 msgid "Layout"
 msgstr ""
 
@@ -485,11 +481,11 @@ msgstr ""
 msgid "License key"
 msgstr ""
 
-#: includes/class-settings.php:487 includes/facets/reset.php:60
+#: includes/class-settings.php:495 includes/facets/reset.php:60
 msgid "Link"
 msgstr ""
 
-#: includes/class-settings.php:488
+#: includes/class-settings.php:496
 msgid "Link type"
 msgstr ""
 
@@ -514,7 +510,7 @@ msgstr ""
 msgid "Load more text"
 msgstr ""
 
-#: includes/class-settings.php:549
+#: includes/class-settings.php:557
 msgid "Loading"
 msgstr ""
 
@@ -522,11 +518,11 @@ msgstr ""
 msgid "Loading text"
 msgstr ""
 
-#: includes/facets/proximity.php:192
+#: includes/facets/proximity.php:196
 msgid "Longitude"
 msgstr ""
 
-#: includes/class-settings.php:542
+#: includes/class-settings.php:550
 msgid "Looking"
 msgstr ""
 
@@ -534,11 +530,11 @@ msgstr ""
 msgid "Max"
 msgstr ""
 
-#: includes/class-settings.php:511
+#: includes/class-settings.php:519
 msgid "Menu Order"
 msgstr ""
 
-#: includes/facets/proximity.php:202
+#: includes/facets/proximity.php:206
 msgid "Miles"
 msgstr ""
 
@@ -550,16 +546,15 @@ msgstr ""
 msgid "Min + Max"
 msgstr ""
 
-#: includes/class-settings.php:135
+#: includes/class-settings.php:143
 msgid "Multi-select"
 msgstr ""
 
-#: includes/class-settings.php:527 templates/page-settings.php:160
-#: templates/page-settings.php:188
+#: templates/page-settings.php:160 templates/page-settings.php:188
 msgid "Name"
 msgstr ""
 
-#: includes/class-settings.php:513
+#: includes/class-settings.php:521
 msgid "Narrow results by"
 msgstr ""
 
@@ -567,11 +562,15 @@ msgstr ""
 msgid "Next button label"
 msgstr ""
 
-#: includes/class-settings.php:461 includes/facets/proximity.php:212
+#: includes/class-settings.php:462
+msgid "No results text"
+msgstr ""
+
+#: includes/class-settings.php:469 includes/facets/proximity.php:216
 msgid "None"
 msgstr ""
 
-#: includes/class-settings.php:429
+#: includes/class-settings.php:436
 msgid "Not yet activated"
 msgstr ""
 
@@ -579,15 +578,15 @@ msgstr ""
 msgid "Nothing to import"
 msgstr ""
 
-#: includes/class-settings.php:483
+#: includes/class-settings.php:491
 msgid "Number"
 msgstr ""
 
-#: includes/class-settings.php:486
+#: includes/class-settings.php:494
 msgid "Number format"
 msgstr ""
 
-#: includes/class-settings.php:453
+#: includes/class-settings.php:460
 msgid "Number of grid columns"
 msgstr ""
 
@@ -595,35 +594,35 @@ msgstr ""
 msgid "Number Range"
 msgstr ""
 
-#: includes/class-settings.php:162
+#: includes/class-settings.php:170
 msgid "Off"
 msgstr ""
 
-#: includes/class-builder.php:238
+#: includes/class-builder.php:246
 msgid "On Sale"
 msgstr ""
 
-#: includes/class-settings.php:491
+#: includes/class-settings.php:499
 msgid "Open in new tab?"
 msgstr ""
 
-#: includes/class-settings.php:181
+#: includes/class-settings.php:189
 msgid "OR (match any)"
 msgstr ""
 
-#: includes/class-settings.php:206
+#: includes/class-settings.php:214
 msgid "Other data source"
 msgstr ""
 
-#: includes/class-builder.php:233
+#: includes/class-builder.php:241
 msgid "Out of Stock"
 msgstr ""
 
-#: includes/class-settings.php:367
+#: includes/class-settings.php:374
 msgid "Overwrite existing items?"
 msgstr ""
 
-#: includes/class-settings.php:495
+#: includes/class-settings.php:503
 msgid "Padding"
 msgstr ""
 
@@ -639,11 +638,11 @@ msgstr ""
 msgid "Pager type"
 msgstr ""
 
-#: includes/class-settings.php:117
+#: includes/class-settings.php:125
 msgid "Parent term"
 msgstr ""
 
-#: includes/class-settings.php:366
+#: includes/class-settings.php:373
 msgid "Paste the import code here"
 msgstr ""
 
@@ -651,7 +650,7 @@ msgstr ""
 msgid "Per page"
 msgstr ""
 
-#: includes/class-settings.php:502
+#: includes/class-settings.php:510
 msgid "per page"
 msgstr ""
 
@@ -659,42 +658,42 @@ msgstr ""
 msgid "Per page options"
 msgstr ""
 
-#: includes/class-settings.php:114
+#: includes/class-settings.php:122
 msgid "Placeholder text"
 msgstr ""
 
-#: includes/class-updater.php:170
+#: includes/class-updater.php:172
 #, php-format
 msgid ""
 "Please <a href=\"%s\" target=\"_blank\">renew your license</a> for automatic "
 "updates."
 msgstr ""
 
-#: includes/class-updater.php:175
+#: includes/class-updater.php:177
 msgid "Please activate your FacetWP license for automatic updates."
 msgstr ""
 
-#: includes/class-helper.php:482
+#: includes/class-helper.php:485
 msgid "Post Author"
 msgstr ""
 
-#: includes/class-helper.php:479 includes/class-settings.php:508
+#: includes/class-helper.php:482 includes/class-settings.php:516
 msgid "Post Date"
 msgstr ""
 
-#: includes/class-helper.php:480 includes/class-settings.php:509
+#: includes/class-helper.php:483 includes/class-settings.php:517
 msgid "Post Modified"
 msgstr ""
 
-#: includes/class-settings.php:506
+#: includes/class-settings.php:514
 msgid "Post Name"
 msgstr ""
 
-#: includes/class-helper.php:481 includes/class-settings.php:505
+#: includes/class-helper.php:484 includes/class-settings.php:513
 msgid "Post Title"
 msgstr ""
 
-#: includes/class-helper.php:478 includes/class-settings.php:507
+#: includes/class-helper.php:481 includes/class-settings.php:515
 msgid "Post Type"
 msgstr ""
 
@@ -702,23 +701,23 @@ msgstr ""
 msgid "Post types"
 msgstr ""
 
-#: includes/class-settings.php:489
+#: includes/class-settings.php:497
 msgid "Post URL"
 msgstr ""
 
-#: includes/class-helper.php:476 includes/class-settings.php:504
+#: includes/class-helper.php:479 includes/class-settings.php:512
 msgid "Posts"
 msgstr ""
 
-#: includes/class-settings.php:492 includes/facets/slider.php:135
+#: includes/class-settings.php:500 includes/facets/slider.php:135
 msgid "Prefix"
 msgstr ""
 
-#: includes/class-settings.php:148
+#: includes/class-settings.php:156
 msgid "Preserve ghost order"
 msgstr ""
 
-#: includes/class-settings.php:545
+#: includes/class-settings.php:553
 msgid "Press CTRL+C to copy"
 msgstr ""
 
@@ -734,15 +733,15 @@ msgstr ""
 msgid "Purge the index table"
 msgstr ""
 
-#: includes/class-settings.php:543
+#: includes/class-settings.php:551
 msgid "Purging"
 msgstr ""
 
-#: includes/class-settings.php:534
+#: includes/class-settings.php:542
 msgid "Query"
 msgstr ""
 
-#: includes/class-settings.php:537
+#: includes/class-settings.php:545
 msgid "Query Arguments"
 msgstr ""
 
@@ -750,27 +749,27 @@ msgstr ""
 msgid "Radio"
 msgstr ""
 
-#: includes/facets/proximity.php:216
+#: includes/facets/proximity.php:220
 msgid "Radius options"
 msgstr ""
 
-#: includes/facets/proximity.php:208
+#: includes/facets/proximity.php:212
 msgid "Radius UI"
 msgstr ""
 
-#: includes/facets/proximity.php:227
+#: includes/facets/proximity.php:231
 msgid "Range (max)"
 msgstr ""
 
-#: includes/facets/proximity.php:222
+#: includes/facets/proximity.php:226
 msgid "Range (min)"
 msgstr ""
 
-#: includes/class-settings.php:190
+#: includes/class-settings.php:198
 msgid "Raw value"
 msgstr ""
 
-#: includes/class-settings.php:547 templates/page-settings.php:116
+#: includes/class-settings.php:555 templates/page-settings.php:116
 msgid "Re-index"
 msgstr ""
 
@@ -790,7 +789,7 @@ msgstr ""
 msgid "Reset only these facets"
 msgstr ""
 
-#: includes/class-settings.php:226
+#: includes/class-settings.php:233
 msgid "Reset text"
 msgstr ""
 
@@ -802,7 +801,7 @@ msgstr ""
 msgid "Result counts"
 msgstr ""
 
-#: includes/class-settings.php:523
+#: includes/class-settings.php:531
 msgid "Row"
 msgstr ""
 
@@ -814,7 +813,7 @@ msgstr ""
 msgid "Save changes"
 msgstr ""
 
-#: includes/class-settings.php:538
+#: includes/class-settings.php:546
 msgid "Saving"
 msgstr ""
 
@@ -826,7 +825,7 @@ msgstr ""
 msgid "Search engine"
 msgstr ""
 
-#: includes/class-settings.php:471
+#: includes/class-settings.php:479
 msgid "Separator"
 msgstr ""
 
@@ -846,15 +845,15 @@ msgstr ""
 msgid "Settings saved, please re-index"
 msgstr ""
 
-#: includes/class-settings.php:129
+#: includes/class-settings.php:137
 msgid "Show expanded"
 msgstr ""
 
-#: includes/class-settings.php:70
+#: includes/class-settings.php:78
 msgid "Show facet choices for out-of-stock products?"
 msgstr ""
 
-#: includes/class-settings.php:143
+#: includes/class-settings.php:151
 msgid "Show ghosts"
 msgstr ""
 
@@ -866,7 +865,7 @@ msgstr ""
 msgid "Show indexer stats"
 msgstr ""
 
-#: includes/class-settings.php:164
+#: includes/class-settings.php:172
 msgid "Show only these values"
 msgstr ""
 
@@ -874,28 +873,28 @@ msgstr ""
 msgid "Skipped"
 msgstr ""
 
-#: includes/facets/slider.php:7 includes/facets/proximity.php:211
+#: includes/facets/slider.php:7 includes/facets/proximity.php:215
 msgid "Slider"
 msgstr ""
 
-#: includes/class-settings.php:200
+#: includes/class-settings.php:208
 msgid "Soft limit"
 msgstr ""
 
-#: includes/class-settings.php:462
+#: includes/class-settings.php:470
 msgid "Solid"
 msgstr ""
 
-#: includes/facets/sort.php:11
+#: includes/facets/sort.php:10
 msgid "Sort"
 msgstr ""
 
-#: includes/class-settings.php:186 includes/class-settings.php:503
-#: includes/facets/sort.php:58
+#: includes/class-settings.php:194 includes/class-settings.php:511
+#: includes/facets/sort.php:57
 msgid "Sort by"
 msgstr ""
 
-#: includes/facets/sort.php:63
+#: includes/facets/sort.php:62
 msgid "Sort options"
 msgstr ""
 
@@ -903,7 +902,7 @@ msgstr ""
 msgid "Source"
 msgstr ""
 
-#: includes/class-settings.php:454
+#: includes/class-settings.php:461
 msgid "Spacing between results"
 msgstr ""
 
@@ -911,15 +910,15 @@ msgstr ""
 msgid "Star Rating"
 msgstr ""
 
-#: includes/facets/date_range.php:121
+#: includes/facets/date_range.php:125
 msgid "Start + End Dates"
 msgstr ""
 
-#: includes/facets/date_range.php:123
+#: includes/facets/date_range.php:127
 msgid "Start Date"
 msgstr ""
 
-#: includes/class-settings.php:525
+#: includes/class-settings.php:533
 msgid "Start typing"
 msgstr ""
 
@@ -927,15 +926,19 @@ msgstr ""
 msgid "Step"
 msgstr ""
 
-#: includes/class-settings.php:548
+#: includes/class-settings.php:556
 msgid "Stop indexer"
 msgstr ""
 
-#: includes/class-settings.php:522
+#: includes/class-settings.php:51
+msgid "Strict query detection"
+msgstr ""
+
+#: includes/class-settings.php:530
 msgid "Style"
 msgstr ""
 
-#: includes/class-settings.php:493 includes/facets/slider.php:139
+#: includes/class-settings.php:501 includes/facets/slider.php:139
 msgid "Suffix"
 msgstr ""
 
@@ -943,43 +946,43 @@ msgstr ""
 msgid "Support"
 msgstr ""
 
-#: includes/class-settings.php:64
+#: includes/class-settings.php:72
 msgid "Support product variations?"
 msgstr ""
 
-#: includes/class-settings.php:531
+#: includes/class-settings.php:539
 msgid "Switch to advanced mode"
 msgstr ""
 
-#: includes/class-settings.php:532
+#: includes/class-settings.php:540
 msgid "Switch to visual mode"
 msgstr ""
 
-#: includes/class-helper.php:487
+#: includes/class-helper.php:490
 msgid "Taxonomies"
 msgstr ""
 
-#: includes/class-settings.php:191
+#: includes/class-settings.php:199
 msgid "Term order"
 msgstr ""
 
-#: includes/class-settings.php:498
+#: includes/class-settings.php:506
 msgid "Term URL"
 msgstr ""
 
-#: includes/class-settings.php:481
+#: includes/class-settings.php:489
 msgid "Text"
 msgstr ""
 
-#: includes/class-settings.php:456
+#: includes/class-settings.php:464
 msgid "Text color"
 msgstr ""
 
-#: includes/class-settings.php:455
+#: includes/class-settings.php:463
 msgid "Text style"
 msgstr ""
 
-#: includes/class-settings.php:540
+#: includes/class-settings.php:548
 msgid "The index table is empty"
 msgstr ""
 
@@ -987,11 +990,15 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-#: includes/class-settings.php:222
+#: includes/class-settings.php:229
 msgid "UI type"
 msgstr ""
 
-#: includes/facets/proximity.php:200
+#: includes/class-settings.php:535
+msgid "Unique name"
+msgstr ""
+
+#: includes/facets/proximity.php:204
 msgid "Unit of measurement"
 msgstr ""
 
@@ -999,23 +1006,23 @@ msgstr ""
 msgid "URL prefix"
 msgstr ""
 
-#: includes/class-settings.php:479
+#: includes/class-settings.php:487
 msgid "User ID"
 msgstr ""
 
-#: includes/class-settings.php:478
+#: includes/class-settings.php:486
 msgid "User login"
 msgstr ""
 
-#: includes/class-settings.php:436
+#: includes/class-settings.php:443
 msgid "Valid until"
 msgstr ""
 
-#: includes/class-settings.php:159
+#: includes/class-settings.php:167
 msgid "Value modifiers"
 msgstr ""
 
-#: includes/class-settings.php:61
+#: includes/class-settings.php:69
 #: includes/integrations/woocommerce/woocommerce.php:64
 msgid "WooCommerce"
 msgstr ""

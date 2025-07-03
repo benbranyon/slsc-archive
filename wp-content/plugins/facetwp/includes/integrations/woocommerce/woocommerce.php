@@ -15,6 +15,7 @@ class FacetWP_Integration_WooCommerce
         add_filter( 'facetwp_facet_sources', [ $this, 'facet_sources' ] );
         add_filter( 'facetwp_facet_display_value', [ $this, 'translate_hardcoded_choices' ], 10, 2 );
         add_filter( 'facetwp_indexer_post_facet', [ $this, 'index_woo_values' ], 10, 2 );
+        add_filter( 'facetwp_facet_sources', [ $this, 'exclude_data_sources' ] );
 
         // Support WooCommerce product variations
         $is_enabled = ( 'yes' === FWP()->helper->get_setting( 'wc_enable_variations', 'no' ) );
@@ -132,9 +133,6 @@ class FacetWP_Integration_WooCommerce
         else {
             $pt = (array) $args['post_type'];
 
-            if ( in_array( 'any', $pt ) ) {
-                $pt = get_post_types();
-            }
             if ( in_array( 'product', $pt ) ) {
                 $pt[] = 'product_variation';
             }
@@ -166,7 +164,17 @@ class FacetWP_Integration_WooCommerce
 
                 if ( false !== $term ) {
                     $params['term_id'] = $term->term_id;
+                    $params['parent_id'] = $term->parent;
                     $params['facet_display_value'] = $term->name;
+
+                    $params['depth'] = count( get_ancestors( $term->term_id, $taxonomy, 'taxonomy' ) );
+
+                    $facet = FWP()->helper->get_facet_by_name( $params['facet_name'] );
+
+                    // handle parent_term setting
+                    if ( 0 < $facet['parent_term'] && !term_is_ancestor_of( $facet['parent_term'], $params['term_id'], $taxonomy ) ) {
+                        $params['facet_value'] = ''; // don't index
+                    }
                 }
             }
         }
@@ -485,6 +493,16 @@ class FacetWP_Integration_WooCommerce
 
 
     /**
+     * Exclude specific WC custom fields
+     * @since 4.2.3
+     */
+    function exclude_data_sources( $sources ) {
+        unset( $sources['custom_fields']['choices']['cf/_product_attributes'] );
+        return $sources;
+    }
+
+
+    /**
      * Allow certain hard-coded choices to be translated dynamically
      * instead of stored as translated in the index table
      * @since 3.9.6
@@ -493,7 +511,15 @@ class FacetWP_Integration_WooCommerce
         $source = $params['facet']['source'];
 
         if ( 'woo/stock_status' == $source ) {
-            $label = ( 'In Stock' == $label ) ? __( 'In Stock', 'fwp-front' ) : __( 'Out of Stock', 'fwp-front' );
+
+            // We aren't using a ternary here in case the user
+            // assigned a custom stock status label
+            if ( 'In Stock' == $label ) {
+                $label = __( 'In Stock', 'fwp-front' );
+            }
+            elseif ( 'Out of Stock' == $label ) {
+                $label = __( 'Out of Stock', 'fwp-front' );
+            }
         }
         elseif ( 'woo/on_sale' == $source ) {
             $label = __( 'On Sale', 'fwp-front' );
