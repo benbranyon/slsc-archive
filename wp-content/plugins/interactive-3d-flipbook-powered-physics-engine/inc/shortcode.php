@@ -166,14 +166,14 @@
       $atts = $r['atts'];
       $jsData = $r['jsData'];
 
-      $r = sprintf('<%s class="%s %s"', $is_link? 'a ': 'div', '_'.POST_ID, to_single_quotes($classes));
+      $r = sprintf('<%s class="%s %s"', $is_link? 'a ': 'div', '_'.POST_ID, esc_attr($classes));
       foreach($atts as $k=> $v) {
         if($k!=='classes' && $k!=='style' && $k!=='query') {
-          $r .= sprintf(' data-%s="%s"', $k, to_single_quotes($v));
+          $r .= sprintf(' data-%s="%s"', $k, esc_attr($v));
         }
       }
       if($atts['style']!=='') {
-        $r .= sprintf(' style="%s"', to_single_quotes($atts['style']));
+        $r .= sprintf(' style="%s"', esc_attr($atts['style']));
       }
 
       $res = ($is_link? $r.'>'.$content.'</a>' :$r.'></div>'.$content).($jsData? implode([
@@ -200,7 +200,7 @@
   		unset($params['tax']);
       unset($params['style']);
       ob_start();
-  		echo('<table class="fb3d-categories" data-query="'.to_single_quotes(json_encode($q_params)).'" data-raw-query="'.to_single_quotes($atts['query']).'" style="'.to_single_quotes($atts['style']).'"><tr>');
+  		echo('<table class="fb3d-categories" data-query="'.esc_attr(to_single_quotes(json_encode($q_params))).'" data-raw-query="'.esc_attr(to_single_quotes($atts['query'])).'" style="'.esc_attr($atts['style']).'"><tr>');
   		for($i=0; $i<$q->post_count; ++$i) {
   			if($i%$cols===0 && $i) {
   				echo('</tr><tr>');
