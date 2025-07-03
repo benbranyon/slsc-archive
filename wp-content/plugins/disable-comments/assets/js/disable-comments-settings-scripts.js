@@ -18,10 +18,11 @@ jQuery(document).ready(function ($) {
 			}
 
 			$sites_list.append( "\
-				<div class='subsite__checklist__item'>\
+				<div class='subsite__checklist__item checkbox-style'>\
 					<input type='hidden' name='" + name + "' value='0' />\
 					<input type='checkbox' id='" + id + "' class='site_option' name='" + name + "' value='1' " + site.is_checked + " />\
 					<label for='" + id + "'>"
+						+ "<i class='icon' tabindex='0'></i>"
 						+ site.blogname +
 					"</label>\
 				</div>\
@@ -127,7 +128,7 @@ jQuery(document).ready(function ($) {
 				sites_list_wrapper.find('.check-all').addClass('semi-checked');
 			}
 			sites_list_wrapper.find('.check-all').prop('checked', totalChecked == site_option.length);
-			sites_list_wrapper.find('.check-all+label small').text(`(${totalChecked} selected)`)
+			sites_list_wrapper.find('.check-all+label .selected-count').text(`(${totalChecked} selected)`)
 		}
 
 		jQuery(".sites_list_wrapper").on('change', function(){
@@ -171,7 +172,7 @@ jQuery(document).ready(function ($) {
 	function enable_site_wise_uihelper() {
 		var pagination = jQuery("#disableCommentSaveSettings .sites_list_wrapper .has-pagination");
 		var indiv_bits = jQuery(
-			".disabled__sites .remove__checklist__item, #disableCommentSaveSettings .subsite__checklist__item, #disableCommentSaveSettings .sub__site_control"
+			"#disableCommentSaveSettings .subsite__checklist__item, #disableCommentSaveSettings .sub__site_control"
 		);
 		if (jQuery("#sitewide_settings").is(":checked")) {
 			pagination.length && pagination.addClass('disabled').pagination('disable', true);
@@ -179,12 +180,21 @@ jQuery(document).ready(function ($) {
 				.css("opacity", ".3")
 				.find(":input")
 				.attr("disabled", true);
+			indiv_bits
+				.not('.sub__site_control')
+				.find("label .icon")
+				.attr("tabindex", -1);
+
 		} else {
 			pagination.length && pagination.removeClass('disabled').pagination('enable', true);
 			indiv_bits
 				.css("opacity", "1")
 				.find(":input")
 				.attr("disabled", false);
+			indiv_bits
+				.not('.sub__site_control')
+				.find("label .icon")
+				.attr("tabindex", '0');
 		}
 	}
 
@@ -195,18 +205,22 @@ jQuery(document).ready(function ($) {
 
 	function disable_comments_uihelper() {
 		var indiv_bits = jQuery(
-			"#disable__post__types .remove__checklist__item, #extratypes"
+			"#disable__post__types .remove__checklist__item, #disable__post__types .custom-types-input"
 		);
 		if (jQuery("#remove_everywhere").is(":checked")) {
 			indiv_bits
 				.css("opacity", ".3")
 				.find(":input")
 				.attr("disabled", true);
+			jQuery("#disable__post__types .remove__checklist__item label .icon")
+				.attr("tabindex", -1);
 		} else {
 			indiv_bits
 				.css("opacity", "1")
 				.find(":input")
 				.attr("disabled", false);
+			jQuery("#disable__post__types .remove__checklist__item label .icon")
+				.attr("tabindex", '0');
 		}
 	}
 
@@ -218,7 +232,7 @@ jQuery(document).ready(function ($) {
 
 	function delete_comments_uihelper() {
 		var toggle_pt_bits = jQuery(
-			"#delete__post__types .delete__checklist__item, #extradeletetypes"
+			"#delete__post__types .delete__checklist__item, #delete__post__types .custom-types-input"
 		);
 		var toggle_ct_bits = jQuery("#listofdeletecommenttypes");
 		if (jQuery("#delete_everywhere, #delete_spam").is(":checked")) {
@@ -230,6 +244,8 @@ jQuery(document).ready(function ($) {
 				.css("opacity", ".3")
 				.find(":input")
 				.attr("disabled", true);
+			jQuery("#delete__post__types .checkbox-style label .icon, #listofdeletecommenttypes label .icon")
+				.attr("tabindex", -1);
 		} else {
 			if (jQuery("#selected_delete_types").is(":checked")) {
 				toggle_pt_bits
@@ -240,6 +256,10 @@ jQuery(document).ready(function ($) {
 					.css("opacity", ".3")
 					.find(":input")
 					.attr("disabled", true);
+				jQuery("#delete__post__types .checkbox-style label .icon")
+					.attr("tabindex", '0');
+				jQuery("#listofdeletecommenttypes label .icon")
+					.attr("tabindex", '-1');
 			} else {
 				toggle_ct_bits
 					.css("opacity", "1")
@@ -249,6 +269,10 @@ jQuery(document).ready(function ($) {
 					.css("opacity", ".3")
 					.find(":input")
 					.attr("disabled", true);
+				jQuery("#delete__post__types .checkbox-style label .icon")
+					.attr("tabindex", -1);
+				jQuery("#listofdeletecommenttypes label .icon")
+					.attr("tabindex", '0');
 			}
 		}
 	}
@@ -445,4 +469,29 @@ jQuery(document).ready(function ($) {
 		jQuery('#enable_exclude_by_role').trigger('change');
 	})();
 
+
+	jQuery(document).on('keydown', 'label .icon[tabindex], label span[tabindex]', function(event) {
+		// console.log(event);
+		if (event.code === 'Space' || event.code === 'Enter') {
+			event.preventDefault();
+
+			const inputId = jQuery(this).parent().attr('for');
+			const inputElement = document.getElementById(inputId);
+
+			if (inputElement) {
+				inputElement.click();
+			}
+		}
+
+	});
+
+	jQuery(document).on('keydown', '.disable__comment__nav__item a', function(event) {
+		// console.log(event);
+		if (event.code === 'Space' || event.code === 'Enter') {
+			event.preventDefault();
+			jQuery(this).click();
+		}
+	});
+
 });
+
