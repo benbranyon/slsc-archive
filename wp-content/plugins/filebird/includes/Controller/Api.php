@@ -105,7 +105,7 @@ class Api {
 		$name      = sanitize_text_field( $request->get_param( 'name' ) );
 
 		if ( $name != '' ) {
-			$folder = FolderModel::newOrGet( $name, $parent_id );
+			$folder = FolderModel::newUniqueFolder( $name, $parent_id );
 			wp_send_json_success( array( 'id' => $folder['id'] ) );
 		}
 		wp_send_json_error(

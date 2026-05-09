@@ -149,6 +149,7 @@ class Polylang extends Controller {
 		$join .= " INNER JOIN {$wpdb->posts} as posts ON posts.ID = fbva.attachment_id ";
 
 		$where .= " WHERE posts.post_type = 'attachment' AND (posts.post_status = 'inherit' OR posts.post_status = 'private') ";
+		$where .= " AND posts.ID NOT IN (SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_elementor_is_screenshot') ";
 		if( $check_author ) {
 			$where .= $wpdb->prepare( ' AND fbv.created_by = %d', apply_filters( 'fbv_folder_created_by', '0' ) );
 		}

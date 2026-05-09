@@ -1,10 +1,10 @@
 === FileBird - WordPress Media Library Folders & File Manager ===
 Contributors: ninjateam
 Donate link: https://ninjateam.org/wordpress-media-library-folders/ 
-Tags: wordpress media library folders, folders, media, media folders, category, file manager
+Tags: wordpress media library folders, wp media folders, media, media folders, file manager
 Requires at least: 3.0
-Tested up to: 6.8
-Stable tag: 6.4.7
+Tested up to: 6.9
+Stable tag: 6.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,23 +12,23 @@ Organize thousands of WordPress media files in folders / categories with ease.
 
 == Description ==
 
-**Best plugin of all time to categorize WordPress media library with folders.**
+**#1 Best plugin of all time to categorize WordPress media library with folders.**
 
 Let's organize WordPress media library folders using a drag and drop organizer.
 
-[TEST DRIVE](https://media-folder.ninjateam.org/create/) | [**GO PRO (Lifetime License)**](https://1.envato.market/FileBird-Premium) 💎
+[**TEST DRIVE**](https://media-folder.ninjateam.org/create/) | [**GO PRO (Lifetime License)**](https://1.envato.market/FileBird-Premium) 💎
 
-FileBird enhances your media library with a clean user interface, native icons, smooth drag & drop, dynamic gallery, and advanced sort options. With such a better organization, it becomes super easy to insert images into Gutenberg blocks, find old files, and remove unused images.
+FileBird transforms your WordPress media library with intuitive folder organization, smooth drag & drop, and smart sorting. Locate images faster, easily insert them into Gutenberg blocks, quickly identify and remove unused files.
 
 The free version allows you to create **unlimited main folders** and **subfolders**.
 
-📌 [Documentation](https://ninjateam.gitbook.io/filebird/) | [Compare FileBird Free vs Pro](https://ninjateam.gitbook.io/filebird/compare-filebird-free-and-pro)
+📌 [Addons](https://ninjateam.org/downloads/filebird-cloud-integration-dropbox-and-google-drive/?utm_source=wp-org&utm_medium=filebird-addons) | [Compare FileBird Free vs Pro](https://ninjateam.gitbook.io/filebird/compare-filebird-free-and-pro)
 
 [youtube https://www.youtube.com/watch?v=NjeEbqmMVwU]
 
 ###⚡️ FEATURES
 
-FileBird allows you to create virtual folders to [categorize your WordPress media file uploads](https://ninjateam.org/how-to-organize-your-wordpress-media-library/). So when you move files and folders around, it won’t break the permalinks to your images in the page/post content.
+FileBird allows you to create virtual folders to [categorize your WordPress media file uploads](https://ninjateam.org/how-to-organize-your-wordpress-media-library/?utm_source=wp-org&utm_medium=filebird). So when you move files and folders around, it won’t break the permalinks to your images in the page/post content.
 
 With FileBird, you can save time on WP media management, search for any files & folders, sort them out, add product image gallery, download/export media folders, etc. That’s a great way to boost your admin workflow and productivity.
 
@@ -72,7 +72,7 @@ Go advanced with 2 ways to sort folders and 10 ways to sort files. This is a gre
 Now you can calculate your attachment size in a single click and sort files by file size.
 
 **Custom Folder Color (PRO)**
-Right-click on a specific folder to pick a distinct color. This helps differentiate it between numerous folders.
+Right-click on a specific folder to pick a distinct color. This helps differentiate it from numerous folders.
 
 **Multiple Tree View Styles (PRO)**
 Apart from the hierarchical tree view, you have the option to hide levels from the tree view, too. This flat tree view is very useful for those with a large number of folders.
@@ -113,12 +113,12 @@ You won’t see WordPress media library not loading, as FileBird smart-loads one
 
 * Upload multiple folders and their files directly from your computer to WordPress
 * Create a gallery from folders using the Gutenberg block of FileBird gallery 
-* [Create WordPress document gallery](https://ninjateam.org/document-gallery-wordpress/) with shortcode
+* [Create WordPress document gallery](https://ninjateam.org/document-gallery-wordpress/?utm_source=wp-org&utm_medium=filebird) with shortcode
 * Resize the left sidebar to get an overview of all folders
 * Upload files to a specific folder by choosing the destination folder from the dropdown
 * Easily **search** for the name of file/folder
 * From the page/post composer, **browse** files and folders in the FileBird UI
-* While [customizing WooCommerce email](https://yaycommerce.com/woocommerce-email-template-customization/) with a drag-and-drop email builder, you can quickly find the images you need
+* While [customizing WooCommerce email](https://yaycommerce.com/woocommerce-email-template-customization/?utm_source=wp-org&utm_medium=filebird) with a drag-and-drop email builder, you can quickly find the images you need
 * Keep your folders uncluttered by clearing out the old files using the **Sort by file size** feature
 * Press ESC to exit bulk select mode
 
@@ -128,9 +128,9 @@ With [FileBird Pro](https://1.envato.market/FileBird-Premium), you will be able 
 
 **THEMES**
 
-* Avada – #1 WordPress best selling theme of all time
+* Avada - WordPress best selling theme of all time
 * Divi - Theme from ElegantThemes
-* Enfold – The user-friendliest WordPress Theme ever made
+* Enfold - The user-friendliest WordPress Theme ever made
 * Uncode – The highly anticipated Frontend Editor
 * Jupiter - Elementor Multi-Purpose Theme
 * Flatsome – Best selling WooCommerce Theme
@@ -138,11 +138,11 @@ With [FileBird Pro](https://1.envato.market/FileBird-Premium), you will be able 
 * XStore - Responsive Multi-Purpose WooCommerce WordPress Theme
 * KLEO - Community Multi Purpose BuddyPress Theme
 * Bricks Builder
-* And a lot more +++
+* And a lot more
 
 **PLUGINS**
 
-* WPML – Best WP plugin to translate and display your website in any languages
+* WPML – Best WP plugin to translate and display your website in any language
 * Polylang – A plugin that allows you to create a bilingual or multilingual WordPress site
 * Elementor Website Builder 
 * JetEngine
@@ -209,6 +209,26 @@ Happy Organizing! 😍
 
 == Changelog ==
 
+= Dec 5, 2025 - Version 6.5.2 =
+- Added: Auto rename when add new folder and it's name exists
+- Improved: Security
+
+= Oct 22, 2025 - Version 6.5.1 =
+- Improved: Security (Access Control Authenticated (Subscriber+))
+- Fixed: Inputs were not working properly
+
+= Oct 17, 2025 – Version 6.5.0 =
+- Added: Double click folder to rename
+- Improved: Security for Clear All Data function
+
+= Aug 4, 2025 – Version 6.4.9 =
+- Added: Accessibility improvements based on WCAG guidelines
+- Fixed: Security
+
+= Apr 19, 2025 – Version 6.4.8 =
+- Added: FileBird Gallery Element for WPBakery Page Builder (PRO)
+- Added: Support Import/Export Custom Post Types (PRO)
+
 = Mar 19, 2025 – Version 6.4.7 =
 - Improved: Code for Performance and maintainability
 
@@ -218,7 +238,7 @@ Happy Organizing! 😍
 - Fixed: Security (reported by researcher Revan Arifio)
 
 = Dec 11, 2024 - Version 6.4.2.1 =
-- Fixed: Zoom out feature in Gutenberg edior is disabled
+- Fixed: Zoom out feature in Gutenberg editor is disabled
 - Updated: Block uses Tree instead of Select
 
 = Oct 17, 2024 - Version 6.4.2 =
