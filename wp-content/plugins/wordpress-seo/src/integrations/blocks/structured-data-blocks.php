@@ -88,13 +88,13 @@ class Structured_Data_Blocks implements Integration_Interface {
 			\WPSEO_PATH . 'blocks/structured-data-blocks/faq/block.json',
 			[
 				'render_callback' => [ $this, 'optimize_faq_images' ],
-			]
+			],
 		);
 		\register_block_type(
 			\WPSEO_PATH . 'blocks/structured-data-blocks/how-to/block.json',
 			[
 				'render_callback' => [ $this, 'optimize_how_to_images' ],
-			]
+			],
 		);
 	}
 
@@ -130,21 +130,21 @@ class Structured_Data_Blocks implements Integration_Interface {
 			$strings[] = \sprintf(
 			/* translators: %d expands to the number of day/days. */
 				\_n( '%d day', '%d days', $days, 'wordpress-seo' ),
-				$days
+				$days,
 			);
 		}
 		if ( $hours ) {
 			$strings[] = \sprintf(
 			/* translators: %d expands to the number of hour/hours. */
 				\_n( '%d hour', '%d hours', $hours, 'wordpress-seo' ),
-				$hours
+				$hours,
 			);
 		}
 		if ( $minutes ) {
 			$strings[] = \sprintf(
 			/* translators: %d expands to the number of minute/minutes. */
 				\_n( '%d minute', '%d minutes', $minutes, 'wordpress-seo' ),
-				$minutes
+				$minutes,
 			);
 		}
 		return $strings;
@@ -170,13 +170,13 @@ class Structured_Data_Blocks implements Integration_Interface {
 				return \sprintf(
 				/* translators: %s expands to a unit of time (e.g. 1 day). */
 					\__( '%1$s and %2$s', 'wordpress-seo' ),
-					...$elements
+					...$elements,
 				);
 			case 3:
 				return \sprintf(
 				/* translators: %s expands to a unit of time (e.g. 1 day). */
 					\__( '%1$s, %2$s and %3$s', 'wordpress-seo' ),
-					...$elements
+					...$elements,
 				);
 			default:
 				return '';
@@ -202,9 +202,9 @@ class Structured_Data_Blocks implements Integration_Interface {
 
 		return \preg_replace(
 			'/(<p class="schema-how-to-total-time">)(<span class="schema-how-to-duration-time-text">.*<\/span>)(.[^\/p>]*)(<\/p>)/',
-			'<p class="schema-how-to-total-time"><span class="schema-how-to-duration-time-text">' . $duration_text . '&nbsp;</span>' . $duration . '</p>',
+			'<p class="schema-how-to-total-time"><span class="schema-how-to-duration-time-text">' . \esc_html( $duration_text ) . '&nbsp;</span>' . $duration . '</p>',
 			$content,
-			1
+			1,
 		);
 	}
 
@@ -246,58 +246,8 @@ class Structured_Data_Blocks implements Integration_Interface {
 		// Then replace all images with optimized versions in the content.
 		$content = \preg_replace_callback(
 			'/<img[^>]+>/',
-			function ( $matches ) {
-				\preg_match( '/src="([^"]+)"/', $matches[0], $src_matches );
-				if ( ! $src_matches || ! isset( $src_matches[1] ) ) {
-					return $matches[0];
-				}
-				$attachment_id = $this->attachment_src_to_id( $src_matches[1] );
-				if ( $attachment_id === 0 ) {
-					return $matches[0];
-				}
-				$image_size  = 'full';
-				$image_style = [ 'style' => 'max-width: 100%; height: auto;' ];
-				\preg_match( '/style="[^"]*width:\s*(\d+)px[^"]*"/', $matches[0], $style_matches );
-				if ( $style_matches && isset( $style_matches[1] ) ) {
-					$width     = (int) $style_matches[1];
-					$meta_data = \wp_get_attachment_metadata( $attachment_id );
-					if ( isset( $meta_data['height'] ) && isset( $meta_data['width'] ) && $meta_data['height'] > 0 && $meta_data['width'] > 0 ) {
-						$aspect_ratio = ( $meta_data['height'] / $meta_data['width'] );
-						$height       = ( $width * $aspect_ratio );
-						$image_size   = [ $width, $height ];
-					}
-					$image_style = '';
-				}
-
-				/**
-				 * Filter: 'wpseo_structured_data_blocks_image_size' - Allows adjusting the image size in structured data blocks.
-				 *
-				 * @since 18.2
-				 *
-				 * @param string|int[] $image_size     The image size. Accepts any registered image size name, or an array of width and height values in pixels (in that order).
-				 * @param int          $attachment_id  The id of the attachment.
-				 * @param string       $attachment_src The attachment src.
-				 */
-				$image_size = \apply_filters(
-					'wpseo_structured_data_blocks_image_size',
-					$image_size,
-					$attachment_id,
-					$src_matches[1]
-				);
-				$image_html = \wp_get_attachment_image(
-					$attachment_id,
-					$image_size,
-					false,
-					$image_style
-				);
-
-				if ( empty( $image_html ) ) {
-					return $matches[0];
-				}
-
-				return $image_html;
-			},
-			$content
+			[ $this, 'replace_image_with_optimized_version' ],
+			$content,
 		);
 
 		if ( ! $this->registered_shutdown_function ) {
@@ -306,6 +256,82 @@ class Structured_Data_Blocks implements Integration_Interface {
 		}
 
 		return $content;
+	}
+
+	/**
+	 * Replaces an image tag with an optimized version while preserving inline alt text.
+	 *
+	 * @param string[] $matches The regex matches from preg_replace_callback.
+	 *
+	 * @return string The optimized image HTML or original if optimization fails.
+	 */
+	private function replace_image_with_optimized_version( $matches ) {
+		\preg_match( '/src="([^"]+)"/', $matches[0], $src_matches );
+		if ( ! $src_matches || ! isset( $src_matches[1] ) ) {
+			return $matches[0];
+		}
+		$attachment_id = $this->attachment_src_to_id( $src_matches[1] );
+		if ( $attachment_id === 0 ) {
+			return $matches[0];
+		}
+
+		// Extract the alt text from the original image HTML, only if an alt attribute is present.
+		$has_alt = (bool) \preg_match( '/alt="([^"]*)"/', $matches[0], $alt_matches );
+
+		$image_size  = 'full';
+		$image_attrs = [
+			'style' => 'max-width: 100%; height: auto;',
+		];
+
+		// Only override alt when the original image had an explicit alt attribute.
+		if ( $has_alt ) {
+			// Decode HTML entities since wp_get_attachment_image() will encode them again.
+			$image_attrs['alt'] = \html_entity_decode( $alt_matches[1], ( \ENT_QUOTES | \ENT_HTML5 ), 'UTF-8' );
+		}
+
+		\preg_match( '/style="[^"]*width:\s*(\d+)px[^"]*"/', $matches[0], $style_matches );
+		if ( $style_matches && isset( $style_matches[1] ) ) {
+			$width     = (int) $style_matches[1];
+			$meta_data = \wp_get_attachment_metadata( $attachment_id );
+			if ( isset( $meta_data['height'] ) && isset( $meta_data['width'] ) && $meta_data['height'] > 0 && $meta_data['width'] > 0 ) {
+				$aspect_ratio = ( $meta_data['height'] / $meta_data['width'] );
+				$height       = ( $width * $aspect_ratio );
+				$image_size   = [ $width, $height ];
+			}
+			// When using a specific image size, don't include the style attribute.
+			$image_attrs = [];
+			if ( $has_alt ) {
+				$image_attrs['alt'] = \html_entity_decode( $alt_matches[1], ( \ENT_QUOTES | \ENT_HTML5 ), 'UTF-8' );
+			}
+		}
+
+		/**
+		 * Filter: 'wpseo_structured_data_blocks_image_size' - Allows adjusting the image size in structured data blocks.
+		 *
+		 * @since 18.2
+		 *
+		 * @param string|int[] $image_size     The image size. Accepts any registered image size name, or an array of width and height values in pixels (in that order).
+		 * @param int          $attachment_id  The id of the attachment.
+		 * @param string       $attachment_src The attachment src.
+		 */
+		$image_size = \apply_filters(
+			'wpseo_structured_data_blocks_image_size',
+			$image_size,
+			$attachment_id,
+			$src_matches[1],
+		);
+		$image_html = \wp_get_attachment_image(
+			$attachment_id,
+			$image_size,
+			false,
+			$image_attrs,
+		);
+
+		if ( empty( $image_html ) ) {
+			return $matches[0];
+		}
+
+		return $image_html;
 	}
 
 	/**
@@ -377,10 +403,26 @@ class Structured_Data_Blocks implements Integration_Interface {
 	 * @return void
 	 */
 	private function add_images_from_attributes_to_used_cache( $post_id, $elements, $key ) {
-		// First grab all image IDs from the attributes.
+		// First, grab all image IDs from the attributes.
 		$images = [];
 		foreach ( $elements as $element ) {
-			if ( ! isset( $element[ $key ] ) ) {
+			// Check if the key "images" exists in any of the elements, grab the image IDs.
+			if ( isset( $element['images'] ) && \is_array( $element['images'] ) && \count( $element['images'] ) > 0 ) {
+				$image_data = $element['images'];
+				foreach ( $image_data as $image ) {
+					if ( ! isset( $image['type'] ) || $image['type'] !== 'img' ) {
+						continue;
+					}
+
+					if ( ! isset( $image['key'] ) || ! isset( $image['props']['src'] ) ) {
+						continue;
+					}
+
+					$images[ $image['props']['src'] ] = (int) $image['key'];
+				}
+			}
+			// Don't process the key again if we've already processed the "images" key.
+			if ( ! isset( $element[ $key ] ) || ! \is_array( $element[ $key ] ) || isset( $element['images'] ) ) {
 				continue;
 			}
 			if ( isset( $element[ $key ] ) && \is_array( $element[ $key ] ) ) {

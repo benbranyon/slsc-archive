@@ -147,4 +147,21 @@ class Robots_Txt_Presenter extends Abstract_Presenter {
 
 		return $robots_txt_content;
 	}
+
+	/**
+	 * Handles adding schema map content to the robots txt content.
+	 *
+	 * @phpcs:disable VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
+	 *
+	 * @deprecated 27.5
+	 * @codeCoverageIgnore
+	 *
+	 * @param string $robots_txt_content The current working robots txt string.
+	 *
+	 * @return string
+	 */
+	private function handle_schema_maps( $robots_txt_content ) {
+		\_deprecated_function( __METHOD__, 'Yoast SEO 27.5' );
+		return '';
+	}
 }
