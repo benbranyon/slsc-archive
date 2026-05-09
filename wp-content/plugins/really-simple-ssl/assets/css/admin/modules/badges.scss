@@ -13,34 +13,89 @@
     margin: auto auto;
     font-size: var(--rsp-fs-100);
 
-    &.rsp-dark {
+    &.rsssl-dark {
       background-color: var(--rsp-black);
       color: var(--rsp-white);
     }
 
-    &.rsp-low {
+    &.rsssl-low {
       background-color: var(--rsp-yellow-faded);
       color: var(--rsp-black);
     }
 
-    &.rsp-medium {
+    &.rsssl-medium {
       background-color: var(--rsp-yellow);
       color: var(--rsp-black);
     }
 
-    &.rsp-high {
+    &.rsssl-high {
       background-color: var(--rsp-red-faded);
       color: var(--rsp-black);
     }
 
-    &.rsp-critical {
+    &.rsssl-critical {
       background-color: var(--rsp-red);
       color: var(--rsp-white);
     }
 
-    &.rsp-success {
+    &.rsssl-success {
       background-color: var(--rsp-color-success);
       color: var(--rsp-white);
+    }
+
+    &.rsssl-default {
+      background-color: var(--rsp-grey-200);
+      color:black;
+    }
+  }
+
+  .rsssl-badge-large {
+    --badge-height: 28px;
+    height: var(--badge-height);
+    line-height: var(--badge-height);
+    padding: 0 10px;
+    min-width: 80px;
+    text-align: center;
+    border-radius: var(--rsp-border-radius-xs);
+    color: var(--rsp-white);
+    display: table;
+    margin: auto auto;
+    font-size: var(--rsp-fs-300);
+    font-weight: 400;
+
+    &.rsssl-dark {
+      background-color: var(--rsp-black);
+      color: var(--rsp-white);
+    }
+
+    &.rsssl-risk-level-low {
+      background-color: var(--rsp-yellow-faded);
+      color: var(--rsp-black);
+    }
+
+    &.rsssl-risk-level-medium {
+      background-color: var(--rsp-yellow);
+      color: var(--rsp-black);
+    }
+
+    &.rsssl-risk-level-high {
+      background-color: var(--rsp-red-faded);
+      color: var(--rsp-black);
+    }
+
+    &.rsssl-risk-level-critical {
+      background-color: var(--rsp-red);
+      color: var(--rsp-white);
+    }
+
+    &.rsssl-success {
+      background-color: var(--rsp-color-success);
+      color: var(--rsp-white);
+    }
+
+    &.rsssl-default {
+      background-color: var(--rsp-grey-200);
+      color:black;
     }
   }
 }

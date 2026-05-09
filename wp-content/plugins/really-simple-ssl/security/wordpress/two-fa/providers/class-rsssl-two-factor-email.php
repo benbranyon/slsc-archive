@@ -90,6 +90,15 @@ class Rsssl_Two_Factor_Email extends Rsssl_Two_Factor_Provider implements Rsssl_
         new Rsssl_Email_Controller($namespace, $version, $featureVersion);
     }
 
+    /**
+     * Ensure PHP session is started.
+     */
+    public static function ensure_session_started() {
+        if ( PHP_SAPI !== 'cli' && ! headers_sent() && ! session_id() ) {
+            session_start();
+        }
+    }
+
 	/**
 	 * Returns the name of the provider.
 	 *
@@ -252,8 +261,9 @@ class Rsssl_Two_Factor_Email extends Rsssl_Two_Factor_Provider implements Rsssl_
 	 * @return void
 	 * @since 0.1-dev
 	 */
-	public function generate_and_email_token( WP_User $user, $profile = false ): void {
-		$token = $this->generate_token( $user->ID );
+	public function generate_and_email_token( WP_User $user, $profile = false, $is_resend = false ): void {
+        self::ensure_session_started();
+        $token = $this->generate_token( $user->ID );
 
         $skip_two_fa_url = Rsssl_Two_Factor_Settings::rsssl_one_time_login_url( $user->ID, false, $profile );
 		// Add skip button to email content.
@@ -330,7 +340,19 @@ class Rsssl_Two_Factor_Email extends Rsssl_Two_Factor_Provider implements Rsssl_
 		$mailer->title             = __( 'Hi', 'really-simple-ssl' ) . ' ' . $user->display_name . ',';
 		$mailer->message           = $message;
 		$mailer->send_mail();
+
+        if ( $is_resend ) {
+            $_SESSION['rsssl_email_resent'] = true;
+        }
 	}
+
+    public static function maybe_show_email_resend_notice( $user ) {
+        self::ensure_session_started();
+        if ( ! empty( $_SESSION['rsssl_email_resent'] ) ) {
+            echo '<div class="notice notice-success" style="margin-bottom:16px;"><p>' . esc_html__( 'A new verification code has been sent to your email address.', 'really-simple-ssl' ) . '</p></div>';
+            unset( $_SESSION['rsssl_email_resent'] );
+        }
+    }
 
 	/**
 	 * Prints the form that prompts the user to authenticate.
@@ -355,11 +377,9 @@ class Rsssl_Two_Factor_Email extends Rsssl_Two_Factor_Provider implements Rsssl_
 		<p>
 			<label for="rsssl-authcode"><?php esc_html_e( 'Verification Code:', 'really-simple-ssl' ); ?></label>
 			<input type="text" inputmode="numeric" name="rsssl-two-factor-email-code" id="rsssl-authcode" class="input rsssl-authcode" value="" size="20" pattern="[0-9 ]*" placeholder="1234 5678" data-digits="8" />
-			<?php submit_button( __( 'Log In', 'really-simple-ssl' ) ); ?>
 		</p>
-		<p class="rsssl-two-factor-email-resend">
-			<input type="submit" class="button" name="<?php echo esc_attr( self::RSSSL_INPUT_NAME_RESEND_CODE ); ?>" value="<?php esc_attr_e( 'Resend Code', 'really-simple-ssl' ); ?>" />
-		</p>
+		<?php submit_button( __( 'Log In', 'really-simple-ssl' ), 'primary', 'submit' ); ?>
+		<?php submit_button( __( 'Resend Code', 'really-simple-ssl' ), 'secondary', self::RSSSL_INPUT_NAME_RESEND_CODE ); ?>
 		<script type="text/javascript">
 			setTimeout( function(){
 				var d;
@@ -407,7 +427,7 @@ class Rsssl_Two_Factor_Email extends Rsssl_Two_Factor_Provider implements Rsssl_
 	 */
 	public function pre_process_authentication( $user ): bool {
 		if ( isset( $user->ID ) && isset( $_REQUEST[ self::RSSSL_INPUT_NAME_RESEND_CODE ] ) ) {
-			$this->generate_and_email_token( $user );
+			$this->generate_and_email_token( $user, false, true );
 			return true;
 		}
 
@@ -494,15 +514,38 @@ class Rsssl_Two_Factor_Email extends Rsssl_Two_Factor_Provider implements Rsssl_
 		if ( ! $user->exists() ) {
 			return false;
 		}
-		$user_roles     = $user->roles;
-		$optional_roles = rsssl_get_option( 'two_fa_enabled_roles_email' );
-		if ( empty( $optional_roles ) ) {
-			$optional_roles = array();
-		}
+
 		if ( 'disabled' === Rsssl_Two_Factor_Settings::get_user_status( 'email', $user->ID ) ) {
 			return false;
 		}
-		return in_array( $user_roles[0], $optional_roles, true );
+
+		$optional_roles = (array) rsssl_get_option( 'two_fa_enabled_roles_email', array() );
+		$user_roles     = $user->roles;
+
+		// Guard clause: if roles is not an array, no overlap possible.
+		if ( ! is_array( $user_roles ) ) {
+			return false;
+		}
+
+		// For multisite, get the strictest role across all sites.
+		if ( is_multisite() ) {
+			$strict_roles = Rsssl_Two_Factor_Settings::get_strictest_role_across_sites( $user->ID, array( 'email' ) );
+
+			// Array conversion for possible single-role.
+			if ( is_string( $strict_roles ) ) {
+				$strict_roles = ( '' === $strict_roles ) ? null : array( $strict_roles );
+			}
+
+			// No valid roles from multisite, no overlap possible.
+			if ( empty( $strict_roles ) || ! is_array( $strict_roles ) ) {
+				return false;
+			}
+
+			$user_roles = $strict_roles;
+		}
+
+		// Check if any of the user's roles are in the optional roles list.
+		return ! empty( array_intersect( $user_roles, $optional_roles ) );
 	}
 
 	/**
@@ -541,6 +584,11 @@ class Rsssl_Two_Factor_Email extends Rsssl_Two_Factor_Provider implements Rsssl_
 		$title             = esc_html__( 'Email', 'really-simple-ssl' );
 		$description       = esc_html__( 'Receive a code by email', 'really-simple-ssl' );
 
+		// Check if any of the user's roles are in the forced roles list.
+		$user_roles      = ! empty( $user->roles ) && is_array( $user->roles ) ? $user->roles : [];
+		$forced_roles    = (array) rsssl_get_option( 'two_fa_forced_roles' );
+		$is_forcible     = ! empty( array_intersect( $user_roles, $forced_roles ) );
+
 		// Load the template.
 		rsssl_load_template(
 			'selectable-option.php',
@@ -550,7 +598,7 @@ class Rsssl_Two_Factor_Email extends Rsssl_Two_Factor_Provider implements Rsssl_
 				'checked_attribute' => $checked_attribute,
 				'title'             => $title,
 				'type'              => 'email', // Used this to identify the provider.
-				'forcible'          => in_array( $user->roles[0], (array) rsssl_get_option( 'two_fa_forced_roles' ), true ),
+				'forcible'          => $is_forcible,
 				'description'       => $description,
 				'user'              => $user,
 			),
@@ -571,14 +619,29 @@ class Rsssl_Two_Factor_Email extends Rsssl_Two_Factor_Provider implements Rsssl_
 			return false;
 		}
 
-        // Get and normalize the user roles.
+        // Get the user roles.
         $user_roles = $user->roles;
+
+        // Guard clause: if roles is not an array, no overlap possible.
         if ( ! is_array( $user_roles ) ) {
-            $user_roles = array();
+            return false;
         }
 
+        // For multisite, get the strictest role across all sites.
         if ( is_multisite() ) {
-            $user_roles = Rsssl_Two_Factor_Settings::get_strictest_role_across_sites($user->ID, ['email']);
+            $strict_roles = Rsssl_Two_Factor_Settings::get_strictest_role_across_sites( $user->ID, array( 'email' ) );
+
+            // Array conversion for possible single-role.
+            if ( is_string( $strict_roles ) ) {
+                $strict_roles = ( '' === $strict_roles ) ? null : array( $strict_roles );
+            }
+
+            // No valid roles from multisite, no overlap possible.
+            if ( empty( $strict_roles ) || ! is_array( $strict_roles ) ) {
+                return false;
+            }
+
+            $user_roles = $strict_roles;
         }
 
         // Get and normalize enabled roles.
@@ -587,15 +650,8 @@ class Rsssl_Two_Factor_Email extends Rsssl_Two_Factor_Provider implements Rsssl_
             $enabled_roles = array();
         }
 
-        // Return true if one of the user roles is in the enabled roles.
-        if ( (count($user_roles) > 1) || is_multisite() ) {
-            return count(array_intersect($user_roles, $enabled_roles)) > 0;
-        }
-
-        // If the user role is in the enabled roles, return true.
-        $firstKey = ( empty($user_roles) ? 0 : array_key_first($user_roles) );
-        $firstFoundRole = $user_roles[$firstKey];
-		return in_array( $firstFoundRole, $enabled_roles, true );
+        // Check if any user role is in the enabled roles list.
+        return ! empty( array_intersect( $user_roles, $enabled_roles ) );
 	}
 
     public static function is_configured( WP_User $user ): bool {
@@ -618,3 +674,4 @@ class Rsssl_Two_Factor_Email extends Rsssl_Two_Factor_Provider implements Rsssl_
         delete_user_meta( $user_id, '_rsssl_two_factor_nonce' );
     }
 }
+

@@ -160,7 +160,7 @@ function rsssl_menu() {
 									'helpLink'             => 'instructions/configuring-the-content-security-policy/',
 									'premium'              => true,
 									'premium_title'        => 'Source Directives with Learning Mode',
-									'premium_text'         => __( "Allow only necessary third party resources to be loaded on your website, thus preventing common attacks. Use our unique learning mode to automatically configure your Content Security Policy.", 'really-simple-ssl' ),
+									'premium_text'         => __( "Allow only necessary third-party resources to be loaded on your website, thus preventing common attacks. Use our unique learning mode to automatically configure your Content Security Policy.", 'really-simple-ssl' ),
 									'title'                => 'Source Directives',
 								]
 							],
@@ -222,7 +222,7 @@ function rsssl_menu() {
 									'premium' => true,
 									'helpLink' => 'instructions/about-vulnerabilities#measures',
 									'premium_title' => __( "Automated Measures", 'really-simple-ssl' ),
-									'premium_text' => __( "Maintain peace of mind with our simple, but effective automated measures when vulnerabilities are discovered. When needed Really Simple Security will force update or quarantaine vulnerable components, on your terms!", 'really-simple-ssl' ),
+									'premium_text' => __( "Maintain peace of mind with our simple, but effective automated measures when vulnerabilities are discovered. When needed Really Simple Security will force update or quarantine vulnerable components, on your terms!", 'really-simple-ssl' ),
 								],
 							],
 						],
@@ -715,7 +715,7 @@ function rsssl_menu() {
 					'id'         => 'le-system-status',
 					'group_id'         => 'le-system-status',
 					'title'      => __('System status', 'really-simple-ssl'),
-					'intro'      => __('Letʼs Encrypt is a free, automated and open certificate authority brought to you by the nonprofit Internet Security Research Group (ISRG).',
+					'intro'      => __('Letʼs Encrypt is a free, automated and open certificate authority brought to you by the non-profit Internet Security Research Group (ISRG).',
 						'really-simple-ssl'),
 					'helpLink'   => 'about-lets-encrypt',
 					'tests_only' => true,
@@ -789,21 +789,30 @@ function rsssl_add_url_param_ids( array $menu_items ): array {
 	return $menu_items;
 }
 
-function rsssl_get_url_ref(){
-	if ( !defined('HBRW_PLATFORM_ID') ) {
+function rsssl_get_url_ref() {
+	if (defined('rsssl_pro')) {
 		return false;
 	}
 
-	if ( defined( 'rsssl_pro') ) {
-		return false;
-	}
+    $id = 0;
+    if (defined('HBRW_PLATFORM_ID') && !empty(HBRW_PLATFORM_ID)) {
+        $id = (int) HBRW_PLATFORM_ID;
+    }
+    if (defined('EXTENDIFY_PARTNER_ID') && !empty(EXTENDIFY_PARTNER_ID)) {
+        $id = 3; // hard reference to Extendify platform
+    }
 
-	$param_ids = [
-		1 => 483,//Combell
-		2 => 492,//Easyhost
+    if (empty($id)) {
+        return false;
+    }
+
+	$references = [
+		1 => 483, // Combell
+		2 => 492, // Easyhost
+		3 => 673, // Extendify
 	];
-	$id = (int) HBRW_PLATFORM_ID;
-	return $param_ids[ $id ] ?? false;
+
+	return $references[$id] ?? false;
 }
 
 function rsssl_link( $slug = 'pro', $mtm_campaign = 'notification', $mtm_src = 'free', $discount = '' ): string {
@@ -819,6 +828,14 @@ function rsssl_link( $slug = 'pro', $mtm_campaign = 'notification', $mtm_src = '
 	if ( (int) $ref > 0 ) {
 		$url = add_query_arg( 'ref', $ref, $url );
 	}
+
+    // Add non-human-readable ID as the campaign
+    if ( ! defined( 'rsssl_pro' ) && defined( 'EXTENDIFY_PARTNER_ID' ) && ! empty( EXTENDIFY_PARTNER_ID ) ) {
+        $campaign = RSSSL()->admin->encrypt( EXTENDIFY_PARTNER_ID, 'string', 'C6E297149ABB6' );
+        if ( ! empty( $campaign ) ) {
+            $url = add_query_arg( 'campaign', sanitize_text_field( $campaign ), $url );
+        }
+    }
 
 	// Add discount code separately if provided
 	if ( ! empty( $discount ) ) {

@@ -121,7 +121,7 @@ foreach ( $variables_to_check as $var ) {
                            data-digits="8"/>
                 </p>
                 <p class="rsssl-two-factor-email-resend">
-                    <button class="button"
+                    <button type="button" class="button"
                             id="<?php echo esc_attr( Rsssl_Two_Factor_Email::RSSSL_INPUT_NAME_RESEND_CODE ); ?>"
                             name="<?php echo esc_attr( Rsssl_Two_Factor_Email::RSSSL_INPUT_NAME_RESEND_CODE ); ?>"><?php esc_attr_e( 'Resend Code', 'really-simple-ssl' ); ?></button>
                 </p>

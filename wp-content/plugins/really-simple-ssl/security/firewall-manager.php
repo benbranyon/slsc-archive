@@ -1,48 +1,93 @@
 <?php
 defined( 'ABSPATH' ) || die();
 
+use RSSSL\Security\RSSSL_Htaccess_File_Manager;
+use RSSSL\Pro\Security\WordPress\Rsssl_Geo_Block;
+
 /**
  * Class to handle the creation and include of the firewall
  */
 class rsssl_firewall_manager {
 	/**
-	 * Firewall object
-	 *
-	 * @var rsssl_firewall_manager
+	 * Marker string for .htaccess rules related to auto prepend file.
 	 */
-	private static $this;
+	private const HTACCESS_MARKER_PREPEND = 'Really Simple Auto Prepend File';
+	/**
+	 * Firewall object
+	 */
+	private static rsssl_firewall_manager $this;
+
+	/**
+	 * The htaccess file manager
+	 */
+	public RSSSL_Htaccess_File_Manager $htAccessFile;
 	/**
 	 * File
 	 *
 	 * @var string
 	 */
-	private $file = WP_CONTENT_DIR . '/advanced-headers.php';
+	private $file;
 	/**
 	 * If we can use a dynamic path
 	 *
 	 * @var bool
 	 */
-	private $use_dynamic_path = WP_CONTENT_DIR === ABSPATH . 'wp-content';
-
-	//rules to add to the firewall.
-	private $rules;
-
+	private $dynamic_path;
 	/**
-	 * Our constructor
+	 * Path to the firewall.php file, filterable.
+	 *
+	 * @var string
 	 */
-	public function __construct() {
+	private string $firewall_file_path;
+	/**
+	 * Rules to add to the firewall.
+	 *
+	 * @var string
+	 */
+	private $rules;
+	/**
+	 * The WP_Filesystem instance, used for file operations.
+	 *
+	 */
+	private $wp_filesystem;
+
+	public function __construct(RSSSL_Htaccess_File_Manager $htaccessFile) {
 
 		if ( isset( self::$this ) ) {
 			wp_die();
 		}
 		self::$this = $this;
 
+		// Store the injected htaccess file manager
+		$this->htAccessFile = $htaccessFile;
+
+		// Set dynamic path detection dynamically to handle environment changes
+		$this->dynamic_path = $this->get_dynamic_path();
+
+		// Determine firewall.php path, allowing custom content dir or fallback.
+		if ( $this->dynamic_path ) {
+			$wpContentPath = ABSPATH . 'wp-content/';
+		} else {
+			$wpContentPath = WP_CONTENT_DIR . '/';
+		}
+
+		$this->firewall_file_path = apply_filters(
+			'rsssl_firewall_file_path',
+			$wpContentPath . 'firewall.php'
+		);
+
+		// Set the file path dynamically so we can detect WP_CONTENT_DIR changes
+		$this->file = $this->get_advanced_headers_path();
+
 		// trigger this action to force rules update
 		add_action( 'rsssl_update_rules', array( $this, 'install' ), 10 );
 		add_action( 'rsssl_after_saved_fields', array( $this, 'install' ), 100 );
 		add_action( 'rsssl_deactivate', array( $this, 'uninstall' ), 20 );
+
+		// Proactively check for environment changes on admin loads
+		add_action( 'admin_init', array( $this, 'maybe_regenerate_firewall' ), 5 );
+
 		add_filter( 'rsssl_notices', array( $this, 'notices' ) );
-		add_filter( 'before_rocket_htaccess_rules', array( $this, 'add_htaccess_rules_before_wp_rocket' ), 999 );
 
 		//handle activation and deactivation of wp rocket
 		add_action( 'rocket_activation', array( $this, 'remove_prepend_file_in_htaccess' ) );
@@ -65,6 +110,11 @@ class rsssl_firewall_manager {
 	 * @return void
 	 */
 	public function install(): void {
+		// Don't regenerate files during deactivation
+		if ( doing_action( 'rsssl_deactivate' ) ) {
+			return;
+		}
+
 		if ( ! rsssl_admin_logged_in() ) {
 			return;
 		}
@@ -79,17 +129,20 @@ class rsssl_firewall_manager {
 
 		// no rules? remove the file.
 		if ( empty( trim( $this->rules ) ) ) {
-			// $this->delete_file();
 			$this->remove_prepend_file_in_htaccess();
 			$this->remove_prepend_file_in_wp_config();
 			return;
 		}
+
 		// update the file to be included.
 		$this->update_firewall( $this->rules );
 
 		$this->include_prepend_file_in_wp_config();
 		if ( $this->uses_htaccess() ) {
-			$this->include_prepend_file_in_htaccess();
+			// only include in the admin_init, to prevent issues with the htaccess file not being writable.
+			if( current_filter() !== 'plugins_loaded' ) {
+				$this->include_prepend_file_in_htaccess();
+			}
 		}
 
 		if ( $this->has_user_ini_file() ) {
@@ -115,7 +168,44 @@ class rsssl_firewall_manager {
 		$this->remove_prepend_file_in_wp_config();
 		$this->remove_auto_prepend_file_in_user_ini();
 
-		$this->delete_file();
+		$this->empty_file();
+		$this->delete_test_file();
+
+		// Delete firewall.php file using the existing handler
+		if ( class_exists( '\RSSSL\Pro\Security\WordPress\Firewall\Rsssl_Firewall_File_Handler' ) ) {
+			$firewall_handler = new \RSSSL\Pro\Security\WordPress\Firewall\Rsssl_Firewall_File_Handler();
+			$firewall_handler->delete();
+		}
+	}
+
+	/**
+	 * Proactively check for environment changes on admin loads
+	 * This ensures firewall regeneration after site clones/migrations
+	 *
+	 * @return void
+	 */
+	public function maybe_regenerate_firewall(): void {
+
+		if ( ! rsssl_user_can_manage() ) {
+			return;
+		}
+
+		// Only check if we have firewall rules that need to be active
+		if ( ! $this->has_rules() ) {
+			return;
+		}
+
+		// Only run the check if environment has changed
+		if ( $this->should_regenerate_firewall() ) {
+			// Trigger the full installation process for firewall.php
+			$this->install();
+			// Also generate the Geo Block firewall settings
+			$fireWallSettingIsEnabled = rsssl_get_option( 'enable_firewall', false );
+			if ( $fireWallSettingIsEnabled ) {
+				$geoBlock = Rsssl_Geo_Block::get_instance();
+				$geoBlock->generate_firewall_rules();
+			}
+		}
 	}
 
 	/**
@@ -126,28 +216,39 @@ class rsssl_firewall_manager {
 	 * @return bool
 	 */
 	private function file_exists( string $file ): bool {
-		return file_exists( $file );
-		// $wp_filesystem = $this->init_file_system();
-		// return $wp_filesystem->is_file($this->file);
+		$wp_filesystem = $this->get_file_system();
+
+		// Use WP Filesystem if available, otherwise fall back to direct operations
+		return $wp_filesystem ? $wp_filesystem->is_file( $file ) : file_exists( $file );
 	}
 
 	/**
-	 * Initialize the WP_Filesystem
+	 * Get the WP_Filesystem instance with lazy loading
 	 *
 	 * @return false|WP_Filesystem_Base
 	 */
-	private function init_file_system() {
+	private function get_file_system() {
+		// Return cached instance if available
+		if ( $this->wp_filesystem !== null ) {
+			return $this->wp_filesystem;
+		}
+
 		if ( ! function_exists( 'WP_Filesystem' ) ) {
 			include_once ABSPATH . 'wp-admin/includes/file.php';
 		}
 		if ( false === ( $creds = request_filesystem_credentials( site_url(), '', false, false, null ) ) ) {
+			$this->wp_filesystem = false;
 			return false; // stop processing here.
 		}
 		global $wp_filesystem;
 		if ( ! WP_Filesystem( $creds ) ) {
 			// request_filesystem_credentials(site_url(), '', true, false, null);//phpcs:ingore
+			$this->wp_filesystem = false;
 			return false;
 		}
+
+		// Cache the instance
+		$this->wp_filesystem = $wp_filesystem;
 		return $wp_filesystem;
 	}
 
@@ -158,10 +259,12 @@ class rsssl_firewall_manager {
 	 *
 	 * @return void
 	 */
-	public function update_firewall( string $rules ): void {
+	public function update_firewall( string $rules ): void
+	{
 		if ( ! rsssl_admin_logged_in() ) {
 			return;
 		}
+
 		$contents  = '<?php' . "\n";
 		$contents .= '/**' . "\n";
 		$contents .= '* This file is created by Really Simple Security' . "\n";
@@ -179,6 +282,15 @@ class rsssl_firewall_manager {
 		//if already included at some point, don't execute again.
 		$contents .= 'if ( defined("RSSSL_HEADERS_ACTIVE" ) ) return;' . "\n";
 		$contents .= 'define( "RSSSL_HEADERS_ACTIVE", true );' . "\n";
+
+		// If the main firewall (firewall.php) is enabled, add the include directive for it.
+		if ( rsssl_get_option( 'enable_firewall', false ) ) {
+			$firewallFilePath = $this->firewall_file_path;
+			$contents        .= 'if ( file_exists( "' . $firewallFilePath . '" ) ) {' . "\n";
+			$contents        .= '    require_once "' . $firewallFilePath . '";' . "\n";
+			$contents        .= '}' . "\n\n";
+		}
+
 		$contents .= "//RULES START\n" . $rules;
 
 		$this->put_contents( $this->file, $contents );
@@ -197,19 +309,23 @@ class rsssl_firewall_manager {
 			return;
 		}
 
-		if ( !file_exists($file) || $this->is_writable($file)) {
-			// $wp_filesystem = $this->init_file_system();
-			// $result = $wp_filesystem->put_contents($contents, $this->file);
-			file_put_contents( $file, $contents );//phpcs:ignore
-		} else if ( !$this->is_writable($file)) {
+		// Check if file is writable (or doesn't exist yet, which is fine)
+		if ( $this->file_exists( $file ) && ! $this->is_writable( $file ) ) {
 			return;
 		}
 
-		//only chmod other files than .htaccess and wpconfig. We leave these as is.
-		if ( strpos($file, 'htaccess') === false || strpos($file, 'wp-config.php') === false ) {
-			if ( $this->file_exists( $this->file) ) {
-				chmod( $this->file, 0644 );//phpcs:ignore
-			}
+		$wp_filesystem = $this->get_file_system();
+
+		if ( $wp_filesystem === false ) {
+			file_put_contents( $file, $contents );//phpcs:ignore
+			return;
+		}
+
+		$wp_filesystem->put_contents( $file, $contents );
+
+		// Only chmod files other than .htaccess and wp-config.php
+		if ( strpos($file, 'htaccess') === false && strpos($file, 'wp-config.php') === false ) {
+			$wp_filesystem->chmod( $file, 0644 );
 		}
 	}
 
@@ -221,28 +337,72 @@ class rsssl_firewall_manager {
 	 * @return string
 	 */
 	private function get_contents( string $file ): string {
-		if ( ! $this->file_exists( $file ) ) {
+		// Validate that file path is not empty
+		if ( empty( $file ) ) {
 			return '';
 		}
-		// $wp_filesystem = $this->init_file_system();
-		// $result = $wp_filesystem->get_contents($file);
-		return file_get_contents( $file );//phpcs:ignore
+
+		$wp_filesystem = $this->get_file_system();
+
+		if ( $wp_filesystem === false ) {
+			return file_exists( $file ) ? file_get_contents( $file ) : '';//phpcs:ignore
+		}
+
+		$result = $wp_filesystem->get_contents( $file );
+		return $result ? $result : '';
 	}
+
 	/**
-	 * Delete a file
+	 * Empty the advanced-headers.php file instead of deleting it.
+	 * This prevents 500 errors when user.ini is cached and still references this file.
 	 *
 	 * @return void
 	 */
-	private function delete_file(): void {
+	private function empty_file(): void {
 		if ( ! rsssl_user_can_manage() ) {
 			return;
 		}
 
-		if ( $this->file_exists( $this->file ) ) {
-			unlink( $this->file );//phpcs:ignore
+		$contents = <<<PHP
+<?php
+// This file was created by Really Simple Security
+// It is no longer used and safe to delete
+PHP;
+
+		$this->put_contents( $this->file, $contents );
+	}
+
+	/**
+	 * Get the path to the advanced-headers-test.php file.
+	 *
+	 * @return string
+	 */
+	private function get_test_file_path(): string {
+		return WP_CONTENT_DIR . '/advanced-headers-test.php';
+	}
+
+	/**
+	 * Delete the advanced-headers-test.php file if it exists.
+	 *
+	 * @return void
+	 */
+	private function delete_test_file(): void {
+		if ( ! rsssl_user_can_manage() ) {
+			return;
 		}
-		// $wp_filesystem = $this->init_file_system();
-		// $wp_filesystem->delete($this->file);
+
+		$test_file = $this->get_test_file_path();
+		if ( ! file_exists( $test_file ) ) {
+			return;
+		}
+
+		$wp_filesystem = $this->get_file_system();
+		if ( $wp_filesystem === false ) {
+			unlink( $test_file );//phpcs:ignore
+			return;
+		}
+
+		$wp_filesystem->delete( $test_file );
 	}
 
 	/**
@@ -286,7 +446,7 @@ class rsssl_firewall_manager {
 		if ( ! function_exists( 'get_home_path' ) ) {
 			include_once ABSPATH . 'wp-admin/includes/file.php';
 		}
-		if ( RSSSL_IS_FLYWHEEL && isset( $_SERVER['DOCUMENT_ROOT'] ) ) {
+		if ( defined('RSSSL_IS_FLYWHEEL') && RSSSL_IS_FLYWHEEL && isset( $_SERVER['DOCUMENT_ROOT'] ) ) {
 			return trailingslashit( $this->sanitize_path( wp_unslash( $_SERVER['DOCUMENT_ROOT'] ) ) );
 		}
 		return get_home_path();
@@ -319,7 +479,8 @@ class rsssl_firewall_manager {
 	 *
 	 * @return void
 	 */
-	public function include_prepend_file_in_htaccess(): void {
+	public function include_prepend_file_in_htaccess(): void
+	{
 		if ( ! $this->file_exists( $this->file ) ) {
 			return;
 		}
@@ -329,61 +490,20 @@ class rsssl_firewall_manager {
 			return;
 		}
 
-        $htaccess_file   = $this->htaccess_path();
-        $rules           = $this->get_htaccess_rules();
-        $pluginBlockStart = "#Begin Really Simple Auto Prepend File\n";
-        $pluginBlockEnd   = "\n#End Really Simple Auto Prepend File\n";
+		$htaccess_file = $this->htaccess_path();
+		if ( !$this->file_exists($htaccess_file) || !$this->is_writable($htaccess_file) ) {
+			return;
+		}
 
-        // Build a regex pattern to target only the plugin's block.
-        $pattern = '/' . preg_quote($pluginBlockStart, '/') . '(.*?)' . preg_quote($pluginBlockEnd, '/') . '/is';
+		$htaccess_manager = new RSSSL_Htaccess_File_Manager();
+		$rules_string = $this->get_htaccess_rules();
 
-        if ( $this->file_exists( $htaccess_file ) ) {
-            $content = $this->get_contents( $htaccess_file );
-            // Remove any existing plugin block.
-            $content = preg_replace( $pattern, '', $content );
-            // Preserve existing WordPress rules (for both single and multisite) while adding the plugin block.
-            $content = $this->preserve_wp_rules( $content, $rules, $pluginBlockStart, $pluginBlockEnd );
-            // Clean up any extra newlines.
-            $content = preg_replace( "/\n\n+/", "\n\n", $content );
-            if ( $this->is_writable( $htaccess_file ) ) {
-                $this->put_contents( $htaccess_file, $content );
-            }
-        }
+		$rule_definition = [
+			'marker' => self::HTACCESS_MARKER_PREPEND,
+			'lines' => empty(trim($rules_string)) ? [] : explode("\n", $rules_string),
+		];
+		$htaccess_manager->write_rule($rule_definition, 'include prepend file in htaccess');
 	}
-
-    /**
-     * Preserve existing WordPress rules while injecting the plugin's firewall block.
-     *
-     * This function extracts the WordPress block (the section between "# BEGIN WordPress" and "# END WordPress"),
-     * temporarily removes it from the .htaccess content, then prepends the plugin's firewall block and re-appends
-     * the WordPress block. This applies to both single and multisite environments.
-     *
-     * @param string $content           The current .htaccess content.
-     * @param string $rules             The firewall rules to inject.
-     * @param string $pluginBlockStart  The starting marker for the plugin block.
-     * @param string $pluginBlockEnd    The ending marker for the plugin block.
-     * @return string                   The updated .htaccess content.
-     */
-    private function preserve_wp_rules( string $content, string $rules, string $pluginBlockStart, string $pluginBlockEnd ): string {
-        $wpBlock = '';
-        // Look for the WordPress block in the content.
-        if ( preg_match( '/(# BEGIN WordPress.*?# END WordPress)/s', $content, $matches ) ) {
-            $wpBlock = $matches[1];
-            // Remove the WordPress block temporarily.
-            $content = str_replace( $wpBlock, '', $content );
-        }
-        $pluginBlock = '';
-        if ( ! empty( trim( $rules ) ) ) {
-            $pluginBlock = $pluginBlockStart . $rules . $pluginBlockEnd;
-        }
-        // Prepend the plugin block to the content.
-        $content = $pluginBlock . "\n" . $content;
-        // Re-append the WordPress block if it was present.
-        if ( ! empty( $wpBlock ) ) {
-            $content .= "\n" . $wpBlock;
-        }
-        return $content;
-    }
 
 	/**
 	 * Get the .htaccess rules for the prepend file
@@ -391,18 +511,19 @@ class rsssl_firewall_manager {
 	 *
 	 * @return string //the string containing the lines of rules
 	 */
-	private function get_htaccess_rules() : string {
+	private function get_htaccess_rules() : string
+	{
 		if ( defined('RSSSL_HTACCESS_SKIP_AUTO_PREPEND') && RSSSL_HTACCESS_SKIP_AUTO_PREPEND ) {
 			return '';
 		}
-        if (isset(RSSSL()->server) ) {
-            $config = RSSSL()->server->auto_prepend_config();
-        } else {
-            $config = get_option('rsssl_auto_prepend_config');
-            if (empty($config)) {
-                return '';
-            }
-        }
+		if (isset(RSSSL()->server) ) {
+			$config = RSSSL()->server->auto_prepend_config();
+		} else {
+			$config = get_option('rsssl_auto_prepend_config');
+			if (empty($config)) {
+				return '';
+			}
+		}
 		$file = addcslashes($this->file, "'");
 		switch ($config) {
 			case 'litespeed':
@@ -429,19 +550,17 @@ class rsssl_firewall_manager {
 
 		$userIni = ini_get('user_ini.filename');
 		if ($userIni) {
-			$rules = array_merge(
+			array_push(
 				$rules,
-				array(
-					sprintf('<Files "%s">', addcslashes($userIni, '"')),
-					'<IfModule mod_authz_core.c>' ,
-					'Require all denied',
-					'</IfModule>',
-					'<IfModule !mod_authz_core.c>',
-					'Order deny,allow',
-					'Deny from all',
-					'</IfModule>',
-					'</Files>',
-				));
+				sprintf( '<Files "%s">',
+					addcslashes( $userIni, '"' ) ),
+				'<IfModule mod_authz_core.c>',
+				'Require all denied', '</IfModule>',
+				'<IfModule !mod_authz_core.c>',
+				'Order deny,allow', 'Deny from all',
+				'</IfModule>',
+				'</Files>'
+			);
 		}
 
 		return implode( "\n", $rules );
@@ -456,9 +575,13 @@ class rsssl_firewall_manager {
 		if ( ! rsssl_user_can_manage() ) {
 			return;
 		}
-		$file    = $this->wpconfig_path();
+		$file = $this->wpconfig_path();
+		if ( empty( $file ) ) {
+			update_option( 'rsssl_firewall_error', 'wpconfig-notfound', false );
+			return;
+		}
 		$content = $this->get_contents( $file );
-		if ( $this->is_writable( $file ) && strpos( $content, 'advanced-headers.php' ) === false ) {
+		if ( strpos( $content, 'advanced-headers.php' ) === false ) {
 			$rule = $this->get_wp_config_rule();
 
 			// if RSSSL comment is found, insert after.
@@ -492,20 +615,26 @@ class rsssl_firewall_manager {
 	 *
 	 * @return void
 	 */
-	public function remove_prepend_file_in_htaccess(): void {
+	public function remove_prepend_file_in_htaccess(): void
+	{
 		if ( ! rsssl_user_can_manage() ) {
 			return;
 		}
-		$start         = '#Begin Really Simple Auto Prepend File' . "\n";
-		$end           = "\n" . '#End Really Simple Auto Prepend File' . "\n";
-		$pattern       = '/' . $start . '(.*?)' . $end . '/is';
-		$htaccess_file = $this->htaccess_path();
-		if ( $this->file_exists( $htaccess_file ) ) {
-			$content = $this->get_contents( $htaccess_file );
-			// remove first, to ensure we are at the top of the file.
-			$content = preg_replace( $pattern, '', $content );
-			$this->put_contents( $htaccess_file, $content );
+
+		// Initialize htAccessFile if not set
+		if ( ! isset($this->htAccessFile) ) {
+			$this->htAccessFile = new RSSSL_Htaccess_File_Manager();
 		}
+
+		// Determine the correct .htaccess file path this instance of firewall manager should use.
+		$specific_htaccess_path = $this->htaccess_path();
+
+		// Ensure the injected htaccess_file_manager service instance is configured to use this specific path.
+		$this->htAccessFile->set_htaccess_file_path($specific_htaccess_path);
+
+		// Call clear_rule on the htaccess_file_manager service.
+		// The service itself is responsible for handling file existence and writability.
+		$this->htAccessFile->clear_rule(self::HTACCESS_MARKER_PREPEND, 'testregel');
 	}
 
 	/**
@@ -519,6 +648,9 @@ class rsssl_firewall_manager {
 		}
 
 		$file = $this->wpconfig_path();
+		if ( empty( $file ) ) {
+			return;
+		}
 		if ( $this->is_writable( $file ) ) {
 			$content = $this->get_contents( $file );
 			$rule    = $this->get_wp_config_rule();
@@ -540,9 +672,10 @@ class rsssl_firewall_manager {
 	 * @return bool
 	 */
 	private function is_writable( $file ): bool {
-		// $wp_filesystem = $this->init_file_system();
-		// return $wp_filesystem->is_writable($file);
-		return is_writable( $file );//phpcs:ignore
+		$wp_filesystem = $this->get_file_system();
+
+		// Use WP Filesystem if available, otherwise fall back to direct operations
+		return $wp_filesystem ? $wp_filesystem->is_writable( $file ) : is_writable( $file );//phpcs:ignore
 	}
 
 	/**
@@ -595,8 +728,6 @@ class rsssl_firewall_manager {
 	public function firewall_write_error() {
 		return get_site_option( 'rsssl_firewall_error' );
 	}
-
-
 
 	/**
 	 * Get the status for the firewall
@@ -665,7 +796,7 @@ class rsssl_firewall_manager {
 	 * @return string
 	 */
 	public function get_wp_config_rule() {
-		if ( $this->use_dynamic_path ) {
+		if ( $this->dynamic_path ) {
 			$rule  = 'if (!defined("RSSSL_HEADERS_ACTIVE") && file_exists( ABSPATH . "wp-content/advanced-headers.php")) {' . "\n";
 			$rule .= "\t" . 'require_once ABSPATH . "wp-content/advanced-headers.php";' . "\n" . '}';
 		} else {
@@ -725,7 +856,7 @@ class rsssl_firewall_manager {
 			$directory = dirname( $filtered_path );
 
 			// Ensure the directory exists before checking for the file.
-			if ( is_dir( $directory ) && file_exists( $filtered_path ) ) {
+			if ( is_dir( $directory ) && $this->file_exists( $filtered_path ) ) {
 				return $filtered_path;
 			}
 		}
@@ -754,21 +885,70 @@ class rsssl_firewall_manager {
 	}
 
 	/**
-	 * Return .htaccess redirect when using WP Rocket
-	 * @return string
+	 * Check if the firewall file should be regenerated
+	 * This detects environment changes like WP Engine clones
+	 * Also returns true if the file does not exist yet
+	 *
+	 * @return bool
 	 */
-	public function add_htaccess_rules_before_wp_rocket($rules) {
-		if ( !file_exists( $this->file ) ) {
-			return $rules;
+	private function should_regenerate_firewall(): bool {
+
+		if ( ! $this->file_exists( $this->file ) ) {
+			return true;
 		}
 
-		$rules = $this->get_htaccess_rules()."\n".$rules;
-		if ( ! empty( $rules ) ) {
-			$start           = '#Begin Really Simple Auto Prepend File' . "\n";
-			$end             = "\n" . '#End Really Simple Auto Prepend File' . "\n";
-			$rules = $start . $rules . $end;
+		// Check if we have stored environment signature
+		$stored_signature = get_option( 'rsssl_firewall_environment_signature' );
+		$current_signature = $this->get_environment_signature();
+
+		// If no stored signature, store it and regenerate
+		if ( ! $stored_signature ) {
+			update_option( 'rsssl_firewall_environment_signature', $current_signature, false );
+			return true;
 		}
-		return $rules;
+
+		// If signature changed, update it and regenerate
+		if ( $stored_signature !== $current_signature ) {
+			update_option( 'rsssl_firewall_environment_signature', $current_signature, false );
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Generate a signature of the current environment
+	 * Used to detect when the site has been cloned or migrated
+	 *
+	 * @return string
+	 */
+	private function get_environment_signature(): string {
+		$signature_parts = array(
+			WP_CONTENT_DIR,
+			ABSPATH,
+			get_home_url(),
+			get_site_url(),
+		);
+
+		return md5( implode( '|', $signature_parts ) );
+	}
+
+	/**
+	 * Get the advanced headers file path
+	 * Always uses WP_CONTENT_DIR which is dynamically set by WordPress
+	 *
+	 * @return string
+	 */
+	private function get_advanced_headers_path(): string {
+		return WP_CONTENT_DIR . '/advanced-headers.php';
+	}
+
+	/**
+	 * Check if we can use a dynamic path for the advanced headers file
+	 * @return string
+	 */
+	private function get_dynamic_path(): string {
+		return WP_CONTENT_DIR === ABSPATH . 'wp-content';
 	}
 
 	/**
@@ -864,6 +1044,9 @@ auto_prepend_file = '%s'
 		}
 
 		$userIniPath = $this->get_user_ini_path();
+		if ($userIniPath === null) {
+			return;
+		}
 		$userIniContent = $this->get_contents( $userIniPath );
 		$userIniContent = preg_replace( '/; BEGIN Really Simple Auto Prepend File.*?; END Really Simple Auto Prepend File/is', '', $userIniContent );
 		$userIniContent = str_replace( 'auto_prepend_file', ';auto_prepend_file', $userIniContent );

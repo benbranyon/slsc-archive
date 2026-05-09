@@ -22,7 +22,7 @@ require_once(rsssl_path.'settings/config/disable-fields-filter.php');
  */
 function rsssl_fix_rest_url_for_wpml($url, $path, $blog_id, $scheme)
 {
-	if (strpos($url, 'reallysimplessl/v') === false) {
+	if (strpos($url, 'really-simple-security/v') === false) {
 		return $url;
 	}
 
@@ -38,6 +38,11 @@ function rsssl_fix_rest_url_for_wpml($url, $path, $blog_id, $scheme)
 	if ($current_language) {
 		if (strpos($url, '/'.$current_language.'/wp-json/')) {
 			$url = str_replace('/'.$current_language.'/wp-json/', '/wp-json/', $url);
+		}
+
+		// Handle plain permalinks
+		if (strpos($url, '/'.$current_language.'/?rest_route=')) {
+			$url = str_replace('/'.$current_language.'/?rest_route=', '/?rest_route=', $url);
 		}
 	}
 
@@ -55,20 +60,39 @@ add_filter('rest_url', 'rsssl_fix_rest_url_for_wpml', 10, 4);
  */
 function rsssl_get_chunk_translations($path = 'settings/build'  ) {
 	//get all files from the settings/build folder
-	$files = scandir(rsssl_path . $path );
+	$base_path = rsssl_path . $path;
+	$files = scandir($base_path );
 	$json_translations = [];
 
 	// filter the filenames to get the JavaScript and asset filenames
 	$jsFilename = '';
 	$assetFilename = '';
+	$candidates = [];
 
 	foreach ($files as $file) {
-		if (strpos($file, 'index.') === 0) {
-			if (substr($file, -3) === '.js') {
-				$jsFilename = $file;
-			} elseif (substr($file, -10) === '.asset.php') {
-				$assetFilename = $file;
+		// Collect build candidates and pick the newest matching index.<version>.js + asset.php pair.
+		if (strpos($file, 'index.') === 0 && substr($file, -10) === '.asset.php') {
+			$asset_file_path = trailingslashit($base_path) . $file;
+			$asset_data = require $asset_file_path;
+			if (!is_array($asset_data) || empty($asset_data['version']) || !is_string($asset_data['version'])) {
+				continue;
 			}
+
+			$version = $asset_data['version'];
+			$js_file = 'index.' . $version . '.js';
+			$js_file_path = trailingslashit($base_path) . $js_file;
+
+			if (!file_exists($js_file_path)) {
+				continue;
+			}
+
+			$mtime = max((int) @filemtime($asset_file_path), (int) @filemtime($js_file_path));
+			$candidates[] = [
+				'version' => $version,
+				'js' => $js_file,
+				'asset' => $file,
+				'mtime' => $mtime,
+			];
 		}
 
 		if (strpos($file, '.js') === false) {
@@ -85,6 +109,16 @@ function rsssl_get_chunk_translations($path = 'settings/build'  ) {
 		}
 		wp_deregister_script( $chunk_handle );
 	}
+
+	// Prefer the newest valid build output.
+	if (!empty($candidates)) {
+		usort($candidates, static function($a, $b) {
+			return ($b['mtime'] ?? 0) <=> ($a['mtime'] ?? 0);
+		});
+		$jsFilename = $candidates[0]['js'];
+		$assetFilename = $candidates[0]['asset'];
+	}
+
 	if (empty($jsFilename) || empty($assetFilename) ) {
 		return [];
 	}
@@ -246,67 +280,6 @@ function rsssl_settings_page()
  *
  * @return void
  */
-function rsssl_rest_api_fallback()
-{
-	$response = $data = [];
-	$error    = $action = $test = $do_action = false;
-
-	if ( ! rsssl_user_can_manage()) {
-		$error = true;
-	}
-	//if the site is using this fallback, we want to show a notice
-	update_option('rsssl_ajax_fallback_active', time(), false);
-	if (isset($_GET['rest_action'])) {
-		$action = sanitize_text_field($_GET['rest_action']);
-		if (strpos($action, 'reallysimplessl/v1/tests/') !== false) {
-			$test = strtolower(str_replace('reallysimplessl/v1/tests/', '', $action));
-		}
-	}
-	$requestData = json_decode(file_get_contents('php://input'), true);
-	if ($requestData) {
-		$action = $requestData['path'] ?? false;
-		$action = sanitize_text_field($action);
-		$data = $requestData['data'] ?? false;
-		if (strpos($action, 'reallysimplessl/v1/do_action/') !== false) {
-			$do_action = strtolower(str_replace('reallysimplessl/v1/do_action/', '', $action));
-		}
-	}
-	if (!$error) {
-		if (strpos($action, 'fields/get') !== false) {
-			$response = rsssl_rest_api_fields_get();
-		} else if (strpos($action, 'fields/set') !== false) {
-			$request = new WP_REST_Request();
-			$response = rsssl_rest_api_fields_set($request, $data);
-		} else if ($test) {
-			$request = new WP_REST_Request();
-			$data = $_GET['data'] ?? false;
-			$data = json_decode(stripcslashes($data));
-			$data = (array)$data;
-			$nonce = isset($_GET['nonce']) ? sanitize_text_field($_GET['nonce']) : false;
-			$id = isset($_GET['id']) ? sanitize_text_field($_GET['id']) : false;
-			$state = isset($_GET['state']) ? sanitize_title($_GET['state']) : false;
-			$request->set_param('test', $test);
-			$request->set_param('state', $state);
-			$request->set_param('id', $id);
-			$request->set_param('nonce', $nonce);
-			//remove
-			foreach ($_GET as $key => $value) {
-				$data[$key] = sanitize_text_field($value);
-			}
-			$response = rsssl_run_test($request, $data);
-		} elseif ($do_action) {
-			$request = new WP_REST_Request();
-			$request->set_param('action', $do_action);
-			$response = rsssl_do_action($request, $data);
-		}
-	}
-	header("Content-Type: application/json");
-	echo json_encode($response);
-	exit;
-}
-
-add_action('wp_ajax_rsssl_rest_api_fallback', 'rsssl_rest_api_fallback');
-
 add_action('rest_api_init', 'rsssl_settings_rest_route', 10);
 function rsssl_settings_rest_route()
 {
@@ -314,7 +287,7 @@ function rsssl_settings_rest_route()
 		return;
 	}
 
-	register_rest_route('reallysimplessl/v1', 'fields/get', array(
+	register_rest_route('really-simple-security/v1', 'fields/get', array(
 		'methods' => 'GET',
 		'callback' => 'rsssl_rest_api_fields_get',
 		'permission_callback' => function () {
@@ -322,7 +295,7 @@ function rsssl_settings_rest_route()
 		}
 	));
 
-	register_rest_route('reallysimplessl/v1', 'fields/set', array(
+	register_rest_route('really-simple-security/v1', 'fields/set', array(
 		'methods' => 'POST',
 		'callback' => 'rsssl_rest_api_fields_set',
 		'permission_callback' => function () {
@@ -330,7 +303,7 @@ function rsssl_settings_rest_route()
 		}
 	));
 
-	register_rest_route('reallysimplessl/v1', 'tests/(?P<test>[a-z\_\-]+)', array(
+	register_rest_route('really-simple-security/v1', 'tests/(?P<test>[a-z\_\-]+)', array(
 		'methods' => 'GET',
 		'callback' => 'rsssl_run_test',
 		'permission_callback' => function () {
@@ -338,7 +311,7 @@ function rsssl_settings_rest_route()
 		}
 	));
 
-	register_rest_route('reallysimplessl/v1', 'do_action/(?P<action>[a-z\_\-]+)', array(
+	register_rest_route('really-simple-security/v1', 'do_action/(?P<action>[a-z\_\-]+)', array(
 		'methods' => 'POST',
 		'callback' => 'rsssl_do_action',
 		'permission_callback' => function () {
@@ -363,13 +336,6 @@ function rsssl_store_ssl_labs($data)
 	return [];
 }
 
-function rsssl_remove_fallback_notice()
-{
-	if (get_option('rsssl_ajax_fallback_active') !== false) {
-		delete_option('rsssl_ajax_fallback_active');
-	}
-}
-
 /**
  * @param WP_REST_Request $request
  * @param array|bool $ajax_data
@@ -382,9 +348,6 @@ function rsssl_do_action($request, $ajax_data = false)
 		return;
 	}
 
-	if (!$ajax_data) {
-		rsssl_remove_fallback_notice();
-	}
 	$action = sanitize_title($request->get_param('action'));
 	$data = $ajax_data !== false ? $ajax_data : $request->get_params();
 
@@ -427,17 +390,22 @@ function rsssl_do_action($request, $ajax_data = false)
 			$response = [];
 			$response['roles'] = $roles;
 			break;
-		case 'get_hosts':
-			$response = [];
-			if ( !class_exists('rsssl_le_hosts')) {
-				require_once( rsssl_path . 'lets-encrypt/config/class-hosts.php');
-				$response['hosts'] = ( new rsssl_le_hosts() )->hosts;
-			} else {
-				$response['hosts'] = RSSSL_LE()->hosts->hosts;
-            }
-			break;
+	case 'get_hosts':
+		$response = [
+			'hosts' => [], // fallback response
+		];
+		if ( function_exists( 'RSSSL_LE' ) ) {
+			$response['hosts'] = RSSSL_LE()->hosts->getKnownHosts();
+		}
+		break;
 		default:
-			$response = apply_filters("rsssl_do_action", [], $action, $data);
+            $response = apply_filters("rsssl_do_action", [], $action, $data);
+	}
+
+	// Backward compatibility: some legacy actions returned the payload at the top-level,
+	// while older Settings code expects it under `data`.
+	if (in_array($action, ['hardening_data'], true) && is_array($response) && !isset($response['data'])) {
+		$response = array_merge(['data' => $response], $response);
 	}
 
 	if (is_array($response)) {
@@ -496,6 +464,11 @@ function rsssl_plugin_actions($data)
 	}
 	$slug = sanitize_title($data['slug']);
 	$action = sanitize_title($data['pluginAction']);
+
+    if (class_exists('rsssl_installer') === false) {
+        require_once( rsssl_path . 'class-installer.php');
+    }
+
 	$installer = new rsssl_installer($slug);
 	if ($action === 'download') {
 		$installer->download_plugin();
@@ -536,9 +509,6 @@ function rsssl_run_test($request, $ajax_data = false)
 {
 	if (!rsssl_user_can_manage()) {
 		return [];
-	}
-	if (!$ajax_data) {
-		rsssl_remove_fallback_notice();
 	}
 	$nonce = $request->get_param('nonce');
 	if (!wp_verify_nonce($nonce, 'rsssl_nonce')) {
@@ -595,6 +565,10 @@ function rsssl_other_plugins_data($slug = false)
 			'title' => 'SimplyBook.me - ' . __("Online Booking System", "really-simple-ssl"),
 		],
 	);
+
+    if (class_exists('rsssl_installer') === false) {
+        require_once( rsssl_path . 'class-installer.php');
+    }
 
 	foreach ($plugins as $index => $plugin) {
 		$installer = new rsssl_installer($plugin['slug']);
@@ -692,21 +666,25 @@ function rsssl_rest_api_fields_set(WP_REST_Request $request, $ajax_data = false)
 	$config_fields = rsssl_fields(false);
 	$config_ids = array_column($config_fields, 'id');
 	foreach ($fields as $index => $field) {
-		$config_field_index = array_search($field['id'], $config_ids);
-		$config_field = $config_fields[$config_field_index];
+		if (!isset($field['id'])) {
+			unset($fields[$index]);
+			continue;
+		}
+		$field_id = sanitize_text_field($field['id']);
+		$config_field_index = array_search($field_id, $config_ids);
 		if ($config_field_index === false) {
 			unset($fields[$index]);
 			continue;
 		}
-		$type = rsssl_sanitize_field_type($field['type']);
+		$config_field = $config_fields[$config_field_index];
+		$type = isset($config_field['type']) ? rsssl_sanitize_field_type($config_field['type']) : false;
         if ($type === false) {
             return [
                 'success' => false,
-                'error'   => 'Invalid field type provided for field ' . sanitize_text_field($field['id']),
+                'error'   => 'Invalid field type configured for field ' . $field_id,
             ];
         }
-		$field_id = sanitize_text_field($field['id']);
-		$value = rsssl_sanitize_field($field['value'], $type, $field_id);
+		$value = rsssl_sanitize_field($field['value'] ?? false, $type, $field_id);
 		//if an endpoint is defined, we use that endpoint instead
 		if (isset($config_field['data_endpoint'])) {
 			//the updateItemId allows us to update one specific item in a field set.
@@ -729,6 +707,8 @@ function rsssl_rest_api_fields_set(WP_REST_Request $request, $ajax_data = false)
 		}
 
 		$field['value'] = $value;
+		$field['id'] = $field_id;
+		$field['type'] = $type;
 		$fields[$index] = $field;
 	}
 

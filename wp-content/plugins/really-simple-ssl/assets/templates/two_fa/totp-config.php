@@ -49,6 +49,6 @@ if (isset($_GET['error']) && $_GET['error'] === 1) {
     </label>
 </p>
 
-<input type="submit" class="button button-primary button-large totp-submit" name="two-factor-totp-submit"
+<input type="button" class="button button-primary button-large totp-submit" name="two-factor-totp-submit"
        id="two-factor-totp-submit"
        value="<?php echo esc_html__('Submit', 'really-simple-ssl'); ?>"/>
