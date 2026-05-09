@@ -1,10 +1,10 @@
 <?php
 
-namespace wpai_acf_add_on\fields\acf\checkbox;
+namespace wpai_acf_add_on_pro\fields\acf\checkbox;
 
 /**
  * Class FieldCheckboxV4
- * @package wpai_acf_add_on\fields\acf\checkbox
+ * @package pmai_acf_add_on\fields\acf\checkbox
  */
 class FieldCheckboxV4 extends FieldCheckbox {
 

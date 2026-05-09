@@ -1,13 +1,13 @@
 <?php
 
-namespace wpai_acf_add_on\fields\acf\radio;
+namespace wpai_acf_add_on_pro\fields\acf\radio;
 
-use wpai_acf_add_on\ACFService;
-use wpai_acf_add_on\fields\Field;
+use pmai_acf_add_on\ACFService;
+use pmai_acf_add_on\fields\Field;
 
 /**
  * Class FieldRadio
- * @package wpai_acf_add_on\fields\acf\radio
+ * @package pmai_acf_add_on\fields\acf\radio
  */
 class FieldRadio extends Field {
 

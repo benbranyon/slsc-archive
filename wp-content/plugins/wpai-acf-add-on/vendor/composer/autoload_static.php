@@ -4,17 +4,25 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit7b201fc9b3018e32bcb49778920a5860
+class ComposerStaticInit2ec555cbe9214632fe839030b4857df6
 {
     public static $prefixLengthsPsr4 = array (
         'w' => 
         array (
-            'wpai_acf_add_on\\' => 16,
+            'wpai_acf_add_on_pro\\' => 20,
+        ),
+        'P' => 
+        array (
+            'PMXI\\AddonInstaller\\' => 20,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'wpai_acf_add_on\\' => 
+        'wpai_acf_add_on_pro\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src',
+        ),
+        'PMXI\\AddonInstaller\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),
@@ -27,9 +35,9 @@ class ComposerStaticInit7b201fc9b3018e32bcb49778920a5860
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit7b201fc9b3018e32bcb49778920a5860::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit7b201fc9b3018e32bcb49778920a5860::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit7b201fc9b3018e32bcb49778920a5860::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit2ec555cbe9214632fe839030b4857df6::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit2ec555cbe9214632fe839030b4857df6::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit2ec555cbe9214632fe839030b4857df6::$classMap;
 
         }, null, ClassLoader::class);
     }

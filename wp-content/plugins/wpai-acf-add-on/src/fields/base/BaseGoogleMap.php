@@ -1,12 +1,12 @@
 <?php
 
-namespace wpai_acf_add_on\fields\base;
+namespace wpai_acf_add_on_pro\fields\base;
 
-use wpai_acf_add_on\fields\Field;
+use pmai_acf_add_on\fields\Field;
 
 /**
  * Class BaseGoogleMap
- * @package wpai_acf_add_on\fields\base
+ * @package pmai_acf_add_on\fields\base
  */
 abstract class BaseGoogleMap extends Field {
 

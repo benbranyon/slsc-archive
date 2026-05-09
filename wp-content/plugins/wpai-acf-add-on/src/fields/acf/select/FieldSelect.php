@@ -1,13 +1,13 @@
 <?php
 
-namespace wpai_acf_add_on\fields\acf\select;
+namespace wpai_acf_add_on_pro\fields\acf\select;
 
-use wpai_acf_add_on\ACFService;
-use wpai_acf_add_on\fields\Field;
+use pmai_acf_add_on\ACFService;
+use pmai_acf_add_on\fields\Field;
 
 /**
  * Class FieldSelect
- * @package wpai_acf_add_on\fields\acf\select
+ * @package pmai_acf_add_on\fields\acf\select
  */
 class FieldSelect extends Field {
 

@@ -1,6 +1,6 @@
 <?php
 
-if (\wpai_acf_add_on\ACFService::isACFNewerThan('5.0.0')){
+if (\pmai_acf_add_on\ACFService::isACFNewerThan('5.0.0')){
 
     if (!empty($field['sub_fields'])){
         foreach ($field['sub_fields'] as $key => $sub_field){ ?>
@@ -11,7 +11,7 @@ if (\wpai_acf_add_on\ACFService::isACFNewerThan('5.0.0')){
                 <td>
                     <div class="inner">
                         <?php
-                        \wpai_acf_add_on\fields\FieldFactory::create($sub_field, $post, $field_name . "[" . $field['key'] . "][rows][ROWNUMBER]")->view();
+                        \pmai_acf_add_on\fields\FieldFactory::create($sub_field, $post, $field_name . "[" . $field['key'] . "][rows][ROWNUMBER]")->view();
                         ?>
                     </div>
                 </td>
@@ -25,7 +25,7 @@ if (\wpai_acf_add_on\ACFService::isACFNewerThan('5.0.0')){
             <td>
                 <div class="inner">
                     <?php
-                    \wpai_acf_add_on\fields\FieldFactory::create($field['sub_field'], $post, $field_name)->view();
+                    \pmai_acf_add_on\fields\FieldFactory::create($field['sub_field'], $post, $field_name)->view();
                     ?>
                 </div>
             </td>

@@ -1,13 +1,13 @@
 <?php
 
-namespace wpai_acf_add_on\fields\acf\group;
+namespace wpai_acf_add_on_pro\fields\acf\group;
 
-use wpai_acf_add_on\ACFService;
-use wpai_acf_add_on\fields\Field;
+use pmai_acf_add_on\ACFService;
+use pmai_acf_add_on\fields\Field;
 
 /**
  * Class FieldGroupV5
- * @package wpai_acf_add_on\fields\acf\group
+ * @package pmai_acf_add_on\fields\acf\group
  */
 class FieldGroupV5 extends Field {
 

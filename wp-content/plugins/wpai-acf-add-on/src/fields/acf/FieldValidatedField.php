@@ -1,12 +1,12 @@
 <?php
 
-namespace wpai_acf_add_on\fields\acf;
+namespace wpai_acf_add_on_pro\fields\acf;
 
-use wpai_acf_add_on\fields\Field;
+use pmai_acf_add_on\fields\Field;
 
 /**
  * Class FieldValidateField
- * @package wpai_acf_add_on\fields\acf
+ * @package pmai_acf_add_on\fields\acf
  */
 class FieldValidateField extends Field {
 
