@@ -99,7 +99,7 @@ class wordfenceScanner {
 				$logOnly = (isset($signatureRow[5]) && !empty($signatureRow[5])) ? $signatureRow[5] : false;
 				$commonStringIndexes = (isset($signatureRow[8]) && is_array($signatureRow[8])) ? $signatureRow[8] : array(); 
 				if (@preg_match('/' . $pattern . '/iS', '') === false) {
-					wordfence::status(1, 'error', sprintf(__('Regex compilation failed for signature %d', 'wordfence'), (int) $id));
+					wordfence::status(1, 'error', sprintf(/* translators: malware signature ID */ __('Regex compilation failed for signature %d', 'wordfence'), (int) $id));
 					unset($sigData['rules'][$key]);
 				}
 				else if (!$logOnly) {
@@ -398,8 +398,8 @@ class wordfenceScanner {
 										'severity' => wfIssues::SEVERITY_CRITICAL,
 										'ignoreP' => $record->realPath,
 										'ignoreC' => $fileSum,
-										'shortMsg' => sprintf(__('File appears to be malicious or unsafe: %s', 'wordfence'), esc_html($record->getDisplayPath())),
-										'longMsg' => $customMessage . ' ' . sprintf(__('The matched text in this file is: %s', 'wordfence'), '<strong style="color: #F00;" class="wf-split-word">' . wfUtils::potentialBinaryStringToHTML((wfUtils::strlen($matchString) > 200 ? wfUtils::substr($matchString, 0, 200) . '...' : $matchString)) . '</strong>') . ' ' . '<br><br>' . sprintf(/* translators: Scan result type. */ __('The issue type is: %s', 'wordfence'), '<strong>' . esc_html($rule[7]) . '</strong>') . '<br>' . sprintf(/* translators: Scan result description. */ __('Description: %s', 'wordfence'), '<strong>' . esc_html($rule[3]) . '</strong>') . $extraMsg,
+										'shortMsg' => sprintf(/* translators: file path */__('File appears to be malicious or unsafe: %s', 'wordfence'), esc_html($record->getDisplayPath())),
+										'longMsg' => $customMessage . ' ' . sprintf(/* translators: matched text */ __('The matched text in this file is: %s', 'wordfence'), '<strong style="color: #F00;" class="wf-split-word">' . wfUtils::potentialBinaryStringToHTML((wfUtils::strlen($matchString) > 200 ? wfUtils::substr($matchString, 0, 200) . '...' : $matchString)) . '</strong>') . ' ' . '<br><br>' . sprintf(/* translators: Scan result type. */ __('The issue type is: %s', 'wordfence'), '<strong>' . esc_html($rule[7]) . '</strong>') . '<br>' . sprintf(/* translators: Scan result description. */ __('Description: %s', 'wordfence'), '<strong>' . esc_html($rule[3]) . '</strong>') . $extraMsg,
 										'data' => array_merge(array(
 											'file' => $file,
 											'realFile' => $record->realPath,
@@ -509,49 +509,7 @@ class wordfenceScanner {
 						continue; 
 					}
 					
-					if ($result['badList'] == 'goog-malware-shavar') {
-						$this->addResult(array(
-							'type' => 'file',
-							'severity' => wfIssues::SEVERITY_CRITICAL,
-							'ignoreP' => $record->realPath,
-							'ignoreC' => md5_file($record->realPath),
-							'shortMsg' => __('File contains suspected malware URL: ', 'wordfence') . esc_html($record->getDisplayPath()),
-							'longMsg' => wp_kses(sprintf(
-								/* translators: 1. Malware signature matched text. 2. Malicious URL. 3. Malicious URL. */
-								__('This file contains a suspected malware URL listed on Google\'s list of malware sites. Wordfence decodes %1$s when scanning files so the URL may not be visible if you view this file. The URL is: %2$s - More info available at <a href="http://safebrowsing.clients.google.com/safebrowsing/diagnostic?site=%3$s&client=googlechrome&hl=en-US" target="_blank" rel="noopener noreferrer">Google Safe Browsing diagnostic page<span class="screen-reader-text"> (opens in new tab)</span></a>.', 'wordfence'),
-								esc_html($this->patterns['word3']),
-								esc_html($result['URL']),
-								urlencode($result['URL'])
-							), array('a'=>array('href'=>array(), 'target'=>array(), 'rel'=>array()), 'span'=>array('class'))),
-							'data' => array_merge(array(
-								'file' => $file,
-								'realFile' => $record->realPath,
-								'shac' => $record->SHAC,
-								'badURL' => $result['URL'],
-								'gsb' => 'goog-malware-shavar',
-								'highSense' => $options['scansEnabled_highSense']
-							), $dataForFile),
-						));
-					}
-					else if ($result['badList'] == 'googpub-phish-shavar') {
-						$this->addResult(array(
-							'type' => 'file',
-							'severity' => wfIssues::SEVERITY_CRITICAL,
-							'ignoreP' => $record->realPath,
-							'ignoreC' => md5_file($record->realPath),
-							'shortMsg' => __('File contains suspected phishing URL: ', 'wordfence') . esc_html($record->getDisplayPath()),
-							'longMsg' => __('This file contains a URL that is a suspected phishing site that is currently listed on Google\'s list of known phishing sites. The URL is: ', 'wordfence') . esc_html($result['URL']),
-							'data' => array_merge(array(
-								'file' => $file,
-								'realFile' => $record->realPath,
-								'shac' => $record->SHAC,
-								'badURL' => $result['URL'],
-								'gsb' => 'googpub-phish-shavar',
-								'highSense' => $options['scansEnabled_highSense']
-							), $dataForFile),
-						));
-					}
-					else if ($result['badList'] == 'wordfence-dbl') {
+					if ($result['badList'] == 'wordfence-dbl') {
 						$this->addResult(array(
 							'type' => 'file',
 							'severity' => wfIssues::SEVERITY_CRITICAL,

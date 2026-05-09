@@ -12,6 +12,7 @@ require_once(__DIR__ . '/wfScanFile.php');
 require_once(__DIR__ . '/wfScanFileListItem.php');
 require_once(__DIR__ . '/wfScanEntrypoint.php');
 require_once(__DIR__ . '/wfCurlInterceptor.php');
+require_once(__DIR__ . '/wfCommonPasswords.php');
 
 class wfScanEngine {
 	const SCAN_MANUALLY_KILLED = -999;
@@ -20,7 +21,6 @@ class wfScanEngine {
 	private static $scanIsRunning = false; //Indicates that the scan is running in this specific process
 
 	public $api = false;
-	private $dictWords = array();
 	private $forkRequested = false;
 	private $lastCheck = 0;
 
@@ -52,7 +52,7 @@ class wfScanEngine {
 		'unknown' => false
 	);
 	private $userPasswdQueue = "";
-	private $passwdHasIssues = wfIssues::STATUS_SECURE;
+	private $passwdHasIssues = wfIssues::STATE_SECURE;
 	private $suspectedFiles = false; //Files found with the ".suspected" extension
 	private $gsbMultisiteBlogOffset = 0;
 	private $updateCheck = false;
@@ -172,8 +172,6 @@ class wfScanEngine {
 		$this->api = new wfAPI($this->apiKey, $this->wp_version);
 		$this->malwarePrefixesHash = $malwarePrefixesHash;
 		$this->coreHashesHash = $coreHashesHash;
-		include(dirname(__FILE__) . '/wfDict.php'); //$dictWords
-		$this->dictWords = $dictWords;
 		$this->scanMode = $scanMode;
 
 		$this->scanController = new wfScanner($scanMode);
@@ -205,8 +203,6 @@ class wfScanEngine {
 	public function __wakeup() {
 		$this->cycleStartTime = time();
 		$this->api = new wfAPI($this->apiKey, $this->wp_version);
-		include(dirname(__FILE__) . '/wfDict.php'); //$dictWords
-		$this->dictWords = $dictWords;
 		$this->scanController = new wfScanner($this->scanMode);
 	}
 
@@ -217,7 +213,7 @@ class wfScanEngine {
 	public function go() {
 		self::$scanIsRunning = true;
 		try {
-			self::checkForKill();
+			self::checkScanStatus();
 			$this->doScan();
 			wfConfig::set('lastScanCompleted', 'ok');
 			wfConfig::set('lastScanFailureType', false);
@@ -307,7 +303,7 @@ class wfScanEngine {
 		if ((time() - $this->startTime) > $timeLimit) {
 			$error = sprintf(
 			/* translators: 1. Time duration. 2. Support URL. */
-				__('The scan time limit of %1$s has been exceeded and the scan will be terminated. This limit can be customized on the options page. <a href="%2$s" target="_blank" rel="noopener noreferrer">Get More Information<span class="screen-reader-text"> (' . esc_html__('opens in new tab', 'wordfence') . ')</span></a>', 'wordfence'),
+				__('The scan time limit of %1$s has been exceeded and the scan will be terminated. This limit can be customized on the options page. <a href="%2$s" target="_blank" rel="noopener noreferrer">Get More Information<span class="screen-reader-text"> (opens in new tab)</span></a>', 'wordfence'),
 				wfUtils::makeDuration($timeLimit),
 				wfSupportController::esc_supportURL(wfSupportController::ITEM_SCAN_TIME_LIMIT)
 			);
@@ -472,7 +468,7 @@ class wfScanEngine {
 
 		$peakMemory = wfScan::logPeakMemory();
 		$this->status(2, 'info', sprintf(
-		/* translators: 1. Memory in bytes. 2. Memory in bytes. */
+			/* translators: 1. Bytes of memory. 2. Bytes of memory. */
 			__('Wordfence used %1$s of memory for scan. Server peak memory usage was: %2$s', 'wordfence'),
 			wfUtils::formatBytes($peakMemory - wfScan::$peakMemAtStart),
 			wfUtils::formatBytes($peakMemory)
@@ -542,14 +538,14 @@ class wfScanEngine {
 			$result = $this->api->call('check_spam_ip', array(), array(
 				'siteURL' => site_url()
 			));
-			$haveIssues = wfIssues::STATUS_SECURE;
+			$haveIssues = wfIssues::STATE_SECURE;
 			if (!empty($result['haveIssues']) && is_array($result['issues'])) {
 				foreach ($result['issues'] as $issue) {
 					$added = $this->addIssue($issue['type'], wfIssues::SEVERITY_HIGH, $issue['ignoreP'], $issue['ignoreC'], $issue['shortMsg'], $issue['longMsg'], $issue['data']);
 					if ($added == wfIssues::ISSUE_ADDED || $added == wfIssues::ISSUE_UPDATED) {
-						$haveIssues = wfIssues::STATUS_PROBLEM;
+						$haveIssues = wfIssues::STATE_PROBLEM;
 					} else if ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC) {
-						$haveIssues = wfIssues::STATUS_IGNORED;
+						$haveIssues = wfIssues::STATE_IGNORED;
 					}
 				}
 			}
@@ -577,7 +573,7 @@ class wfScanEngine {
 		if ($this->scanController->isPremiumScan()) {
 			if (is_multisite()) {
 				global $wpdb;
-				$h = new wordfenceURLHoover($this->apiKey, $this->wp_version, false, true);
+				$h = new wordfenceURLHoover($this->apiKey, $this->wp_version, true);
 				$blogIDs = $wpdb->get_col($wpdb->prepare("SELECT blog_id FROM {$wpdb->blogs} WHERE blog_id > %d ORDER BY blog_id ASC", $this->gsbMultisiteBlogOffset)); //Can't use wp_get_sites or get_sites because they return empty at 10k sites
 				foreach ($blogIDs as $id) {
 					$homeURL = get_home_url($id);
@@ -601,12 +597,12 @@ class wfScanEngine {
 	private function scan_checkGSB_finish() {
 		if ($this->scanController->isPremiumScan()) {
 			if (is_multisite()) {
-				$h = new wordfenceURLHoover($this->apiKey, $this->wp_version, false, true);
+				$h = new wordfenceURLHoover($this->apiKey, $this->wp_version, true);
 				$badURLs = $h->getBaddies();
 				if ($h->errorMsg) {
 					$this->status(4, 'info', sprintf(/* translators: Error message. */ __("Error checking domain blocklists: %s", 'wordfence'), $h->errorMsg));
-					wfIssues::statusEnd($this->statusIDX['checkGSB'], wfIssues::STATUS_FAILED);
-					$this->scanController->completeStage(wfScanner::STAGE_BLACKLIST_CHECK, wfIssues::STATUS_FAILED);
+					wfIssues::statusEnd($this->statusIDX['checkGSB'], wfIssues::STATE_FAILED);
+					$this->scanController->completeStage(wfScanner::STAGE_BLACKLIST_CHECK, wfIssues::STATE_FAILED);
 					return;
 				}
 				$h->cleanup();
@@ -628,7 +624,7 @@ class wfScanEngine {
 				$badURLs = $finalResults;
 			}
 
-			$haveIssues = wfIssues::STATUS_SECURE;
+			$haveIssues = wfIssues::STATE_SECURE;
 			if (is_array($badURLs) && count($badURLs) > 0) {
 				foreach ($badURLs as $id => $badSiteList) {
 					foreach ($badSiteList as $badSite) {
@@ -636,31 +632,7 @@ class wfScanEngine {
 						$badList = $badSite['badList'];
 						$data = array('badURL' => $url);
 
-						if ($badList == 'goog-malware-shavar') {
-							if (is_multisite()) {
-								$shortMsg = sprintf(/* translators: WordPress site ID. */ __('The multisite blog with ID %d is listed on Google\'s Safe Browsing malware list.', 'wordfence'), intval($id));
-								$data['multisite'] = intval($id);
-							} else {
-								$shortMsg = __('Your site is listed on Google\'s Safe Browsing malware list.', 'wordfence');
-							}
-							$longMsg = sprintf(
-							/* translators: 1. URL. 2. URL. */
-								__('The URL %1$s is on the malware list. More info available at <a href="http://safebrowsing.clients.google.com/safebrowsing/diagnostic?site=%2$s&client=googlechrome&hl=en-US" target="_blank" rel="noopener noreferrer">Google Safe Browsing diagnostic page<span class="screen-reader-text"> (' . esc_html__('opens in new tab', 'wordfence') . ')</span></a>.', 'wordfence'), esc_html($url), urlencode($url));
-							$data['gsb'] = $badList;
-						} else if ($badList == 'googpub-phish-shavar') {
-							if (is_multisite()) {
-								$shortMsg = sprintf(
-								/* translators: WordPress site ID. */
-									__('The multisite blog with ID %d is listed on Google\'s Safe Browsing phishing list.', 'wordfence'), intval($id));
-								$data['multisite'] = intval($id);
-							} else {
-								$shortMsg = __('Your site is listed on Google\'s Safe Browsing phishing list.', 'wordfence');
-							}
-							$longMsg = sprintf(
-							/* translators: 1. URL. 2. URL. */
-								__('The URL %1$s is on the phishing list. More info available at <a href="http://safebrowsing.clients.google.com/safebrowsing/diagnostic?site=%2$s&client=googlechrome&hl=en-US" target="_blank" rel="noopener noreferrer">Google Safe Browsing diagnostic page<span class="screen-reader-text"> (' . esc_html__('opens in new tab', 'wordfence') . ')</span></a>.', 'wordfence'), esc_html($url), urlencode($url));
-							$data['gsb'] = $badList;
-						} else if ($badList == 'wordfence-dbl') {
+						if ($badList == 'wordfence-dbl') {
 							if (is_multisite()) {
 								$shortMsg = sprintf(
 								/* translators: WordPress site ID. */
@@ -673,7 +645,8 @@ class wfScanEngine {
 							/* translators: URL. */
 								__("The URL %s is on the blocklist.", 'wordfence'), esc_html($url));
 							$data['gsb'] = $badList;
-						} else {
+						}
+						else {
 							if (is_multisite()) {
 								$shortMsg = sprintf(
 								/* translators: WordPress site ID. */
@@ -688,9 +661,9 @@ class wfScanEngine {
 
 						$added = $this->addIssue('checkGSB', wfIssues::SEVERITY_CRITICAL, 'checkGSB', 'checkGSB' . $url, $shortMsg, $longMsg, $data);
 						if ($added == wfIssues::ISSUE_ADDED || $added == wfIssues::ISSUE_UPDATED) {
-							$haveIssues = wfIssues::STATUS_PROBLEM;
-						} else if ($haveIssues != wfIssues::STATUS_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
-							$haveIssues = wfIssues::STATUS_IGNORED;
+							$haveIssues = wfIssues::STATE_PROBLEM;
+						} else if ($haveIssues != wfIssues::STATE_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
+							$haveIssues = wfIssues::STATE_IGNORED;
 						}
 					}
 				}
@@ -713,7 +686,7 @@ class wfScanEngine {
 			define('WORDFENCE_CHECKHOWGETIPS_TIMEOUT', 30);
 		}
 
-		$haveIssues = wfIssues::STATUS_SECURE;
+		$haveIssues = wfIssues::STATE_SECURE;
 		$existing = wfConfig::get('howGetIPs', '');
 		$recommendation = wfConfig::get('detectProxyRecommendation', '');
 		while (empty($recommendation) && (time() - $this->checkHowGetIPsRequestTime) < WORDFENCE_CHECKHOWGETIPS_TIMEOUT) {
@@ -724,18 +697,18 @@ class wfScanEngine {
 
 		if ($recommendation == 'DEFERRED') {
 			//Do nothing
-			$haveIssues = wfIssues::STATUS_SKIPPED;
+			$haveIssues = wfIssues::STATE_SKIPPED;
 		} else if (empty($recommendation)) {
-			$haveIssues = wfIssues::STATUS_FAILED;
+			$haveIssues = wfIssues::STATE_FAILED;
 		} else if ($recommendation == 'UNKNOWN') {
 			$added = $this->addIssue('checkHowGetIPs', wfIssues::SEVERITY_HIGH, 'checkHowGetIPs', 'checkHowGetIPs' . $recommendation . WORDFENCE_VERSION,
 				__("Unable to accurately detect IPs", 'wordfence'),
-				sprintf(/* translators: Support URL. */ __('Wordfence was unable to validate a test request to your website. This can happen if your website is behind a proxy that does not use one of the standard ways to convey the IP of the request or it is unreachable publicly. IP blocking and live traffic information may not be accurate. <a href="%s" target="_blank" rel="noopener noreferrer">Get More Information<span class="screen-reader-text"> (' . esc_html__('opens in new tab', 'wordfence') . ')</span></a>', 'wordfence'), wfSupportController::esc_supportURL(wfSupportController::ITEM_NOTICE_MISCONFIGURED_HOW_GET_IPS))
+				sprintf(/* translators: Support URL. */ __('Wordfence was unable to validate a test request to your website. This can happen if your website is behind a proxy that does not use one of the standard ways to convey the IP of the request or it is unreachable publicly. IP blocking and live traffic information may not be accurate. <a href="%s" target="_blank" rel="noopener noreferrer">Get More Information<span class="screen-reader-text"> (opens in new tab)</span></a>', 'wordfence'), wfSupportController::esc_supportURL(wfSupportController::ITEM_NOTICE_MISCONFIGURED_HOW_GET_IPS))
 				, array());
 			if ($added == wfIssues::ISSUE_ADDED || $added == wfIssues::ISSUE_UPDATED) {
-				$haveIssues = wfIssues::STATUS_PROBLEM;
+				$haveIssues = wfIssues::STATE_PROBLEM;
 			} else if ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC) {
-				$haveIssues = wfIssues::STATUS_IGNORED;
+				$haveIssues = wfIssues::STATE_IGNORED;
 			}
 		} else if (!empty($existing) && $existing != $recommendation) {
 			$extraMsg = '';
@@ -753,14 +726,14 @@ class wfScanEngine {
 				__("'How does Wordfence get IPs' is misconfigured", 'wordfence'),
 				sprintf(
 				/* translators: Support URL. */
-					__('A test request to this website was detected on a different value for this setting. IP blocking and live traffic information may not be accurate. <a href="%s" target="_blank" rel="noopener noreferrer">Get More Information<span class="screen-reader-text"> (' . esc_html__('opens in new tab', 'wordfence') . ')</span></a>', 'wordfence'),
+					__('A test request to this website was detected on a different value for this setting. IP blocking and live traffic information may not be accurate. <a href="%s" target="_blank" rel="noopener noreferrer">Get More Information<span class="screen-reader-text"> (opens in new tab)</span></a>', 'wordfence'),
 					wfSupportController::esc_supportURL(wfSupportController::ITEM_NOTICE_MISCONFIGURED_HOW_GET_IPS)
 				) . $extraMsg,
 				array('recommendation' => $recommendation));
 			if ($added == wfIssues::ISSUE_ADDED || $added == wfIssues::ISSUE_UPDATED) {
-				$haveIssues = wfIssues::STATUS_PROBLEM;
+				$haveIssues = wfIssues::STATE_PROBLEM;
 			} else if ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC) {
-				$haveIssues = wfIssues::STATUS_IGNORED;
+				$haveIssues = wfIssues::STATE_IGNORED;
 			}
 		}
 
@@ -773,7 +746,7 @@ class wfScanEngine {
 	}
 
 	private function scan_checkReadableConfig() {
-		$haveIssues = wfIssues::STATUS_SECURE;
+		$haveIssues = wfIssues::STATE_SECURE;
 		$status = wfIssues::statusStart(__("Check for publicly accessible configuration files, backup files and logs", 'wordfence'));
 		$this->scanController->startStage(wfScanner::STAGE_PUBLIC_FILES);
 
@@ -826,10 +799,10 @@ class wfScanEngine {
 					$key,
 					sprintf(
 					/* translators: File path. */
-						__('Publicly accessible config, backup, or log file found: %s', 'wordfence'), esc_html($pathFromRoot)),
+						__('Publicly accessible config, backup, or log file found: %s', 'wordfence'), $pathFromRoot),
 					sprintf(
 					/* translators: 1. URL to publicly accessible file. 2. Support URL. */
-						__('<a href="%1$s" target="_blank" rel="noopener noreferrer">%1$s</a> is publicly accessible and may expose source code or sensitive information about your site. Files such as this one are commonly checked for by scanners and should be made inaccessible. Alternately, some can be removed if you are certain your site does not need them. Sites using the nginx web server may need manual configuration changes to protect such files. <a href="%2$s" target="_blank" rel="noopener noreferrer">Learn more<span class="screen-reader-text"> (' . esc_html__('opens in new tab', 'wordfence') . ')</span></a>', 'wordfence'),
+						__('<a href="%1$s" target="_blank" rel="noopener noreferrer">%1$s</a> is publicly accessible and may expose source code or sensitive information about your site. Files such as this one are commonly checked for by scanners and should be made inaccessible. Alternately, some can be removed if you are certain your site does not need them. Sites using the nginx web server may need manual configuration changes to protect such files. <a href="%2$s" target="_blank" rel="noopener noreferrer">Learn more<span class="screen-reader-text"> (opens in new tab)</span></a>', 'wordfence'),
 						$test->getUrl(),
 						wfSupportController::esc_supportURL(wfSupportController::ITEM_SCAN_RESULT_PUBLIC_CONFIG)
 					),
@@ -841,9 +814,9 @@ class wfScanEngine {
 					)
 				);
 				if ($added == wfIssues::ISSUE_ADDED || $added == wfIssues::ISSUE_UPDATED) {
-					$haveIssues = wfIssues::STATUS_PROBLEM;
-				} else if ($haveIssues != wfIssues::STATUS_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
-					$haveIssues = wfIssues::STATUS_IGNORED;
+					$haveIssues = wfIssues::STATE_PROBLEM;
+				} else if ($haveIssues != wfIssues::STATE_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
+					$haveIssues = wfIssues::STATE_IGNORED;
 				}
 			}
 		}
@@ -858,7 +831,7 @@ class wfScanEngine {
 			return;
 		}
 
-		$haveIssues = wfIssues::STATUS_SECURE;
+		$haveIssues = wfIssues::STATE_SECURE;
 		$status = wfIssues::statusStart(__("Checking if your server discloses the path to the document root", 'wordfence'));
 		$testPage = includes_url() . basename($file);
 
@@ -874,9 +847,9 @@ class wfScanEngine {
 				array('url' => $testPage)
 			);
 			if ($added == wfIssues::ISSUE_ADDED || $added == wfIssues::ISSUE_UPDATED) {
-				$haveIssues = wfIssues::STATUS_PROBLEM;
-			} else if ($haveIssues != wfIssues::STATUS_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
-				$haveIssues = wfIssues::STATUS_IGNORED;
+				$haveIssues = wfIssues::STATE_PROBLEM;
+			} else if ($haveIssues != wfIssues::STATE_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
+				$haveIssues = wfIssues::STATE_IGNORED;
 			}
 		}
 
@@ -889,7 +862,7 @@ class wfScanEngine {
 		$uploadPaths = wp_upload_dir();
 		$enabled = self::isDirectoryListingEnabled($uploadPaths['baseurl']);
 
-		$haveIssues = wfIssues::STATUS_SECURE;
+		$haveIssues = wfIssues::STATE_SECURE;
 		if ($enabled) {
 			$added = $this->addIssue(
 				'wpscan_directoryListingEnabled',
@@ -903,9 +876,9 @@ class wfScanEngine {
 				)
 			);
 			if ($added == wfIssues::ISSUE_ADDED || $added == wfIssues::ISSUE_UPDATED) {
-				$haveIssues = wfIssues::STATUS_PROBLEM;
-			} else if ($haveIssues != wfIssues::STATUS_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
-				$haveIssues = wfIssues::STATUS_IGNORED;
+				$haveIssues = wfIssues::STATE_PROBLEM;
+			} else if ($haveIssues != wfIssues::STATE_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
+				$haveIssues = wfIssues::STATE_IGNORED;
 			}
 		}
 		wfIssues::statusEnd($this->statusIDX['wpscan_directoryListingEnabled'], $haveIssues);
@@ -918,14 +891,14 @@ class wfScanEngine {
 			$result = $this->api->call('spamvertize_check', array(), array(
 				'siteURL' => site_url()
 			));
-			$haveIssues = wfIssues::STATUS_SECURE;
+			$haveIssues = wfIssues::STATE_SECURE;
 			if ($result['haveIssues'] && is_array($result['issues'])) {
 				foreach ($result['issues'] as $issue) {
 					$added = $this->addIssue($issue['type'], wfIssues::SEVERITY_CRITICAL, $issue['ignoreP'], $issue['ignoreC'], $issue['shortMsg'], $issue['longMsg'], $issue['data']);
 					if ($added == wfIssues::ISSUE_ADDED || $added == wfIssues::ISSUE_UPDATED) {
-						$haveIssues = wfIssues::STATUS_PROBLEM;
-					} else if ($haveIssues != wfIssues::STATUS_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
-						$haveIssues = wfIssues::STATUS_IGNORED;
+						$haveIssues = wfIssues::STATE_PROBLEM;
+					} else if ($haveIssues != wfIssues::STATE_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
+						$haveIssues = wfIssues::STATE_IGNORED;
 					}
 				}
 			}
@@ -962,7 +935,7 @@ class wfScanEngine {
 					}
 					catch (wfInvalidPathException $e) {
 						//Ignore invalid scan paths
-						wordfence::status(4, 'info', sprintf(__("Ignoring invalid scan path: %s", 'wordfence'), $e->getPath()));
+						wordfence::status(4, 'info', sprintf(/* translators: filesystem path */ __("Ignoring invalid scan path: %s", 'wordfence'), $e->getPath()));
 					}
 				}
 			}
@@ -996,7 +969,7 @@ class wfScanEngine {
 								$entrypoint->addTo($entrypoints);
 							}
 							catch (wfInvalidPathException $e) {
-								wordfence::status(4, 'info', sprintf(__("Ignoring invalid expected scan file: %s", 'wordfence'), $e->getPath()));
+								wordfence::status(4, 'info', sprintf(/* translators: filesystem path */ __("Ignoring invalid expected scan file: %s", 'wordfence'), $e->getPath()));
 							}
 						}
 					}
@@ -1010,7 +983,7 @@ class wfScanEngine {
 						$entrypoint->addTo($entrypoints);
 					}
 					catch (wfInvalidPathException $e) {
-						wordfence::status(4, 'info', sprintf(__("Ignoring invalid base scan file: %s", 'wordfence'), $e->getPath()));
+						wordfence::status(4, 'info', sprintf(/* translators: filesystem path */ __("Ignoring invalid base scan file: %s", 'wordfence'), $e->getPath()));
 					}
 				}
 			}
@@ -1020,7 +993,7 @@ class wfScanEngine {
 	}
 
 	private function scan_checkSkippedFiles() {
-		$haveIssues = wfIssues::STATUS_SECURE;
+		$haveIssues = wfIssues::STATE_SECURE;
 		$status = wfIssues::statusStart(__("Checking for paths skipped due to scan settings", 'wordfence'));
 		$this->scanController->startStage(wfScanner::STAGE_SERVER_STATE);
 
@@ -1059,8 +1032,8 @@ class wfScanEngine {
 				sprintf(
 				/* translators: 1. Number of paths skipped in scan. 2. Support URL. 3. List of skipped paths. */
 					_n(
-						'The option "Scan files outside your WordPress installation" is off by default, which means %1$d path and its file(s) will not be scanned for malware or unauthorized changes. To continue skipping this path, you may ignore this issue. Or to start scanning it, enable the option and subsequent scans will include it. Some paths may not be necessary to scan, so this is optional. <a href="%2$s" target="_blank" rel="noopener noreferrer">Learn More<span class="screen-reader-text"> (' . esc_html__('opens in new tab', 'wordfence') . ')</span></a><br><br>The path skipped is %3$s',
-						'The option "Scan files outside your WordPress installation" is off by default, which means %1$d paths and their file(s) will not be scanned for malware or unauthorized changes. To continue skipping these paths, you may ignore this issue. Or to start scanning them, enable the option and subsequent scans will include them. Some paths may not be necessary to scan, so this is optional. <a href="%2$s" target="_blank" rel="noopener noreferrer">Learn More<span class="screen-reader-text"> (' . esc_html__('opens in new tab', 'wordfence') . ')</span></a><br><br>The paths skipped are %3$s',
+						'The option "Scan files outside your WordPress installation" is off by default, which means %1$d path and its file(s) will not be scanned for malware or unauthorized changes. To continue skipping this path, you may ignore this issue. Or to start scanning it, enable the option and subsequent scans will include it. Some paths may not be necessary to scan, so this is optional. <a href="%2$s" target="_blank" rel="noopener noreferrer">Learn More<span class="screen-reader-text"> (opens in new tab)</span></a><br><br>The path skipped is %3$s',
+						'The option "Scan files outside your WordPress installation" is off by default, which means %1$d paths and their file(s) will not be scanned for malware or unauthorized changes. To continue skipping these paths, you may ignore this issue. Or to start scanning them, enable the option and subsequent scans will include them. Some paths may not be necessary to scan, so this is optional. <a href="%2$s" target="_blank" rel="noopener noreferrer">Learn More<span class="screen-reader-text"> (opens in new tab)</span></a><br><br>The paths skipped are %3$s',
 						$c,
 						'wordfence'
 					),
@@ -1072,9 +1045,9 @@ class wfScanEngine {
 			);
 
 			if ($added == wfIssues::ISSUE_ADDED || $added == wfIssues::ISSUE_UPDATED) {
-				$haveIssues = wfIssues::STATUS_PROBLEM;
-			} else if ($haveIssues != wfIssues::STATUS_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
-				$haveIssues = wfIssues::STATUS_IGNORED;
+				$haveIssues = wfIssues::STATE_PROBLEM;
+			} else if ($haveIssues != wfIssues::STATE_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
+				$haveIssues = wfIssues::STATE_IGNORED;
 			}
 		}
 
@@ -1148,23 +1121,23 @@ class wfScanEngine {
 				throw new Exception($this->scanner->errorMsg);
 			}
 			$this->scanner = null;
-			$haveIssues = wfIssues::STATUS_SECURE;
-			$haveIssuesGSB = wfIssues::STATUS_SECURE;
+			$haveIssues = wfIssues::STATE_SECURE;
+			$haveIssuesGSB = wfIssues::STATE_SECURE;
 			foreach ($this->fileContentsResults as $issue) {
 				$this->status(2, 'info', sprintf(/* translators: Scan result description. */ __("Adding issue: %s", 'wordfence'), $issue['shortMsg']));
 				$added = $this->addIssue($issue['type'], $issue['severity'], $issue['ignoreP'], $issue['ignoreC'], $issue['shortMsg'], $issue['longMsg'], $issue['data']);
 
 				if (isset($issue['data']['gsb'])) {
 					if ($added == wfIssues::ISSUE_ADDED || $added == wfIssues::ISSUE_UPDATED) {
-						$haveIssuesGSB = wfIssues::STATUS_PROBLEM;
-					} else if ($haveIssuesGSB != wfIssues::STATUS_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
-						$haveIssuesGSB = wfIssues::STATUS_IGNORED;
+						$haveIssuesGSB = wfIssues::STATE_PROBLEM;
+					} else if ($haveIssuesGSB != wfIssues::STATE_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
+						$haveIssuesGSB = wfIssues::STATE_IGNORED;
 					}
 				} else {
 					if ($added == wfIssues::ISSUE_ADDED || $added == wfIssues::ISSUE_UPDATED) {
-						$haveIssues = wfIssues::STATUS_PROBLEM;
-					} else if ($haveIssues != wfIssues::STATUS_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
-						$haveIssues = wfIssues::STATUS_IGNORED;
+						$haveIssues = wfIssues::STATE_PROBLEM;
+					} else if ($haveIssues != wfIssues::STATE_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
+						$haveIssues = wfIssues::STATE_IGNORED;
 					}
 				}
 			}
@@ -1183,7 +1156,7 @@ class wfScanEngine {
 	}
 
 	private function scan_suspectedFiles() {
-		$haveIssues = wfIssues::STATUS_SECURE;
+		$haveIssues = wfIssues::STATE_SECURE;
 		$status = wfIssues::statusStart(__("Scanning for publicly accessible quarantined files", 'wordfence'));
 		$this->scanController->startStage(wfScanner::STAGE_PUBLIC_FILES);
 
@@ -1198,10 +1171,10 @@ class wfScanEngine {
 						wfIssues::SEVERITY_HIGH,
 						$key,
 						$key,
-						sprintf(/* translators: File path. */ __('Publicly accessible quarantined file found: %s', 'wordfence'), esc_html($file)),
+						sprintf(/* translators: File path. */ __('Publicly accessible quarantined file found: %s', 'wordfence'), $file),
 						sprintf(
 						/* translators: URL to publicly accessible file. */
-							__('<a href="%1$s" target="_blank" rel="noopener noreferrer">%1$s<span class="screen-reader-text"> (' . esc_html__('opens in new tab', 'wordfence') . ')</span></a> is publicly accessible and may expose source code or sensitive information about your site. Files such as this one are commonly checked for by scanners and should be removed or made inaccessible.', 'wordfence'),
+							__('<a href="%1$s" target="_blank" rel="noopener noreferrer">%1$s<span class="screen-reader-text"> (opens in new tab)</span></a> is publicly accessible and may expose source code or sensitive information about your site. Files such as this one are commonly checked for by scanners and should be removed or made inaccessible.', 'wordfence'),
 							$test->getUrl()
 						),
 						array(
@@ -1212,9 +1185,9 @@ class wfScanEngine {
 					);
 
 					if ($added == wfIssues::ISSUE_ADDED || $added == wfIssues::ISSUE_UPDATED) {
-						$haveIssues = wfIssues::STATUS_PROBLEM;
-					} else if ($haveIssues != wfIssues::STATUS_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
-						$haveIssues = wfIssues::STATUS_IGNORED;
+						$haveIssues = wfIssues::STATE_PROBLEM;
+					} else if ($haveIssues != wfIssues::STATE_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
+						$haveIssues = wfIssues::STATE_IGNORED;
 					}
 				}
 			}
@@ -1264,12 +1237,12 @@ class wfScanEngine {
 			$row = $wfdb->querySingleRec("select ID, post_title, post_type, post_date, post_content from {$table} where ID = %d", $postID);
 			$found = $this->hoover->hoover($blogID . '-' . $row['ID'], $row['post_title'] . ' ' . $row['post_content'], wordfenceURLHoover::standardExcludedHosts());
 			$this->scanController->incrementSummaryItem(wfScanner::SUMMARY_SCANNED_URLS, $found);
-			if (preg_match('/(?:<[\s\n\r\t]*script[\r\s\n\t]+.*>|<[\s\n\r\t]*meta.*refresh)/i', $row['post_title'])) {
+			if (preg_match('/(?:<\s*script[^>]*>|<\s*meta.*refresh)/i', $row['post_title'])) {
 				$this->addIssue(
 					'postBadTitle',
 					wfIssues::SEVERITY_HIGH,
-					$row['ID'],
-					md5(wfUtils::ifnull($row['post_title'])),
+					'postBadTitle-' . $blogID . '-' . $row['ID'],
+					'postBadTitle-' . $blogID . '-' . $row['ID'] . '-' . md5(wfUtils::ifnull($row['post_title'])),
 					__("Post title contains suspicious code", 'wordfence'),
 					__("This post contains code that is suspicious. Please check the title of the post and confirm that the code in the title is not malicious.", 'wordfence'),
 					array(
@@ -1302,7 +1275,7 @@ class wfScanEngine {
 			throw new Exception($this->hoover->errorMsg);
 		}
 		$this->hoover->cleanup();
-		$haveIssues = wfIssues::STATUS_SECURE;
+		$haveIssues = wfIssues::STATE_SECURE;
 		foreach ($hooverResults as $idString => $hresults) {
 			$arr = explode('-', $idString);
 			$blogID = $arr[0];
@@ -1311,7 +1284,7 @@ class wfScanEngine {
 			$blog = null;
 			$post = null;
 			foreach ($hresults as $result) {
-				if ($result['badList'] != 'goog-malware-shavar' && $result['badList'] != 'googpub-phish-shavar' && $result['badList'] != 'wordfence-dbl') {
+				if ($result['badList'] != 'wordfence-dbl') {
 					continue; //A list type that may be new and the plugin has not been upgraded yet.
 				}
 
@@ -1329,32 +1302,10 @@ class wfScanEngine {
 					$contentMD5 = md5(wfUtils::ifnull($post['post_content']));
 				}
 
-				if ($result['badList'] == 'goog-malware-shavar') {
-					$shortMsg = sprintf(
-					/* translators: 1. WordPress Post type. 2. URL. */
-						__('%1$s contains a suspected malware URL: %2$s', 'wordfence'),
-						$uctype,
-						esc_html($title)
-					);
+				if ($result['badList'] == 'wordfence-dbl') {
+					$shortMsg = sprintf(/* translators: 1. WordPress Post type. 2. URL. */ __('%1$s contains a suspected malware URL: %2$s', 'wordfence'), $uctype, $title);
 					$longMsg = sprintf(
-					/* translators: 1. WordPress Post type. 2. URL. 3. URL. */
-						__('This %1$s contains a suspected malware URL listed on Google\'s list of malware sites. The URL is: %2$s - More info available at <a href="http://safebrowsing.clients.google.com/safebrowsing/diagnostic?site=%3$s&client=googlechrome&hl=en-US" target="_blank" rel="noopener noreferrer">Google Safe Browsing diagnostic page<span class="screen-reader-text"> (' . esc_html__('opens in new tab', 'wordfence') . ')</span></a>.', 'wordfence'),
-						esc_html($type),
-						esc_html($result['URL']),
-						urlencode($result['URL'])
-					);
-				} else if ($result['badList'] == 'googpub-phish-shavar') {
-					$shortMsg = sprintf(/* translators: 1. WordPress Post type. 2. URL. */ __('%1$s contains a suspected phishing site URL: %2$s', 'wordfence'), $uctype, esc_html($title));
-					$longMsg = sprintf(
-					/* translators: 1. WordPress Post type. 2. URL. */
-						__('This %1$s contains a URL that is a suspected phishing site that is currently listed on Google\'s list of known phishing sites. The URL is: %2$s', 'wordfence'),
-						esc_html($type),
-						esc_html($result['URL'])
-					);
-				} else if ($result['badList'] == 'wordfence-dbl') {
-					$shortMsg = sprintf(/* translators: 1. WordPress Post type. 2. URL. */ __('%1$s contains a suspected malware URL: %2$s', 'wordfence'), $uctype, esc_html($title));
-					$longMsg = sprintf(
-					/* translators: 1. WordPress Post type. 2. URL. */
+					/* translators: 1. WordPress post type. 2. URL. */
 						__('This %1$s contains a URL that is currently listed on Wordfence\'s domain blocklist. The URL is: %2$s', 'wordfence'),
 						esc_html($type),
 						esc_html($result['URL'])
@@ -1368,8 +1319,8 @@ class wfScanEngine {
 				if (is_multisite()) {
 					switch_to_blog($blogID);
 				}
-				$ignoreP = $idString;
-				$ignoreC = $idString . $contentMD5;
+				$ignoreP = 'postBadURL-' . $idString;
+				$ignoreC = 'postBadURL-' . $idString . $contentMD5;
 				$added = $this->addIssue('postBadURL', wfIssues::SEVERITY_HIGH, $ignoreP, $ignoreC, $shortMsg, $longMsg, array(
 					'postID'       => $postID,
 					'badURL'       => $result['URL'],
@@ -1385,9 +1336,9 @@ class wfScanEngine {
 					'blog_id'      => $blogID
 				));
 				if ($added == wfIssues::ISSUE_ADDED || $added == wfIssues::ISSUE_UPDATED) {
-					$haveIssues = wfIssues::STATUS_PROBLEM;
-				} else if ($haveIssues != wfIssues::STATUS_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
-					$haveIssues = wfIssues::STATUS_IGNORED;
+					$haveIssues = wfIssues::STATE_PROBLEM;
+				} else if ($haveIssues != wfIssues::STATE_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
+					$haveIssues = wfIssues::STATE_IGNORED;
 				}
 				if (is_multisite()) {
 					restore_current_blog();
@@ -1449,7 +1400,7 @@ class wfScanEngine {
 			throw new Exception($this->hoover->errorMsg);
 		}
 		$this->hoover->cleanup();
-		$haveIssues = wfIssues::STATUS_SECURE;
+		$haveIssues = wfIssues::STATE_SECURE;
 		foreach ($hooverResults as $idString => $hresults) {
 			$arr = explode('-', $idString);
 			$blogID = $arr[0];
@@ -1457,7 +1408,7 @@ class wfScanEngine {
 			$blog = null;
 			$comment = null;
 			foreach ($hresults as $result) {
-				if ($result['badList'] != 'goog-malware-shavar' && $result['badList'] != 'googpub-phish-shavar' && $result['badList'] != 'wordfence-dbl') {
+				if ($result['badList'] != 'wordfence-dbl') {
 					continue; //A list type that may be new and the plugin has not been upgraded yet.
 				}
 
@@ -1475,26 +1426,7 @@ class wfScanEngine {
 					$contentMD5 = md5(wfUtils::ifnull($comment['comment_content'] . $comment['comment_author'] . $comment['comment_author_url']));
 				}
 
-				if ($result['badList'] == 'goog-malware-shavar') {
-					$shortMsg = sprintf(
-					/* translators: 1. WordPress post type. 2. WordPress author username. */
-						__('%1$s with author %2$s contains a suspected malware URL.', 'wordfence'), $uctype, esc_html($author));
-					$longMsg = sprintf(
-					/* translators: 1. WordPress post type. 2. URL. 3. URL. */
-						__('This %1$s contains a suspected malware URL listed on Google\'s list of malware sites. The URL is: %2$s - More info available at <a href="http://safebrowsing.clients.google.com/safebrowsing/diagnostic?site=%3$s&client=googlechrome&hl=en-US" target="_blank" rel="noopener noreferrer">Google Safe Browsing diagnostic page<span class="screen-reader-text"> (' . esc_html__('opens in new tab', 'wordfence') . ')</span></a>.', 'wordfence'),
-						esc_html($type),
-						esc_html($result['URL']),
-						urlencode($result['URL'])
-					);
-				} else if ($result['badList'] == 'googpub-phish-shavar') {
-					$shortMsg = sprintf(/* translators: WordPress post type. */ __("%s contains a suspected phishing site URL.", 'wordfence'), $uctype);
-					$longMsg = sprintf(
-					/* translators: 1. WordPress post type. 2. URL. */
-						__('This %1$s contains a URL that is a suspected phishing site that is currently listed on Google\'s list of known phishing sites. The URL is: %2$s', 'wordfence'),
-						esc_html($type),
-						esc_html($result['URL'])
-					);
-				} else if ($result['badList'] == 'wordfence-dbl') {
+				if ($result['badList'] == 'wordfence-dbl') {
 					$shortMsg = sprintf(/* translators: URL. */ __("%s contains a suspected malware URL.", 'wordfence'), $uctype);
 					$longMsg = sprintf(
 					/* translators: 1. WordPress post type. 2. URL. */
@@ -1508,8 +1440,8 @@ class wfScanEngine {
 					switch_to_blog($blogID);
 				}
 
-				$ignoreP = $idString;
-				$ignoreC = $idString . '-' . $contentMD5;
+				$ignoreP = 'commentBadURL-' . $idString;
+				$ignoreC = 'commentBadURL-' . $idString . '-' . $contentMD5;
 				$added = $this->addIssue('commentBadURL', wfIssues::SEVERITY_LOW, $ignoreP, $ignoreC, $shortMsg, $longMsg, array(
 					'commentID'       => $commentID,
 					'badURL'          => $result['URL'],
@@ -1524,9 +1456,9 @@ class wfScanEngine {
 					'blog_id'         => $blogID
 				));
 				if ($added == wfIssues::ISSUE_ADDED || $added == wfIssues::ISSUE_UPDATED) {
-					$haveIssues = wfIssues::STATUS_PROBLEM;
-				} else if ($haveIssues != wfIssues::STATUS_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
-					$haveIssues = wfIssues::STATUS_IGNORED;
+					$haveIssues = wfIssues::STATE_PROBLEM;
+				} else if ($haveIssues != wfIssues::STATE_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
+					$haveIssues = wfIssues::STATE_IGNORED;
 				}
 
 				if (is_multisite()) {
@@ -1629,12 +1561,6 @@ class wfScanEngine {
 		$this->statusIDX['passwds'] = wfIssues::statusStart(__('Scanning for weak passwords', 'wordfence'));
 		$this->scanController->startStage(wfScanner::STAGE_PASSWORD_STRENGTH);
 		
-		require(ABSPATH . 'wp-includes/version.php'); /** @var string $wp_version */
-		if (version_compare($wp_version, '6.8', '>=')) {
-			wordfence::status(2, 'info', __('Skipping password strength check because WordPress version is >= 6.8 and MD5 is no longer used.', 'wordfence'));
-			return true;
-		}
-		
 		global $wpdb;
 		$counter = 0;
 		$query = "select ID from " . $wpdb->users;
@@ -1682,10 +1608,10 @@ class wfScanEngine {
 			$this->userPasswdQueue = substr($this->userPasswdQueue, 4);
 			$state = $this->scanUserPassword($userID);
 			$this->scanController->incrementSummaryItem(wfScanner::SUMMARY_SCANNED_USERS);
-			if ($state == wfIssues::STATUS_PROBLEM) {
-				$this->passwdHasIssues = wfIssues::STATUS_PROBLEM;
-			} else if ($this->passwdHasIssues != wfIssues::STATUS_PROBLEM && $state == wfIssues::STATUS_IGNORED) {
-				$this->passwdHasIssues = wfIssues::STATUS_IGNORED;
+			if ($state == wfIssues::STATE_PROBLEM) {
+				$this->passwdHasIssues = wfIssues::STATE_PROBLEM;
+			} else if ($this->passwdHasIssues != wfIssues::STATE_PROBLEM && $state == wfIssues::STATE_IGNORED) {
+				$this->passwdHasIssues = wfIssues::STATE_IGNORED;
 			}
 
 			$this->forkIfNeeded();
@@ -1698,10 +1624,9 @@ class wfScanEngine {
 	}
 
 	public function scanUserPassword($userID) {
+		$haveIssues = wfIssues::STATE_SECURE;
 		$suspended = wp_suspend_cache_addition();
 		wp_suspend_cache_addition(true);
-		require_once(ABSPATH . 'wp-includes/class-phpass.php');
-		$passwdHasher = new PasswordHash(8, TRUE);
 		$userDat = get_userdata($userID);
 		if ($userDat === false) {
 			wordfence::status(2, 'error', sprintf(/* translators: WordPress user ID. */ __("Could not get username for user with ID %d when checking password strength.", 'wordfence'), $userID));
@@ -1714,13 +1639,29 @@ class wfScanEngine {
 				$userDat->user_login,
 				$userID
 			) . (function_exists('memory_get_usage') ? " (Mem:" . sprintf('%.1f', memory_get_usage(true) / (1024 * 1024)) . "M)" : ""));
-		$highCap = $this->highestCap($userDat->wp_capabilities);
-		if ($this->isEditor($userDat->wp_capabilities)) {
+		$capabilities = $userDat->get_role_caps();
+		$highCap = $this->highestCap($capabilities);
+		$isAdmin = $highCap === "administrator";
+		// bcrypt takes significantly longer than md5 to check so it's impractical to check the extended list
+		$usesBcrypt = strpos($userDat->user_pass, '$wp') === 0;
+		$emailLocalPart = explode("@", $userDat->user_email, 2)[0];
+		$words = [
+			$userDat->user_login => true,
+			$userDat->user_email => true,
+			$emailLocalPart => true
+		];
+		if ($usesBcrypt && !$isAdmin) {
+			$this->status(10, 'info', sprintf(/* translators: WordPress username. */ __('Skipping password scan for non-admin user %s with bcrypt password', 'wordfence'), $userDat->user_login));
+			// When using bcrypt, only admins are checked
+			return $haveIssues;
+		}
+		if ($isAdmin || $this->isEditor($capabilities)) {
+			wfCommonPasswords::addToKeyedList($words, !$usesBcrypt);
 			$shortMsg = sprintf(
 			/* translators: 1. WordPress username. 2. WordPress capability. */
 				__('User "%1$s" with "%2$s" access has an easy password.', 'wordfence'),
-				esc_html($userDat->user_login),
-				esc_html($highCap)
+				$userDat->user_login,
+				$highCap
 			);
 			$longMsg = sprintf(
 			/* translators: WordPress capability. */
@@ -1728,18 +1669,16 @@ class wfScanEngine {
 				esc_html($highCap)
 			);
 			$level = wfIssues::SEVERITY_CRITICAL;
-			$words = $this->dictWords;
-		} else {
+		}
+		else {
 			$shortMsg = sprintf(
 			/* translators: WordPress username. */
-				__("User \"%s\" with 'subscriber' access has a very easy password.", 'wordfence'), esc_html($userDat->user_login));
+				__("User \"%s\" with 'subscriber' access has a very easy password.", 'wordfence'), $userDat->user_login);
 			$longMsg = __("A user with 'subscriber' access has a password that is very easy to guess. Please either change it or ask the user to change their password.", 'wordfence');
 			$level = wfIssues::SEVERITY_HIGH;
-			$words = array($userDat->user_login);
 		}
-		$haveIssues = wfIssues::STATUS_SECURE;
-		for ($i = 0; $i < sizeof($words); $i++) {
-			if ($passwdHasher->CheckPassword($words[$i], $userDat->user_pass)) {
+		foreach (array_keys($words) as $word) {
+			if (wp_check_password($word, $userDat->user_pass, $userDat->ID)) {
 				$this->status(2, 'info', sprintf(/* translators: Scan result description. */ __('Adding issue %s', 'wordfence'), $shortMsg));
 				$added = $this->addIssue('easyPassword', $level, $userDat->ID, $userDat->ID . '-' . $userDat->user_pass, $shortMsg, $longMsg, array(
 					'ID'           => $userDat->ID,
@@ -1750,9 +1689,9 @@ class wfScanEngine {
 					'editUserLink' => wfUtils::editUserLink($userDat->ID)
 				));
 				if ($added == wfIssues::ISSUE_ADDED || $added == wfIssues::ISSUE_UPDATED) {
-					$haveIssues = wfIssues::STATUS_PROBLEM;
-				} else if ($haveIssues != wfIssues::STATUS_SECURE && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
-					$haveIssues = wfIssues::STATUS_IGNORED;
+					$haveIssues = wfIssues::STATE_PROBLEM;
+				} else if ($haveIssues != wfIssues::STATE_SECURE && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
+					$haveIssues = wfIssues::STATE_IGNORED;
 				}
 				break;
 			}
@@ -1761,34 +1700,7 @@ class wfScanEngine {
 		wp_suspend_cache_addition($suspended);
 		return $haveIssues;
 	}
-
-	/*
-	private function scan_sitePages(){
-		if(is_multisite()){ return; } //Multisite not supported by this function yet
-		$this->statusIDX['sitePages'] = wordfence::statusStart("Scanning externally for malware");
-		$resp = wp_remote_get(site_url());
-		if(is_array($resp) && isset($resp['body']) && strlen($rep['body']) > 0){
-			$this->hoover = new wordfenceURLHoover($this->apiKey, $this->wp_version);
-			$this->hoover->hoover(1, $rep['body']);
-			$hooverResults = $this->hoover->getBaddies();
-			if($this->hoover->errorMsg){
-				wordfence::statusEndErr();
-				throw new Exception($this->hoover->errorMsg);
-			}
-			$badURLs = array();
-			foreach($hooverResults as $idString => $hresults){
-				foreach($hresults as $result){
-					if(! in_array($result['URL'], $badURLs)){
-						$badURLs[] = $result['URL'];
-					}
-				}
-			}
-			if(sizeof($badURLs) > 0){
-				$this->addIssue('badSitePage', 1, 'badSitePage1', 'badSitePage1', "Your home page contains a malware URL");
-			}
-		}
-	}
-	*/
+	
 	private function scan_diskSpace() {
 		$this->statusIDX['diskSpace'] = wfIssues::statusStart(__('Scanning to check available disk space', 'wordfence'));
 		$this->scanController->startStage(wfScanner::STAGE_SERVER_STATE);
@@ -1798,8 +1710,8 @@ class wfScanEngine {
 		wfUtils::errorsOn();
 		if (!$total || !$free) {
 			$this->status(2, 'info', __('Unable to access available disk space information', 'wordfence'));
-			wfIssues::statusEnd($this->statusIDX['diskSpace'], wfIssues::STATUS_SECURE);
-			$this->scanController->completeStage(wfScanner::STAGE_SERVER_STATE, wfIssues::STATUS_SECURE);
+			wfIssues::statusEnd($this->statusIDX['diskSpace'], wfIssues::STATE_SECURE);
+			$this->scanController->completeStage(wfScanner::STAGE_SERVER_STATE, wfIssues::STATE_SECURE);
 			return;
 		}
 
@@ -1817,11 +1729,11 @@ class wfScanEngine {
 		} else if ($freeMegs < 20) {
 			$level = wfIssues::SEVERITY_HIGH;
 		} else {
-			wfIssues::statusEnd($this->statusIDX['diskSpace'], wfIssues::STATUS_SECURE);
-			$this->scanController->completeStage(wfScanner::STAGE_SERVER_STATE, wfIssues::STATUS_SECURE);
+			wfIssues::statusEnd($this->statusIDX['diskSpace'], wfIssues::STATE_SECURE);
+			$this->scanController->completeStage(wfScanner::STAGE_SERVER_STATE, wfIssues::STATE_SECURE);
 			return;
 		}
-		$haveIssues = wfIssues::STATUS_SECURE;
+		$haveIssues = wfIssues::STATE_SECURE;
 		$added = $this->addIssue('diskSpace',
 			$level,
 			'diskSpace',
@@ -1831,9 +1743,9 @@ class wfScanEngine {
 			array('spaceLeft' => wfUtils::formatBytes($free))
 		);
 		if ($added == wfIssues::ISSUE_ADDED || $added == wfIssues::ISSUE_UPDATED) {
-			$haveIssues = wfIssues::STATUS_PROBLEM;
-		} else if ($haveIssues != wfIssues::STATUS_SECURE && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
-			$haveIssues = wfIssues::STATUS_IGNORED;
+			$haveIssues = wfIssues::STATE_PROBLEM;
+		} else if ($haveIssues != wfIssues::STATE_SECURE && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
+			$haveIssues = wfIssues::STATE_IGNORED;
 		}
 		wfIssues::statusEnd($this->statusIDX['diskSpace'], $haveIssues);
 		$this->scanController->completeStage(wfScanner::STAGE_SERVER_STATE, $haveIssues);
@@ -1843,7 +1755,7 @@ class wfScanEngine {
 		$this->statusIDX['wafStatus'] = wfIssues::statusStart(__('Checking Web Application Firewall status', 'wordfence'));
 		$this->scanController->startStage(wfScanner::STAGE_SERVER_STATE);
 
-		$haveIssues = wfIssues::STATUS_SECURE;
+		$haveIssues = wfIssues::STATE_SECURE;
 		$added = false;
 		$firewall = new wfFirewall();
 		if (wfConfig::get('waf_status') !== $firewall->firewallMode() && $firewall->firewallMode() == wfFirewall::FIREWALL_MODE_DISABLED) {
@@ -1852,15 +1764,15 @@ class wfScanEngine {
 				'wafStatus',
 				'wafStatus' . $firewall->firewallMode(),
 				__('Web Application Firewall is disabled', 'wordfence'),
-				sprintf(/* translators: Support URL. */ __('Wordfence\'s Web Application Firewall has been unexpectedly disabled. If you see a notice at the top of the Wordfence admin pages that says "The Wordfence Web Application Firewall cannot run," click the link in that message to rebuild the configuration. If this does not work, you may need to fix file permissions. <a href="%s" target="_blank" rel="noopener noreferrer">More Details<span class="screen-reader-text"> (' . esc_html__('opens in new tab', 'wordfence') . ')</span></a>', 'wordfence'), wfSupportController::esc_supportURL(wfSupportController::ITEM_SCAN_RESULT_WAF_DISABLED)),
+				sprintf(/* translators: Support URL. */ __('Wordfence\'s Web Application Firewall has been unexpectedly disabled. If you see a notice at the top of the Wordfence admin pages that says "The Wordfence Web Application Firewall cannot run," click the link in that message to rebuild the configuration. If this does not work, you may need to fix file permissions. <a href="%s" target="_blank" rel="noopener noreferrer">More Details<span class="screen-reader-text"> (opens in new tab)</span></a>', 'wordfence'), wfSupportController::esc_supportURL(wfSupportController::ITEM_SCAN_RESULT_WAF_DISABLED)),
 				array('wafStatus' => $firewall->firewallMode(), 'wafStatusDisplay' => $firewall->displayText())
 			);
 		}
 
 		if ($added == wfIssues::ISSUE_ADDED || $added == wfIssues::ISSUE_UPDATED) {
-			$haveIssues = wfIssues::STATUS_PROBLEM;
-		} else if ($haveIssues != wfIssues::STATUS_SECURE && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
-			$haveIssues = wfIssues::STATUS_IGNORED;
+			$haveIssues = wfIssues::STATE_PROBLEM;
+		} else if ($haveIssues != wfIssues::STATE_SECURE && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
+			$haveIssues = wfIssues::STATE_IGNORED;
 		}
 		wfIssues::statusEnd($this->statusIDX['wafStatus'], $haveIssues);
 		$this->scanController->completeStage(wfScanner::STAGE_SERVER_STATE, $haveIssues);
@@ -1951,8 +1863,33 @@ class wfScanEngine {
 		}
 	}
 
+	private static function get_cvss_metrics($record) {
+		$vector = $record["cvssVector"];
+		$metrics = [];
+		if (!is_string($vector))
+			return $metrics;
+		$components = explode("/", $vector);
+		foreach ($components as $component) {
+			$pair = explode(":", $component, 2);
+			if (count($pair) == 2) {
+				$metrics[$pair[0]] = $pair[1];
+			}
+		}
+		return $metrics;
+	}
+
+	private static function get_record_severity($record) {
+		if (isset($record["vulnerable"]) && !$record["vulnerable"])
+			return wfIssues::SEVERITY_MEDIUM;
+		$metrics = self::get_cvss_metrics($record);
+		// Vulnerabilities with high attack complexity or privileges required can be downgraded
+		if ($metrics["AC"] == "H" || $metrics["PR"] == "H")
+			return wfIssues::SEVERITY_HIGH;
+		return wfIssues::SEVERITY_CRITICAL;
+	}
+
 	private function scan_oldVersions_finish() {
-		$haveIssues = wfIssues::STATUS_SECURE;
+		$haveIssues = wfIssues::STATE_SECURE;
 
 		if (!$this->isFullScan()) {
 			$this->deleteNewIssues(array('wfUpgradeError', 'wfUpgrade', 'wfPluginUpgrade', 'wfThemeUpgrade'));
@@ -1969,7 +1906,7 @@ class wfScanEngine {
 			}
 			$longMsg .= ' ' . sprintf(
 				/* translators: Support URL. */
-					__('<a href="%s" target="_blank" rel="noopener noreferrer">Get more information.<span class="screen-reader-text"> (' . esc_html__('opens in new tab', 'wordfence') . ')</span></a>', 'wordfence'), wfSupportController::esc_supportURL(wfSupportController::ITEM_SCAN_RESULT_UPDATE_CHECK_FAILED));
+					__('<a href="%s" target="_blank" rel="noopener noreferrer">Get more information.<span class="screen-reader-text"> (opens in new tab)</span></a>', 'wordfence'), wfSupportController::esc_supportURL(wfSupportController::ITEM_SCAN_RESULT_UPDATE_CHECK_FAILED));
 			
 			$ignoreKey = ($lastSlug === false ? 'wfUpgradeErrorGeneral' : sprintf('wfUpgradeError-%s', $lastSlug));
 			
@@ -1978,15 +1915,15 @@ class wfScanEngine {
 				wfIssues::SEVERITY_MEDIUM,
 				$ignoreKey,
 				$ignoreKey,
-				($lastSlug === false ? __("Update Check Encountered Error", 'wordfence') : sprintf(/* translators: plugin/theme slug. */ __("Update Check Encountered Error on '%s'", 'wordfence'), esc_html($lastSlug))),
+				($lastSlug === false ? __("Update Check Encountered Error", 'wordfence') : sprintf(/* translators: plugin/theme slug. */ __("Update Check Encountered Error on '%s'", 'wordfence'), $lastSlug)),
 				$longMsg,
 				array()
 			);
 			if ($added == wfIssues::ISSUE_ADDED || $added == wfIssues::ISSUE_UPDATED) {
-				$haveIssues = wfIssues::STATUS_PROBLEM;
+				$haveIssues = wfIssues::STATE_PROBLEM;
 			}
-			else if ($haveIssues != wfIssues::STATUS_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
-				$haveIssues = wfIssues::STATUS_IGNORED;
+			else if ($haveIssues != wfIssues::STATE_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
+				$haveIssues = wfIssues::STATE_IGNORED;
 			}
 		}
 
@@ -2028,7 +1965,7 @@ class wfScanEngine {
 				//else vulnerability fixed or unpatched vulnerability, keep the existing values already set
 			}
 			
-			$longMsg .= ' <a href="' . wfSupportController::esc_supportURL(wfSupportController::ITEM_SCAN_RESULT_CORE_UPGRADE) . '" target="_blank" rel="noopener noreferrer">' . esc_html__('Learn more', 'wordfence') . '<span class="screen-reader-text"> (' . esc_html__('opens in new tab', 'wordfence') . ')</span></a>';
+			$longMsg .= ' <a href="' . wfSupportController::esc_supportURL(wfSupportController::ITEM_SCAN_RESULT_CORE_UPGRADE) . '" target="_blank" rel="noopener noreferrer">' . esc_html__('Learn more', 'wordfence') . '<span class="screen-reader-text"> (opens in new tab)</span></a>';
 			
 			if ($updateVersion) {
 				$added = $this->addIssue(
@@ -2045,24 +1982,32 @@ class wfScanEngine {
 				);
 				
 				if ($added == wfIssues::ISSUE_ADDED || $added == wfIssues::ISSUE_UPDATED) {
-					$haveIssues = wfIssues::STATUS_PROBLEM;
-				} else if ($haveIssues != wfIssues::STATUS_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
-					$haveIssues = wfIssues::STATUS_IGNORED;
+					$haveIssues = wfIssues::STATE_PROBLEM;
+				} else if ($haveIssues != wfIssues::STATE_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
+					$haveIssues = wfIssues::STATE_IGNORED;
 				}
 			}
 		}
 
 		$allPlugins = $this->updateCheck->getAllPlugins();
 
+		if (wordfence::hasWordfenceAssistant($allPlugins)) {
+			$key = "wfAssistantPresent";
+			$added = $this->addIssue(
+				$key,
+				wfIssues::SEVERITY_LOW,
+				$key,
+				$key,
+				__("Wordfence Assistant is currently installed and is not needed unless instructed by Wordfence support", "wordfence"),
+				__("The Wordfence Assistant plugin is currently installed. It should only be retained during use and should be removed once it's no longer needed.", "wordfence"),
+				[]
+			);
+		}
+
 		// Plugin updates needed
 		if (count($this->updateCheck->getPluginUpdates()) > 0) {
 			foreach ($this->updateCheck->getPluginUpdates() as $plugin) {
-				$severity = wfIssues::SEVERITY_CRITICAL;
-				if (isset($plugin['vulnerable'])) {
-					if (!$plugin['vulnerable']) {
-						$severity = wfIssues::SEVERITY_MEDIUM;
-					}
-				}
+				$severity = self::get_record_severity($plugin);
 				$key = 'wfPluginUpgrade' . ' ' . $plugin['pluginFile'] . ' ' . $plugin['newVersion'] . ' ' . $plugin['Version'];
 				$shortMsg = sprintf(
 				/* translators: 1. Plugin name. 2. Software version. 3. Software version. */
@@ -2077,9 +2022,9 @@ class wfScanEngine {
 						empty($plugin['Name']) ? $plugin['pluginFile'] : $plugin['Name']
 					), $plugin);
 				if ($added == wfIssues::ISSUE_ADDED || $added == wfIssues::ISSUE_UPDATED) {
-					$haveIssues = wfIssues::STATUS_PROBLEM;
-				} else if ($haveIssues != wfIssues::STATUS_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
-					$haveIssues = wfIssues::STATUS_IGNORED;
+					$haveIssues = wfIssues::STATE_PROBLEM;
+				} else if ($haveIssues != wfIssues::STATE_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
+					$haveIssues = wfIssues::STATE_IGNORED;
 				}
 
 				if (isset($plugin['slug'])) {
@@ -2091,12 +2036,7 @@ class wfScanEngine {
 		// Theme updates needed
 		if (count($this->updateCheck->getThemeUpdates()) > 0) {
 			foreach ($this->updateCheck->getThemeUpdates() as $theme) {
-				$severity = wfIssues::SEVERITY_CRITICAL;
-				if (isset($theme['vulnerable'])) {
-					if (!$theme['vulnerable']) {
-						$severity = wfIssues::SEVERITY_MEDIUM;
-					}
-				}
+				$severity = self::get_record_severity($theme);
 				$key = 'wfThemeUpgrade' . ' ' . $theme['Name'] . ' ' . $theme['version'] . ' ' . $theme['newVersion'];
 				$shortMsg = sprintf(
 				/* translators: 1. Theme name. 2. Software version. 3. Software version. */
@@ -2111,9 +2051,9 @@ class wfScanEngine {
 					esc_html($theme['Name'])
 				), $theme);
 				if ($added == wfIssues::ISSUE_ADDED || $added == wfIssues::ISSUE_UPDATED) {
-					$haveIssues = wfIssues::STATUS_PROBLEM;
-				} else if ($haveIssues != wfIssues::STATUS_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
-					$haveIssues = wfIssues::STATUS_IGNORED;
+					$haveIssues = wfIssues::STATE_PROBLEM;
+				} else if ($haveIssues != wfIssues::STATE_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
+					$haveIssues = wfIssues::STATE_IGNORED;
 				}
 			}
 		}
@@ -2126,7 +2066,7 @@ class wfScanEngine {
 					$hasVersion = array_key_exists('version', $statusArray);
 					if (!$hasVersion) {
 						$statusArray['version'] = null;
-						wordfence::status(3, 'error', "Unable to determine version for plugin $slug");
+						wordfence::status(3, 'error', sprintf(/* translators: slug */ __('Unable to determine version for plugin %s', 'wordfence'), $slug));
 					}
 					
 					if (array_key_exists('last_updated', $statusArray) && 
@@ -2140,7 +2080,7 @@ class wfScanEngine {
 						catch (Exception $e) { //DateMalformedStringException in PHP >= 8.3, Exception previously
 							wordfence::status(3, 'error', sprintf(
 							/* translators: 1. Plugin slug. 2. Malformed date string. */
-								__('Encountered bad date string for plugin "%s" in abandoned plugin check: %s', 'wordfence'), 
+								__('Encountered bad date string for plugin "%1$s" in abandoned plugin check: %2$s', 'wordfence'),
 								$slug, 
 								$statusArray['last_updated']));
 							continue;
@@ -2197,12 +2137,12 @@ class wfScanEngine {
 						}
 						$longMsg .= ' ' . sprintf(
 							/* translators: Support URL. */
-								__('<a href="%s" target="_blank" rel="noopener noreferrer">Get more information.<span class="screen-reader-text"> (' . esc_html__('opens in new tab', 'wordfence') . ')</span></a>', 'wordfence'), wfSupportController::esc_supportURL(wfSupportController::ITEM_SCAN_RESULT_PLUGIN_ABANDONED));
+								__('<a href="%s" target="_blank" rel="noopener noreferrer">Get more information.<span class="screen-reader-text"> (opens in new tab)</span></a>', 'wordfence'), wfSupportController::esc_supportURL(wfSupportController::ITEM_SCAN_RESULT_PLUGIN_ABANDONED));
 						$added = $this->addIssue('wfPluginAbandoned', $severity, $key, $key, $shortMsg, $longMsg, $statusArray);
 						if ($added == wfIssues::ISSUE_ADDED || $added == wfIssues::ISSUE_UPDATED) {
-							$haveIssues = wfIssues::STATUS_PROBLEM;
-						} else if ($haveIssues != wfIssues::STATUS_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
-							$haveIssues = wfIssues::STATUS_IGNORED;
+							$haveIssues = wfIssues::STATE_PROBLEM;
+						} else if ($haveIssues != wfIssues::STATE_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
+							$haveIssues = wfIssues::STATE_IGNORED;
 						}
 
 						unset($allPlugins[$slug]);
@@ -2236,12 +2176,12 @@ class wfScanEngine {
 								}
 								$longMsg .= ' ' . sprintf(
 									/* translators: Support URL. */
-										__('<a href="%s" target="_blank" rel="noopener noreferrer">Get more information.<span class="screen-reader-text"> (' . esc_html__('opens in new tab', 'wordfence') . ')</span></a>', 'wordfence'), wfSupportController::esc_supportURL(wfSupportController::ITEM_SCAN_RESULT_PLUGIN_REMOVED));
+										__('<a href="%s" target="_blank" rel="noopener noreferrer">Get more information.<span class="screen-reader-text"> (opens in new tab)</span></a>', 'wordfence'), wfSupportController::esc_supportURL(wfSupportController::ITEM_SCAN_RESULT_PLUGIN_REMOVED));
 								$added = $this->addIssue('wfPluginRemoved', wfIssues::SEVERITY_CRITICAL, $key, $key, $shortMsg, $longMsg, $pluginData);
 								if ($added == wfIssues::ISSUE_ADDED || $added == wfIssues::ISSUE_UPDATED) {
-									$haveIssues = wfIssues::STATUS_PROBLEM;
-								} else if ($haveIssues != wfIssues::STATUS_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
-									$haveIssues = wfIssues::STATUS_IGNORED;
+									$haveIssues = wfIssues::STATE_PROBLEM;
+								} else if ($haveIssues != wfIssues::STATE_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
+									$haveIssues = wfIssues::STATE_IGNORED;
 								}
 
 								unset($allPlugins[$slug]);
@@ -2255,10 +2195,10 @@ class wfScanEngine {
 			foreach ($allPlugins as $slug => $plugin) {
 				if ($plugin['vulnerable']) {
 					$key = implode(' ', array('wfPluginVulnerable', $plugin['pluginFile'], $plugin['Version']));
-					$shortMsg = sprintf(__('The Plugin "%s" has a security vulnerability.', 'wordfence'), $plugin['Name']);
+					$shortMsg = sprintf(/* translators: plugin name */ __('The Plugin "%s" has a security vulnerability.', 'wordfence'), $plugin['Name']);
 					$longMsg = sprintf(
 						wp_kses(
-							__('To protect your site from this vulnerability, the safest option is to deactivate and completely remove "%s" until a patched version is available. <a href="%s" target="_blank" rel="noopener noreferrer">Get more information.<span class="screen-reader-text"> (opens in new tab)</span></a>', 'wordfence'),
+						/* translators: 1. Plugin name; 2. Support URL */ __('To protect your site from this vulnerability, the safest option is to deactivate and completely remove "%1$s" until a patched version is available. <a href="%2$s" target="_blank" rel="noopener noreferrer">Get more information.<span class="screen-reader-text"> (opens in new tab)</span></a>', 'wordfence'),
 							array(
 								'a' => array(
 									'href' => array(),
@@ -2278,8 +2218,8 @@ class wfScanEngine {
 					if (is_array($plugin['vulnerable']) && isset($plugin['vulnerable']['cvssVector'])) { $statusArray['cvssVector'] = $plugin['vulnerable']['cvssVector']; }
 					$plugin['updatedAvailable'] = false;
 					$added = $this->addIssue('wfPluginVulnerable', wfIssues::SEVERITY_CRITICAL, $key, $key, $shortMsg, $longMsg, $plugin);
-					if ($added == wfIssues::ISSUE_ADDED || $added == wfIssues::ISSUE_UPDATED) { $haveIssues = wfIssues::STATUS_PROBLEM; }
-					else if ($haveIssues != wfIssues::STATUS_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) { $haveIssues = wfIssues::STATUS_IGNORED; }
+					if ($added == wfIssues::ISSUE_ADDED || $added == wfIssues::ISSUE_UPDATED) { $haveIssues = wfIssues::STATE_PROBLEM; }
+					else if ($haveIssues != wfIssues::STATE_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) { $haveIssues = wfIssues::STATE_IGNORED; }
 					
 					unset($allPlugins[$slug]);
 				}
@@ -2296,7 +2236,7 @@ class wfScanEngine {
 	public function scan_suspiciousAdminUsers() {
 		$this->statusIDX['suspiciousAdminUsers'] = wfIssues::statusStart(__("Scanning for admin users not created through WordPress", 'wordfence'));
 		$this->scanController->startStage(wfScanner::STAGE_OPTIONS_AUDIT);
-		$haveIssues = wfIssues::STATUS_SECURE;
+		$haveIssues = wfIssues::STATE_SECURE;
 
 		$adminUsers = new wfAdminUserMonitor();
 		if ($adminUsers->isEnabled()) {
@@ -2314,17 +2254,17 @@ class wfScanEngine {
 				foreach ($suspiciousAdmins as $userID) {
 					$this->scanController->incrementSummaryItem(wfScanner::SUMMARY_SCANNED_USERS);
 					$user = new WP_User($userID);
-					$key = 'suspiciousAdminUsers' . $userID;
+					$key = 'suspiciousAdminUsers-outsideWordPress-' . $userID;
 					$added = $this->addIssue('suspiciousAdminUsers', wfIssues::SEVERITY_HIGH, $key, $key,
-						sprintf(/* translators: WordPress username. */ __("An admin user with the username %s was created outside of WordPress.", 'wordfence'), esc_html($user->user_login)),
+						sprintf(/* translators: WordPress username. */ __("An admin user with the username %s was created outside of WordPress.", 'wordfence'), $user->user_login),
 						sprintf(/* translators: WordPress username. */ __("An admin user with the username %s was created outside of WordPress. It's possible a plugin could have created the account, but if you do not recognize the user, we suggest you remove it.", 'wordfence'), esc_html($user->user_login)),
 						array(
 							'userID' => $userID,
 						));
 					if ($added == wfIssues::ISSUE_ADDED || $added == wfIssues::ISSUE_UPDATED) {
-						$haveIssues = wfIssues::STATUS_PROBLEM;
-					} else if ($haveIssues != wfIssues::STATUS_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
-						$haveIssues = wfIssues::STATUS_IGNORED;
+						$haveIssues = wfIssues::STATE_PROBLEM;
+					} else if ($haveIssues != wfIssues::STATE_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
+						$haveIssues = wfIssues::STATE_IGNORED;
 					}
 				}
 			}
@@ -2335,7 +2275,7 @@ class wfScanEngine {
 			 */
 			foreach ($admins as $userID => $adminUser) {
 				$added = false;
-				$key = 'suspiciousAdminUsers' . $userID;
+				$key = 'suspiciousAdminUsers-username-' . $userID;
 
 				// Check against user name list here.
 				$suspiciousAdminUsernames = wfConfig::get_ser('suspiciousAdminUsernames');
@@ -2343,7 +2283,7 @@ class wfScanEngine {
 					foreach ($suspiciousAdminUsernames as $usernamePattern) {
 						if (preg_match($usernamePattern, $adminUser->user_login)) {
 							$added = $this->addIssue('suspiciousAdminUsers', wfIssues::SEVERITY_HIGH, $key, $key,
-								sprintf(/* translators: WordPress username. */ __("An admin user with a suspicious username %s was found.", 'wordfence'), esc_html($adminUser->user_login)),
+								sprintf(/* translators: WordPress username. */ __("An admin user with a suspicious username %s was found.", 'wordfence'), $adminUser->user_login),
 								sprintf(/* translators: WordPress username. */ __("An admin user with a suspicious username %s was found. Administrators accounts with usernames similar to this are commonly seen created by hackers. It's possible a plugin could have created the account, but if you do not recognize the user, we suggest you remove it.", 'wordfence'), esc_html($adminUser->user_login)),
 								array(
 									'userID' => $userID,
@@ -2353,9 +2293,9 @@ class wfScanEngine {
 				}
 
 				if ($added == wfIssues::ISSUE_ADDED || $added == wfIssues::ISSUE_UPDATED) {
-					$haveIssues = wfIssues::STATUS_PROBLEM;
-				} else if ($haveIssues != wfIssues::STATUS_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
-					$haveIssues = wfIssues::STATUS_IGNORED;
+					$haveIssues = wfIssues::STATE_PROBLEM;
+				} else if ($haveIssues != wfIssues::STATE_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
+					$haveIssues = wfIssues::STATE_IGNORED;
 				}
 			}
 		}
@@ -2367,7 +2307,7 @@ class wfScanEngine {
 	public function scan_suspiciousOptions() {
 		$this->statusIDX['suspiciousOptions'] = wfIssues::statusStart(__("Scanning for suspicious site options", 'wordfence'));
 		$this->scanController->startStage(wfScanner::STAGE_OPTIONS_AUDIT);
-		$haveIssues = wfIssues::STATUS_SECURE;
+		$haveIssues = wfIssues::STATE_SECURE;
 
 		$blogsToScan = self::getBlogsToScan('options');
 		$wfdb = new wfDB();
@@ -2423,21 +2363,15 @@ class wfScanEngine {
 					$blog = array_shift($blogs);
 				}
 
-				if ($result['badList'] == 'goog-malware-shavar') {
-					$shortMsg = sprintf(/* translators: URL. */ __("Option contains a suspected malware URL: %s", 'wordfence'), esc_html($optionKey));
-					$longMsg = sprintf(/* translators: URL. */ __("This option contains a suspected malware URL listed on Google's list of malware sites. It may indicate your site is infected with malware. The URL is: %s", 'wordfence'), esc_html($result['URL']));
-				} else if ($result['badList'] == 'googpub-phish-shavar') {
-					$shortMsg = sprintf(/* translators: URL. */ __("Option contains a suspected phishing site URL: %s", 'wordfence'), esc_html($optionKey));
-					$longMsg = sprintf(/* translators: URL. */ __("This option contains a URL that is a suspected phishing site that is currently listed on Google's list of known phishing sites. It may indicate your site is infected with malware. The URL is: %s", 'wordfence'), esc_html($result['URL']));
-				} else if ($result['badList'] == 'wordfence-dbl') {
-					$shortMsg = sprintf(/* translators: URL. */ __("Option contains a suspected malware URL: %s", 'wordfence'), esc_html($optionKey));
+				if ($result['badList'] == 'wordfence-dbl') {
+					$shortMsg = sprintf(/* translators: URL. */ __("Option contains a suspected malware URL: %s", 'wordfence'), $optionKey);
 					$longMsg = sprintf(/* translators: URL. */ __("This option contains a URL that is currently listed on Wordfence's domain blocklist. It may indicate your site is infected with malware. The URL is: %s", 'wordfence'), esc_html($result['URL']));
 				} else {
 					//A list type that may be new and the plugin has not been upgraded yet.
 					continue;
 				}
 
-				$longMsg .= ' - ' . sprintf(/* translators: Support URL. */ __('<a href="%s" target="_blank" rel="noopener noreferrer">Get more information.<span class="screen-reader-text"> (' . esc_html__('opens in new tab', 'wordfence') . ')</span></a>', 'wordfence'), wfSupportController::esc_supportURL(wfSupportController::ITEM_SCAN_RESULT_OPTION_MALWARE_URL));
+				$longMsg .= ' - ' . sprintf(/* translators: Support URL. */ __('<a href="%s" target="_blank" rel="noopener noreferrer">Get more information.<span class="screen-reader-text"> (opens in new tab)</span></a>', 'wordfence'), wfSupportController::esc_supportURL(wfSupportController::ITEM_SCAN_RESULT_OPTION_MALWARE_URL));
 
 				$this->status(2, 'info', sprintf(/* translators: Scan result description. */ __("Adding issue: %s", 'wordfence'), $shortMsg));
 
@@ -2456,9 +2390,9 @@ class wfScanEngine {
 					'blog_id'     => $blogID
 				));
 				if ($added == wfIssues::ISSUE_ADDED || $added == wfIssues::ISSUE_UPDATED) {
-					$haveIssues = wfIssues::STATUS_PROBLEM;
-				} else if ($haveIssues != wfIssues::STATUS_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
-					$haveIssues = wfIssues::STATUS_IGNORED;
+					$haveIssues = wfIssues::STATE_PROBLEM;
+				} else if ($haveIssues != wfIssues::STATE_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
+					$haveIssues = wfIssues::STATE_IGNORED;
 				}
 				if (is_multisite()) {
 					restore_current_blog();
@@ -2473,13 +2407,13 @@ class wfScanEngine {
 	public function scan_geoipSupport() {
 		$this->statusIDX['geoipSupport'] = wfIssues::statusStart(__("Checking for future GeoIP support", 'wordfence'));
 		$this->scanController->startStage(wfScanner::STAGE_SERVER_STATE);
-		$haveIssues = wfIssues::STATUS_SECURE;
+		$haveIssues = wfIssues::STATE_SECURE;
 
 		if (version_compare(phpversion(), '5.4') < 0 && wfConfig::get('isPaid') && wfBlock::hasCountryBlock()) {
 			$shortMsg = __('PHP Update Needed for Country Blocking', 'wordfence');
 			$longMsg = sprintf(/* translators: Software version. */ __('The GeoIP database that is required for country blocking has been updated to a new format. This new format requires sites to run PHP 5.4 or newer, and this site is on PHP %s. To ensure country blocking continues functioning, please update PHP.', 'wordfence'), wfUtils::cleanPHPVersion());
 
-			$longMsg .= ' ' . sprintf(/* translators: Support URL. */ __('<a href="%s" target="_blank" rel="noopener noreferrer">Get more information.<span class="screen-reader-text"> (' . esc_html__('opens in new tab', 'wordfence') . ')</span></a>', 'wordfence'), wfSupportController::esc_supportURL(wfSupportController::ITEM_SCAN_RESULT_GEOIP_UPDATE));
+			$longMsg .= ' ' . sprintf(/* translators: Support URL. */ __('<a href="%s" target="_blank" rel="noopener noreferrer">Get more information.<span class="screen-reader-text"> (opens in new tab)</span></a>', 'wordfence'), wfSupportController::esc_supportURL(wfSupportController::ITEM_SCAN_RESULT_GEOIP_UPDATE));
 
 			$this->status(2, 'info', sprintf(/* translators: Scan result description. */ __("Adding issue: %s", 'wordfence'), $shortMsg));
 
@@ -2487,9 +2421,9 @@ class wfScanEngine {
 			$ignoreC = $ignoreP;
 			$added = $this->addIssue('geoipSupport', wfIssues::SEVERITY_MEDIUM, $ignoreP, $ignoreC, $shortMsg, $longMsg, array());
 			if ($added == wfIssues::ISSUE_ADDED || $added == wfIssues::ISSUE_UPDATED) {
-				$haveIssues = wfIssues::STATUS_PROBLEM;
-			} else if ($haveIssues != wfIssues::STATUS_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
-				$haveIssues = wfIssues::STATUS_IGNORED;
+				$haveIssues = wfIssues::STATE_PROBLEM;
+			} else if ($haveIssues != wfIssues::STATE_PROBLEM && ($added == wfIssues::ISSUE_IGNOREP || $added == wfIssues::ISSUE_IGNOREC)) {
+				$haveIssues = wfIssues::STATE_IGNORED;
 			}
 		}
 
@@ -2562,7 +2496,7 @@ class wfScanEngine {
 		if (!wfConfig::get('startScansRemotely', false)) {
 			if ($isFork) {
 				$testSuccessful = (bool) wfConfig::get('scanAjaxTestSuccessful');
-				wordfence::status(4, 'info', sprintf(__("Cached result for scan start test: %s", 'wordfence'), var_export($testSuccessful, true)));
+				wordfence::status(4, 'info', sprintf(/* translators: test result */ __("Cached result for scan start test: %s", 'wordfence'), var_export($testSuccessful, true)));
 			}
 			else {
 				try {
@@ -2650,7 +2584,7 @@ class wfScanEngine {
 			if (is_wp_error($response)) {
 				$error_message = $response->get_error_message();
 				if ($error_message) {
-					$lastScanCompletedMessage = sprintf(/* translators: WordPress admin panel URL. */ __("There was an error starting the scan: %s.", 'wordfence'), $error_message);
+					$lastScanCompletedMessage = sprintf(/* translators: Error message. */ __("There was an error starting the scan: %s.", 'wordfence'), $error_message);
 				} else {
 					$lastScanCompletedMessage = __("There was an unknown error starting the scan.", 'wordfence');
 				}

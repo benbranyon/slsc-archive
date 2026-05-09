@@ -5,6 +5,13 @@ class wfUtils {
 	const DEFAULT_MAX_SERIALIZED_ARRAY_LENGTH = 1024;
 	const DEFAULT_MAX_SERIALIZED_ARRAY_DEPTH = 5;
 	
+	//Fields for wfUtils::parseCallable
+	const CALLABLE_CLASS = 'class';
+	const CALLABLE_FUNCTION = 'function';
+	const CALLABLE_IS_INSTANCE = 'instance';
+	const CALLABLE_IS_CLOSURE = 'closure';
+	const CALLABLE_IS_INVOKABLE = 'invokable';
+	
 	//Flags for wfUtils::parse_version
 	const VERSION_MAJOR = 'major';
 	const VERSION_MINOR = 'minor';
@@ -14,6 +21,10 @@ class wfUtils {
 	
 	//Flags for array_diff_assoc
 	const ARRAY_DIFF_ORDERED_ARRAYS = 1; //When specified, non-associative arrays are treated as if the ordering matters. The default is to ignore the ordering and only care about the content
+	
+	//Constants for wfUtils::serverIPs
+	const SERVER_ADDR_CACHE_TTL =  86400;
+	const SERVER_ADDR_REFRESH_TTL =  14400;
 	
 	private static $isWindows = false;
 	public static $scanLockFH = false;
@@ -93,7 +104,7 @@ class wfUtils {
 			if($noSeconds){
 				return __("less than a minute", 'wordfence');
 			} else {
-				return sprintf(/* translators: Number of seconds. */ __("%d seconds", 'wordfence'), floor($secs));
+				return sprintf(/* translators: Time duration (plural). */ __("%d seconds", 'wordfence'), floor($secs));
 			}
 		}
 	}
@@ -887,8 +898,14 @@ class wfUtils {
 	 * @return string
 	 */
 	public static function inet_aton($ip) {
-		$ip = preg_replace('/(?<=^|\.)0+([1-9])/', '$1', $ip);
-		return sprintf("%u", ip2long($ip));
+		try {
+			$ip = preg_replace('/(?<=^|\.)0+([1-9])/', '$1', $ip);
+			return sprintf("%u", ip2long($ip));
+		}
+		catch (Throwable $t) {
+			//Ignore -- fall through to default
+		}
+		return '0';
 	}
 
 	/**
@@ -912,9 +929,14 @@ class wfUtils {
 	 * @return string
 	 */
 	public static function inet_pton($ip) {
-		// convert the 4 char IPv4 to IPv6 mapped version.
-		$pton = str_pad(self::hasIPv6Support() ? @inet_pton($ip) : self::_inet_pton($ip), 16,
-			"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff\x00\x00\x00\x00", STR_PAD_LEFT);
+		$default = "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff\x00\x00\x00\x00";
+		try {
+			// convert the 4 char IPv4 to IPv6 mapped version.
+			$pton = str_pad(self::hasIPv6Support() ? @inet_pton($ip) : self::_inet_pton($ip), 16, $default, STR_PAD_LEFT);
+		}
+		catch (Throwable $t) {
+			$pton = $default;
+		}
 		return $pton;
 	}
 
@@ -1055,6 +1077,16 @@ class wfUtils {
 			}
 			return WP_CONTENT_DIR . '/plugins/';
 		}
+	}
+	
+	/**
+	 * Convenience function to generate an admin URL using the appropriate function depending on multisite status.
+	 *
+	 * @param string $path
+	 * @return string
+	 */
+	public static function maybeNetworkAdminURL($path) {
+		return function_exists('network_admin_url') && is_multisite() ? network_admin_url($path) : admin_url($path);
 	}
 	public static function makeRandomIP(){
 		return rand(11,230) . '.' . rand(0,255) . '.' . rand(0,255) . '.' . rand(0,255);
@@ -1480,11 +1512,79 @@ class wfUtils {
 			}
 		}
 		
-		if (isset($_SERVER['SERVER_ADDR']) && wfUtils::isValidIP($_SERVER['SERVER_ADDR'])) {
-			$serverIPs[] = $_SERVER['SERVER_ADDR'];
+		/*
+		 * This segment governs the SERVER_ADDR cache. We cache all seen values for the TTL defined by 
+		 * `wfUtils::SERVER_ADDR_CACHE_TTL` to account for varying IPs from load balancers. We do not refresh
+		 * the timestamp on a repeat address until it's at least `wfUtils::SERVER_ADDR_REFRESH_TTL` old unless we're
+		 * going to save a change anyway. 
+		 */
+		
+		$recentServerAddr = wfConfig::get_ser('recentServerAddr');
+		$dirtyServerAddr = false;
+		$containsCurrentServerAddr = false;
+		$recents = array();
+		if (!is_array($recentServerAddr)) {
+			$recentServerAddr = array();
 		}
 		
-		$serverIPs = array_unique($serverIPs);
+		$recentServerAddr = array_filter($recentServerAddr, function($time, $addr) use (&$dirtyServerAddr, &$containsCurrentServerAddr, &$recents) {
+			if (!wfUtils::isValidIP($addr)) {
+				$dirtyServerAddr = true;
+				return false;
+			}
+			
+			if ($time < time() - self::SERVER_ADDR_CACHE_TTL) {
+				$dirtyServerAddr = true;
+				return false;
+			}
+			
+			if (isset($_SERVER['SERVER_ADDR']) && $addr == $_SERVER['SERVER_ADDR']) {
+				$containsCurrentServerAddr = true;
+				if ($time < time() - self::SERVER_ADDR_REFRESH_TTL) {
+					$dirtyServerAddr = true;
+				}
+				return false; //Filtering out the current one now so it can be re-added later with a current timestamp
+			}
+			$recents[] = $addr;
+			return true;
+		}, ARRAY_FILTER_USE_BOTH);
+		
+		if (isset($_SERVER['SERVER_ADDR']) && wfUtils::isValidIP($_SERVER['SERVER_ADDR'])) {
+			$recentServerAddr[$_SERVER['SERVER_ADDR']] = time();
+			$recents[] = $_SERVER['SERVER_ADDR'];
+			$dirtyServerAddr = $dirtyServerAddr || !$containsCurrentServerAddr;
+		}
+			
+		if ($dirtyServerAddr) {
+			//Check for state change from another request, merge as needed, then save our update
+			$locked = wfConfig::createLock('recentServerAddr');
+			if ($locked) {
+				$currentState = wfConfig::get_ser('recentServerAddr', array(), true, false);
+				if (is_array($currentState)) {
+					foreach ($currentState as $addr => $time) {
+						if (!wfUtils::isValidIP($addr)) {
+							continue;
+						}
+						
+						if (array_key_exists($addr, $recentServerAddr)) {
+							$recentServerAddr[$addr] = max($time, $recentServerAddr[$addr]);
+						}
+						else if ($time > time() - self::SERVER_ADDR_CACHE_TTL) {
+							$recentServerAddr[$addr] = $time;
+							$recents[] = $addr;
+						}
+					}
+				}
+				
+				wfConfig::set_ser('recentServerAddr', $recentServerAddr);
+				wfConfig::releaseLock('recentServerAddr');
+			}
+		}
+		
+		sort($recents);
+		$serverIPs = array_merge($serverIPs, $recents);
+		
+		$serverIPs = array_values(array_unique($serverIPs));
 		$cachedServerIPs = $serverIPs;
 		return $serverIPs;
 	}
@@ -1572,25 +1672,32 @@ class wfUtils {
 		}
 		return false; //Returns an array with a valid IP and the server variable, or false.
 	}
+	
+	/**
+	 * Returns an array of IPs seen by the server. The structure of the return value is an array of arrays where each
+	 * child array has the structure ['ip' => <ip address>, 'selected' => <whether this one is considered the client ip>]
+	 *
+	 * @return array|false May return false if there are no IPs (e.g., a CLI request)
+	 */
 	public static function getIPPreview($howGet = null, $trustedProxies = null) {
 		$ip = self::getIPAndServerVariable($howGet, $trustedProxies);
 		if (is_array($ip)) {
 			list($IP, $variable) = $ip;
 			if (isset($_SERVER[$variable]) && strpos($_SERVER[$variable], ',') !== false) {
 				$items = preg_replace('/[\s,]/', '', explode(',', $_SERVER[$variable]));
-				$output = '';
+				$output = array();
 				foreach ($items as $i) {
 					if ($IP == $i) {
-						$output .= ', <strong>' . esc_html($i) . '</strong>';
+						$output[] = array('ip' => $i, 'selected' => true);
 					}
 					else {
-						$output .= ', ' . esc_html($i); 
+						$output[] = array('ip' => $i, 'selected' => false);
 					}
 				}
 				
-				return substr($output, 2);
+				return $output;
 			}
-			return '<strong>' . esc_html($IP) . '</strong>';
+			return array(array('ip' => $IP, 'selected' => true));
 		}
 		return false;
 	}
@@ -1985,7 +2092,7 @@ class wfUtils {
 				}
 			}
 			else {
-				require_once(__DIR__ . '/wfIpLocator.php');
+				self::requireIpLocator();
 				$locator = wfIpLocator::getInstance();
 				$freshIPs = array();
 				$locale = get_locale();
@@ -2203,6 +2310,59 @@ class wfUtils {
 		}
 		return true;
 	}
+	
+	/**
+	 * Parses a callable and returns its components or null if it's not a valid callable. This does not attempt to verify
+	 * that the callable can actually be executed (e.g., the function may not exist), just that its structure is correct.
+	 * 
+	 * The array returned will have keys corresponding to the `wfUtils::CALLABLE_` constants.
+	 * 
+	 * @param callable $callable
+	 * @return array|null
+	 */
+	public static function parseCallable($callable) {
+		try {
+			if (!@is_callable($callable, true, $parsed)) {
+				return null;
+			}
+		}
+		catch (Throwable $t) {
+			return null;
+		}
+		
+		$className = null;
+		$functionName = null;
+		$isClosure = false;
+		$isInstance = false;
+		$isInvokable = false;
+		if (substr_count($parsed, '::')) {
+			$components = explode('::', $parsed);
+			$isClosure = $components[0] == 'Closure';
+			if (!$isClosure) {
+				$className = $components[0];
+				$functionName = $components[1];
+			}
+		}
+		else if (is_string($callable)) {
+			$functionName = $parsed;
+		}
+		
+		if (is_array($callable) && count($callable) == 2) {
+			$isInstance = is_object($callable[0]);
+		}
+		else if (!$isClosure && is_object($callable)) {
+			$isInvokable = true;
+		}
+		
+		return array(
+			self::CALLABLE_CLASS => $className,
+			self::CALLABLE_FUNCTION => $functionName,
+			self::CALLABLE_IS_CLOSURE => $isClosure,
+			self::CALLABLE_IS_INSTANCE => $isInstance,
+			self::CALLABLE_IS_INVOKABLE => $isInvokable,
+		);
+	}
+	
 	public static function iniSet($key, $val){
 		if(self::funcEnabled('ini_set')){
 			@ini_set($key, $val);
@@ -2440,6 +2600,30 @@ class wfUtils {
 		remove_filter( 'wp_mail_content_type', 'wfUtils::set_html_content_type' );
 		return $result;
 	}
+	
+	/**
+	 * Convenience method to send an email via `wp_mail` and avoid an exception of another plugin overrides the call
+	 * and throws one (Core does not currently throw any).
+	 *
+	 * @param $to
+	 * @param $subject
+	 * @param $message
+	 * @param $headers
+	 * @param $attachments
+	 * @return bool
+	 */
+	public static function maybe_wp_mail($to, $subject, $message, $headers = '', $attachments = array()) {
+		try {
+			return wp_mail($to, $subject, $message, $headers, $attachments);
+		}
+		catch (Exception $e) {
+			wordfence::status(2, 'error', 'Wordfence failed to send email: ' . $e->getMessage());
+		}
+		catch (Throwable $t) {
+			wordfence::status(2, 'error', 'Wordfence failed to send email: ' . $t->getMessage());
+		}
+		return false;
+	}
 
 	/**
 	 * @param string $readmePath
@@ -2629,6 +2813,50 @@ class wfUtils {
 			}
 		}
 		return $output;
+	}
+	
+	/**
+	 * A custom version of `esc_attr` that allows the escaping behavior to be customized
+	 *
+	 * @param string $text
+	 * @param int $quote_style
+	 * @param string $charset
+	 * @param bool $double_encode
+	 *
+	 * @return string
+	 */
+	public static function esc_attr( $text, $quote_style = ENT_QUOTES, $charset = 'UTF-8', $double_encode = false ) {
+		$original = $text;
+		$text = wp_check_invalid_utf8((string) $text);
+		
+		if (0 === strlen($text)) { return ''; }
+		else if (!preg_match( '/[&<>"\']/', $text ) ) { return $text; }
+		
+		if (!in_array($quote_style, array(ENT_NOQUOTES, ENT_COMPAT, ENT_QUOTES, 'single', 'double'), true)) {
+			$quote_style = ENT_QUOTES;
+		}
+		
+		$_quote_style = $quote_style;
+		
+		if ('double' === $quote_style) {
+			$quote_style  = ENT_COMPAT;
+			$_quote_style = ENT_COMPAT;
+		}
+		else if ('single' === $quote_style) {
+			$quote_style = ENT_NOQUOTES;
+		}
+		
+		if (!$double_encode) {
+			$text = wp_kses_normalize_entities($text, ($quote_style & ENT_XML1) ? 'xml' : 'html');
+		}
+		
+		$text = htmlspecialchars($text, $quote_style, $charset, $double_encode);
+		
+		if ('single' === $_quote_style) {
+			$text = str_replace( "'", '&#039;', $text );
+		}
+		
+		return apply_filters('attribute_escape', $text, $original);
 	}
 	
 	public static function requestDetectProxyCallback($timeout = 2, $blocking = true, $forceCheck = false) {
@@ -3289,6 +3517,20 @@ class wfUtils {
 		return $a1 == $a2;
 	}
 	
+	/**
+	 * Returns true if $maybeSubset is contained within $set.
+	 *
+	 * @param array $set
+	 * @param array $maybeSubset
+	 * @return bool
+	 */
+	public static function is_subset($set, $maybeSubset) {
+		if (!is_array($set) || !is_array($maybeSubset)) {
+			return false;
+		}
+		return count(array_intersect($set, $maybeSubset)) == count($maybeSubset);
+	}
+	
 	public static function array_first($array) {
 		if (empty($array)) {
 			return null;
@@ -3308,11 +3550,7 @@ class wfUtils {
 	}
 	
 	public static function array_strtolower($array) {
-		$result = array();
-		foreach ($array as $a) {
-			$result[] = strtolower($a);
-		}
-		return $result;
+		return array_map(function($v) { return self::strtolower($v); }, $array);
 	}
 	
 	public static function array_column($input = null, $columnKey = null, $indexKey = null) { //Polyfill from https://github.com/ramsey/array_column/blob/master/src/array_column.php
@@ -3878,6 +4116,10 @@ class wfWebServerInfo {
 			$serverInfo->setSoftware(self::APACHE);
 			$serverInfo->setSoftwareName('apache');
 		}
+		else if (stripos($_SERVER['SERVER_SOFTWARE'], 'unit') !== false) {
+			$serverInfo->setSoftware(self::NGINX);
+			$serverInfo->setSoftwareName('unit');
+		}
 
 		$serverInfo->setHandler($sapi);
 
@@ -3894,7 +4136,7 @@ class wfWebServerInfo {
 	/**
 	 * @return bool
 	 */
-	public function isNGINX() {
+	public function isNginx() {
 		return $this->getSoftware() === self::NGINX;
 	}
 
@@ -3926,7 +4168,20 @@ class wfWebServerInfo {
 	public function isApacheSuPHP() {
 		return $this->isApache() && $this->isCGI() &&
 			function_exists('posix_getuid') &&
+			function_exists('getmyuid') &&
 			getmyuid() === posix_getuid();
+	}
+
+	private function isUnit() {
+		return $this->softwareName == "unit";
+	}
+
+	public function isNginxStandard() {
+		return $this->isNginx() && !$this->isUnit();
+	}
+
+	public function isNginxUnit() {
+		return $this->isNginx() && $this->isUnit();
 	}
 
 	/**

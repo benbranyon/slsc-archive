@@ -1600,10 +1600,10 @@ END AS `detailSort`
 		}
 		
 		$log = wfLog::shared();
-		$log->getCurrentRequest()->actionDescription = __('blocked access via country blocking', 'wordfence');
+		$log->getCurrentRequest()->actionDescription = wfWAFBlockI18n::getBlockDescription(wfWAFBlockI18n::WFWAF_BLOCK_COUNTRY);
 		wfConfig::inc('totalCountryBlocked');
 		wfActivityReport::logBlockedIP(wfUtils::getIP(), null, 'country');
-		$log->do503(3600, __('Access from your area has been temporarily limited for security reasons', 'wordfence')); //exits
+		$log->do503(3600, wfI18n::__('Access from your area has been temporarily limited for security reasons', 'wordfence')); //exits
 	}
 	
 	/**
@@ -1632,8 +1632,8 @@ END AS `detailSort`
 		switch ($this->type) {
 			case self::TYPE_COUNTRY:
 				return array(
-					'blockLogin' => wfUtils::truthyToInt($this->blockLogin),
-					'blockSite' => wfUtils::truthyToInt($this->blockSite),
+					'blockLogin' => wfUtils::truthyToBoolean($this->blockLogin),
+					'blockSite' => wfUtils::truthyToBoolean($this->blockSite),
 					'countries' => $this->countries,
 					'reason' => $this->reason,
 					'expiration' => $this->expiration,
