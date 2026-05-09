@@ -107,7 +107,8 @@ class Indexable_Repository {
 	 * This may be the result of the indexable not existing or of being unable to determine what type of page the
 	 * current page is.
 	 *
-	 * @return bool|Indexable The indexable. If no indexable is found returns an empty indexable. Returns false if there is a database error.
+	 * @return bool|Indexable The indexable. If no indexable is found returns an empty indexable. Returns false if
+	 *                        there is a database error.
 	 */
 	public function for_current_page() {
 		$indexable = false;
@@ -148,7 +149,7 @@ class Indexable_Repository {
 					'object_type' => 'unknown',
 					'post_status' => 'unindexed',
 					'version'     => 1,
-				]
+				],
 			);
 		}
 
@@ -212,6 +213,27 @@ class Indexable_Repository {
 			->where( 'object_type', $object_type )
 			->where( 'object_sub_type', $object_sub_type )
 			->find_many();
+
+		return \array_map( [ $this, 'upgrade_indexable' ], $indexables );
+	}
+
+	/**
+	 * Retrieves a paginated set of indexable instances of public indexables.
+	 *
+	 * @param int    $page      The page number (1-based).
+	 * @param int    $page_size The number of items per page.
+	 * @param string $post_type The post type indexables to find.
+	 *
+	 * @return Indexable[] The array with the paginated indexable instances which are public.
+	 */
+	public function find_all_public_paginated( int $page, int $page_size, string $post_type ): array {
+		$offset = ( ( $page - 1 ) * $page_size );
+
+		$query = $this->query()->where_raw( '( is_public IS NULL OR is_public = 1 ) AND ( is_robots_noindex IS NULL OR is_robots_noindex = 0 )' );
+		$query->where( 'object_sub_type', $post_type );
+		$query->where( 'post_status', 'publish' );
+
+		$indexables = $query->order_by_asc( 'id' )->limit( $page_size )->offset( $offset )->find_many();
 
 		return \array_map( [ $this, 'upgrade_indexable' ], $indexables );
 	}
@@ -466,10 +488,11 @@ class Indexable_Repository {
 	 * @param string $post_type                   The post type.
 	 * @param int    $limit                       The maximum number of posts to return.
 	 * @param bool   $exclude_older_than_one_year Whether to exclude posts older than one year.
+	 * @param string $search_filter               Optional. A search filter to apply to the breadcrumb title.
 	 *
 	 * @return Indexable[] array of indexables.
 	 */
-	public function get_recently_modified_posts( string $post_type, int $limit, bool $exclude_older_than_one_year ) {
+	public function get_recently_modified_posts( string $post_type, int $limit, bool $exclude_older_than_one_year, string $search_filter = '' ) {
 		$query = $this->query()
 			->where( 'object_type', 'post' )
 			->where( 'object_sub_type', $post_type )
@@ -479,6 +502,10 @@ class Indexable_Repository {
 
 		if ( $exclude_older_than_one_year === true ) {
 			$query->where_gte( 'object_published_at', \gmdate( 'Y-m-d H:i:s', \strtotime( '-1 year' ) ) );
+		}
+
+		if ( $search_filter !== '' ) {
+			$query->where_like( 'breadcrumb_title', '%' . $search_filter . '%' );
 		}
 
 		$query->order_by_desc( 'object_last_modified' )
@@ -508,6 +535,101 @@ class Indexable_Repository {
 		}
 
 		return $query->find_many();
+	}
+
+	/**
+	 * Returns the most recently modified posts with keywords of a post type.
+	 *
+	 * @param string      $post_type  The post type.
+	 * @param int|null    $limit      The maximum number of posts to return.
+	 * @param string|null $date_limit Only include content modified after this date.
+	 *
+	 * @return array<array<string, string>>|false The array of indexable columns. False if the query failed.
+	 */
+	public function get_recent_posts_with_keywords_for_post_type( string $post_type, ?int $limit = null, ?string $date_limit = null ) {
+		$query = $this->query()
+			->select( 'object_id' )
+			->select( 'primary_focus_keyword_score' )
+			->select( 'breadcrumb_title' )
+			->where( 'object_type', 'post' )
+			->where( 'object_sub_type', $post_type )
+			->where_not_equal( 'primary_focus_keyword_score', 0 )
+			->where_not_null( 'primary_focus_keyword_score' )
+			->where_raw( "( post_status = 'publish' OR post_status IS NULL )" )
+			->where_raw( '( is_robots_noindex IS NULL OR is_robots_noindex <> 1 )' )
+			->order_by_desc( 'object_last_modified' );
+
+		if ( $limit !== null ) {
+			$query->limit( $limit );
+		}
+
+		if ( $date_limit !== null ) {
+			$query->where_gte( 'object_last_modified', $date_limit );
+		}
+
+		return $query->find_array();
+	}
+
+	/**
+	 * Returns the most recently modified posts with readability scores of a post type.
+	 *
+	 * @param string      $post_type  The post type.
+	 * @param int|null    $limit      The maximum number of posts to return.
+	 * @param string|null $date_limit Only include content modified after this date.
+	 *
+	 * @return array<array<string, string|null>>|false The array of indexable columns. False if the query failed.
+	 */
+	public function get_recent_posts_with_readability_scores_for_post_type( string $post_type, ?int $limit = null, ?string $date_limit = null ) {
+		$query = $this->query()
+			->select( 'object_id' )
+			->select( 'readability_score' )
+			->select( 'breadcrumb_title' )
+			->where( 'object_type', 'post' )
+			->where( 'object_sub_type', $post_type )
+			->where_not_null( 'estimated_reading_time_minutes' )
+			->where_raw( "( post_status = 'publish' OR post_status IS NULL )" )
+			->order_by_desc( 'object_last_modified' );
+
+		if ( $limit !== null ) {
+			$query->limit( $limit );
+		}
+
+		if ( $date_limit !== null ) {
+			$query->where_gte( 'object_last_modified', $date_limit );
+		}
+
+		return $query->find_array();
+	}
+
+	/**
+	 * Returns the most recently modified posts for a post type.
+	 *
+	 * @param string      $post_type  The post type.
+	 * @param int|null    $limit      The maximum number of posts to return.
+	 * @param string|null $date_limit Only include content modified after this date.
+	 *
+	 * @return array<array<string, string|null>>|false The array of indexable columns. False if the query failed.
+	 */
+	public function get_recent_posts_for_post_type( string $post_type, ?int $limit = null, ?string $date_limit = null ) {
+		$query = $this->query()
+			->select( 'object_id' )
+			->select( 'breadcrumb_title' )
+			->select( 'description' )
+			->where( 'object_type', 'post' )
+			->where( 'object_sub_type', $post_type )
+			->where_raw( "( post_status = 'publish' OR post_status IS NULL )" )
+			->where_raw( '( is_robots_noindex IS NULL OR is_robots_noindex <> 1 )' )
+			->order_by_desc( 'object_last_modified' );
+
+		if ( $limit !== null ) {
+			$query->limit( $limit );
+		}
+
+		if ( $date_limit !== null ) {
+			$query->where_gte( 'object_last_modified', $date_limit );
+		}
+
+		return $query->find_array();
 	}
 
 	/**
@@ -561,18 +683,19 @@ class Indexable_Repository {
 	/**
 	 * Resets the permalinks of the passed object type and subtype.
 	 *
-	 * @param string|null $type    The type of the indexable. Can be null.
-	 * @param string|null $subtype The subtype. Can be null.
+	 * @param string|null $type      The type of the indexable. Can be null.
+	 * @param string|null $subtype   The subtype. Can be null.
+	 * @param int|null    $object_id The object ID. Can be null.
 	 *
 	 * @return int|bool The number of permalinks changed if the query was succesful. False otherwise.
 	 */
-	public function reset_permalink( $type = null, $subtype = null ) {
+	public function reset_permalink( $type = null, $subtype = null, $object_id = null ) {
 		$query = $this->query()->set(
 			[
 				'permalink'      => null,
 				'permalink_hash' => null,
 				'version'        => 0,
-			]
+			],
 		);
 
 		if ( $type !== null ) {
@@ -581,6 +704,10 @@ class Indexable_Repository {
 
 		if ( $type !== null && $subtype !== null ) {
 			$query->where( 'object_sub_type', $subtype );
+		}
+
+		if ( $object_id !== null ) {
+			$query->where( 'object_id', $object_id );
 		}
 
 		return $query->update_many();

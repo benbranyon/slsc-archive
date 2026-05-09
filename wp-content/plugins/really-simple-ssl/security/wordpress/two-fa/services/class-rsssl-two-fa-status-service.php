@@ -9,24 +9,55 @@ class Rsssl_Two_Fa_Status_Service {
      * @return string
      */
     public function determineStatus(int $userId, array $forcedRoles, int $daysThreshold): string {
-        $totpStatus   = get_user_meta($userId, 'rsssl_two_fa_status_totp', true);
-        $emailStatus  = get_user_meta($userId, 'rsssl_two_fa_status_email', true);
-        $passkeyStatus  = get_user_meta($userId, 'rsssl_two_fa_status_passkey', true);
-        $lastLogin    = get_user_meta($userId, 'rsssl_two_fa_last_login', true);
+        $userData = get_userdata($userId);
+        if (!$userData) {
+            return 'open';
+        }
 
-        if (in_array('active', [$totpStatus, $emailStatus, $passkeyStatus], true)) {
+        $providerStatuses = [];
+        foreach ( \RSSSL\Security\WordPress\Two_Fa\Providers\Rsssl_Provider_Loader::get_loader()::available_providers() as $method => $provider ) {
+            if (!$provider::is_enabled($userData)) {
+                continue;
+            }
+
+            $providerStatuses[] = \RSSSL\Security\WordPress\Two_Fa\Rsssl_Two_Factor_Settings::get_user_status($method, $userId);
+        }
+
+        $lastLogin = get_user_meta($userId, 'rsssl_two_fa_last_login', true);
+
+        // User has active 2FA configured
+        if (in_array('active', $providerStatuses, true)) {
             return 'active';
         }
-        if ($totpStatus === 'disabled' && $emailStatus === 'disabled') {
+
+        // Only mark the user as disabled when every enabled provider is disabled.
+        if (!empty($providerStatuses) && !array_diff($providerStatuses, array('disabled'))) {
             return 'disabled';
         }
-        foreach ($forcedRoles as $role) {
-            if (in_array($role, get_userdata($userId)->roles, true)
-                && strtotime($lastLogin) < strtotime("-$daysThreshold days")
-            ) {
-                return 'expired';
-            }
+
+        // Check if user has a forced role
+        $isForced = !empty(array_intersect($forcedRoles, \RSSSL\Security\WordPress\Two_Fa\Rsssl_Two_Factor_Settings::get_user_roles($userId)));
+
+        // Non-forced users can still configure any remaining open provider.
+        if (!$isForced) {
+            return 'open';
         }
-        return $totpStatus ?: $emailStatus ?: 'open';
+
+        // New user without lastLogin - initialize grace period
+        if (empty($lastLogin)) {
+            update_user_meta($userId, 'rsssl_two_fa_last_login', gmdate('Y-m-d H:i:s'));
+            return 'open';
+        }
+
+        // Grace period has expired
+        $lastLoginTime = strtotime($lastLogin);
+        $thresholdTime = strtotime("-$daysThreshold days");
+
+        if ($lastLoginTime !== false && $lastLoginTime < $thresholdTime) {
+            return 'expired';
+        }
+
+        // Still within grace period
+        return 'open';
     }
 }

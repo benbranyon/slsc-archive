@@ -1,14 +1,14 @@
 <?php
 
-namespace wpai_acf_add_on\fields\acf;
+namespace wpai_acf_add_on_pro\fields\acf;
 
-use wpai_acf_add_on\ACFService;
-use wpai_acf_add_on\fields\Field;
-use wpai_acf_add_on\fields\FieldFactory;
+use pmai_acf_add_on\ACFService;
+use pmai_acf_add_on\fields\Field;
+use pmai_acf_add_on\fields\FieldFactory;
 
 /**
  * Class FieldFlexibleContent
- * @package wpai_acf_add_on\fields\acf
+ * @package pmai_acf_add_on\fields\acf
  */
 class FieldFlexibleContent extends Field {
 

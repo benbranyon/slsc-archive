@@ -50,7 +50,12 @@ class WPML extends Controller {
 		global $wpdb;
 
 		check_ajax_referer( 'fbv_nonce', 'nonce', true );
-
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array( 'mess' => __( 'You do not have permission to perform this action.', 'filebird' ) ),
+				403
+			);
+		}
 		$translationNotInFolder = $wpdb->get_results(
 			"SELECT GROUP_CONCAT( IF(fbv.folder_id is NULL, icl.element_id, NULL) ) as attachment_ids, GROUP_CONCAT(DISTINCT(fbv.folder_id)) as folder_id
 			FROM `{$wpdb->prefix}icl_translations` icl

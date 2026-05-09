@@ -1,13 +1,13 @@
 <?php
 
-namespace wpai_acf_add_on\fields\acf\field_clone;
+namespace wpai_acf_add_on_pro\fields\acf\field_clone;
 
-use wpai_acf_add_on\ACFService;
-use wpai_acf_add_on\fields\Field;
+use pmai_acf_add_on\ACFService;
+use pmai_acf_add_on\fields\Field;
 
 /**
  * Class FieldCloneV5
- * @package wpai_acf_add_on\fields\acf\field_clone
+ * @package pmai_acf_add_on\fields\acf\field_clone
  */
 class FieldCloneV5 extends Field {
 

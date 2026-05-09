@@ -1,13 +1,13 @@
 <?php
 
-namespace wpai_acf_add_on\fields\acf\true_false;
+namespace wpai_acf_add_on_pro\fields\acf\true_false;
 
-use wpai_acf_add_on\ACFService;
-use wpai_acf_add_on\fields\Field;
+use pmai_acf_add_on\ACFService;
+use pmai_acf_add_on\fields\Field;
 
 /**
  * Class FieldTrueFalse
- * @package wpai_acf_add_on\fields\acf\true_false
+ * @package pmai_acf_add_on\fields\acf\true_false
  */
 class FieldTrueFalse extends Field {
 

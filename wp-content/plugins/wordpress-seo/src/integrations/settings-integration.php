@@ -23,11 +23,16 @@ use Yoast\WP\SEO\Helpers\Language_Helper;
 use Yoast\WP\SEO\Helpers\Options_Helper;
 use Yoast\WP\SEO\Helpers\Post_Type_Helper;
 use Yoast\WP\SEO\Helpers\Product_Helper;
+use Yoast\WP\SEO\Helpers\Route_Helper;
 use Yoast\WP\SEO\Helpers\Schema\Article_Helper;
 use Yoast\WP\SEO\Helpers\Taxonomy_Helper;
 use Yoast\WP\SEO\Helpers\User_Helper;
 use Yoast\WP\SEO\Helpers\Woocommerce_Helper;
+use Yoast\WP\SEO\Llms_Txt\Application\Configuration\Llms_Txt_Configuration;
+use Yoast\WP\SEO\Llms_Txt\Application\Health_Check\File_Runner;
+use Yoast\WP\SEO\Llms_Txt\Infrastructure\Content\Manual_Post_Collection;
 use Yoast\WP\SEO\Promotions\Application\Promotion_Manager;
+use Yoast\WP\SEO\Schema\Application\Configuration\Schema_Configuration;
 
 /**
  * Class Settings_Integration.
@@ -48,7 +53,7 @@ class Settings_Integration implements Integration_Interface {
 	 *
 	 * @var array
 	 */
-	public const ALLOWED_OPTION_GROUPS = [ 'wpseo', 'wpseo_titles', 'wpseo_social' ];
+	public const ALLOWED_OPTION_GROUPS = [ 'wpseo', 'wpseo_titles', 'wpseo_social', 'wpseo_llmstxt' ];
 
 	/**
 	 * Holds the disallowed settings, per option group.
@@ -189,6 +194,41 @@ class Settings_Integration implements Integration_Interface {
 	protected $content_type_visibility;
 
 	/**
+	 * Holds the Llms_Txt_Configuration instance.
+	 *
+	 * @var Llms_Txt_Configuration
+	 */
+	protected $llms_txt_configuration;
+
+	/**
+	 * Holds the Schema_Configuration instance.
+	 *
+	 * @var Schema_Configuration
+	 */
+	protected $schema_configuration;
+
+	/**
+	 * The manual post collection.
+	 *
+	 * @var Manual_Post_Collection
+	 */
+	private $manual_post_collection;
+
+	/**
+	 * Runs the health check.
+	 *
+	 * @var File_Runner
+	 */
+	private $runner;
+
+	/**
+	 * Holds the Route_Helper.
+	 *
+	 * @var Route_Helper
+	 */
+	private $route_helper;
+
+	/**
 	 * Constructs Settings_Integration.
 	 *
 	 * @param WPSEO_Admin_Asset_Manager                     $asset_manager           The WPSEO_Admin_Asset_Manager.
@@ -204,6 +244,11 @@ class Settings_Integration implements Integration_Interface {
 	 * @param User_Helper                                   $user_helper             The User_Helper.
 	 * @param Options_Helper                                $options                 The options helper.
 	 * @param Content_Type_Visibility_Dismiss_Notifications $content_type_visibility The Content_Type_Visibility_Dismiss_Notifications instance.
+	 * @param Llms_Txt_Configuration                        $llms_txt_configuration  The Llms_Txt_Configuration instance.
+	 * @param Manual_Post_Collection                        $manual_post_collection  The manual post collection.
+	 * @param File_Runner                                   $runner                  The file runner.
+	 * @param Route_Helper                                  $route_helper            The Route_Helper.
+	 * @param Schema_Configuration                          $schema_configuration    The Schema_Configuration.
 	 */
 	public function __construct(
 		WPSEO_Admin_Asset_Manager $asset_manager,
@@ -218,7 +263,12 @@ class Settings_Integration implements Integration_Interface {
 		Article_Helper $article_helper,
 		User_Helper $user_helper,
 		Options_Helper $options,
-		Content_Type_Visibility_Dismiss_Notifications $content_type_visibility
+		Content_Type_Visibility_Dismiss_Notifications $content_type_visibility,
+		Llms_Txt_Configuration $llms_txt_configuration,
+		Manual_Post_Collection $manual_post_collection,
+		File_Runner $runner,
+		Route_Helper $route_helper,
+		Schema_Configuration $schema_configuration
 	) {
 		$this->asset_manager           = $asset_manager;
 		$this->replace_vars            = $replace_vars;
@@ -233,6 +283,11 @@ class Settings_Integration implements Integration_Interface {
 		$this->user_helper             = $user_helper;
 		$this->options                 = $options;
 		$this->content_type_visibility = $content_type_visibility;
+		$this->llms_txt_configuration  = $llms_txt_configuration;
+		$this->manual_post_collection  = $manual_post_collection;
+		$this->runner                  = $runner;
+		$this->route_helper            = $route_helper;
+		$this->schema_configuration    = $schema_configuration;
 	}
 
 	/**
@@ -327,7 +382,7 @@ class Settings_Integration implements Integration_Interface {
 					self::PAGE,
 					[ $this, 'display_page' ],
 				],
-			]
+			],
 		);
 
 		return $pages;
@@ -343,17 +398,24 @@ class Settings_Integration implements Integration_Interface {
 	 * @return array The pages.
 	 */
 	public function add_settings_saved_page( $pages ) {
+		$runner = $this->runner;
 		\add_submenu_page(
-			'',
+			'options.php',
 			'',
 			'',
 			'wpseo_manage_options',
 			self::PAGE . '_saved',
-			static function () {
+			static function () use ( $runner ) {
 				// Add success indication to HTML response.
 				$success = empty( \get_settings_errors() ) ? 'true' : 'false';
 				echo \esc_html( "{{ yoast-success: $success }}" );
-			}
+
+				$runner->run();
+				if ( ! $runner->is_successful() ) {
+					$failure_reason = $runner->get_generation_failure_reason();
+					echo \esc_html( "{{ yoast-llms-txt-generation-failure: $failure_reason }}" );
+				}
+			},
 		);
 
 		return $pages;
@@ -379,7 +441,7 @@ class Settings_Integration implements Integration_Interface {
 		\wp_enqueue_media();
 		$this->asset_manager->enqueue_script( 'new-settings' );
 		$this->asset_manager->enqueue_style( 'new-settings' );
-		if ( \YoastSEO()->classes->get( Promotion_Manager::class )->is( 'black-friday-2024-promotion' ) ) {
+		if ( \YoastSEO()->classes->get( Promotion_Manager::class )->is( 'black-friday-promotion' ) ) {
 			$this->asset_manager->enqueue_style( 'black-friday-banner' );
 		}
 		$this->asset_manager->localize_script( 'new-settings', 'wpseoScriptData', $this->get_script_data() );
@@ -447,6 +509,9 @@ class Settings_Integration implements Integration_Interface {
 			'fallbacks'                      => $this->get_fallbacks(),
 			'showNewContentTypeNotification' => $show_new_content_type_notification,
 			'currentPromotions'              => \YoastSEO()->classes->get( Promotion_Manager::class )->get_current_promotions(),
+			'llmsTxt'                        => $this->llms_txt_configuration->get_configuration(),
+			'initialLlmTxtPages'             => $this->get_site_llms_txt_pages( $settings ),
+			'schemaFrameworkConfiguration'   => $this->schema_configuration->get_configuration(),
 		];
 	}
 
@@ -517,7 +582,6 @@ class Settings_Integration implements Integration_Interface {
 			'upsellSettings'                => $this->get_upsell_settings(),
 			'siteRepresentsPerson'          => $this->get_site_represents_person( $settings ),
 			'siteBasicsPolicies'            => $this->get_site_basics_policies( $settings ),
-			'llmsTxtUrl'                    => \home_url( 'llms.txt' ),
 		];
 	}
 
@@ -526,7 +590,7 @@ class Settings_Integration implements Integration_Interface {
 	 *
 	 * @param array $settings The settings.
 	 *
-	 * @return array The currently represented person's ID and name.
+	 * @return array The currently represented person.
 	 */
 	protected function get_site_represents_person( $settings ) {
 		$person = [
@@ -595,6 +659,57 @@ class Settings_Integration implements Integration_Interface {
 		$policies[ $key ] = $policy_array;
 
 		return $policies;
+	}
+
+	/**
+	 * Adds page if it is present.
+	 *
+	 * @param array<int, string> $pages   The existing pages.
+	 * @param int                $page_id The page id to check.
+	 * @param string             $key     The option key name.
+	 *
+	 * @return array<int, string> The policy data.
+	 */
+	private function maybe_add_page( $pages, $page_id, $key ) {
+		if ( isset( $page_id ) && \is_int( $page_id ) && $page_id !== 0 ) {
+			$post = $this->manual_post_collection->get_content_type_entry( $page_id );
+			if ( $post === null ) {
+				return $pages;
+			}
+
+			$pages[ $key ] = [
+				'id'    => $page_id,
+				'title' => ( $post->get_title() ) ? $post->get_title() : $post->get_slug(),
+				'slug'  => $post->get_slug(),
+			];
+		}
+
+		return $pages;
+	}
+
+	/**
+	 * Get site llms.txt pages.
+	 *
+	 * @param array $settings The settings.
+	 *
+	 * @return array<string, array<string, int|string>> The llms.txt pages.
+	 */
+	private function get_site_llms_txt_pages( $settings ) {
+		$llms_txt_pages = [];
+
+		$llms_txt_pages = $this->maybe_add_page( $llms_txt_pages, $settings['wpseo_llmstxt']['about_us_page'], 'about_us_page' );
+		$llms_txt_pages = $this->maybe_add_page( $llms_txt_pages, $settings['wpseo_llmstxt']['contact_page'], 'contact_page' );
+		$llms_txt_pages = $this->maybe_add_page( $llms_txt_pages, $settings['wpseo_llmstxt']['terms_page'], 'terms_page' );
+		$llms_txt_pages = $this->maybe_add_page( $llms_txt_pages, $settings['wpseo_llmstxt']['privacy_policy_page'], 'privacy_policy_page' );
+		$llms_txt_pages = $this->maybe_add_page( $llms_txt_pages, $settings['wpseo_llmstxt']['shop_page'], 'shop_page' );
+
+		if ( isset( $settings['wpseo_llmstxt']['other_included_pages'] ) && \is_array( $settings['wpseo_llmstxt']['other_included_pages'] ) ) {
+			foreach ( $settings['wpseo_llmstxt']['other_included_pages'] as $key => $page_id ) {
+				$llms_txt_pages = $this->maybe_add_page( $llms_txt_pages, $page_id, 'other_included_pages-' . $key );
+			}
+		}
+
+		return $llms_txt_pages;
 	}
 
 	/**
@@ -747,7 +862,7 @@ class Settings_Integration implements Integration_Interface {
 			$settings['wpseo_titles']['breadcrumbs-sep'] = \html_entity_decode(
 				$settings['wpseo_titles']['breadcrumbs-sep'],
 				( \ENT_NOQUOTES | \ENT_HTML5 ),
-				'UTF-8'
+				'UTF-8',
 			);
 		}
 
@@ -757,8 +872,13 @@ class Settings_Integration implements Integration_Interface {
 		$settings['blogdescription'] = \html_entity_decode(
 			$settings['blogdescription'],
 			( \ENT_NOQUOTES | \ENT_HTML5 ),
-			'UTF-8'
+			'UTF-8',
 		);
+
+		if ( isset( $settings['wpseo_llmstxt']['other_included_pages'] ) ) {
+			// Append an empty page to the other included pages, so that we manage to show an empty field in the UI.
+			$settings['wpseo_llmstxt']['other_included_pages'][] = 0;
+		}
 
 		return $settings;
 	}
@@ -874,7 +994,7 @@ class Settings_Integration implements Integration_Interface {
 		foreach ( $post_types as $post_type ) {
 			$transformed[ $post_type->name ] = [
 				'name'                 => $post_type->name,
-				'route'                => $this->get_route( $post_type->name, $post_type->rewrite, $post_type->rest_base ),
+				'route'                => $this->route_helper->get_route( $post_type->name, $post_type->rewrite, $post_type->rest_base ),
 				'label'                => $post_type->label,
 				'singularLabel'        => $post_type->labels->singular_name,
 				'hasArchive'           => $this->post_type_helper->has_archive( $post_type ),
@@ -927,7 +1047,7 @@ class Settings_Integration implements Integration_Interface {
 		foreach ( $taxonomies as $taxonomy ) {
 			$transformed[ $taxonomy->name ] = [
 				'name'          => $taxonomy->name,
-				'route'         => $this->get_route( $taxonomy->name, $taxonomy->rewrite, $taxonomy->rest_base ),
+				'route'         => $this->route_helper->get_route( $taxonomy->name, $taxonomy->rewrite, $taxonomy->rest_base ),
 				'label'         => $taxonomy->label,
 				'showUi'        => $taxonomy->show_ui,
 				'singularLabel' => $taxonomy->labels->singular_name,
@@ -935,7 +1055,7 @@ class Settings_Integration implements Integration_Interface {
 					$taxonomy->object_type,
 					static function ( $object_type ) use ( $post_type_names ) {
 						return \in_array( $object_type, $post_type_names, true );
-					}
+					},
 				),
 				'isNew'         => \in_array( $taxonomy->name, $new_taxonomies, true ),
 			];
@@ -945,35 +1065,10 @@ class Settings_Integration implements Integration_Interface {
 			$transformed,
 			static function ( $a, $b ) {
 				return \strnatcmp( $a['label'], $b['label'] );
-			}
+			},
 		);
 
 		return $transformed;
-	}
-
-	/**
-	 * Gets the route from a name, rewrite and rest_base.
-	 *
-	 * @param string $name      The name.
-	 * @param array  $rewrite   The rewrite data.
-	 * @param string $rest_base The rest base.
-	 *
-	 * @return string The route.
-	 */
-	protected function get_route( $name, $rewrite, $rest_base ) {
-		$route = $name;
-		if ( isset( $rewrite['slug'] ) ) {
-			$route = $rewrite['slug'];
-		}
-		if ( ! empty( $rest_base ) ) {
-			$route = $rest_base;
-		}
-		// Always strip leading slashes.
-		while ( \substr( $route, 0, 1 ) === '/' ) {
-			$route = \substr( $route, 1 );
-		}
-
-		return $route;
 	}
 
 	/**

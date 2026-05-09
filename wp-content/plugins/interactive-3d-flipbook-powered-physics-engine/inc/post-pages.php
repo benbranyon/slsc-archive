@@ -1,5 +1,6 @@
 <?php
   namespace iberezansky\fb3d;
+  defined('ABSPATH') || die();
 
   function is_page_ID($page_ID) {
     return isset($page_ID) && $page_ID!=0;

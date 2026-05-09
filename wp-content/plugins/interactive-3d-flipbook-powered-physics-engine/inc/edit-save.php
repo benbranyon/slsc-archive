@@ -1,5 +1,6 @@
 <?php
   namespace iberezansky\fb3d;
+  defined('ABSPATH') || die();
 
   function put_value(&$arr, &$key, &$value, $p=0) {
     $i = strpos($key, '-', $p);

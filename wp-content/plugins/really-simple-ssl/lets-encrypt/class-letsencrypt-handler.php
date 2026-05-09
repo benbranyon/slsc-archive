@@ -12,6 +12,7 @@ use LE_ACME2\Connector\Connector;
 use LE_ACME2\Order;
 use LE_ACME2\Utilities\Certificate;
 use LE_ACME2\Utilities\Logger;
+use RSSSL\Security\RSSSL_Htaccess_File_Manager;
 
 class rsssl_letsencrypt_handler {
 	use Encryption;
@@ -27,12 +28,14 @@ class rsssl_letsencrypt_handler {
 	public $certs_directory = false;
     public $subjects = array();
 
+	public $htaccess_file_manager;
+
 	public function __construct()
     {
 		if ( isset( self::$_this ) ) {
 			wp_die();
 		}
-
+		$this->htaccess_file_manager = Rsssl_Htaccess_File_Manager::get_instance();
 		add_action('admin_init', array($this, 'upgrade'));
 
 		//loading of these hooks is stricter. The class can be used in the notices, which are needed on the generic dashboard
@@ -78,7 +81,7 @@ class rsssl_letsencrypt_handler {
 	/**
 	 * If we're on apache, add a line to the .htaccess so the acme challenge directory won't get blocked.
 	 */
-	public function maybe_add_htaccess_exclude(){
+	public function maybe_add_htaccess_exclude(): void {
 
 		if (!rsssl_user_can_manage()) {
 			return;
@@ -88,31 +91,41 @@ class rsssl_letsencrypt_handler {
 			return;
 		}
 
-		$htaccess_file = RSSSL()->admin->htaccess_file();
-		if ( !file_exists($htaccess_file) ) {
+		$htaccess_file = $this->htaccess_file_manager->htaccess_file_path;
+		if ( $this->htaccess_file_manager->validate_htaccess_file_path() === false ) {
 			return;
 		}
 
-		if ( !is_writable($htaccess_file) ) {
+		$htaccess = $this->htaccess_file_manager->get_htaccess_content();
+
+		// if the htaccess file is null we return early
+		if ( $htaccess === null ) {
 			return;
 		}
 
-		$htaccess = file_get_contents( $htaccess_file );
+		// We validate if the old markers are still present, and remove them if they are.
+		if ( $this->maybe_remove_old_markers( $htaccess ) ) {
+			$this->htaccess_file_manager->clear_legacy_rule('Really Simple Security LETS ENCRYPT');
+		}
 
+		$content_with_marker = [
+			'marker' => 'Really Simple Security LETS ENCRYPT',
+			'lines' => [
+				'RewriteRule ^.well-known/(.*)$ - [L]',
+			],
+		];
+
+		$this->htaccess_file_manager->write_rule($content_with_marker, 'created lines for acme challenge directory');
+
+	}
+
+	/**
+	 * Validates if the old markers are still present, and removes them if they are.
+	 */
+	private function maybe_remove_old_markers(string $htAccessContent ) :bool
+	{
 		//if it's already inserted, skip.
-		if ( strpos($htaccess, 'Really Simple Security LETS ENCRYPT') !== FALSE ) {
-			return;
-		}
-
-		$htaccess = preg_replace("/#\s?BEGIN\s?Really Simple Security LETS ENCRYPT.*?#\s?END\s?Really Simple Security LETS ENCRYPT/s", "", $htaccess);
-		$htaccess = preg_replace("/\n+/", "\n", $htaccess);
-
-		$rules = '#BEGIN Really Simple Security LETS ENCRYPT'."\n";
-		$rules .= 'RewriteRule ^.well-known/(.*)$ - [L]'."\n";
-		$rules .= '#END Really Simple Security LETS ENCRYPT'."\n";
-		$htaccess = $rules . $htaccess;
-		file_put_contents($htaccess_file, $htaccess);
-
+		return strpos($htAccessContent, '#BEGIN Really Simple Security LETS ENCRYPT');
 	}
 
 	/**
@@ -258,7 +271,7 @@ class rsssl_letsencrypt_handler {
 
 	    $hosting_company = rsssl_get_other_host();
 	    if ( $hosting_company && $hosting_company !== 'none' ) {
-		    $hosting_specific_link = RSSSL_LE()->hosts->hosts[$hosting_company]['ssl_installation_link'];
+		    $hosting_specific_link = RSSSL_LE()->hosts->getKnownHosts()[$hosting_company]['ssl_installation_link'];
 		    if ($hosting_specific_link) {
 			    $site = trailingslashit( str_replace(array('https://','http://', 'www.'),'', site_url()) );
 			    if ( strpos($hosting_specific_link,'{host}') !==false && empty($host) ) {
@@ -990,7 +1003,8 @@ class rsssl_letsencrypt_handler {
     {
 	    $install_method = get_option('rsssl_le_certificate_installed_by_rsssl');
 	    $hosting_company = rsssl_get_other_host();
-	    if ( in_array($install_method, RSSSL_LE()->hosts->no_installation_renewal_needed) || in_array($hosting_company, RSSSL_LE()->hosts->no_installation_renewal_needed)) {
+	    $hosts = RSSSL_LE()->hosts;
+	    if ( in_array($install_method, $hosts->no_installation_renewal_needed) || in_array($hosting_company, $hosts->no_installation_renewal_needed)) {
 		    return false;
 	    }
 
@@ -1190,15 +1204,16 @@ class rsssl_letsencrypt_handler {
 		$message = __("We have not detected any known hosting limitations.", "really-simple-ssl" );
 		$host = rsssl_get_other_host();
 		if ( $host === 'none' ) $host = false;
-		if ( isset(RSSSL_LE()->hosts->hosts[$host]) ){
-			if ( RSSSL_LE()->hosts->hosts[$host]['free_ssl_available'] === 'paid_only' ) {
+	$known_hosts = RSSSL_LE()->hosts->getKnownHosts();
+		if ( isset($known_hosts[$host]) ){
+			if ( $known_hosts[$host]['free_ssl_available'] === 'paid_only' ) {
 				$action = 'stop';
 				$status = 'error';
-				$message = sprintf(__("According to our information, your hosting provider does not allow any kind of SSL installation, other then their own paid certificate. For an alternative hosting provider with SSL, see this %sarticle%s.","really-simple-ssl"), '<a target="_blank" href="https://really-simple-ssl.com/hosting-providers-with-free-ssl">', '</a>');
+				$message = sprintf(__("According to our information, your hosting provider does not allow any kind of SSL installation, other than their own paid certificate. For an alternative hosting provider with SSL, see this %sarticle%s.","really-simple-ssl"), '<a target="_blank" href="https://really-simple-ssl.com/hosting-providers-with-free-ssl">', '</a>');
 			}
 
-			if ( RSSSL_LE()->hosts->hosts[$host]['free_ssl_available'] === 'activated_by_default' ) {
-				$url = RSSSL_LE()->hosts->hosts[$host]['ssl_installation_link'];
+			if ( $known_hosts[$host]['free_ssl_available'] === 'activated_by_default' ) {
+				$url = $known_hosts[$host]['ssl_installation_link'];
 				$action = 'continue';
 				$status = 'error';
 				$message = sprintf(__("According to our information, your hosting provider supplies your account with an SSL certificate by default. Please contact your %shosting support%s if this is not the case.","really-simple-ssl"), '<a target="_blank" href="'.$url.'">', '</a>').'&nbsp'.
@@ -1600,7 +1615,7 @@ class rsssl_letsencrypt_handler {
 		insert_with_markers($path, 'Really Simple Security LETS ENCRYPT', $htaccess);
 
 		$htaccess = file_get_contents( $path );
-		if ( strpos($htaccess, 'deny from all') !== FALSE ) {
+		if ( stripos($htaccess, 'Require all denied') !== FALSE ) {
 			update_option('rsssl_htaccess_file_set_'.$type, true, false);
 			return;
 		}

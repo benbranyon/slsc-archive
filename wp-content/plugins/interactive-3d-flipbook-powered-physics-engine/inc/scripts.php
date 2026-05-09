@@ -1,5 +1,6 @@
 <?php
   namespace iberezansky\fb3d;
+  defined('ABSPATH') || die();
 
   function register_scripts() {
     if(!isset($GLOBALS['wp_scripts']->registered['react'])) {

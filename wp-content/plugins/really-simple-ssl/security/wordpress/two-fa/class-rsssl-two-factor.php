@@ -13,11 +13,8 @@
 namespace RSSSL\Security\WordPress\Two_Fa;
 
 use Exception;
-use RSSSL\Security\WordPress\Two_Fa\Models\Rsssl_Two_Factor_User_Factory;
-use RSSSL\Security\WordPress\Two_Fa\Repositories\Rsssl_Two_Fa_User_Query_Builder;
 use RSSSL\Security\WordPress\Two_Fa\Repositories\Rsssl_Two_Fa_User_Repository;
 use RSSSL\Security\WordPress\Two_Fa\Services\Rsssl_Two_Fa_Reminder_Service;
-use RSSSL\Security\WordPress\Two_Fa\Services\Rsssl_Two_Fa_Status_Service;
 use RSSSL\Security\WordPress\Two_Fa\Services\Rsssl_Two_Factor_Reset_Service;
 use RSSSL\Security\WordPress\Two_Fa\Providers\Rsssl_Provider_Loader;
 use RSSSL\Security\WordPress\Two_Fa\Providers\Rsssl_Two_Factor_Provider;
@@ -116,10 +113,7 @@ class Rsssl_Two_Factor
          * Runs the fix for the reset error in 9.1.1
          */
 	    if (filter_var(get_option('rsssl_reset_fix', false), FILTER_VALIDATE_BOOLEAN)) {
-            global $wpdb;
-            $queryBuilder = new Rsssl_Two_Fa_User_Query_Builder($wpdb);
-            $factory = new Rsssl_Two_Factor_User_Factory(new Rsssl_Two_Fa_Status_Service());
-            $repository = new Rsssl_Two_Fa_User_Repository($queryBuilder, $factory);
+            $repository = new Rsssl_Two_Fa_User_Repository();
             (new Rsssl_Two_Factor_Reset_Service($repository))->resetFix();
 	    }
 
@@ -566,7 +560,6 @@ class Rsssl_Two_Factor
     {
         switch (Rsssl_Two_Factor_Settings::get_login_action($user->ID)) {
             case 'onboarding':
-                wp_clear_auth_cookie();
                 self::is_onboarding_complete($user);
                 exit;
             case 'expired':
@@ -693,7 +686,7 @@ class Rsssl_Two_Factor
      */
     public static function show_two_factor_login(WP_User $user): void
     {
-	    $redirect_to = isset($_REQUEST['redirect_to']) ? esc_url_raw(wp_unslash($_REQUEST['redirect_to'])) : admin_url();
+	    $redirect_to = isset($_REQUEST['redirect_to']) ? wp_validate_redirect(wp_unslash($_REQUEST['redirect_to']), admin_url()) : admin_url();
         $provider = Rsssl_Two_Factor_Settings::get_login_action($user->ID);
 		$login_nonce = Rsssl_Two_Fa_Authentication::create_login_nonce($user->ID)['rsssl_key'];
 
@@ -840,6 +833,22 @@ class Rsssl_Two_Factor
             // We really should migrate login_header() out of `wp-login.php` so it can be called from an includes file.
             include_once __DIR__ . '/function-login-header.php';
         }
+
+        // Enqueue two-fa JavaScript assets
+        $uri = trailingslashit(rsssl_url) . 'assets/features/two-fa/assets.min.js';
+        $uri_file = trailingslashit(rsssl_path) . 'assets/features/two-fa/assets.min.js';
+        add_filter('wp_script_attributes', [self::class, 'handle_script_attributes'], 10, 2);
+        wp_enqueue_script('rsssl-frontend-settings', $uri, array(), filemtime($uri_file), true);
+
+        wp_localize_script('rsssl-frontend-settings', 'rsssl_validate', array(
+            'nonce' => wp_create_nonce('wp_rest'),
+            'root' => esc_url_raw(rest_url(self::REST_NAMESPACE)),
+            'login_nonce' => $login_nonce,
+            'redirect_to' => $redirect_to,
+            'user_id' => $user->ID,
+            'origin' => 'validation',
+            'translatables' => apply_filters('rsssl_two_factor_translatables', []),
+        ));
 
         // Load the login template.
         rsssl_load_template(
@@ -991,9 +1000,15 @@ class Rsssl_Two_Factor
 
 		/** @var Rsssl_Two_Factor_Provider $provider_instance */
 		$provider_instance = $provider_class::get_instance();
+
+		// Check for corrupted/empty TOTP key before attempting authentication
+		self::validate_totp_key_exists( $user, $provider_key );
+
 		// Allow the provider to re-send codes, etc.
 		if ( ( 'email' === $provider_key ) && true === $provider_instance->pre_process_authentication( $user ) ) {
-			self::login_html( $user, $nonce, $redirect_to, $provider_key );
+			// Always generate a new nonce.
+			$new_nonce = self::generate_login_nonce_for_user($user->ID);
+			self::login_html($user, $new_nonce, $redirect_to, '', $provider_class);
 			exit;
 		}
 
@@ -1093,6 +1108,9 @@ class Rsssl_Two_Factor
 		do_action('rsssl_two_factor_user_authenticated', $user);
 
 		$redirect_to = apply_filters('login_redirect', $redirect_to, $redirect_to, $user);
+		// cleaning up the user meta.
+	    delete_user_meta( $user->ID, self::RSSSL_USER_FAILED_LOGIN_ATTEMPTS_KEY);
+	    delete_user_meta( $user->ID, self::RSSSL_USER_RATE_LIMIT_KEY);
 		wp_safe_redirect($redirect_to);
 		exit;
 	}
@@ -1113,7 +1131,7 @@ class Rsssl_Two_Factor
         self::login_html(
             $user,
             $login_nonce,
-            isset($_REQUEST['redirect_to']) ? esc_url_raw(wp_unslash($_REQUEST['redirect_to'])) : '',
+            isset($_REQUEST['redirect_to']) ? wp_validate_redirect(wp_unslash($_REQUEST['redirect_to']), '') : '',
             '',
             $provider
         );
@@ -1301,6 +1319,65 @@ class Rsssl_Two_Factor
     }
 
     /**
+     * Validate that TOTP key exists for the user when TOTP provider is used.
+     * Destroys session and displays error if key is corrupted/missing.
+     *
+     * @param WP_User $user The user object.
+     * @param string $provider_key The provider key being used.
+     *
+     * @return void
+     */
+    private static function validate_totp_key_exists( WP_User $user, string $provider_key ): void
+    {
+        if ( 'totp' !== $provider_key ) {
+            return;
+        }
+
+        if ( ! class_exists( 'RSSSL\Pro\Security\WordPress\Two_Fa\Providers\Rsssl_Two_Factor_Totp' ) ) {
+            return;
+        }
+
+        $totp_key = get_user_meta(
+            $user->ID,
+            \RSSSL\Pro\Security\WordPress\Two_Fa\Providers\Rsssl_Two_Factor_Totp::SECRET_META_KEY,
+            true
+        );
+
+        if ( empty( $totp_key ) ) {
+            // Verify we have a valid user before destroying their session
+            if ( ! $user instanceof WP_User || ! $user->exists() ) {
+                wp_die( esc_html__( 'Invalid user.', 'really-simple-ssl' ), 403 );
+            }
+
+            // TOTP key is missing/corrupted
+            self::destroy_current_session_for_user( $user );
+            wp_clear_auth_cookie();
+            self::display_corrupted_totp_error();
+            exit;
+        }
+    }
+
+    /**
+     * Display error when TOTP key is corrupted/missing. Manually load our login header and
+     * footer functions to ensure they are available.
+     * Follows the same template as the expired onboarding error.
+     */
+    private static function display_corrupted_totp_error(): void
+    {
+        if (!function_exists('login_header')) {
+            include_once __DIR__ . '/function-login-header.php';
+        }
+
+        if (!function_exists('login_footer')) {
+            include_once __DIR__ . '/function-login-footer.php';
+        }
+
+	    rsssl_load_template('expired.php', [
+            'message' => esc_html__('Your Two-Factor Authentication configuration is corrupted. Please contact your site administrator to regain access.', 'really-simple-ssl'),
+        ], rsssl_path . 'assets/templates/two_fa/');
+    }
+
+    /**
      * Generate the HTML for the onboarding screen for a given user.
      *
      * @param WP_User $user The user object.
@@ -1310,18 +1387,24 @@ class Rsssl_Two_Factor
      */
     private static function onboarding_user_html(WP_User $user): void
     {
-
+        $passkey_onboarding = get_user_meta($user->ID, 'rsssl_two_fa_status_passkey', true) === 'open';
         // Variables needed for the template and scripts
         $onboarding_url = self::login_url(array('action' => 'rsssl_onboarding'), 'login_post');
         $provider_loader = Rsssl_Provider_Loader::get_loader();
         $provider = self::get_primary_provider_for_user($user);
-        $redirect_to = isset($_REQUEST['redirect_to']) ? esc_url_raw(wp_unslash($_REQUEST['redirect_to'])) : admin_url();
+        $redirect_to = isset($_REQUEST['redirect_to']) ? wp_validate_redirect(wp_unslash($_REQUEST['redirect_to']), admin_url()) : admin_url();
         $enabled_providers = $provider_loader::get_user_enabled_providers($user);
         $login_nonce = self::generate_login_nonce_for_user($user->ID);
         $is_forced = Rsssl_Two_Factor_Settings::is_user_forced_to_use_2fa($user->ID);
         $grace_period = Rsssl_Two_Factor_Settings::is_user_in_grace_period($user);
         $is_today = Rsssl_Two_Factor_Settings::is_today($user);
-
+        if ($passkey_onboarding) {
+            $is_forced = false;
+            //if only passkey is available, set it as the only provider
+            if (count($enabled_providers) === 1 && isset($enabled_providers['passkey'])) {
+                $provider = 'passkey';
+            }
+        }
         // Ensure login_header and login_footer functions are available
         if (!function_exists('login_header')) {
             include_once __DIR__ . '/function-login-header.php';
@@ -1374,7 +1457,7 @@ class Rsssl_Two_Factor
             ),
             rsssl_path . 'assets/templates/two_fa/'
         );
-        
+
         wp_enqueue_script('rsssl-rest-settings');
 
 
@@ -1403,6 +1486,7 @@ class Rsssl_Two_Factor
 		}
 		return $attributes;
 	}
+
 
     /**
      * Enqueues the RSSSL profile settings stylesheet.

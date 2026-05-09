@@ -1,10 +1,10 @@
 <?php
 
-namespace wpai_acf_add_on\fields\acf\radio;
+namespace wpai_acf_add_on_pro\fields\acf\radio;
 
 /**
  * Class FieldRadioV5
- * @package wpai_acf_add_on\fields\acf\radio
+ * @package pmai_acf_add_on\fields\acf\radio
  */
 class FieldRadioV5 extends FieldRadio {
 

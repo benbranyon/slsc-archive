@@ -23,6 +23,10 @@ class wfConfig {
 	const OPTIONS_TYPE_AUDIT_LOG = 'auditlog';
 	const OPTIONS_TYPE_DIAGNOSTICS = 'diagnostics';
 	const OPTIONS_TYPE_ALL = 'all';
+
+	const DEFAULT_ALERT_MAX_HOURLY = 5;
+	
+	const DEFAULT_LOCK_TIMEOUT = 3600;
 	
 	private static $tableExists = true;
 	private static $cache = array();
@@ -145,7 +149,7 @@ class wfConfig {
 			'maxExecutionTime' => array('value' => 0, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_INT)), 
 			'howGetIPs' => array('value' => '', 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_STRING)), 
 			'actUpdateInterval' => array('value' => 2, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_INT)), 
-			'alert_maxHourly' => array('value' => 0, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_INT)), 
+			'alert_maxHourly' => array('value' => self::DEFAULT_ALERT_MAX_HOURLY, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_INT)),
 			'loginSec_userBlacklist' => array('value' => '', 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_STRING)),
 			'liveTraf_maxRows' => array('value' => 2000, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_INT)),
 			'liveTraf_maxAge' => array('value' => 30, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_INT)),
@@ -194,6 +198,7 @@ class wfConfig {
 		'defaultsOnly' => array(
 			"apiKey" => array('value' => "", 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_STRING)),
 			'keyType' => array('value' => wfLicense::KEY_TYPE_FREE, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_STRING)),
+			'licenseType' => array('value' => wfLicense::TYPE_FREE, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_STRING)),
 			'isPaid' => array('value' => false, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_BOOL)),
 			'hasKeyConflict' => array('value' => false, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_BOOL)),
 			'timeoffset_wf_updated' => array('value' => 0, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_INT)),
@@ -235,7 +240,7 @@ class wfConfig {
 			'satisfactionPromptOverride' => array('value' => true, 'autoload' => self::AUTOLOAD, 'validation' => array('type' => self::TYPE_BOOL)),
 		),
 	);
-	public static $serializedOptions = array('lastAdminLogin', 'scanSched', 'emailedIssuesList', 'wf_summaryItems', 'adminUserList', 'twoFactorUsers', 'alertFreqTrack', 'wfStatusStartMsgs', 'vulnerabilities_core', 'vulnerabilities_plugin', 'vulnerabilities_theme', 'dashboardData', 'malwarePrefixes', 'coreHashes', 'noc1ScanSchedule', 'allScansScheduled', 'disclosureStates', 'scanStageStatuses', 'adminNoticeQueue', 'suspiciousAdminUsernames', 'wordpressPluginVersions', 'wordpressThemeVersions', 'lastAuditEvents');
+	public static $serializedOptions = array('lastAdminLogin', 'scanSched', 'emailedIssuesList', 'wf_summaryItems', 'adminUserList', 'twoFactorUsers', 'alertFreqTrack', 'wfStatusStartMsgs', 'vulnerabilities_core', 'vulnerabilities_plugin', 'vulnerabilities_theme', 'dashboardData', 'malwarePrefixes', 'coreHashes', 'noc1ScanSchedule', 'allScansScheduled', 'disclosureStates', 'scanStageStatuses', 'adminNoticeQueue', 'suspiciousAdminUsernames', 'wordpressPluginVersions', 'wordpressThemeVersions', 'lastAuditEvents', 'recentServerAddr');
 	// Configuration keypairs that can be set from Central.
 	private static $wfCentralInternalConfig = array(
 		'wordfenceCentralUserSiteAuthGrant',
@@ -574,6 +579,21 @@ class wfConfig {
 		return (int) self::get($key, $default, $allowCached);
 	}
 	
+	/**
+	 * Alternate version of `getInt` that returns an int if the value is numeric, otherwise returns the raw value.
+	 *
+	 * @param string $key
+	 * @param mixed $default
+	 * @return int|mixed
+	 */
+	public static function getMaybeInt($key, $default = 0, $allowCached = true) {
+		$raw = self::get($key, $default, $allowCached);
+		if (is_numeric($raw)) {
+			return (int) $raw;
+		}
+		return $raw;
+	}
+	
 	public static function getJSON($key, $default = false, $allowCached = true) {
 		$json = self::get($key, $default, $allowCached, $isDefault);
 		if ($isDefault)
@@ -587,6 +607,56 @@ class wfConfig {
 	
 	public static function getBool($key, $default = false, $allowCached = true) {
 		return wfUtils::truthyToBoolean(self::get($key, $default, $allowCached));
+	}
+	
+	/**
+	 * Returns multiple config values at once in an optimized way. Any that are uncached (or if $allowCached is false)
+	 * will all be queried in a single statement rather than multiple.
+	 * 
+	 * @param array $keysDefaults An associative array mapping 'key' => <default>
+	 * @param bool $allowCached
+	 * @return array
+	 */
+	public static function getMultiple($keysDefaults, $allowCached = true) {
+		global $wpdb;
+		
+		$result = array();
+		$remaining = array();
+		foreach ($keysDefaults as $key => $default) {
+			if ($allowCached && self::hasCachedOption($key)) {
+				$result[$key] = self::getCachedOption($key);
+			}
+			else {
+				$remaining[$key] = $default;
+			}
+		}
+		
+		if (!empty($remaining)) {
+			if (!self::$tableExists) {
+				return array_merge($remaining, $result);
+			}
+			
+			$sanitizedKeys = esc_sql(array_keys($remaining));
+			$keysINClause = "'" . implode("','", $sanitizedKeys) . "'";
+			
+			$table = self::table();
+			$rows = $wpdb->get_results("SELECT name, val, autoload FROM {$table} WHERE name IN ({$keysINClause})", ARRAY_A);
+			foreach ($rows as $r) {
+				$name = $r['name'];
+				$val = $r['val'];
+				if (in_array($name, self::$serializedOptions)) {
+					$val = maybe_unserialize($val);
+				}
+				
+				$result[$name] = $val;
+				unset($remaining[$name]);
+				if ($r['autoload'] != self::DONT_AUTOLOAD) {
+					self::updateCachedOption($name, $val);
+				}
+			}
+		}
+		
+		return array_merge($remaining, $result);
 	}
 	
 	/**
@@ -642,8 +712,8 @@ class wfConfig {
 		return 'wordfence_chunked_' . $key . '_';
 	}
 	
-	public static function get_ser($key, $default = false, $cache = true) {
-		if (self::hasCachedOption($key)) {
+	public static function get_ser($key, $default = false, $cache = true, $allowCacheRead = true) {
+		if ($allowCacheRead && self::hasCachedOption($key)) {
 			return self::getCachedOption($key);
 		}
 		
@@ -944,12 +1014,12 @@ class wfConfig {
 		}
 		return 0;
 	}
-	public static function liveTrafficEnabled(&$overriden = null){
-		$enabled = self::get('liveTrafficEnabled');
+	public static function liveTrafficEnabled(&$overridden = null) {
+		$enabled = self::getBool('liveTrafficEnabled');
 		if (WORDFENCE_DISABLE_LIVE_TRAFFIC || WF_IS_WP_ENGINE) {
 			$enabled = false;
-			if ($overriden !== null) {
-				$overriden = true;
+			if ($overridden !== null) {
+				$overridden = true;
 			}
 		}
 		return $enabled;
@@ -965,11 +1035,21 @@ class wfConfig {
 		wfConfig::set('autoUpdate', '0');	
 		wp_clear_scheduled_hook('wordfence_daily_autoUpdate');
 	}
+	
+	/**
+	 * Implements a database-based lock using our wfconfig table for storage. The option name is `$name` . '.lock', and
+	 * by default it auto-expires after `DEFAULT_LOCK_TIMEOUT` and does not autoload.
+	 * 
+	 * @param string $name
+	 * @param int|null $timeout Defaults to `DEFAULT_LOCK_TIMEOUT` if null
+	 * @param bool $autoload Whether the lock option should be saved as an autoloading option
+	 * @return bool Whether the lock was acquired
+	 */
 	public static function createLock($name, $timeout = null) { //Our own version of WP_Upgrader::create_lock that uses our table instead
 		global $wpdb;
 		
 		if (!$timeout) {
-			$timeout = 3600;
+			$timeout = self::DEFAULT_LOCK_TIMEOUT;
 		}
 		
 		$table = self::table();
@@ -993,6 +1073,7 @@ class wfConfig {
 		
 		return true;
 	}
+	
 	public static function releaseLock($name) {
 		self::remove($name . '.lock');
 	}
@@ -1196,6 +1277,69 @@ Options -ExecCGI
 	}
 	
 	/**
+	 * Preprocesses the $changes array to apply actions like conversion from browser time zone to server.
+	 *
+	 * @param array $changes
+	 * @param string|null $timeZone
+	 * @return void
+	 */
+	public static function preprocess(&$changes, $timeZone = null) {
+		$wpTimeZone = null;
+		if (function_exists('wp_timezone') /* WP 5.3+ */) {
+			$wpTimeZone = wp_timezone();
+		}
+		else {
+			//Polyfill
+			try {
+				$timezone_string = get_option( 'timezone_string' );
+				
+				if ( $timezone_string ) {
+					$wpTimeZone = new DateTimeZone($timezone_string);
+				}
+				else {
+					$offset  = (float) get_option( 'gmt_offset' );
+					$hours   = (int) $offset;
+					$minutes = ( $offset - $hours );
+					
+					$sign      = ( $offset < 0 ) ? '-' : '+';
+					$abs_hour  = abs( $hours );
+					$abs_mins  = abs( $minutes * 60 );
+					$tz_offset = sprintf( '%s%02d:%02d', $sign, $abs_hour, $abs_mins );
+					
+					$wpTimeZone = new DateTimeZone($tz_offset);
+				}
+			}
+			catch (Exception $e) {
+				$wpTimeZone = new DateTimeZone('UTC');
+			}
+		}
+		
+		if ($timeZone !== null) {
+			try {
+				$timeZone = new DateTimeZone($timeZone);
+			}
+			catch (Exception $e) {
+				$timeZone = null;
+			}
+		}
+		
+		if ($timeZone === null) {
+			$timeZone = $wpTimeZone;
+		}
+		
+		foreach ($changes as $key => $value) {
+			$checked = false;
+			switch ($key) {
+				//============ WAF
+				case 'learningModeGracePeriod':
+					$dtUtc = (new DateTimeImmutable(substr((string) $value, 0, 10) . ' 00:00:00', $timeZone))->setTimezone(new DateTimeZone('UTC'));
+					$changes[$key] = $dtUtc->format('Y-m-d\TH:i:sP');
+					break;
+			}
+		}
+	}
+	
+	/**
 	 * Validates the array of configuration changes without applying any. All bounds checks must be performed here.
 	 *
 	 * @param array $changes
@@ -1387,7 +1531,7 @@ Options -ExecCGI
 					$value = (int) $value;
 					wfScanMonitor::validateResumeAttempts($value, $valid);
 					if (!$valid)
-						$errors[] = array('option' => $key, 'error' => sprintf(__('Invalid number of scan resume attempts specified: %d', 'wordfence'), $value));
+						$errors[] = array('option' => $key, 'error' => sprintf(/* translators: attempt count */ __('Invalid number of scan resume attempts specified: %d', 'wordfence'), $value));
 					break;
 				}
 			}
@@ -1444,7 +1588,7 @@ Options -ExecCGI
 				{
 					$wafStatus = (isset($changes['wafStatus']) ? $changes['wafStatus'] : $wafConfig->getConfig('wafStatus'));
 					if ($wafStatus == wfFirewall::FIREWALL_MODE_LEARNING) {
-						$dt = wfUtils::parseLocalTime($value);
+						$dt = new DateTimeImmutable($value /* this has previously been normalized to UTC */);
 						$gracePeriodEnd = $dt->format('U');
 						$wafConfig->setConfig($key, $gracePeriodEnd);
 					}
@@ -1924,6 +2068,16 @@ Options -ExecCGI
 					//Letting these fall through to the default save handler
 					break;
 				}
+				
+				//Legacy 2FA
+				case wfCredentialsController::DISABLE_LEGACY_2FA_OPTION:
+					wfAdminNoticeQueue::removeAdminNoticeForCategory('legacy2faDeprecation', wfAdminNoticeQueue::USERS_ALL);
+					wfAdminNoticeQueue::removeAdminNoticeForCategory('legacy2faDeprecationUnprivileged', wfAdminNoticeQueue::USERS_ALL);
+          			//Fall through
+				case wfCredentialsController::ALLOW_LEGACY_2FA_OPTION:
+					wfConfig::set($key, wfUtils::truthyToInt($value));
+					$saved = true;
+					break;
 			}
 			
 			//============ Plugin (default treatment)

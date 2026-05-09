@@ -123,7 +123,14 @@ if (!class_exists('Rsssl_Two_Factor_Profile_Settings')) {
 	        add_action( 'wp_ajax_resend_email_code_profile', [$this, 'resend_email_code_profile_callback'] );
 	        add_action( 'wp_ajax_change_method_to_email', [$this, 'start_email_validation_callback'] );
 
-            if (isset($_GET['profile'], $_GET['_wpnonce']) && rest_sanitize_boolean(wp_unslash($_GET['profile']))) {
+            if (
+                isset($_GET['profile'], $_GET['_wpnonce']) &&
+                rest_sanitize_boolean(wp_unslash($_GET['profile'])) &&
+                wp_verify_nonce(
+                    sanitize_text_field(wp_unslash($_GET['_wpnonce'])),
+                    'one_time_login_' . get_current_user_id()
+                )
+            ) {
                 self::set_active_provider(get_current_user_id(), 'email');
             }
         }
@@ -263,7 +270,7 @@ if (!class_exists('Rsssl_Two_Factor_Profile_Settings')) {
                         return;
                     }
 
-                    $params::validate_auth_code(absint(wp_unslash($_POST['two-factor-totp-authcode'])));
+                    $params::validate_auth_code(sanitize_text_field(wp_unslash($_POST['two-factor-totp-authcode'])));
                     $params::validate_key(sanitize_text_field(wp_unslash($_POST['two-factor-totp-key'])));
                     $auth_code = sanitize_text_field(wp_unslash($_POST['two-factor-totp-authcode']));
                     $key = sanitize_text_field(wp_unslash($_POST['two-factor-totp-key']));
@@ -375,6 +382,9 @@ if (!class_exists('Rsssl_Two_Factor_Profile_Settings')) {
 
             wp_nonce_field('update_user_two_fa_settings', 'rsssl_two_fa_nonce');
 
+            // Pass user_id instead of user object to prevent object corruption during template rendering
+            $user_id = $user->ID;
+
             $data = array(
                 'key' => $key,
                 'totp_url' => $totp_url,
@@ -383,7 +393,7 @@ if (!class_exists('Rsssl_Two_Factor_Profile_Settings')) {
                 'one_enabled' => $one_enabled,
                 'forced' => $forced,
                 'available_providers' => $available_providers,
-                'user' => $user,
+                'user_id' => $user_id,
                 'login_nonce' => wp_create_nonce('rsssl_login_nonce'),
             );
             $data = self::removeCircularReferences($data);
@@ -397,7 +407,7 @@ if (!class_exists('Rsssl_Two_Factor_Profile_Settings')) {
             rsssl_load_template(
                 'profile-settings.php',
                 compact(
-                    'user',
+                    'user_id',
                     'available_providers',
                     'forced',
                     'one_enabled',
@@ -446,6 +456,7 @@ if (!class_exists('Rsssl_Two_Factor_Profile_Settings')) {
             wp_localize_script('rsssl-profile-settings', 'rsssl_profile', array(
                 'ajax_url'      => admin_url( 'admin-ajax.php' ),
                 'backup_codes' => $backup_codes,
+                'nonce' => wp_create_nonce('wp_rest'),
                 'root' => esc_url_raw(rest_url(Rsssl_Two_Factor::REST_NAMESPACE)),
                 'user_id' => get_current_user_id(),
                 'origin' => 'profile',

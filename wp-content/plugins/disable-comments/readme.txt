@@ -3,9 +3,9 @@ Contributors: Asif2BD, priyomukul, wpdevteam, re_enter_rupok, alimuzzamanalim, s
 Donate link: https://wpdeveloper.com/
 Tags: Disable Comments, Stop Spam, Delete Comments, Remove Comments, Spam Protection
 Requires at least: 5.0
-Tested up to: 6.8
-Requires PHP: 5.6
-Stable tag: 2.5.2
+Tested up to: 6.9
+Requires PHP: 7.0
+Stable tag: 2.7.0
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -125,7 +125,7 @@ Consider checking out our other WordPress solutions & boost your WordPress websi
 
 📄 [EmbedPress](https://wordpress.org/plugins/embedpress/): EmbedPress lets you embed anything including videos, images, posts, audio, maps and upload PDF, DOC, PPT etc.
 
-☁ [Templately](https://wordpress.org/plugins/templately/): 5000+ Free templates library for Elementor & Gutenberg along with the cloud collaboration for WordPress.
+☁ [Templately](https://wordpress.org/plugins/templately/): 6000+ Free templates library for Elementor & Gutenberg along with the cloud collaboration for WordPress.
 
 📚 [BetterDocs](https://wordpress.org/plugins/betterdocs/): Best Documentation & Knowledge Base Plugin for WordPress reduce manual support tickets & improve user experience.
 
@@ -191,6 +191,23 @@ Go to the tools page for the Disable Comments plugin and utlize the Delete Comme
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 This will be maintained from August 19, 2020 - @asif2bd
+
+= [2.7.0] - 2026-04-05 =
+* Improvement: Improved overall performance and stability
+
+= [2.6.2] - 2026-01-20 =
+* Fixed: An issue where deleting Notes in WordPress 6.9+ throws an error
+
+= [2.6.1] - 2025-12-02 =
+* Compatible with WordPress 6.9
+* Added: Introduced the “Enable Certain Comment Types” setting, allowing you to exclude the new Block Editor “Notes” comment type introduced in WordPress 6.9
+
+= [2.6.0] - 2025-11-05 =
+* New Feature: Show Existing Comments
+* Improved: Security Enhancements
+
+= [2.5.3] - 2025-09-14 =
+* Enhancement: Introduced a function to retrieve settings details ([#f16cee5](https://github.com/WPDevelopers/disable-comments/commit/f16cee5a4f939bcf8bb1f1d98e5b27103dc632ee))
 
 = [2.5.2] - 2025-05-20 =
 * Fixed: Issue where post types were not being selected in the "On Specific Post Types" section of the plugin settings

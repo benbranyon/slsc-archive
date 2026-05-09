@@ -1,13 +1,13 @@
 <?php
 
-namespace wpai_acf_add_on\fields\acf;
+namespace wpai_acf_add_on_pro\fields\acf;
 
-use wpai_acf_add_on\ACFService;
-use wpai_acf_add_on\fields\Field;
+use pmai_acf_add_on\ACFService;
+use pmai_acf_add_on\fields\Field;
 
 /**
  * Class FieldGallery
- * @package wpai_acf_add_on\fields\acf
+ * @package pmai_acf_add_on\fields\acf
  */
 class FieldGallery extends Field {
 
@@ -72,7 +72,7 @@ class FieldGallery extends Field {
 		            $value = $values[$this->getPostIndex()];
 	            } else {
 		            $value = explode($parent['delimiter'], $values[$this->getPostIndex()]);
-		            $value = $value[$parent['index']];
+		            $value = $value[$parent['index']] ?? '';
 	            }
             }
             $values[$this->getPostIndex()] = $value;
@@ -80,7 +80,7 @@ class FieldGallery extends Field {
 
         foreach ($values as $i => $value) {
             $imgs = array();
-            $line_imgs = explode("\n", $value);
+            $line_imgs = !empty($value) ? explode("\n", $value) : '';
             if (!empty($line_imgs)) {
                 foreach ($line_imgs as $line_img) {
                     $imgs = array_merge($imgs, empty($xpath['delim']) ? array($line_img) : str_getcsv($line_img, $xpath['delim']));

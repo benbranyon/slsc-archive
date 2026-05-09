@@ -29,6 +29,13 @@ class Review {
 	}
 
 	public function fbv_save_review() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array( 'mess' => __( 'You do not have permission to perform this action.', 'filebird' ) ),
+				403
+			);
+		}
+		
 		if ( count( $_REQUEST ) ) {
 			$nonce = $this->hasField( 'nonce', $_REQUEST );
 			$field = $this->hasField( 'field', $_REQUEST );

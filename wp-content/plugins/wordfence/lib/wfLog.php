@@ -213,19 +213,19 @@ class wfLog {
 		wfRateLimit::countHit($type, wfUtils::getIP());
 		
 		if (wfRateLimit::globalRateLimit()->shouldEnforce($type)) {
-			$this->takeBlockingAction('maxGlobalRequests', __("Exceeded the maximum global requests per minute for crawlers or humans.", 'wordfence'));
+			$this->takeBlockingAction('maxGlobalRequests', wfWAFBlockI18n::getBlockDescription(wfWAFBlockI18n::WFWAF_BLOCK_THROTTLEGLOBAL));
 		}
 		else if (wfRateLimit::crawlerViewsRateLimit()->shouldEnforce($type)) {
-			$this->takeBlockingAction('maxRequestsCrawlers', __("Exceeded the maximum number of requests per minute for crawlers.", 'wordfence')); //may not exit
+			$this->takeBlockingAction('maxRequestsCrawlers', wfWAFBlockI18n::getBlockDescription(wfWAFBlockI18n::WFWAF_BLOCK_THROTTLECRAWLER)); //may not exit
 		}
 		else if (wfRateLimit::crawler404sRateLimit()->shouldEnforce($type)) {
-			$this->takeBlockingAction('max404Crawlers', __("Exceeded the maximum number of page not found errors per minute for a crawler.", 'wordfence'));
+			$this->takeBlockingAction('max404Crawlers', wfWAFBlockI18n::getBlockDescription(wfWAFBlockI18n::WFWAF_BLOCK_THROTTLECRAWLERNOTFOUND));
 		}
 		else if (wfRateLimit::humanViewsRateLimit()->shouldEnforce($type)) {
-			$this->takeBlockingAction('maxRequestsHumans', __("Exceeded the maximum number of page requests per minute for humans.", 'wordfence'));
+			$this->takeBlockingAction('maxRequestsHumans', wfWAFBlockI18n::getBlockDescription(wfWAFBlockI18n::WFWAF_BLOCK_THROTTLEHUMAN));
 		}
 		else if (wfRateLimit::human404sRateLimit()->shouldEnforce($type)) {
-			$this->takeBlockingAction('max404Humans', __("Exceeded the maximum number of page not found errors per minute for humans.", 'wordfence'));
+			$this->takeBlockingAction('max404Humans', wfWAFBlockI18n::getBlockDescription(wfWAFBlockI18n::WFWAF_BLOCK_THROTTLEHUMANNOTFOUND));
 		}
 	}
 	
@@ -269,49 +269,51 @@ class wfLog {
 	public function getHits($hitType /* 'hits' or 'logins' */, $type, $afterTime, $limit = 50, $IP = false){
 		global $wpdb;
 		$IPSQL = "";
-		if($IP){
+		$sqlArgs = array($afterTime, $limit);
+		if ($IP) {
 			$ipHex = wfDB::binaryValueToSQLHex(wfUtils::inet_pton($IP));
 			$IPSQL = " and IP={$ipHex} ";
-			$sqlArgs = array($afterTime, $limit);
-		} else {
-			$sqlArgs = array($afterTime, $limit);
 		}
-		if($hitType == 'hits'){
+		
+		if ($hitType == 'hits') {
 			$securityOnly = !wfConfig::liveTrafficEnabled();
 			$delayedHumanBotFiltering = false;
 			
-			if($type == 'hit'){
-				$typeSQL = " ";
-			} else if($type == 'crawler'){
+			$typeSQL = " ";
+			if ($type == 'crawler') {
 				if ($securityOnly) {
-					$typeSQL = " ";
 					$delayedHumanBotFiltering = true;
 				}
 				else {
 					$now = time();
 					$typeSQL = " and jsRun = 0 and {$now} - ctime > 30 ";
 				}
-			} else if($type == 'gCrawler'){
+			}
+			else if ($type == 'gCrawler') {
 				$typeSQL = " and isGoogle = 1 ";
-			} else if($type == '404'){
+			}
+			else if ($type == '404') {
 				$typeSQL = " and statusCode = 404 ";
-			} else if($type == 'human'){
+			}
+			else if ($type == 'human') {
 				if ($securityOnly) {
-					$typeSQL = " ";
 					$delayedHumanBotFiltering = true;
 				}
 				else {
 					$typeSQL = " and jsRun = 1 ";
 				}
-			} else if($type == 'ruser'){
+			}
+			else if ($type == 'ruser') {
 				$typeSQL = " and userID > 0 ";
-			} else {
+			}
+			else if ($type != 'hit') {
 				wordfence::status(1, 'error', sprintf(/* translators: Error message. */ __("Invalid log type to wfLog: %s", 'wordfence'), $type));
 				return false;
 			}
-			array_unshift($sqlArgs, "select h.*, u.display_name from {$this->hitsTable} h
-				LEFT JOIN {$wpdb->users} u on h.userID = u.ID
-				where ctime > %f $IPSQL $typeSQL order by ctime desc limit %d");
+			
+			array_unshift($sqlArgs, "SELECT h.*, u.`display_name` FROM `{$this->hitsTable}` h
+				LEFT JOIN `{$wpdb->users}` u ON h.`userID` = u.`ID`
+				WHERE `ctime` > %f $IPSQL $typeSQL ORDER BY `ctime` DESC LIMIT %d");
 			$results = call_user_func_array(array($this->getDB(), 'querySelect'), $sqlArgs);
 			
 			if ($delayedHumanBotFiltering) {
@@ -333,13 +335,15 @@ class wfLog {
 				}
 			}
 
-		} else if($hitType == 'logins'){
+		}
+		else if ($hitType == 'logins') {
 			array_unshift($sqlArgs, "select l.*, u.display_name from {$this->loginsTable} l
 				LEFT JOIN {$wpdb->users} u on l.userID = u.ID
 				where ctime > %f $IPSQL order by ctime desc limit %d");
 			$results = call_user_func_array(array($this->getDB(), 'querySelect'), $sqlArgs ); 
 
-		} else {
+		}
+		else {
 			wordfence::status(1, 'error', sprintf(/* translators: Error message. */ __("getHits got invalid hitType: %s", 'wordfence'), $hitType));
 			return false;
 		}
@@ -349,7 +353,7 @@ class wfLog {
 
 	private function processActionDescription($description) {
 		switch ($description) {
-		case wfWAFIPBlocksController::WFWAF_BLOCK_UAREFIPRANGE:
+		case wfWAFBlockI18n::WFWAF_BLOCK_UAREFIPRANGE:
 			return __('UA/Hostname/Referrer/IP Range not allowed', 'wordfence');
 		default:
 			return $description;
@@ -357,6 +361,10 @@ class wfLog {
 	}
 
 	/**
+	 * Processes the $results array into one suitable for output.
+	 *
+	 * Note: This may be passed content from different tables, so it won't always have the same columns present.
+	 *
 	 * @param string $type
 	 * @param array $results
 	 * @throws Exception
@@ -372,7 +380,15 @@ class wfLog {
 
 		$patternBlocks = wfBlock::patternBlocks(true);
 
-		foreach($results as &$res){
+		foreach ($results as &$res) {
+			$res['id'] = (int) $res['id'];
+			if (array_key_exists('statusCode', $res)) { $res['statusCode'] = (int) $res['statusCode']; }
+			if (array_key_exists('userID', $res)) { $res['userID'] = (int) $res['userID']; }
+			$res['ctime'] = floatval($res['ctime']);
+			if (array_key_exists('attackLogTime', $res)) { $res['attackLogTime'] = floatval($res['attackLogTime']); }
+			if (array_key_exists('jsRun', $res)) { $res['jsRun'] = wfUtils::truthyToBoolean($res['jsRun']); }
+			if (array_key_exists('isGoogle', $res)) { $res['isGoogle'] = wfUtils::truthyToBoolean($res['isGoogle']); }
+			if (array_key_exists('newVisit', $res)) { $res['newVisit'] = wfUtils::truthyToBoolean($res['newVisit']); }
 			$res['type'] = $type;
 			$res['IP'] = wfUtils::inet_ntop($res['IP']);
 			$res['timeAgo'] = wfUtils::makeTimeAgo($serverTime - $res['ctime']);
@@ -399,81 +415,88 @@ class wfLog {
 			}
 			
 			$res['extReferer'] = false;
-			if(isset( $res['referer'] ) && $res['referer']){
+			if (isset($res['referer'] ) && $res['referer']) {
 				if(wfUtils::hasXSS($res['referer'] )){ //filtering out XSS
 					$res['referer'] = '';
 				}
 			}
-			if( isset( $res['referer'] ) && $res['referer']){
+			if (isset( $res['referer'] ) && $res['referer']) {
 				$refURL = parse_url($res['referer']);
-				if(is_array($refURL) && isset($refURL['host']) && $refURL['host']){
+				if (is_array($refURL) && isset($refURL['host']) && $refURL['host']) {
 					$refHost = strtolower(preg_replace('/^www\./i', '', $refURL['host']));
-					if($refHost != $ourHost){
+					if ($refHost != $ourHost) {
 						$res['extReferer'] = true;
 						//now extract search terms
 						$q = false;
-						if(preg_match('/(?:google|bing|alltheweb|aol|ask)\./i', $refURL['host'])){
+						if (preg_match('/(?:google|bing|alltheweb|aol|ask)\./i', $refURL['host'])) {
 							$q = 'q';
-						} else if(stristr($refURL['host'], 'yahoo.')){
+						}
+						else if (stristr($refURL['host'], 'yahoo.')) {
 							$q = 'p';
-						} else if(stristr($refURL['host'], 'baidu.')){
+						}
+						else if(stristr($refURL['host'], 'baidu.')) {
 							$q = 'wd';
 						}
-						if($q){
+						if ($q) {
 							$queryVars = array();
-							if( isset( $refURL['query'] ) ) {
+							if (isset( $refURL['query'])) {
 								parse_str($refURL['query'], $queryVars);
-								if(isset($queryVars[$q])){
+								if (isset($queryVars[$q])) {
 									$res['searchTerms'] = urlencode($queryVars[$q]);
 								}
 							}
 						}
 					}
 				}
-				if($res['extReferer']){
-					if ( isset( $referringPage ) && stristr( $referringPage['host'], 'google.' ) )
+				if ($res['extReferer']) {
+					if (isset($referringPage) && stristr($referringPage['host'], 'google.'))
 					{
-						parse_str( $referringPage['query'], $queryVars );
-						// echo $queryVars['q']; // This is the search term used
+						parse_str($referringPage['query'], $queryVars);
 					}
 				}
 			}
+			
 			$res['browser'] = false;
-			if($res['UA']){
+			if ($res['UA']) {
 				$b = $browscap->getBrowser($res['UA']);
-				if($b && $b['Parent'] != 'DefaultProperties'){
+				if ($b && $b['Parent'] != 'DefaultProperties') {
 					$res['browser'] = array(
 						'browser'   => !empty($b['Browser']) ? $b['Browser'] : "",
 						'version'   => !empty($b['Version']) ? $b['Version'] : "",
 						'platform'  => !empty($b['Platform']) ? $b['Platform'] : "",
-						'isMobile'  => !empty($b['isMobileDevice']) ? $b['isMobileDevice'] : "",
-						'isCrawler' => !empty($b['Crawler']) ? $b['Crawler'] : "",
+						'isMobile'  => (isset($b['isMobileDevice']) && $b['isMobileDevice']),
+						'isCrawler' => (isset($b['Crawler']) && $b['Crawler']),
 					);
 					
 					if (isset($res['jsRun']) && !wfConfig::liveTrafficEnabled() && !wfUtils::truthyToBoolean($res['jsRun'])) {
-						$res['jsRun'] = !(isset($b['Crawler']) && $b['Crawler']) ? '1' : '0';
+						$res['jsRun'] = !(isset($b['Crawler']) && $b['Crawler']);
 					}
 				}
 				else {
 					$IP = wfUtils::getIP();
 					$res['browser'] = array(
-						'isCrawler' => !wfLog::isHumanRequest($IP, $res['UA']) ? 'true' : ''
+						'isCrawler' => !wfLog::isHumanRequest($IP, $res['UA'])
 					);
 				}
 			}
 
 
-			if($res['userID']){
+			if ($res['userID']) {
 				$ud = get_userdata($res['userID']);
-				if($ud){
+				if ($ud) {
 					$res['user'] = array(
 						'editLink' => wfUtils::editUserLink($res['userID']),
 						'display_name' => $res['display_name'],
-						'ID' => $res['userID']
+						'ID' => (int) $res['userID']
 					);
 				}
-			} else {
+			}
+			else {
 				$res['user'] = false;
+			}
+			
+			if (array_key_exists('actionDescription', $res)) {
+				$res['actionDescription'] = wfWAFBlockI18n::getTranslatedBlockDescription($res['actionDescription']);
 			}
 		}
 	}
@@ -563,8 +586,8 @@ class wfLog {
 			if ($b->matchRequest($IP, $userAgent, $referrer) !== wfBlock::MATCH_NONE) {
 				$b->recordBlock();
 				wfActivityReport::logBlockedIP($IP, null, 'advanced');
-				$this->currentRequest->actionDescription = @__('UA/Referrer/IP Range not allowed', 'wordfence');
-				$this->do503(3600, @__("Advanced blocking in effect.", 'wordfence')); //exits
+				$this->currentRequest->actionDescription = wfWAFBlockI18n::getBlockDescription(wfWAFBlockI18n::WFWAF_BLOCK_UAREFIPRANGE);
+				$this->do503(3600, wfI18n::__("Advanced blocking in effect.", 'wordfence')); //exits
 			}
 		}
 
@@ -576,7 +599,7 @@ class wfLog {
 				$bypassRedirDest = wfConfig::get('cbl_bypassRedirDest', '');
 				
 				$this->initLogRequest();
-				$this->getCurrentRequest()->actionDescription = @__('redirected to bypass URL', 'wordfence');
+				$this->getCurrentRequest()->actionDescription = wfWAFBlockI18n::getBlockDescription(wfWAFBlockI18n::WFWAF_BLOCK_COUNTRY_BYPASS_REDIR);
 				$this->getCurrentRequest()->statusCode = 302;
 				$this->currentRequest->action = 'cbl:redirect';
 				$this->logHit();
@@ -590,7 +613,7 @@ class wfLog {
 				wfConfig::inc('totalCountryBlocked');
 				
 				$this->initLogRequest();
-				$this->getCurrentRequest()->actionDescription = sprintf(/* translators: URL */ @__('blocked access via country blocking and redirected to URL (%s)', 'wordfence'), wfConfig::get('cbl_redirURL'));
+				$this->getCurrentRequest()->actionDescription = wfWAFBlockI18n::getBlockDescription(wfWAFBlockI18n::WFWAF_BLOCK_COUNTRY_REDIR, wfConfig::get('cbl_redirURL'));
 				$this->getCurrentRequest()->statusCode = 503;
 				if (!$this->getCurrentRequest()->action) {
 					$this->currentRequest->action = 'blocked:wordfence';
@@ -605,10 +628,10 @@ class wfLog {
 			}
 			else if ($match !== wfBlock::MATCH_NONE) {
 				$b->recordBlock();
-				$this->currentRequest->actionDescription = @__('blocked access via country blocking', 'wordfence');
+				$this->currentRequest->actionDescription = wfWAFBlockI18n::getBlockDescription(wfWAFBlockI18n::WFWAF_BLOCK_COUNTRY);
 				wfConfig::inc('totalCountryBlocked');
 				wfActivityReport::logBlockedIP($IP, null, 'country');
-				$this->do503(3600, @__('Access from your area has been temporarily limited for security reasons', 'wordfence'));
+				$this->do503(3600, wfI18n::__('Access from your area has been temporarily limited for security reasons', 'wordfence'));
 			}
 		}
 
@@ -623,7 +646,7 @@ class wfLog {
 			}
 			$reason = $ipBlock->reason;
 			if ($ipBlock->type == wfBlock::TYPE_IP_MANUAL || $ipBlock->type == wfBlock::TYPE_IP_AUTOMATIC_PERMANENT) {
-				$reason = @__('Manual block by administrator', 'wordfence');
+				$reason = wfWAFBlockI18n::getBlockDescription(wfWAFBlockI18n::WFWAF_BLOCK_MANUAL);
 			}
 			$this->do503($secsToGo, $reason); //exits
 		}
@@ -713,6 +736,7 @@ class wfLog {
 			header('Retry-After: ' . $secsToGo);
 		}
 		$customText = wpautop(wp_strip_all_tags(wfConfig::get('blockCustomText', '')));
+		$reason = wfWAFBlockI18n::getTranslatedBlockDescription($reason);
 		require_once(dirname(__FILE__) . '/wf503.php');
 		exit();
 	}
@@ -768,6 +792,8 @@ class wfLog {
 		$timeOffset = 3600 * get_option('gmt_offset');
 		foreach($results as &$rec){
 			//$rec['timeAgo'] = wfUtils::makeTimeAgo(time() - $rec['ctime']);
+			$rec['ctime'] = (float) $rec['ctime'];
+			$rec['level'] = (int) $rec['level'];
 			$rec['date'] = date('M d H:i:s', (int) $rec['ctime'] + $timeOffset);
 			$rec['msg'] = wp_kses_data( (string) $rec['msg']);
 		}
@@ -1796,7 +1822,9 @@ class wfLiveTrafficQueryFilter {
 		'=',
 		'!=',
 		'contains',
+		'!contains',
 		'match',
+		'!match',
 		'hregexp',
 		'hnotregexp',
 	);
@@ -1840,9 +1868,18 @@ class wfLiveTrafficQueryFilter {
 					$like = addcslashes($value, '_%\\');
 					$sql = $wpdb->prepare("$param LIKE %s", "%$like%");
 					break;
+					
+				case '!contains':
+					$like = addcslashes($value, '_%\\');
+					$sql = $wpdb->prepare("$param NOT LIKE %s", "%$like%");
+					break;
 
 				case 'match':
 					$sql = $wpdb->prepare("$param LIKE %s", $value);
+					break;
+				
+				case '!match':
+					$sql = $wpdb->prepare("$param NOT LIKE %s", $value);
 					break;
 				
 				case 'hregexp':

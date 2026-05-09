@@ -9,7 +9,7 @@
                     <tbody>
                     <?php
                     if (!empty($fields)){
-                        /** @var \wpai_acf_add_on\fields\Field $subField */
+                        /** @var \pmai_acf_add_on\fields\Field $subField */
                         foreach ($fields as $subField){
                             ?>
                             <tr class="field sub_field field_type-<?php echo $subField->getType();?> field_key-<?php echo $subField->getFieldKey();?>">
@@ -41,7 +41,7 @@
                 <tbody>
                 <?php
                 if (!empty($fields)){
-                    /** @var \wpai_acf_add_on\fields\Field $subField */
+                    /** @var \pmai_acf_add_on\fields\Field $subField */
                     foreach ($fields as $subField){
                         ?>
                         <tr class="field sub_field field_type-<?php echo $subField->getType();?> field_key-<?php echo $subField->getFieldKey();?>">

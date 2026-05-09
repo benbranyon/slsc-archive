@@ -191,8 +191,8 @@ function rsssl_get_system_status() {
 	if ( defined( 'RSSSL_LEARNING_MODE' ) ) {
 		$output .= "RSSSL_LEARNING_MODE defined\n";
 	}
-	if ( defined( 'RSSSL_DEACTIVATING_FREE' ) ) {
-		$output .= "RSSSL_DEACTIVATING_FREE defined\n";
+	if ( defined( 'RSSSL_DEACTIVATING_ALTERNATE' ) ) {
+		$output .= "RSSSL_DEACTIVATING_ALTERNATE defined\n";
 	}
 	if ( defined( 'RSSSL_UPGRADING_TO_PRO' ) ) {
 		$output .= "RSSSL_UPGRADING_TO_PRO defined\n";
@@ -210,7 +210,7 @@ function rsssl_get_system_status() {
 	     && ! defined( 'RSSSL_CSP_MAX_REQUESTS' )
 	     && ! defined( 'RSSSL_DISABLE_CHANGE_LOGIN_URL' )
 	     && ! defined( 'RSSSL_LEARNING_MODE' )
-	     && ! defined( 'RSSSL_DEACTIVATING_FREE' )
+	     && ! defined( 'RSSSL_DEACTIVATING_ALTERNATE' )
 	     && ! defined( 'RSSSL_UPGRADING_TO_PRO' )
 	) {
 		$output .= "No constants defined\n";
@@ -305,30 +305,28 @@ function rsssl_find_wordpress_base_path() {
 		return '/opt/bitnami/wordpress';
 	}
 
-	do {
-		if ( file_exists( $path . '/wp-config.php' ) ) {
-			//check if the wp-load.php file exists here. If not, we assume it's in a subdir.
-			if ( file_exists( $path . '/wp-load.php' ) ) {
-				return $path;
-			} else {
-				//wp not in this directory. Look in each folder to see if it's there.
-				if ( file_exists( $path ) && $handle = opendir( $path ) ) { //phpcs:ignore
-					while ( false !== ( $file = readdir( $handle ) ) ) {//phpcs:ignore
-						if ( '.' !== $file && '..' !== $file ) {
-							$file = $path . '/' . $file;
-							if ( is_dir( $file ) && file_exists( $file . '/wp-load.php' ) ) {
-								$path = $file;
-								break;
-							}
-						}
-					}
-					closedir( $handle );
-				}
-			}
+	// Go up the directory tree looking for wp-load.php
+	// This file is ALWAYS in the WordPress root
+	$max_depth     = 10; // Prevent infinite loops
+	$current_depth = 0;
 
-			return $path;
+	while ( ! file_exists( $path . '/wp-load.php' ) ) {
+		if ( ++ $current_depth > $max_depth ) {
+			break;
 		}
-	} while ( $path = realpath( "$path/.." ) ); //phpcs:ignore
+
+		$parent = dirname( $path );
+		if ( $parent === $path ) {
+			// We've reached the filesystem root
+			break;
+		}
+		$path = $parent;
+	}
+
+	// If we found wp-load.php, return the path
+	if ( file_exists( $path . '/wp-load.php' ) ) {
+		return $path;
+	}
 
 	return false;
 }

@@ -94,6 +94,12 @@ class Core {
 
     public function ajax_first_folder_notice() {
 		check_ajax_referer( 'fbv_nonce', 'nonce', true );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array( 'mess' => __( 'You do not have permission to perform this action.', 'filebird' ) ),
+				403
+			);
+		}
 		update_option( 'fbv_first_folder_notice', time() + 30 * 60 * 60 * 24 ); //After 3 months show
 		wp_send_json_success();
 	}
@@ -318,6 +324,13 @@ class Core {
 	public function users_have_additional_content( $users_have_content, $userids ) {
 		global $wpdb;
 		if ( $userids && ! $users_have_content ) {
+			$userids = array_map( 'intval', (array) $userids );
+			$userids = array_filter( $userids, function( $id ) {
+				return $id !== 0;
+			} );
+			if ( empty( $userids ) ) {
+				return $users_have_content;
+			}
 			if ( $wpdb->get_var( "SELECT id FROM {$wpdb->prefix}fbv WHERE created_by IN( " . implode( ',', $userids ) . ' ) LIMIT 1' ) ) {
 				$users_have_content = true;
 			}

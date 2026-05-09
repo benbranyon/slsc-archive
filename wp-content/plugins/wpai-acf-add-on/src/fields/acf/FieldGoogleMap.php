@@ -1,13 +1,13 @@
 <?php
 
-namespace wpai_acf_add_on\fields\acf;
+namespace wpai_acf_add_on_pro\fields\acf;
 
-use wpai_acf_add_on\ACFService;
-use wpai_acf_add_on\fields\base\BaseGoogleMap;
+use pmai_acf_add_on\ACFService;
+use wpai_acf_add_on_pro\fields\base\BaseGoogleMap;
 
 /**
  * Class FieldGoogleMap
- * @package wpai_acf_add_on\fields\acf
+ * @package pmai_acf_add_on\fields\acf
  */
 class FieldGoogleMap extends BaseGoogleMap {
 

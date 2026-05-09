@@ -283,17 +283,17 @@ class Controller_Users {
 	 * Returns the number of recovery codes remaining for the user or null if the user does not have 2FA active.
 	 *
 	 * @param \WP_User $user
-	 * @return float|null
+	 * @return int
 	 */
 	public function recovery_code_count($user) {
 		global $wpdb;
 		$table = Controller_DB::shared()->secrets;
 		$record = $wpdb->get_var($wpdb->prepare("SELECT `recovery` FROM `{$table}` WHERE `user_id` = %d", $user->ID));
 		if (!$record) {
-			return null;
+			return 0;
 		}
 		
-		return floor(Model_Crypto::strlen($record) / self::RECOVERY_CODE_SIZE);
+		return intdiv(Model_Crypto::strlen($record), self::RECOVERY_CODE_SIZE);
 	}
 	
 	/**
@@ -332,12 +332,14 @@ class Controller_Users {
 		if (!Controller_CAPTCHA::shared()->enabled()) { return; }
 		
 		if ($user) { update_user_meta($user->ID, 'wfls-last-captcha-score', $score); }
-		$stats = Controller_Settings::shared()->get_array(Controller_Settings::OPTION_CAPTCHA_STATS);
+		$stats = Controller_Settings::shared()->get_array(Controller_Settings::OPTION_CAPTCHA_STATS, array());
+		if (!array_key_exists('counts', $stats)) { $stats['counts'] = array_fill(0, 10, 0); }
+		if (!array_key_exists('avg', $stats)) { $stats['avg'] = 0; }
 		$int_score = min(max((int) ($score * 10), 0), 10);
 		$count = array_sum($stats['counts']);
 		$stats['counts'][$int_score]++;
 		$stats['avg'] = ($stats['avg'] * $count + $int_score) / ($count + 1);
-		Controller_Settings::shared()->set_array(Controller_Settings::OPTION_CAPTCHA_STATS, $stats);
+		Controller_Settings::shared()->set(Controller_Settings::OPTION_CAPTCHA_STATS, $stats);
 	}
 	
 	/**
@@ -659,7 +661,7 @@ SQL
 		//Format is 'view' => '<a href="https://wfpremium.dev1.ryanbritton.com/author/ryan/" aria-label="View posts by ryan">View</a>'
 		if (user_can(wp_get_current_user(), Controller_Permissions::CAP_ACTIVATE_2FA_OTHERS) && (Controller_Users::shared()->can_activate_2fa($user) || Controller_Users::shared()->has_2fa_active($user))) {
 			$url = (is_multisite() ? network_admin_url('admin.php?page=WFLS&user=' . $user->ID) : admin_url('admin.php?page=WFLS&user=' . $user->ID));
-			$actions['wf2fa'] = '<a href="' . esc_url($url) . '" aria-label="' . esc_attr(sprintf(__('Edit two-factor authentication for %s', 'wordfence'), $user->user_login)) . '">' . esc_html__('2FA', 'wordfence') . '</a>';
+			$actions['wf2fa'] = '<a href="' . esc_url($url) . '" aria-label="' . esc_attr(sprintf(/* translators: Username */ __('Edit two-factor authentication for %s', 'wordfence'), $user->user_login)) . '">' . esc_html__('2FA', 'wordfence') . '</a>';
 		}
 		return $actions;
 	}

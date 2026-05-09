@@ -1,5 +1,6 @@
 <?php
   namespace iberezansky\fb3d;
+  defined('ABSPATH') || die();
 
   define('iberezansky\fb3d\PROPS_NONCE_ACTION', basename(__FILE__));
   define('iberezansky\fb3d\PROPS_NONCE_NAME', 'fb3d-props-nonce');

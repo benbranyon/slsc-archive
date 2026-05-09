@@ -6,8 +6,7 @@ if ( ! class_exists( "rsssl_le_hosts" ) ) {
     class rsssl_le_hosts {
         private static $_this;
         public $steps;
-        public $hosts;
-        public $supported_hosts;
+        private $hosts;
         public $not_local_certificate_hosts;
         public $no_installation_renewal_needed;
         public $dashboard_activation_required;
@@ -479,15 +478,6 @@ if ( ! class_exists( "rsssl_le_hosts" ) ) {
 		            'api' => false,
 		            'ssl_installation_link' => false,
 	            ),
-	            'xxl' => array(
-		            'name' => 'XXL Hosting',
-		            'installation_renewal_required' => false,
-		            'local_ssl_generation_needed' => false,
-		            'free_ssl_available' => true,
-		            'hosting_dashboard' => 'cpanel',
-		            'api' => false,
-		            'ssl_installation_link' => false,
-	            ),
 	            'combell' => array(
 		            'name' => 'Combell',
 		            'installation_renewal_required' => false,
@@ -628,6 +618,15 @@ if ( ! class_exists( "rsssl_le_hosts" ) ) {
 		            'name' => 'Register.it',
 		            'hosting_dashboard' => 'cpanel',
 		            'api' => false,
+	            ),
+	            'superspace' => array(
+		            'name' => 'Superspace',
+		            'installation_renewal_required' => false,
+		            'local_ssl_generation_needed' => false,
+		            'free_ssl_available' => true,
+		            'hosting_dashboard' => 'cpanel',
+		            'api' => false,
+		            'ssl_installation_link' => false,
 	            ),
 	            'swizzonic' => array(
 		            'name' => 'Swizzonic',
@@ -784,16 +783,20 @@ if ( ! class_exists( "rsssl_le_hosts" ) ) {
             $this->no_installation_renewal_needed[] = 'cpanel:autossl';
 
 	        ksort($this->hosts);
-	        $this->supported_hosts = array(
-		        'none' => __('I don\'t know, or not listed, proceed with installation', 'really-simple-ssl'),
-	        );
-	        $this->supported_hosts = $this->supported_hosts + wp_list_pluck($this->hosts, 'name');
         }
 
         static function this() {
             return self::$_this;
         }
 
+	/**
+	 * Get the known hosts configuration array
+	 *
+	 * @return array
+	 */
+	public function getKnownHosts() {
+		return $this->hosts;
+	}
 		public function detect_host_on_activation(){
 			foreach ( $this->hosts as $host_key => $host ) {
 				if ( isset($host['detected']) && $host['detected'] ) {

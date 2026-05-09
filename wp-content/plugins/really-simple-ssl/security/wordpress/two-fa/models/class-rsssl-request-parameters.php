@@ -37,9 +37,9 @@ class Rsssl_Request_Parameters {
 	/**
 	 * User object.
 	 *
-	 * @var WP_User
+	 * @var WP_User|null
 	 */
-	public WP_User $user;
+	public ?WP_User $user = null;
 
 	/**
 	 * Service provider.
@@ -171,7 +171,7 @@ class Rsssl_Request_Parameters {
 	private function initialize_parameters( WP_REST_Request $request ): void {
 		$allowed_providers = array( 'passkey', 'email', 'totp', 'passkey_register' );
 		$this->nonce       = sanitize_text_field( $request->get_header( 'X-WP-Nonce' ) );
-		$this->redirect_to = $request->get_param( 'redirect_to' ) ? esc_url_raw( $request->get_param( 'redirect_to' ) ) : admin_url();
+		$this->redirect_to = $request->get_param( 'redirect_to' ) ? wp_validate_redirect( $request->get_param( 'redirect_to' ), admin_url() ) : admin_url();
 		$this->login_nonce = sanitize_text_field( $request->get_param( 'login_nonce' ) );
 		$provider          = $request->get_param( 'provider' );
 		$this->forced_roles = rsssl_get_option( 'two_fa_forced_role' , [] );
@@ -186,7 +186,10 @@ class Rsssl_Request_Parameters {
 		} else {
 			$this->user_id  = $request->get_param( 'user_id' )?? 0;
 			$this->provider = $provider?? 'none';
-			$this->user = get_user_by( 'id', $this->user_id );
+			$user = get_user_by( 'id', $this->user_id );
+			if ($user) {
+				$this->user = $user;
+			}
 			if ($request->has_param('entry_id')) {
 				$this->entry_id = (int) $request->get_param('entry_id');
 			}
@@ -208,6 +211,25 @@ class Rsssl_Request_Parameters {
 		$this->user_handle    = sanitize_text_field( $request->get_param( 'userHandle' ) );
 		$this->onboarding     = (bool) $request->get_param( 'onboarding' );
 		$this->auth_device_id = sanitize_text_field( $request->get_param( 'device_name' ) ?? 'unknown' );
+
+		// If user_id is set, we try to get the user object.
+		if ( $this->user_id ) {
+			$user = get_user_by( 'id', $this->user_id );
+			if ($user) {
+				$this->user = $user;
+			}
+			return;
+		}
+
+		// If user_login is set, we try to get the user object by login. Since we probably are in the login flow,
+		// we want to get the user by login.
+		if ( $this->user_login ) {
+			$user = get_user_by( 'login', $this->user_login );
+			if ( $user ) {
+				$this->user_id = $user->ID;
+				$this->user    = $user;
+			}
+		}
 	}
 
 	/**
