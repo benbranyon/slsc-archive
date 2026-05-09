@@ -1,5 +1,6 @@
 <?php
   namespace iberezansky\fb3d;
+  defined('ABSPATH') || die();
   use \WP_Query;
 
   function convert_tax_to_tax_query($tax) {

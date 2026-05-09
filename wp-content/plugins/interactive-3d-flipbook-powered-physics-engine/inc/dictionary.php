@@ -1,5 +1,6 @@
 <?php
   namespace iberezansky\fb3d;
+  defined('ABSPATH') || die();
 
   function __($str, $domain) {
     global $fb3d;

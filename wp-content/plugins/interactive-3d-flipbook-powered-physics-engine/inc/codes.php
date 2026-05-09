@@ -1,5 +1,6 @@
 <?php
   namespace iberezansky\fb3d;
+  defined('ABSPATH') || die();
 
   define('iberezansky\fb3d\CODE_OK', 0);
   define('iberezansky\fb3d\CODE_ERROR', 1);

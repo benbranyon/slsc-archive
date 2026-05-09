@@ -21,6 +21,7 @@ function fb3dClientLocaleLoader() {
       };
       Promise.all([
         fb3dFetch(FB3D_CLIENT_LOCALE.pluginurl+'assets/css/client.css?ver='+FB3D_CLIENT_LOCALE.version),
+        fb3dFetch(FB3D_CLIENT_LOCALE.pluginurl+'assets/templates/iframe-init.html?ver='+FB3D_CLIENT_LOCALE.version),
         fb3dFetch(FB3D_CLIENT_LOCALE.cacheurl+'skins.js?ver='+FB3D_CLIENT_LOCALE.version),
         fb3dFetch(isStable? pdfJs.stablePdfJsLib: pdfJs.pdfJsLib),
         fb3dFetch(assetsJs+'three.min.js?ver=125'),
@@ -28,7 +29,7 @@ function fb3dClientLocaleLoader() {
         fb3dFetch(assetsJs+'client.min.js?ver='+FB3D_CLIENT_LOCALE.version),
       ]).then(function(fs) {
         jQuery('head').append(['<style type="text/css">', fs[0].replace(/url\('..\//gi, 'url(\''+fb3dNormalizeUrl(FB3D_CLIENT_LOCALE.pluginurl+'assets/')), '</style>'].join(''));
-        for(var i = 1; i<fs.length; ++i) {
+        for(var i = 2; i<fs.length; ++i) {
           eval(fs[i]);
         }
       });

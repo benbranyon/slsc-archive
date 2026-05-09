@@ -1,5 +1,6 @@
 <?php
   namespace iberezansky\fb3d;
+  defined('ABSPATH') || die();
 
   function rec_stripslashes($mixed) {
     return  is_array($mixed) ? array_map('\iberezansky\fb3d\rec_stripslashes', $mixed) : stripslashes($mixed);

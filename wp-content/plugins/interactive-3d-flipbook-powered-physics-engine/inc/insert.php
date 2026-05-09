@@ -1,5 +1,6 @@
 <?php
   namespace iberezansky\fb3d;
+  defined('ABSPATH') || die();
 
   function register_tinymce_plugin( $plugin_array ) {
     global $fb3d;

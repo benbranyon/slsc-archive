@@ -1,5 +1,6 @@
 <?php
   namespace iberezansky\fb3d;
+  defined('ABSPATH') || die();
   use \DateTime;
   require_once(INC.'questions.php');
 

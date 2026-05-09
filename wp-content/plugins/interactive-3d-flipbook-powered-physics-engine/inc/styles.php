@@ -1,5 +1,6 @@
 <?php
   namespace iberezansky\fb3d;
+  defined('ABSPATH') || die();
 
   function register_styles() {
     wp_register_style(POST_ID.'-font-awesome', ASSETS_CSS.'font-awesome.min.css', array(), '4.7.0');
