@@ -167,6 +167,101 @@
                 <?php esc_html_e('Disabling comments will also disable trackbacks and pingbacks. All comment-related fields will also be hidden from the edit/quick-edit screens of the affected posts. These settings cannot be overridden for individual posts. Comments will be visible on all other post types.', 'disable-comments'); ?>
             </p>
         </div>
+
+        <div class="disable_option dc-text__block mb30 mt30" role="group" aria-labelledby="existing-comments-heading">
+            <h4 id="existing-comments-heading" class="visually-hidden">
+                <?php esc_html_e('Existing Comments Display Settings', 'disable-comments'); ?>
+            </h4>
+
+            <div class="dissable__switch__item">
+                <input type="hidden" name="show_existing_comments" value="0">
+                <input type="checkbox"
+                    name="show_existing_comments"
+                    id="show_existing_comments"
+                    value="1"
+                    aria-describedby="existing-comments-description"
+                    <?php checked(isset($this->options['show_existing_comments']) ? $this->options['show_existing_comments'] : false); ?>>
+
+                <label for="show_existing_comments">
+                    <span class="switch" role="presentation" tabindex="0">
+                        <span class="switch__text on" aria-hidden="true"><?php esc_html_e('On', 'disable-comments'); ?></span>
+                        <span class="switch__text off" aria-hidden="true"><?php esc_html_e('Off', 'disable-comments'); ?></span>
+                    </span>
+                    <?php esc_html_e('Show Existing Comments', 'disable-comments'); ?>
+                </label>
+
+                <p id="existing-comments-description" class="disable__option__description">
+                    <?php esc_html_e('When enabled, existing approved comments will remain visible even when new comments are disabled. This allows you to stop spam while preserving your existing comment discussions.', 'disable-comments'); ?>
+                </p>
+            </div>
+        </div>
+
+            <!-- Enable Certain Comment Types -->
+        <div class="disable_option dc-text__block mb30 mt30"
+            role="group"
+            aria-labelledby="allowed-comment-types-heading">
+
+            <h4 id="allowed-comment-types-heading" class="visually-hidden">
+                <?php esc_html_e('Allowed Comment Types Settings', 'disable-comments'); ?>
+            </h4>
+
+            <div class="dissable__switch__item">
+                <input type="hidden" name="enable_allowed_comment_types" value="0">
+                <input type="checkbox"
+                    name="enable_allowed_comment_types"
+                    id="enable_allowed_comment_types"
+                    value="1"
+                    aria-controls="allowed_comment_types_wrapper"
+                    aria-expanded="false"
+                    <?php
+                    $allowed_types = isset($this->options['allowed_comment_types']) ? $this->options['allowed_comment_types'] : array();
+                    checked(!empty($allowed_types));
+                    ?>>
+
+                <label for="enable_allowed_comment_types">
+                    <span class="switch" role="presentation" tabindex="0">
+                        <span class="switch__text on" aria-hidden="true"><?php esc_html_e('On', 'disable-comments'); ?></span>
+                        <span class="switch__text off" aria-hidden="true"><?php esc_html_e('Off', 'disable-comments'); ?></span>
+                    </span>
+                    <?php esc_html_e('Enable Certain Comment Types', 'disable-comments'); ?>
+                </label>
+            </div>
+
+            <ul id="allowed_comment_types_wrapper"
+                class="delete__feedback"
+                role="group"
+                aria-label="<?php esc_attr_e('Available comment types', 'disable-comments'); ?>">
+
+                <?php
+                $available_types = $this->get_available_comment_type_options();
+                if (!empty($available_types)):
+                    foreach ($available_types as $type => $label): ?>
+                        <li class="checkbox-style">
+                            <input type="checkbox"
+                                name="allowed_comment_types[]"
+                                id="allowed_comment_type_<?php echo esc_attr($type); ?>"
+                                value="<?php echo esc_attr($type); ?>"
+                                aria-describedby="allowed-comment-types-description"
+                                <?php checked(in_array($type, $allowed_types, true)); ?>>
+                            <label for="allowed_comment_type_<?php echo esc_attr($type); ?>">
+                                <i class="icon" tabindex="0"></i>
+                                <?php echo esc_html($label); ?>
+                            </label>
+                        </li>
+                    <?php endforeach;
+                else: ?>
+                    <li class="disable__option__description">
+                        <?php esc_html_e('Currently, we support WordPress 6.9+ block notes (note type). This option will allow block notes to function even when regular comments are disabled.', 'disable-comments'); ?>
+                    </li>
+                <?php endif; ?>
+            </ul>
+
+            <p id="allowed-comment-types-description" class="disable__option__description mt10">
+                <span class="danger" aria-hidden="true"><?php esc_html_e('Note:', 'disable-comments'); ?></span>
+                <?php esc_html_e('Enabling specific comment types will allow these notes/comments to be added or displayed wherever they normally appear throughout your site, even when regular comments are disabled. These comment types will also be protected from deletion and will not appear in the "Delete Comments" interface.', 'disable-comments'); ?>
+            </p>
+        </div>
+
         <?php if (!is_network_admin()): ?>
             <div id="exclude_by_role_wrapper"
                 class="disable_option dc-text__block mb30 mt30"
@@ -211,7 +306,7 @@
                         <select id="exclude_by_role"
                             class="dc-select2"
                             name="exclude_by_role[]"
-                            data-options='<?php echo wp_json_encode($roles); ?>'
+                            data-options='<?php echo esc_attr( wp_json_encode( $roles ) ); // esc_attr() prevents attribute injection; JS handles DOM XSS via $('<span>').text(label).html() ?>'
                             multiple
                             aria-describedby="roles-description">
                         </select>
@@ -229,7 +324,7 @@
                 </p>
             </div>
 
-            <!-- Avatar Settings -->
+        <!-- Avatar Settings -->
             <div class="disable_option dc-text__block mt30"
                 role="group"
                 aria-labelledby="avatar-settings-heading">

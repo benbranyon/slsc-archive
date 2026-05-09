@@ -6,6 +6,9 @@ jQuery(document).ready(function ($) {
 	var saveBtn   = jQuery("#disableCommentSaveSettings button.button.button__success");
 	var deleteBtn = jQuery("#deleteCommentSettings button.button.button__delete");
 	var savedData;
+	var networkAjaxUrl = disableCommentsObj.is_network_admin === '1'
+		? ajaxurl + (ajaxurl.indexOf('?') === -1 ? '?' : '&') + 'is_network_admin=1'
+		: ajaxurl;
 
 	if(jQuery('.sites_list_wrapper').length){
 		var addSite   = function($sites_list, site, type){
@@ -49,7 +52,7 @@ jQuery(document).ready(function ($) {
 			var $pageSizeWrapper    = $sites_list_wrapper.find('.page__size__wrapper');
 			var isPageLoaded        = {};
 			var args                = {
-				dataSource             : ajaxurl,
+				dataSource             : networkAjaxUrl,
 				locator                : 'data',
 				pageSize               : $pageSize.val() || 50,
 				showPageNumbers        : false,
@@ -296,7 +299,7 @@ jQuery(document).ready(function ($) {
 		};
 
 		jQuery.ajax({
-			url: ajaxurl,
+			url: networkAjaxUrl,
 			type: "post",
 			data: data,
 			beforeSend: function () {
@@ -360,7 +363,7 @@ jQuery(document).ready(function ($) {
 				deleteBtn.html(
 					'<svg id="eael-spinner" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 48 48"><circle cx="24" cy="4" r="4" fill="#fff"/><circle cx="12.19" cy="7.86" r="3.7" fill="#fffbf2"/><circle cx="5.02" cy="17.68" r="3.4" fill="#fef7e4"/><circle cx="5.02" cy="30.32" r="3.1" fill="#fef3d7"/><circle cx="12.19" cy="40.14" r="2.8" fill="#feefc9"/><circle cx="24" cy="44" r="2.5" fill="#feebbc"/><circle cx="35.81" cy="40.14" r="2.2" fill="#fde7af"/><circle cx="42.98" cy="30.32" r="1.9" fill="#fde3a1"/><circle cx="42.98" cy="17.68" r="1.6" fill="#fddf94"/><circle cx="35.81" cy="7.86" r="1.3" fill="#fcdb86"/></svg><span>' + __("Deleting Comments..", "disable-comments") + '</span>'
 				);
-				jQuery.post(ajaxurl, data, function (response) {
+				jQuery.post(networkAjaxUrl, data, function (response) {
 					deleteBtn.html(__("Delete Comments", "disable-comments"));
 					if (response.success) {
 						Swal.fire({
@@ -432,7 +435,10 @@ jQuery(document).ready(function ($) {
 						}).map(function(val, index){
 							return val.id;
 						});
-						var text = "<b>" + _selectedOptions.join("</b>, <b>") + "</b>";
+						var escapedOptions = _selectedOptions.map(function(label) {
+							return $('<span>').text(label).html();
+						});
+						var text = "<b>" + escapedOptions.join("</b>, <b>") + "</b>";
 						excludedRoles.html(sprintf(__("Comments are visible to %s and <b>Logged out users</b>.", "disable-comments"), text));
 						includedRoles.text(__("No comments will be visible to other roles.", "disable-comments"));
 					}
@@ -441,7 +447,10 @@ jQuery(document).ready(function ($) {
 					var selectedOptionsLabels = selectedOptions.map(function(val, index){
 						return val.text;
 					});
-					var text = "<b>" + selectedOptionsLabels.join("</b>, <b>") + "</b>";
+					var escapedLabels = selectedOptionsLabels.map(function(label) {
+						return $('<span>').text(label).html();
+					});
+					var text = "<b>" + escapedLabels.join("</b>, <b>") + "</b>";
 					excludedRoles.html(sprintf(__("Comments are visible to %s.", "disable-comments"), text));
 					includedRoles.text(__("Other roles and logged out users won't see any comments.", "disable-comments"));
 				}
@@ -467,6 +476,22 @@ jQuery(document).ready(function ($) {
 			}
 		});
 		jQuery('#enable_exclude_by_role').trigger('change');
+	})();
+
+	// Handle allowed comment types toggle
+	(function(){
+		var allowedCommentTypesWrapper = jQuery('#allowed_comment_types_wrapper');
+		jQuery('#enable_allowed_comment_types').on('change', function(){
+			if(jQuery(this).is(':checked')){
+				allowedCommentTypesWrapper.show();
+			}
+			else{
+				allowedCommentTypesWrapper.hide();
+				// Uncheck all comment type checkboxes when disabled
+				allowedCommentTypesWrapper.find('input[type="checkbox"]').prop('checked', false);
+			}
+		});
+		jQuery('#enable_allowed_comment_types').trigger('change');
 	})();
 
 
