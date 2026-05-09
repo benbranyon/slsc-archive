@@ -24,12 +24,13 @@ function pmai_pmxi_reimport($entry, $post){
                 if (!empty($fields)) {
                     foreach ($fields as $key => $field) {
                         if ( ! empty($field['name']) ) {
-                            $all_existing_acf[] = '[' . $field['name'] . '] ' . $field['label'];
+                            // Sanitize field name and label to prevent issues with special characters like quotes
+                            $all_existing_acf[] = '[' . sanitize_text_field($field['name']) . '] ' . sanitize_text_field($field['label']);
                             // Include subfields.
                             if( isset($field['sub_fields']) && !in_array($field['type'], ['repeater', 'flexible_content']) && is_array($field['sub_fields']) && !empty($field['sub_fields'])){
                                 foreach($field['sub_fields'] as $sub_field){
                                     if( ! empty($sub_field['name'])){
-                                        $all_existing_acf[] = '[' . $field['name'] . '_' . $sub_field['name'] . '] ' . $sub_field['label'];
+                                        $all_existing_acf[] = '[' . sanitize_text_field($field['name']) . '_' . sanitize_text_field($sub_field['name']) . '] ' . sanitize_text_field($sub_field['label']);
                                     }
                                 }
                             }
@@ -48,12 +49,13 @@ function pmai_pmxi_reimport($entry, $post){
                         continue;
                     }
                     $field = (!empty($cur_meta_val[0])) ? unserialize($cur_meta_val[0]) : array();
-                    $field_name = '[' . esc_html($field['name']) . '] ' . esc_html($field['label']);
-                    if ( ! in_array($field_name, $all_existing_acf) ) $all_existing_acf[] = esc_html($field_name);
+                    // Sanitize field name and label to prevent issues with special characters like quotes
+                    $field_name = '[' . sanitize_text_field($field['name']) . '] ' . sanitize_text_field($field['label']);
+                    if ( ! in_array($field_name, $all_existing_acf) ) $all_existing_acf[] = $field_name;
                     if ( ! empty($field['sub_fields']) ) {
                         foreach ($field['sub_fields'] as $key => $sub_field) {
-                            $sub_field_name = esc_html($field_name) . '---[' . esc_html($sub_field['name']) . ']';
-                            if ( ! in_array($sub_field_name, $all_existing_acf) ) $all_existing_acf[] = esc_html($sub_field_name);
+                            $sub_field_name = $field_name . '---[' . sanitize_text_field($sub_field['name']) . ']';
+                            if ( ! in_array($sub_field_name, $all_existing_acf) ) $all_existing_acf[] = $sub_field_name;
                         }
                     }
                 }

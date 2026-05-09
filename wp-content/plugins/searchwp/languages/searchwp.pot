@@ -1,1940 +1,4174 @@
-#, fuzzy
+# Copyright (C) 2026 SearchWP
+# This file is distributed under the same license as the SearchWP plugin.
 msgid ""
 msgstr ""
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
-"Project-Id-Version: SearchWP\n"
-"POT-Creation-Date: 2019-09-24 10:45-0400\n"
-"PO-Revision-Date: 2017-11-17 08:11-0500\n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"Project-Id-Version: SearchWP 4.5.8\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/searchwp\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.3\n"
-"X-Poedit-Basepath: ..\n"
-"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
-"X-Poedit-WPHeader: searchwp.php\n"
-"X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
-"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
-"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
-"X-Poedit-SearchPath-0: .\n"
-"X-Poedit-SearchPathExcluded-0: *.js\n"
-
-#: admin/class.admin-settings.php:161
-msgid "Support"
-msgstr ""
-
-#: admin/class.admin-settings.php:214
-msgid ""
-"Initial index has been built, the progress bar will be hidden until it is "
-"needed again."
-msgstr ""
-
-#: admin/class.admin-settings.php:261
-#: admin/settings-impl-advanced-legacy.php:450 searchwp.php:918
-#: searchwp.php:1116
-msgid "Settings"
-msgstr ""
-
-#: admin/class.ajax.php:243
-msgid "There was an error recreating the database tables"
-msgstr ""
-
-#: admin/class.ajax.php:262
-msgid "Invalid engine"
-msgstr ""
-
-#: admin/class.ajax.php:345 admin/class.ajax.php:366
-msgid "Invalid format"
-msgstr ""
-
-#: admin/class.ajax.php:485
-msgid "None"
-msgstr ""
-
-#: admin/class.ajax.php:493 includes/class.i18n.php:183
-msgid "Right now"
-msgstr ""
-
-#. translators: %s = human-readable time difference
-#: admin/class.ajax.php:497
-#, php-format
-msgctxt "%s = human-readable time difference"
-msgid "%s ago"
-msgstr ""
-
-#: admin/class.ajax.php:855
-msgid "Supplemental Engine"
-msgstr ""
-
-#: admin/class.dashboard.php:36 admin/stats-legacy.php:61 admin/stats.php:48
-#: includes/class.i18n.php:202 searchwp.php:3170
-msgid "Search Statistics"
-msgstr ""
-
-#: admin/class.dashboard.php:81 admin/class.dashboard.php:89
-#: admin/export-import.php:29 admin/stats-legacy.php:69
-#: admin/stats-legacy.php:95 admin/stats.php:53 includes/class.i18n.php:56
-msgid "Default"
-msgstr ""
-
-#: admin/class.dashboard.php:118 admin/stats-legacy.php:108
-#: includes/class.i18n.php:263
-msgid "Today"
-msgstr ""
-
-#: admin/class.dashboard.php:122 admin/stats-legacy.php:190
-msgid "Past 30 Days"
-msgstr ""
-
-#: admin/class.dashboard.php:129
-msgid "View Full Stats"
-msgstr ""
-
-#: admin/class.extensions.php:41
-msgid "Extensions"
-msgstr ""
-
-#: admin/class.extensions.php:63 searchwp.php:3513
-msgid "Back to SearchWP Settings"
-msgstr ""
-
-#: admin/class.nags.php:120
-#, php-format
-msgid ""
-"The SearchWP indexer runs as fast as it can without overloading your server; "
-"there are filters to customize it's aggressiveness. <a href=\"%s\">Find out "
-"more &raquo;</a> <a class=\"swp-dismiss\" href=\"%s\">Dismiss</a>"
-msgstr ""
-
-#: admin/class.nags.php:146
-#, php-format
-msgid ""
-"SearchWP is NOT intercepting admin searches <a href=\"%s\" target=\"_blank"
-"\">Find out more &raquo;</a>"
-msgstr ""
-
-#: admin/class.nags.php:171
-#, php-format
-msgid ""
-"If the indexer is not progressing you likely need to enable the alternate "
-"indexer <a href=\"%s\" target=\"_blank\">Find out more &raquo;</a>"
-msgstr ""
-
-#: admin/class.nags.php:198
-#, php-format
-msgid ""
-"This post type is <strong>NOT</strong> added to your SearchWP admin engine. "
-"The default WordPress search results are shown. <a href=\"%s\" target="
-"\"_blank\">Find out more &raquo;</a>"
-msgstr ""
-
-#: admin/class.nags.php:225
-#, php-format
-msgid ""
-"Your SearchWP debug log has exceeded 2MB in size. You can delete %1$s when "
-"you are done."
-msgstr ""
-
-#: admin/class.nags.php:268
-msgid ""
-"In order to receive updates and support, you must have an active license."
-msgstr ""
-
-#: admin/class.nags.php:268 admin/settings-impl-license.php:55
-msgid "Manage License"
-msgstr ""
-
-#: admin/class.nags.php:268 admin/view-settings-help.php:15
-msgid "Purchase License"
-msgstr ""
-
-#: admin/class.nags.php:268 admin/class.nags.php:292 includes/class.i18n.php:59
-msgid "Dismiss"
-msgstr ""
-
-#: admin/class.nags.php:292
-#, php-format
-msgid ""
-"Your server is running MySQL version %1$s which may prevent search results "
-"from appearing due to <a href=\"http://bugs.mysql.com/bug.php?id=41156\">bug "
-"41156</a>. Please update MySQL to a more recent version (at least 5.2)."
-msgstr ""
-
-#: admin/class.notices.php:61
-#, php-format
-msgid ""
-"SearchWP has detected HTTP Basic Authentication, in order for the indexer to "
-"operate as expected you must provide credentials via the <a href=\"%s"
-"\"><code>searchwp_basic_auth_creds</code></a> hook, or disable HTTP Basic "
-"Authentication."
-msgstr ""
-
-#: admin/class.notices.php:201
-msgid "Missing SearchWP integration"
-msgstr ""
-
-#: admin/class.notices.php:201
-#, php-format
-msgid ""
-"In order for SearchWP to work with %s you will need to install and activate "
-"the <a href=\"%s\">%s</a> Extension."
-msgstr ""
-
-#: admin/class.notices.php:201
-#, php-format
-msgid "To dismiss this notice please see <a href=\"%s\">these docs</a>."
-msgstr ""
-
-#: admin/class.notices.php:249
-msgid "SearchWP failed to index"
-msgstr ""
-
-#: admin/class.notices.php:249
-msgid "post"
-msgstr ""
-
-#: admin/class.notices.php:249
-msgid "posts"
-msgstr ""
-
-#: admin/class.notices.php:249
-msgid "View details"
-msgstr ""
-
-#: admin/class.notices.php:264 admin/settings-impl-advanced-legacy.php:644
-msgid "The SearchWP indexer is currently <strong>disabled</strong>"
-msgstr ""
-
-#: admin/class.notices.php:326
-msgid ""
-"SearchWP has detected a <strong>theme conflict</strong> with the active "
-"theme."
-msgstr ""
-
-#: admin/class.notices.php:326 admin/class.notices.php:378
-msgid "More info &raquo;"
-msgstr ""
-
-#: admin/class.notices.php:328
-msgid ""
-"In order for SearchWP to display it's results, occurrences of <code>new "
-"WP_Query</code> and <code>query_posts()</code> must be removed from your "
-"search results template."
-msgstr ""
-
-#: admin/class.notices.php:330
-msgid "File location"
-msgstr ""
-
-#: admin/class.notices.php:336
-msgid "Line"
-msgstr ""
-
-#: admin/class.notices.php:340
-msgid ""
-"Please ensure the offending lines are removed from the theme template to "
-"avoid conflicts with SearchWP. When removed, this notice will disappear. You "
-"may also dismiss this message using"
-msgstr ""
-
-#: admin/class.notices.php:341
-msgid ""
-"You may dismiss this (and all like this) message by adding "
-"<code>add_filter( 'searchwp_show_conflict_notices', '__return_false' );</"
-"code> to your theme's <code>functions.php</code>."
-msgstr ""
-
-#: admin/class.notices.php:378
-#, php-format
-msgid ""
-"SearchWP has detected a <strong>potential (<em>not guaranteed</em>)</strong> "
-"action/filter conflict with <code>%s</code> caused by an active plugin or "
-"the active theme."
-msgstr ""
-
-#: admin/class.notices.php:380
-msgid ""
-"<strong>This is simply a <em>preliminary</em> detection of a <em>possible</"
-"em> conflict.</strong> Many times these detections can be <strong>safely "
-"dismissed</strong>"
-msgstr ""
-
-#: admin/class.notices.php:381
-msgid ""
-"<em>If (and only if) you are experiencing issues</em> with search results "
-"not changing or not appearing, the following Hooks (put in place by other "
-"plugins or your active theme) <em>may be</em> contributing to the problem:"
-msgstr ""
-
-#: admin/class.notices.php:388
-msgid "(method) in"
-msgstr ""
-
-#: admin/class.notices.php:388
-msgid " (class)"
-msgstr ""
-
-#: admin/class.notices.php:390
-msgid "(function)"
-msgstr ""
-
-#: admin/class.notices.php:402
-#, php-format
-msgid ""
-"<strong>If you believe there to be a conflict (e.g. search results not "
-"showing up):</strong> use this information you can determine how to best "
-"disable this interference. For more information please see <a href=\"%s"
-"\">this Knowledge Base article</a>."
-msgstr ""
-
-#: admin/class.notices.php:403
-msgid "Dismiss this message"
-msgstr ""
-
-#: admin/class.notices.php:447
-msgid ""
-"<strong>Potentially incomplete results:</strong> Since you <em>do not have "
-"Media enabled</em> for any search engine, you should implement the "
-"<code>searchwp_index_attachments</code> hook to ensure Media is properly "
-"indexed by SearchWP. Once attachment indexing has been enabled, ensure there "
-"is no progress bar on the SearchWP Settings screen, confirming all Media is "
-"indexed."
-msgstr ""
-
-#: admin/class.notices.php:490
-msgid "Deprecated SearchWP Extensions"
-msgstr ""
-
-#: admin/class.notices.php:490
-msgid ""
-"SearchWP 3.0 has merged the functionality of the following extensions, which "
-"should be deactivated:"
-msgstr ""
-
-#: admin/class.systeminfo.php:53
-msgid ""
-"To copy the system info, click below then press CTRL + C (PC) or CMD + C "
-"(Mac)."
-msgstr ""
-
-#: admin/export-import.php:12
-msgid "Settings Export"
-msgstr ""
-
-#: admin/export-import.php:13
-msgid ""
-"Export SearchWP the configuration(s) for SearchWP search engines as JSON. "
-"This allows you to easily import your settings into another site."
-msgstr ""
-
-#: admin/export-import.php:21 includes/class.i18n.php:92
-msgid "Export Data"
-msgstr ""
-
-#: admin/export-import.php:26
-msgid "Search Engines"
-msgstr ""
-
-#: admin/export-import.php:27
-msgid "Checked search engines will be included in the export"
-msgstr ""
-
-#: admin/export-import.php:38
-msgid "ERROR: No SearchWP engines found!"
-msgstr ""
-
-#: admin/export-import.php:43
-msgid "Settings Import"
-msgstr ""
-
-#: admin/export-import.php:44
-msgid ""
-"Paste the JSON from a SearchWP settings export below to import search engine "
-"configuration(s)."
-msgstr ""
-
-#: admin/export-import.php:45
-msgid ""
-"<strong>NOTE:</strong> Existing configurations with matching labels <em>will "
-"be overwritten!</em> This cannot be undone."
-msgstr ""
-
-#: admin/export-import.php:58 includes/class.i18n.php:97
-msgid "Import"
-msgstr ""
-
-#: admin/export-import.php:77
-msgid "Are you SURE you want to import these settings? This cannot be undone."
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:36 includes/class.i18n.php:55
-msgid "Debugging enabled"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:41 includes/class.i18n.php:267
-msgid "Use alternate indexer"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:46 includes/class.i18n.php:172
-msgid "Reduced indexer aggressiveness"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:51
-msgid ""
-"Disable minimum word length (toggling <strong>requires reindex</strong>)"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:56
-msgid "Use SearchWP for Admin/Dashboard searches"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:61
-msgid "Prevent the indexer from automatically running"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:66 includes/class.i18n.php:90
-msgid "Exclusive regex matches"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:71
-msgid ""
-"Remove <strong>all traces</strong> of SearchWP upon plugin deletion "
-"(including index)"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:238
-msgid "Database tables missing! Recreate them on the Advanced Settings screen."
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:252
-#: admin/settings-impl-advanced.php:166
-msgid "Advanced"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:271 includes/class.i18n.php:78
-msgid "Done"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:296 admin/stats-legacy.php:13
-#: admin/stats-legacy.php:19 admin/stats.php:14 admin/stats.php:21
-#: searchwp.php:3558 searchwp.php:3584 searchwp.php:3719
-msgid "Invalid request"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:400
-msgid "Actions"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:410
-msgid "Recreate Database Tables"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:411
-msgid ""
-"SearchWP's database tables cannot be found. This may happen if a site "
-"migration was incomplete. Recreate the tables and initiate an index build."
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:412
-#, php-format
-msgid "Database tables created! <a href=\"%s\">Rebuild index &raquo;</a>"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:419 includes/class.i18n.php:179
-msgid "Reset Index"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:420
-msgid ""
-"<strong>Completely</strong> empty the index. <em>Search statistics will be "
-"left as is.</em>"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:421
-#, php-format
-msgid ""
-"The index <strong>has been emptied</strong>. <a href=\"%s\">Rebuild index "
-"&raquo;</a>"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:426 includes/class.i18n.php:270
-msgid "Wake Up Indexer"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:427
-msgid "If the indexer appears to have stalled, try waking it up."
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:428
-#, php-format
-msgid ""
-"Attempted to wake up the indexer. <a href=\"%s\">View progress &raquo;</a>"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:433
-msgid "Reset Statistics"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:434
-msgid ""
-"<strong>Completely</strong> reset your Search Statistics. <em>Existing index "
-"will be left as is.</em>"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:435
-msgid "Search statistics reset"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:440
-msgid "Restore Conflict Notices"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:441
-msgid "Restore all dismissed conflict notifications."
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:442
-msgid "Conflict notices restored"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:451 includes/class.i18n.php:191
-msgid "Saved!"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:494
-msgid "Index Statistics"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:498
-#, php-format
-msgid ""
-"The indexer reacts to edits made and will apply updates accordingly. <a href="
-"\"%s\" target=\"_blank\">More information &raquo;</a>"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:503
-msgid ""
-"Admin/Dashboard searching has been enabled, which requires additional "
-"resources. Disabled post types will ONLY be utilized when searching in the "
-"Admin/Dashboard, not the front end."
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:509 includes/class.i18n.php:117
-msgid "Last Activity"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:518 includes/class.i18n.php:111
-msgid "Indexed"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:519
-#: admin/settings-impl-advanced-legacy.php:525
-msgid "entry"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:519
-#: admin/settings-impl-advanced-legacy.php:525 includes/class.i18n.php:84
-msgid "entries"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:524 includes/class.i18n.php:266
-msgid "Unindexed"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:533 includes/class.i18n.php:122
-msgid "Main row count"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:534
-msgid "row"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:534 includes/class.i18n.php:184
-msgid "rows"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:538
-msgid "Note: the index is always kept as small as possible."
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:553
-msgid "Are you SURE you want to delete the entire SearchWP index?"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:554
-#: admin/settings-impl-advanced-legacy.php:560
-msgid "Are you completely sure? THIS CAN NOT BE UNDONE!"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:559
-msgid "Are you SURE you want to completely reset your Search Stats?"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:665
-msgid "Nuke on Delete <strong>enabled</strong>"
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:700
-msgid "There was an error recreating the database tables."
-msgstr ""
-
-#: admin/settings-impl-advanced-legacy.php:720
-msgid "Settings imported"
-msgstr ""
-
-#: admin/settings-impl-license.php:42 admin/view-settings-help.php:15
-msgid "Activate License"
-msgstr ""
-
-#: admin/settings-impl-license.php:42
-msgid "License"
-msgstr ""
-
-#: admin/settings-impl-license.php:55
-msgid ""
-"A license key was found, but it is <strong>inactive</strong>. Automatic "
-"updates <em>will not be available</em> until your license is activated."
-msgstr ""
-
-#: admin/settings-impl-license.php:56
-#, php-format
-msgid ""
-"Having trouble activating your license? Please see <a href=\"%s\">this KB "
-"article &raquo;</a>"
-msgstr ""
-
-#: admin/settings-impl-license.php:75
-msgid "License not active"
-msgstr ""
-
-#: admin/settings-impl-license.php:106
-msgid "Manage Your SearchWP License"
-msgstr ""
-
-#: admin/settings-impl-license.php:107
-msgid "Active"
-msgstr ""
-
-#: admin/settings-impl-license.php:107
-msgid "Inactive"
-msgstr ""
-
-#: admin/settings-impl-license.php:111
-msgid "Your SearchWP license is currently active."
-msgstr ""
-
-#: admin/settings-impl-license.php:113
-msgid ""
-"SearchWP requires an active license to receive automatic upates and support. "
-"Enter your license key to activate it."
-msgstr ""
-
-#: admin/settings-impl-license.php:119 admin/settings-impl-license.php:121
-#: includes/class.i18n.php:131
-msgid "Note:"
-msgstr ""
-
-#: admin/settings-impl-license.php:119
-msgid "Your license key is populated using this constant:"
-msgstr ""
-
-#: admin/settings-impl-license.php:121
-msgid "Your license key is populated using this hook:"
-msgstr ""
-
-#: admin/settings-impl-license.php:132
-msgid "Deactivate"
-msgstr ""
-
-#: admin/settings-impl-license.php:135
-msgid "Activate"
-msgstr ""
-
-#: admin/settings-impl-license.php:143
-msgid "Does not expire"
-msgstr ""
-
-#: admin/settings-impl-license.php:145
-#, php-format
-msgid "Active for another %s"
-msgstr ""
-
-#: admin/settings-impl-license.php:149
-#, php-format
-msgid ""
-"Your license key is available both on your payment receipt and in your <a "
-"href=\"%s\">Account</a>"
-msgstr ""
-
-#: admin/settings.php:20
-msgid "Search for term name"
-msgstr ""
-
-#: admin/settings.php:28
-msgid "Default Search Engine"
-msgstr ""
-
-#: admin/settings.php:28 admin/settings.php:53 searchwp.php:1205
-msgid "Statistics"
-msgstr ""
-
-#: admin/settings.php:32
-msgid ""
-"These settings will override WordPress default searches. Customize which "
-"post types are included in search and how much weight each content type "
-"receives."
-msgstr ""
-
-#: admin/settings.php:36 admin/settings.php:69
-msgid ""
-"Only checked post types will be included in search results. If a post type "
-"isn't displayed, ensure <code>exclude_from_search</code> is set to false "
-"when registering it."
-msgstr ""
-
-#: admin/settings.php:60
-msgid "Supplemental Search Engines"
-msgstr ""
-
-#: admin/settings.php:64
-msgid ""
-"Here you can build supplemental search engines to use in specific sections "
-"of your site. When used, the default search engine settings are completely "
-"ignored."
-msgstr ""
-
-#: admin/settings.php:89
-msgid "Add New Supplemental Engine"
-msgstr ""
-
-#: admin/stats-legacy.php:84
-msgid "Searches over the past 30 days"
-msgstr ""
-
-#: admin/stats-legacy.php:105
-msgid "Popular Searches"
-msgstr ""
-
-#: admin/stats-legacy.php:127 includes/class.i18n.php:271
-msgid "Week"
-msgstr ""
-
-#: admin/stats-legacy.php:146 includes/class.i18n.php:148
-msgid "Month"
-msgstr ""
-
-#: admin/stats-legacy.php:165 includes/class.i18n.php:277
-msgid "Year"
-msgstr ""
-
-#: admin/stats-legacy.php:187
-msgid "Failed Searches"
-msgstr ""
-
-#: admin/stats-legacy.php:232
-msgid "Are you sure you want to ignore this search from all statistics?"
-msgstr ""
-
-#: admin/view-settings-engines-legacy.php:20
-msgid "Indexing is"
-msgstr ""
-
-#: admin/view-settings-engines-legacy.php:21
-msgid "almost"
-msgstr ""
-
-#: admin/view-settings-engines-legacy.php:21
-msgid "complete"
-msgstr ""
-
-#: admin/view-settings-engines-legacy.php:25
-msgid ""
-"This process is running in the background. You can leave this page and the "
-"index will continue to be built until completion."
-msgstr ""
-
-#: admin/view-settings-engines-legacy.php:30
-#, php-format
-msgid ""
-"The indexer has been <strong>temporarily scaled back</strong> to reduce "
-"server load. This is monitored automatically. <a href=\"%s\">More "
-"information &raquo;</a>"
-msgstr ""
-
-#: admin/view-settings-engines-legacy.php:44
-#: templates/tmpl.engine.config.php:296
-msgid "Any"
-msgstr ""
-
-#: admin/view-settings-engines.php:129 templates/tmpl.engine.config.php:402
-msgid "All Documents"
-msgstr ""
-
-#: admin/view-settings-engines.php:130 templates/tmpl.engine.config.php:403
-msgid "PDFs"
-msgstr ""
-
-#: admin/view-settings-engines.php:131 templates/tmpl.engine.config.php:404
-msgid "Plain Text"
-msgstr ""
-
-#: admin/view-settings-engines.php:132 templates/tmpl.engine.config.php:405
-msgid "Images"
-msgstr ""
-
-#: admin/view-settings-engines.php:133 templates/tmpl.engine.config.php:406
-msgid "Video"
-msgstr ""
-
-#: admin/view-settings-engines.php:134 templates/tmpl.engine.config.php:407
-msgid "Audio"
-msgstr ""
-
-#: admin/view-settings-engines.php:135 templates/tmpl.engine.config.php:408
-msgid "Office Documents"
-msgstr ""
-
-#: admin/view-settings-engines.php:136 templates/tmpl.engine.config.php:409
-msgid "OpenOffice Documents"
-msgstr ""
-
-#: admin/view-settings-engines.php:137 templates/tmpl.engine.config.php:410
-msgid "iWork Documents"
-msgstr ""
-
-#: admin/view-settings-help.php:12
-msgid "SearchWP Help"
-msgstr ""
-
-#: admin/view-settings-help.php:14
-msgid ""
-"Support is available only to <strong>active license holders</strong>. You "
-"must activate your license to receive support. If you do not have a license "
-"you may purchase one at any time."
-msgstr ""
-
-#: admin/view-settings-help.php:68
-msgid "System Information"
-msgstr ""
-
-#: admin/view-settings-help.php:70
-#, php-format
-msgid ""
-"When submitting this information to support staff it will also be helpful if "
-"you can <a href=\"%s\" target=\"_blank\">create a snippet</a> of your search "
-"results template which is found here:"
-msgstr ""
-
-#: admin/view-settings-help.php:72
-#, php-format
-msgid ""
-"Please provide this information (ideally as a link to a <a href=\"%s\" "
-"target=\"_blank\">snippet</a>) when requested by support staff"
-msgstr ""
-
-#: includes/class.acf.php:182
-msgid "ACF Repeatable"
-msgstr ""
-
-#: includes/class.highlighter.php:418
-msgid "There is no excerpt because this is a protected post."
-msgstr ""
-
-#: includes/class.i18n.php:16
-msgid "A little"
-msgstr ""
-
-#: includes/class.i18n.php:17
-msgid "A lot"
-msgstr ""
-
-#: includes/class.i18n.php:18
-msgid "Actions & Settings"
-msgstr ""
-
-#: includes/class.i18n.php:19
-msgid "Add Attribute"
-msgstr ""
-
-#: includes/class.i18n.php:20
-msgid "Add Content Type"
-msgstr ""
-
-#: includes/class.i18n.php:21
-msgid "Add Engine"
-msgstr ""
-
-#: includes/class.i18n.php:22
-msgid "Add Exclusion"
-msgstr ""
-
-#: includes/class.i18n.php:23
-msgid "Add Limit or Exclude Rule"
-msgstr ""
-
-#: includes/class.i18n.php:24
-msgid "Add Limiter"
-msgstr ""
-
-#: includes/class.i18n.php:25
-msgid "Add New"
-msgstr ""
-
-#: includes/class.i18n.php:26
-msgid "Add Post Type"
-msgstr ""
-
-#: includes/class.i18n.php:27
-msgid "Add Stopword"
-msgstr ""
-
-#: includes/class.i18n.php:28
-msgid "Add to Stopwords"
-msgstr ""
-
-#: includes/class.i18n.php:29
-msgid "Admin engine"
-msgstr ""
-
-#: includes/class.i18n.php:30
-msgid ""
-"This engine is used for Admin/Dashboard searches. It cannot be renamed or "
-"removed."
-msgstr ""
-
-#: includes/class.i18n.php:31
-msgid ""
-"All post types will be indexed to facilitate searching in Admin/Dashboard"
-msgstr ""
-
-#: includes/class.i18n.php:32
-msgid "Any Custom Field"
-msgstr ""
-
-#: includes/class.i18n.php:33
-msgid "Are you sure?"
-msgstr ""
-
-#: includes/class.i18n.php:34
-msgid "Assign weight to:"
-msgstr ""
-
-#: includes/class.i18n.php:35
-msgid "Attribute"
-msgstr ""
-
-#: includes/class.i18n.php:36
-msgid "Attribution"
-msgstr ""
-
-#: includes/class.i18n.php:37
-msgid "Attribute search results to:"
-msgstr ""
-
-#: includes/class.i18n.php:38
-msgid "Automatic \"Did you mean?\" corrections"
-msgstr ""
-
-#: includes/class.i18n.php:39
-msgid ""
-"Currently scaled back to reduce server load. This is monitored automatically."
-msgstr ""
-
-#: includes/class.i18n.php:40
-msgid "Average"
-msgstr ""
-
-#: includes/class.i18n.php:41
-msgid "HTTP Basic Authentication"
-msgstr ""
-
-#: includes/class.i18n.php:42
-msgid ""
-"SearchWP has detected HTTP Basic Authentication, in order for the indexer to "
-"operate as expected you must provide working credentials or disable HTTP "
-"Basic Authentication."
-msgstr ""
-
-#: includes/class.i18n.php:43
-msgid "This can not be undone!"
-msgstr ""
-
-#: includes/class.i18n.php:44
-msgid "Choose"
-msgstr ""
-
-#: includes/class.i18n.php:45
-msgid "Choose custom field"
-msgstr ""
-
-#: includes/class.i18n.php:46
-msgid "Choose native attribute"
-msgstr ""
-
-#: includes/class.i18n.php:47
-msgid "Choose taxonomy"
-msgstr ""
-
-#: includes/class.i18n.php:48
-msgid "Choose terms"
-msgstr ""
-
-#: includes/class.i18n.php:49 templates/tmpl.engine.config.php:341
-msgid "Comma separated IDs"
-msgstr ""
-
-#: includes/class.i18n.php:50 templates/tmpl.engine.config.php:168
-msgid "Content Type"
-msgstr ""
-
-#: includes/class.i18n.php:51 includes/class.stats.php:158
-msgid "Count"
-msgstr ""
-
-#: includes/class.i18n.php:52
-msgid "Custom Field"
-msgstr ""
-
-#: includes/class.i18n.php:53 templates/tmpl.engine.config.php:285
-msgid "Custom Fields"
-msgstr ""
-
-#: includes/class.i18n.php:54
-msgid "SearchWP's database tables are missing!"
-msgstr ""
-
-#: includes/class.i18n.php:57
-msgid "Native WordPress searches will return these post types"
-msgstr ""
-
-#: includes/class.i18n.php:58
-msgid "Delete Engine"
-msgstr ""
-
-#: includes/class.i18n.php:63
-#, php-format
-msgid ""
-"<strong>Note:</strong> Searches with no results will automatically output "
-"results for closest index match <em>and</em> a note will be added above The "
-"Loop. %1$sRead more &raquo;%2$s"
-msgstr ""
-
-#: includes/class.i18n.php:76
-msgid "Document Content"
-msgstr ""
-
-#: includes/class.i18n.php:77
-msgid "Document Properties"
-msgstr ""
-
-#: includes/class.i18n.php:79
-msgid "Engine configuration imported"
-msgstr ""
-
-#: includes/class.i18n.php:80
-msgid "Engine Configuration Transfer"
-msgstr ""
-
-#: includes/class.i18n.php:81
-msgid ""
-"These post types will be included in your search results, all other post "
-"types will be excluded"
-msgstr ""
-
-#: includes/class.i18n.php:82
-msgid ""
-"You must add at least one post type in order for this engine to return "
-"results"
-msgstr ""
-
-#: includes/class.i18n.php:83
-msgid "Engines"
-msgstr ""
-
-#: includes/class.i18n.php:85
-msgid "Exclude"
-msgstr ""
-
-#: includes/class.i18n.php:86
-msgid "Excluded"
-msgstr ""
-
-#: includes/class.i18n.php:87
-msgid "Exclude by taxonomy"
-msgstr ""
-
-#: includes/class.i18n.php:88
-msgid "Excluded from search"
-msgstr ""
-
-#: includes/class.i18n.php:89
-msgid "Excluded IDs"
-msgstr ""
-
-#: includes/class.i18n.php:91
-msgid "Export"
-msgstr ""
-
-#: includes/class.i18n.php:93
-msgid "Find terms"
-msgstr ""
-
-#: includes/class.i18n.php:94
-msgid "Highlight terms in results"
-msgstr ""
-
-#: includes/class.i18n.php:95
-msgid "Ignored"
-msgstr ""
-
-#: includes/class.i18n.php:96
-msgid "These are your ignored queries"
-msgstr ""
-
-#: includes/class.i18n.php:98
-msgid "Import Config"
-msgstr ""
-
-#: includes/class.i18n.php:99
-msgid "Import Data"
-msgstr ""
-
-#: includes/class.i18n.php:100
-msgid "To import: paste engine config export and click Import"
-msgstr ""
-
-#: includes/class.i18n.php:101
-msgid "Importing engine configuration..."
-msgstr ""
-
-#: includes/class.i18n.php:102
-msgid "The index is being reset..."
-msgstr ""
-
-#: includes/class.i18n.php:103
-msgid "Index Prevalence"
-msgstr ""
-
-#: includes/class.i18n.php:104
-msgid "Index Progress"
-msgstr ""
-
-#: includes/class.i18n.php:105
-msgid ""
-"Note: the index is automatically maintained to be kept as small as possible"
-msgstr ""
-
-#: includes/class.i18n.php:106
-msgid "Index out of date"
-msgstr ""
-
-#: includes/class.i18n.php:107
-msgid "Engines saved but the index is now out of date, it should be rebuilt"
-msgstr ""
-
-#: includes/class.i18n.php:108
-msgid "The index is out of date and needs to be Reset"
-msgstr ""
-
-#: includes/class.i18n.php:109
-msgid ""
-"The index has been reset, please rebuild the index on the main settings "
-"screen"
-msgstr ""
-
-#: includes/class.i18n.php:110
-msgid "The index has been reset and is now rebuilding"
-msgstr ""
-
-#: includes/class.i18n.php:112
-msgid "Waking up the indexer..."
-msgstr ""
-
-#: includes/class.i18n.php:113
-msgid "The indexer has been woken up"
-msgstr ""
-
-#: includes/class.i18n.php:114
-msgid ""
-"The indexer has been woken up, please proceed on the main settings screen"
-msgstr ""
-
-#: includes/class.i18n.php:115
-msgid "To enable SearchWP, please review and save your initial settings"
-msgstr ""
-
-#: includes/class.i18n.php:116
-msgid "Intercept Admin/Dashboard searches"
-msgstr ""
-
-#: includes/class.i18n.php:118
-msgid ""
-"To take advantage of recent updates please review and save your settings"
-msgstr ""
-
-#: includes/class.i18n.php:119
-msgid "Limit by taxonomy"
-msgstr ""
-
-#: includes/class.i18n.php:120
-msgid "Limit to"
-msgstr ""
-
-#: includes/class.i18n.php:121
-msgid "Limited to"
-msgstr ""
-
-#: includes/class.i18n.php:123
-msgid "Maximum"
-msgstr ""
-
-#: includes/class.i18n.php:124
-msgid "More info"
-msgstr ""
-
-#: includes/class.i18n.php:125
-msgid "Minimum"
-msgstr ""
-
-#: includes/class.i18n.php:126
-msgid "Native attribute"
-msgstr ""
-
-#: includes/class.i18n.php:127
-msgid "You have not ignored any searches"
-msgstr ""
-
-#: includes/class.i18n.php:128
-msgid "No Results Searches"
-msgstr ""
-
-#: includes/class.i18n.php:129
-msgid "No searches to display"
-msgstr ""
-
-#: includes/class.i18n.php:130
-msgid "No terms found"
-msgstr ""
-
-#: includes/class.i18n.php:132
-msgid "Notices have been reset"
-msgstr ""
-
-#: includes/class.i18n.php:133
-msgid "No engines have been included in the export"
-msgstr ""
-
-#: includes/class.i18n.php:134
-msgid ""
-"is not available to PHP. As a result, Office document content will not be "
-"indexed."
-msgstr ""
-
-#: includes/class.i18n.php:138
-#, php-format
-msgid ""
-"In order to utilize Search Terms that are fewer than %s characters, you must "
-"remove the minimum character length."
-msgstr ""
-
-#: includes/class.i18n.php:149
-msgid "More Info"
-msgstr ""
-
-#: includes/class.i18n.php:150
-msgid "Options"
-msgstr ""
-
-#: includes/class.i18n.php:151
-msgid "Original search term"
-msgstr ""
-
-#: includes/class.i18n.php:152
-msgid "Parse Shortcodes when indexing"
-msgstr ""
-
-#: includes/class.i18n.php:153
-msgid "Partial matches (fuzzy when necessary)"
-msgstr ""
-
-#: includes/class.i18n.php:157
-#, php-format
-msgid ""
-"Enabling partial matches can adversely affect performance and relevancy "
-"%1$sRead more &raquo;%2$s"
-msgstr ""
-
-#: includes/class.i18n.php:168
-msgid "PDF Metadata"
-msgstr ""
-
-#: includes/class.i18n.php:169
-msgid "There was a problem saving the engine settings"
-msgstr ""
-
-#: includes/class.i18n.php:170
-msgid "Rebuild Index"
-msgstr ""
-
-#: includes/class.i18n.php:171
-msgid "Recreate Tables"
-msgstr ""
-
-#: includes/class.i18n.php:173 templates/tmpl.supplemental.config.php:35
-msgid "Remove"
-msgstr ""
-
-#: includes/class.i18n.php:174
-msgid "Remove All"
-msgstr ""
-
-#: includes/class.i18n.php:175
-msgid "Remove all data on uninstall"
-msgstr ""
-
-#: includes/class.i18n.php:176
-msgid "Remove minimum word length"
-msgstr ""
-
-#: includes/class.i18n.php:177
-msgid "Replace"
-msgstr ""
-
-#: includes/class.i18n.php:178
-msgid "When enabled, original Search Term will be removed"
-msgstr ""
-
-#: includes/class.i18n.php:180
-msgid "Reset Stats"
-msgstr ""
-
-#: includes/class.i18n.php:181
-msgid "Restore Defaults"
-msgstr ""
-
-#: includes/class.i18n.php:182
-msgid "Restore Notices"
-msgstr ""
-
-#: includes/class.i18n.php:185
-msgid "Rules"
-msgstr ""
-
-#: includes/class.i18n.php:186
-msgid "Save"
-msgstr ""
-
-#: includes/class.i18n.php:187
-msgid "Save Engine"
-msgstr ""
-
-#: includes/class.i18n.php:188
-msgid "Save Engines"
-msgstr ""
-
-#: includes/class.i18n.php:189
-msgid "Save Stopwords"
-msgstr ""
-
-#: includes/class.i18n.php:190
-msgid "Save Synonyms"
-msgstr ""
-
-#: includes/class.i18n.php:192
-msgid "Saving..."
-msgstr ""
-
-#: includes/class.i18n.php:193 templates/tmpl.engine.config.php:449
-msgid "Single post ID"
-msgstr ""
-
-#: includes/class.i18n.php:194
-msgid "Search"
-msgstr ""
-
-#: includes/class.i18n.php:195
-msgid "Search Term"
-msgstr ""
-
-#: includes/class.i18n.php:196
-msgid "Search Term Handling"
-msgstr ""
-
-#: includes/class.i18n.php:197
-msgid "The original search term"
-msgstr ""
-
-#: includes/class.i18n.php:198
-msgid "Search for terms"
-msgstr ""
-
-#: includes/class.i18n.php:199
-msgid "Search to choose terms"
-msgstr ""
-
-#: includes/class.i18n.php:200
-msgid "Searches"
-msgstr ""
-
-#: includes/class.i18n.php:201
-msgid "Sort Alphabetically"
-msgstr ""
-
-#: includes/class.i18n.php:203
-msgid "Stopwords"
-msgstr ""
-
-#: includes/class.i18n.php:207
-#, php-format
-msgid ""
-"Stopwords are <em>ignored</em> by SearchWP to improve performance. %1$sMore "
-"info &raquo;%2$s"
-msgstr ""
-
-#: includes/class.i18n.php:219
-msgid "Stopwords saved! You should reset the index to apply the changes."
-msgstr ""
-
-#: includes/class.i18n.php:220
-msgid "Suggested Stopwords"
-msgstr ""
-
-#: includes/class.i18n.php:221
-msgid ""
-"The following terms are quite common to your site and may be cluttering your "
-"index and reducing relevency of results:"
-msgstr ""
-
-#: includes/class.i18n.php:222
-msgid "Suggestions"
-msgstr ""
-
-#: includes/class.i18n.php:223
-msgid "Support \"quoted/phrase searches\""
-msgstr ""
-
-#: includes/class.i18n.php:227
-#, php-format
-msgid ""
-"<strong>Note:</strong> There are some limitations that must be considered "
-"when enabling quoted search support. %1$sRead more &raquo;%2$s"
-msgstr ""
-
-#: includes/class.i18n.php:240
-msgid "Synonyms"
-msgstr ""
-
-#: includes/class.i18n.php:241
-msgid "Synonym(s)"
-msgstr ""
-
-#: includes/class.i18n.php:242
-msgid "There are currently no synonyms"
-msgstr ""
-
-#: includes/class.i18n.php:243
-msgid "Term(s) that are synonymous with the Search Term"
-msgstr ""
-
-#: includes/class.i18n.php:247
-#, php-format
-msgid ""
-"Synonyms allow <em>replacement</em> of search terms. %1$sMore info &raquo;"
-"%2$s"
-msgstr ""
-
-#: includes/class.i18n.php:259
-msgid "Synonyms Saved!"
-msgstr ""
-
-#: includes/class.i18n.php:260
-msgid "Taxonomy"
-msgstr ""
-
-#: includes/class.i18n.php:261
-msgid "Taxonomies"
-msgstr ""
-
-#: includes/class.i18n.php:262
-msgid "Term"
-msgstr ""
-
-#: includes/class.i18n.php:264
-msgid "Transfer weight to:"
-msgstr ""
-
-#: includes/class.i18n.php:265
-msgid "Transfer weight to parent"
-msgstr ""
-
-#: includes/class.i18n.php:268
-msgid "Use Defaults"
-msgstr ""
-
-#: includes/class.i18n.php:269
-msgid "Use Keyword Stem"
-msgstr ""
-
-#: includes/class.i18n.php:272 searchwp.php:963
-#: templates/tmpl.engine.config.php:169
-msgid "Weight"
-msgstr ""
-
-#: includes/class.i18n.php:273
-msgid "Weight Multiplier"
-msgstr ""
-
-#: includes/class.i18n.php:274
-msgid "Weight Assignment"
-msgstr ""
-
-#: includes/class.i18n.php:275
-msgid "Weight Transfer"
-msgstr ""
-
-#: includes/class.i18n.php:276
-msgid "Without attributes, this post type will not show up in results"
-msgstr ""
-
-#: includes/class.i18n.php:278
-msgid "Yes, reset index"
-msgstr ""
-
-#: includes/class.i18n.php:279
-msgid "Yes, reset stats"
-msgstr ""
-
-#: includes/class.i18n.php:283
-msgid "There was an error, please open a support ticket."
-msgstr ""
-
-#: includes/class.i18n.php:284
-msgid "Missing nonce."
-msgstr ""
-
-#: includes/class.search.php:314
-msgid "Engine settings not found"
-msgstr ""
-
-#: includes/class.search.php:3170
-msgid "SearchWP Error"
-msgstr ""
-
-#: includes/class.search.php:3179
-msgid "View SQL_BIG_SELECTS Fix"
-msgstr ""
-
-#: includes/class.stats.php:157
-msgid "Query"
-msgstr ""
-
-#: includes/class.stats.php:187
-msgid "No searches for this time period."
-msgstr ""
-
-#: includes/functions.php:628 searchwp.php:964 searchwp.php:3488
-#: templates/tmpl.engine.config.php:176
-msgid "Title"
-msgstr ""
-
-#: includes/functions.php:629 templates/tmpl.engine.config.php:182
-msgid "Content"
-msgstr ""
-
-#: includes/functions.php:630 templates/tmpl.engine.config.php:216
-msgid "Excerpt"
-msgstr ""
-
-#: includes/functions.php:631 templates/tmpl.engine.config.php:223
-msgid "Comments"
-msgstr ""
-
-#: includes/functions.php:652 templates/tmpl.engine.config.php:182
-msgid "Description"
-msgstr ""
-
-#: includes/functions.php:655 templates/tmpl.engine.config.php:216
-msgid "Caption"
-msgstr ""
-
-#: includes/functions.php:690 templates/tmpl.engine.config.php:188
-msgid "Slug"
-msgstr ""
-
-#: includes/functions.php:713
-#, php-format
-msgid ""
-"No results found for <em class=\"searchwp-revised-search-original\">%s</em>. "
-"Showing results for <em class=\"searchwp-suggested-revision-query\">%s</em>"
-msgstr ""
-
-#: lib/SWP_EDD_SL_Plugin_Updater.php:230
-#, php-format
-msgid ""
-"There is a new version of %1$s available. %2$sView version %3$s details%4$s."
-msgstr ""
-
-#: lib/SWP_EDD_SL_Plugin_Updater.php:238
-#, php-format
-msgid ""
-"There is a new version of %1$s available. %2$sView version %3$s details%4$s "
-"or %5$supdate now%6$s."
-msgstr ""
-
-#: lib/SWP_EDD_SL_Plugin_Updater.php:476
-msgid "You do not have permission to install plugin updates"
-msgstr ""
-
-#: lib/SWP_EDD_SL_Plugin_Updater.php:476
-msgid "Error"
-msgstr ""
-
-#: searchwp.php:44
-msgid ""
-"SearchWP requires WordPress 3.5 or higher. Please upgrade before activating "
-"this plugin."
-msgstr ""
-
-#: searchwp.php:962
-msgid "Post ID"
-msgstr ""
-
-#: searchwp.php:1079
-msgid " ago"
-msgstr ""
-
-#: searchwp.php:1126
-msgid "Enable Indexer"
-msgstr ""
-
-#: searchwp.php:1126
-msgid "Disable Indexer"
-msgstr ""
-
-#: searchwp.php:1154
-msgid "In index queue"
-msgstr ""
-
-#: searchwp.php:1168
-msgid "This entry is being indexed"
-msgstr ""
-
-#: searchwp.php:1170
-msgid "This entry is indexed"
-msgstr ""
-
-#: searchwp.php:1177
-msgid "Not indexed "
-msgstr ""
-
-#: searchwp.php:1177
-msgid "status is"
-msgstr ""
-
-#: searchwp.php:1180
-msgid "Not indexed"
-msgstr ""
-
-#: searchwp.php:1184 searchwp.php:3232
-msgid "Last indexed"
-msgstr ""
-
-#: searchwp.php:1331
-msgid ""
-"<p>SearchWP <strong>has been automatically deactivated</strong> because it "
-"failed to create necessary database table(s):</p>"
-msgstr ""
-
-#: searchwp.php:1333
-msgid ""
-"<p>Please ensure the applicable MySQL user has <code>CREATE</code> "
-"permissions and try activating again.</p>"
-msgstr ""
-
-#: searchwp.php:1334
-msgid "Back to Plugins"
-msgstr ""
-
-#: searchwp.php:1667
-msgid "SearchWP must be updated to the latest version to work with "
-msgstr ""
-
-#: searchwp.php:1919
-msgid "Invalid SearchWP Engine: "
-msgstr ""
-
-#: searchwp.php:2555
-msgid "Minimum word length triggered"
-msgstr ""
-
-#: searchwp.php:2562
-msgid "Stopword removed"
-msgstr ""
-
-#: searchwp.php:2569
-msgid "Search query length too long"
-msgstr ""
-
-#: searchwp.php:3116
-#, php-format
-msgid ""
-"Showing results for <em class=\"searchwp-suggested-revision-query\">%s</em>"
-msgstr ""
-
-#: searchwp.php:3170
-msgid "Search Stats"
-msgstr ""
-
-#: searchwp.php:3467
-msgid "Outstanding Index Issues"
-msgstr ""
-
-#: searchwp.php:3469
-msgid "Nothing is currently excluded from the indexer."
-msgstr ""
-
-#: searchwp.php:3473
-msgid ""
-"SearchWP was unable to fully implement <code>utf8mb4</code> (Emoji) support "
-"which may prevent indexing some content. Please open a support ticket for "
-"more assistance."
-msgstr ""
-
-#: searchwp.php:3480
-msgid ""
-"SearchWP was unable to index the following content, and it is actively being "
-"excluded from subsequent index runs."
-msgstr ""
-
-#: searchwp.php:3480
-msgid "Reintroduce All"
-msgstr ""
-
-#: searchwp.php:3489
-msgid "Reintroduce to indexer"
-msgstr ""
-
-#: searchwp.php:3500
-msgid "Manually populate PDF content if reintroduction fails"
-msgstr ""
-
-#: searchwp.php:3506
-msgid "Reintroduce"
-msgstr ""
-
-#: searchwp.php:3597 searchwp.php:3650
-msgid "SearchWP Alternate Indexer"
-msgstr ""
-
-#: searchwp.php:3599
-msgid "Current progress:"
-msgstr ""
-
-#: searchwp.php:3600
-msgid ""
-"If the percentage is not increasing it <strong>does not necessarily mean</"
-"strong> there is a problem. SearchWP takes multiple passes when indexing, "
-"please allow adequate time for the indexer to run."
-msgstr ""
-
-#: searchwp.php:3603
-msgid "Triggering next index chunk, please wait..."
-msgstr ""
-
-#: searchwp.php:3624
-msgid "Index built!"
-msgstr ""
-
-#: searchwp.php:3651
-#, php-format
-msgid ""
-"There are <strong>%d</strong> entries left to index. <strong>YOU MUST LEAVE "
-"THIS BROWSER WINDOW OPEN</strong> during indexing."
-msgstr ""
-
-#: searchwp.php:3652
-msgid "This action builds the initial index and only needs to be run once."
-msgstr ""
-
-#: searchwp.php:3657
-msgid "Build Initial Index"
-msgstr ""
-
-#: searchwp.php:3806
-msgid "Invalid settings."
-msgstr ""
-
-#: searchwp.php:3952
-msgid "SearchWP Frequent (Every five minutes until initial index is built)"
-msgstr ""
-
-#: searchwp.php:4628
-msgid "SearchWP File Content"
-msgstr ""
-
-#: searchwp.php:4870
-msgid ""
-"The content below will be indexed for this file. If you are experiencing "
-"unexpected search results, ensure accuracy here."
-msgstr ""
-
-#: searchwp.php:4891
-#, php-format
-msgid ""
-"<strong>NOTE:</strong> This content is too long to display (%s). Here is a "
-"sample from the indexed content:"
-msgstr ""
-
-#: searchwp.php:4896
-msgid ""
-"To override this limit you must add the following to your theme's "
-"<code>functions.php</code>:"
-msgstr ""
-
-#: searchwp.php:4910
-msgid ""
-"Only plain text files, PDFs, and Office documents are supported at this time."
-msgstr ""
-
-#: searchwp.php:4926
-msgid "Indexed PDF Metadata"
-msgstr ""
-
-#: searchwp.php:4930
-msgid "Key"
-msgstr ""
-
-#: searchwp.php:4931
-msgid "Value"
-msgstr ""
-
-#: templates/tmpl.engine.config.php:137
-msgid "Media"
-msgstr ""
-
-#: templates/tmpl.engine.config.php:155
-msgid ""
-"These values add weight to results.<br /><br />A weight of 1 is neutral<br /"
-">Between 0 &amp; 1 lowers result weight<br />Over 1 increases result "
-"weight<br />Zero omits the result<br /><span class=\"searchwp-weight-warning"
-"\">-1 excludes matches</span>"
-msgstr ""
-
-#: templates/tmpl.engine.config.php:158
-msgid "Applicable entries"
-msgstr ""
-
-#: templates/tmpl.engine.config.php:248
-msgid "Document content"
-msgstr ""
-
-#: templates/tmpl.engine.config.php:273
-msgid "PDF metadata"
-msgstr ""
-
-#: templates/tmpl.engine.config.php:317
-msgid "Add Custom Field"
-msgstr ""
-
-#: templates/tmpl.engine.config.php:320
-msgid ""
-"Include Custom Field data in search results. Meta values do not need to be "
-"plain strings, available keywords in metadata are extracted and indexed."
-msgstr ""
-
-#: templates/tmpl.engine.config.php:334
-msgid "Exclude IDs: "
-msgstr ""
-
-#: templates/tmpl.engine.config.php:343
-msgid ""
-"Comma separated post IDs. Will be excluded entirely, even if attributed to."
-msgstr ""
-
-#: templates/tmpl.engine.config.php:356
-#, php-format
-msgid "Exclude %s:"
-msgstr ""
-
-#: templates/tmpl.engine.config.php:367 templates/tmpl.engine.config.php:418
-msgid "Leave blank to omit"
-msgstr ""
-
-#: templates/tmpl.engine.config.php:386
-msgid "Entries with these will be excluded entirely, even if attributed to."
-msgstr ""
-
-#: templates/tmpl.engine.config.php:396
-msgid "Limit File Type(s) to"
-msgstr ""
-
-#: templates/tmpl.engine.config.php:425
-msgid "If populated, Media results will be limited to these Media types"
-msgstr ""
-
-#: templates/tmpl.engine.config.php:432
-msgid "Attribute post parent"
-msgstr ""
-
-#: templates/tmpl.engine.config.php:436 templates/tmpl.engine.config.php:463
-msgid "Enabled"
-msgstr ""
-
-#: templates/tmpl.engine.config.php:439
-msgid ""
-"When enabled, search weights will be applied to the post parent, not the "
-"post GUID"
-msgstr ""
-
-#: templates/tmpl.engine.config.php:446
-msgid "Attribute search results to "
-msgstr ""
-
-#: templates/tmpl.engine.config.php:452
-msgid ""
-"<strong>Expects single post ID</strong><br/>If permalinks for this post type "
-"should not be included in search results, you can have it's search weight "
-"count toward another post ID."
-msgstr ""
-
-#: templates/tmpl.engine.config.php:459
-msgid "Use keyword stem"
-msgstr ""
-
-#: templates/tmpl.engine.config.php:466
-msgid ""
-"<em>May increase search latency</em><br />For example: when enabled, "
-"searches for <strong>fishing</strong> and <strong>fished</strong> will "
-"generate the same results. When disabled, results may be different."
-msgstr ""
-
-#: templates/tmpl.engine.config.php:477
-msgid ""
-"<strong>Note:</strong> <code>ZipArchive</code> is not available to PHP. As a "
-"result, Office document content will not be indexed."
-msgstr ""
-
-#: templates/tmpl.engine.config.php:480
-msgid ""
-"<strong>Note:</strong> <code>DOMDocument</code> is not available to PHP. As "
-"a result, Office document content will not be indexed."
-msgstr ""
-
-#. Plugin Name of the plugin/theme
+"POT-Creation-Date: 2026-02-19T16:39:34+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.7.1\n"
+"X-Domain: searchwp\n"
+
+#. Plugin Name of the plugin
+#. Author of the plugin
+#: index.php
+#: includes/Admin/OptionsView.php:343
+#: includes/Admin/Views/SearchFormsView.php:786
+#: includes/Integrations/PageBuilderBlocks/BeaverBuilder/modules/SearchFormsModule/SearchFormsModule.php:30
+#: includes/Integrations/PageBuilderBlocks/BeaverBuilder/modules/SearchTemplatesModule/SearchTemplatesModule.php:30
+#: includes/Integrations/PageBuilderBlocks/Elementor/Init.php:65
+#: includes/Integrations/PageBuilderBlocks/WPBakery/Init.php:67
+#: includes/Integrations/PageBuilderBlocks/WPBakery/Init.php:120
 msgid "SearchWP"
 msgstr ""
 
-#. Plugin URI of the plugin/theme
-#. Author URI of the plugin/theme
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: index.php
 msgid "https://searchwp.com/"
 msgstr ""
 
-#. Description of the plugin/theme
+#. Description of the plugin
+#: index.php
 msgid "The best WordPress search you can find"
 msgstr ""
 
-#. Author of the plugin/theme
-msgid "SearchWP, LLC"
+#: includes/Admin/AdminBar.php:98
+msgid "Activate License"
+msgstr ""
+
+#: includes/Admin/AdminBar.php:108
+#: includes/Admin/OptionsView.php:405
+msgid "Algorithm"
+msgstr ""
+
+#: includes/Admin/AdminBar.php:118
+#: includes/Admin/OptionsView.php:420
+msgid "Statistics"
+msgstr ""
+
+#. translators: %s: URL to the Taxonomy Source documentation.
+#: includes/Admin/AdminNotices/DeprecatedIntegrationAdminNotice.php:67
+msgid "The <strong>SearchWP Term Archive Priority extension</strong> has been deprecated. Please consider using the <a href=\"%s\" target=\"_blank\">Taxonomy Source instead</a>."
+msgstr ""
+
+#: includes/Admin/AdminNotices/DeprecatedIntegrationAdminNotice.php:74
+msgid "The <strong>SearchWP Diagnostics extension</strong> has been deprecated and can be uninstalled. Its functionality has been integrated into the core SearchWP plugin."
+msgstr ""
+
+#. Translators: Placeholder is a link to the Migration Guide.
+#: includes/Admin/AdminNotices/DirtyInstallAdminNotice.php:34
+msgid "Error: Duplicate SearchWP version detected! When upgrading SearchWP from version 3.x to 4 you must follow the %1$s%2$s%3$s which will resolve this error."
+msgstr ""
+
+#: includes/Admin/AdminNotices/DirtyInstallAdminNotice.php:36
+msgid "Migration Guide"
+msgstr ""
+
+#. Translators: 1st placeholder is the name of a Source. 2nd placeholder is the name of an Engine.
+#: includes/Admin/AdminNotices/MissingEngineSourceAdminNotice.php:35
+msgid "Note: <strong>%1$s</strong> were not added to the <strong>%2$s</strong> SearchWP Engine, which is used for Admin searches. As a result default WordPress results are shown."
+msgstr ""
+
+#. Translators: 1st placeholder is a link, 2nd closes the link.
+#: includes/Admin/AdminNotices/MissingIntegrationAdminNotice.php:41
+msgid "%1$senter your license key%2$s and"
+msgstr ""
+
+#. Translators: 1st placeholder is a link, 2nd closes the link.
+#: includes/Admin/AdminNotices/MissingIntegrationAdminNotice.php:48
+msgid "%1$supgrade your license to Pro/All Access Bundle%2$s and"
+msgstr ""
+
+#. Translators: 1st placeholder is a plugin name, 2nd is an action requirement like "enter your license and", 3rd is a link to an Extension, 4th is the Extension name, 5th closes the link.
+#: includes/Admin/AdminNotices/MissingIntegrationAdminNotice.php:56
+msgid "<strong>Missing SearchWP Integration Extension</strong>. For full integration with %1$s please %2$s install the %3$s%4$s%5$s Extension."
+msgstr ""
+
+#: includes/Admin/DashboardWidgets/StatisticsDashboardWidget.php:51
+msgid "SearchWP Statistics %d Day Overview"
+msgstr ""
+
+#: includes/Admin/DashboardWidgets/StatisticsDashboardWidget.php:84
+msgid "Loading..."
+msgstr ""
+
+#: includes/Admin/DashboardWidgets/StatisticsDashboardWidget.php:229
+msgid "Invalid Engine name"
+msgstr ""
+
+#: includes/Admin/Extensions/CustomResultsOrderPreview.php:47
+msgid "Custom Results Order"
+msgstr ""
+
+#: includes/Admin/Extensions/CustomResultsOrderPreview.php:83
+msgid "Custom Results Order is a PRO Feature"
+msgstr ""
+
+#: includes/Admin/Extensions/CustomResultsOrderPreview.php:84
+#: includes/Admin/Extensions/RedirectsPreview.php:84
+#: includes/Admin/Extensions/RelatedPreview.php:84
+#: includes/Admin/Views/WelcomeView.php:529
+msgid "Upgrade to SearchWP PRO"
+msgstr ""
+
+#: includes/Admin/Extensions/CustomResultsOrderPreview.php:86
+#: includes/Admin/Extensions/RedirectsPreview.php:86
+#: includes/Admin/Extensions/RelatedPreview.php:86
+#: includes/Admin/Views/StatisticsView.php:238
+msgid "<strong>Bonus:</strong> SearchWP Standard users get up to <span class=\"green\">$200 off their upgrade price</span>, automatically applied at checkout."
+msgstr ""
+
+#: includes/Admin/Extensions/CustomResultsOrderPreview.php:93
+msgid "Custom Results Order extension is not active"
+msgstr ""
+
+#: includes/Admin/Extensions/CustomResultsOrderPreview.php:94
+#: includes/Admin/Extensions/RedirectsPreview.php:94
+#: includes/Admin/Extensions/RelatedPreview.php:94
+msgid "Activate Extension"
+msgstr ""
+
+#: includes/Admin/Extensions/CustomResultsOrderPreview.php:112
+msgid "Curate your own results order and prioritize them based on what matters most to you. Tailor your search results to ensure that the most important and relevant information is displayed prominently. <a href=\"%s\" target=\"_blank\">View&nbsp;Docs</a>"
+msgstr ""
+
+#: includes/Admin/Extensions/CustomResultsOrderPreview.php:127
+msgid "Customize search results"
+msgstr ""
+
+#: includes/Admin/Extensions/CustomResultsOrderPreview.php:128
+msgid "Highlight important content"
+msgstr ""
+
+#: includes/Admin/Extensions/CustomResultsOrderPreview.php:131
+msgid "Promote specific products or offers"
+msgstr ""
+
+#: includes/Admin/Extensions/CustomResultsOrderPreview.php:132
+msgid "Enhance user experience"
+msgstr ""
+
+#: includes/Admin/Extensions/ExcludeUIPreview.php:100
+msgid "Exclude from SearchWP"
+msgstr ""
+
+#. translators: %s is the post type name.
+#: includes/Admin/Extensions/ExcludeUIPreview.php:107
+msgid "Activate the SearchWP Exclude UI extension and exclude any %s from your search results."
+msgstr ""
+
+#: includes/Admin/Extensions/ExcludeUIPreview.php:113
+msgid "View Docs"
+msgstr ""
+
+#: includes/Admin/Extensions/ExcludeUIPreview.php:114
+#: includes/Admin/i18n.php:251
+#: includes/Admin/Views/AboutUsView.php:642
+#: includes/Admin/Views/ExtensionsView.php:448
+msgid "Activate"
+msgstr ""
+
+#: includes/Admin/Extensions/RedirectsPreview.php:47
+msgid "Redirects"
+msgstr ""
+
+#: includes/Admin/Extensions/RedirectsPreview.php:83
+msgid "Redirects is a PRO Feature"
+msgstr ""
+
+#: includes/Admin/Extensions/RedirectsPreview.php:93
+msgid "Redirects extension is not active"
+msgstr ""
+
+#: includes/Admin/Extensions/RedirectsPreview.php:112
+msgid "Automatically redirect to a specific page when certain searches are performed! While SearchWP will find the most relevant search results for you, there are times where you simply want to help your visitor move directly to a page of your choosing, saving them a click in the process. <a href=\"%s\" target=\"_blank\">View&nbsp;Docs</a>"
+msgstr ""
+
+#: includes/Admin/Extensions/RedirectsPreview.php:127
+msgid "Easily redirect searches"
+msgstr ""
+
+#: includes/Admin/Extensions/RedirectsPreview.php:128
+msgid "Increase Conversion Rates"
+msgstr ""
+
+#: includes/Admin/Extensions/RedirectsPreview.php:131
+msgid "Improve User Experience"
+msgstr ""
+
+#: includes/Admin/Extensions/RelatedPreview.php:47
+msgid "Related"
+msgstr ""
+
+#: includes/Admin/Extensions/RelatedPreview.php:83
+msgid "Related is a PRO Feature"
+msgstr ""
+
+#: includes/Admin/Extensions/RelatedPreview.php:93
+msgid "Related extension is not active"
+msgstr ""
+
+#: includes/Admin/Extensions/RelatedPreview.php:112
+msgid "Enhance your readers' experience with SearchWP Related extension. Seamlessly weave related articles and posts into your content, captivating your audience and driving them to explore more! <a href=\"%s\" target=\"_blank\">View&nbsp;Docs</a>"
+msgstr ""
+
+#: includes/Admin/Extensions/RelatedPreview.php:127
+msgid "Increased engagement"
+msgstr ""
+
+#: includes/Admin/Extensions/RelatedPreview.php:128
+msgid "Cross-promotion"
+msgstr ""
+
+#: includes/Admin/Extensions/RelatedPreview.php:129
+msgid "Discoverability of older content"
+msgstr ""
+
+#: includes/Admin/Extensions/RelatedPreview.php:132
+msgid "Personalization options"
+msgstr ""
+
+#: includes/Admin/Extensions/RelatedPreview.php:133
+msgid "Flexible integration"
+msgstr ""
+
+#: includes/Admin/i18n.php:22
+msgid "Add the taxonomies that should be searched for this source. <a href=\"%s\" target=\"_blank\">View&nbsp;Docs</a>"
+msgstr ""
+
+#: includes/Admin/i18n.php:26
+msgid "Add the custom fields that should be searched for this source. <a href=\"%s\" target=\"_blank\">View&nbsp;Docs</a>"
+msgstr ""
+
+#. Translators: placeholder is the number "1"
+#: includes/Admin/i18n.php:31
+msgid "%s Attribute"
+msgstr ""
+
+#. Translators: placeholder is the number of attributes
+#: includes/Admin/i18n.php:36
+msgid "%s Attributes"
+msgstr ""
+
+#: includes/Admin/i18n.php:40
+msgid "Attributes to search (slider sets relevance weight). <a href=\"%s\" target=\"_blank\">View&nbsp;Docs</a>"
+msgstr ""
+
+#. Translators: placeholder is the number "1"
+#: includes/Admin/i18n.php:45
+msgid "%s Rule"
+msgstr ""
+
+#. Translators: placeholder is the number of attributes
+#: includes/Admin/i18n.php:50
+msgid "%s Rules"
+msgstr ""
+
+#: includes/Admin/i18n.php:54
+msgid "Rules determine what content can and cannot show up in search results. <a href=\"%s\" target=\"_blank\">View&nbsp;Docs</a>"
+msgstr ""
+
+#: includes/Admin/i18n.php:57
+msgid "This engine will be used for WordPress Admin searches, it will search these sources:"
+msgstr ""
+
+#: includes/Admin/i18n.php:59
+msgid "When searching a supported Source, this Engine will be used. <a href=\"%s\" target=\"_blank\">View&nbsp;Docs</a>"
+msgstr ""
+
+#. Translators: placeholder is the label of the engine.
+#: includes/Admin/i18n.php:64
+msgid "Already set: %s"
+msgstr ""
+
+#: includes/Admin/i18n.php:67
+msgid "Alternate indexer running: leave this browser window open until the initial index has been built."
+msgstr ""
+
+#: includes/Admin/i18n.php:68
+msgid "Alternate indexer in use: initial index built. This browser window can be closed, the index will be kept up to date automatically."
+msgstr ""
+
+#. Translators: 1st placeholder is the name of a Source, 2nd placeholder is the label of the engine.
+#: includes/Admin/i18n.php:72
+msgid "Choose which %1$s Attributes should be considered when searching the %2$s engine:"
+msgstr ""
+
+#. Translators: 1st placeholder is the label of a Source Attribute.
+#: includes/Admin/i18n.php:81
+msgid "Type to search %1$s..."
+msgstr ""
+
+#: includes/Admin/i18n.php:86
+msgid "There was an error copying to your clipboard, please manually copy and paste"
+msgstr ""
+
+#: includes/Admin/i18n.php:87
+msgid "Are you sure you want to reset statistics? This cannot be undone!"
+msgstr ""
+
+#: includes/Admin/i18n.php:88
+msgid "Potential WP-Cron issue detected, background process may not be fully functional."
+msgstr ""
+
+#: includes/Admin/i18n.php:89
+msgid "This engine will be used for native WordPress searches, it will search these sources:"
+msgstr ""
+
+#: includes/Admin/i18n.php:90
+msgid "This engine will search these sources:"
+msgstr ""
+
+#: includes/Admin/i18n.php:92
+msgid "This engine will be used for native WordPress <strong>and</strong> Admin searches, it will search these sources"
+msgstr ""
+
+#. Translators: 1st placeholder is the label of the Source, 2nd placeholder is the label of the Engine.
+#: includes/Admin/i18n.php:97
+msgid "Edit Rules for %1$s (%2$s Engine)"
+msgstr ""
+
+#. Translators: placeholder is the label of the engine.
+#: includes/Admin/i18n.php:103
+msgid "Edit Settings (%s engine)"
+msgstr ""
+
+#: includes/Admin/i18n.php:107
+msgid "<strong>Exclude</strong> entries if:"
+msgstr ""
+
+#: includes/Admin/i18n.php:110
+msgid "To export: choose what you want to export and then copy to clipboard"
+msgstr ""
+
+#: includes/Admin/i18n.php:111
+msgid "HTTP Loopback connections are not working on this server; this window must be left open for the initial index to build. Subsequent content edits will be reindexed automatically when made."
+msgstr ""
+
+#: includes/Admin/i18n.php:112
+msgid "To import: paste settings export and click Import"
+msgstr ""
+
+#. Translators: 1st placeholder is an opening link, 2nd placeholder is closing, 3rd placeholder is an email link.
+#: includes/Admin/i18n.php:116
+msgid "<p>Your license key can be retrieved or renewed within your %1$sAccount%2$s</p><p>If you are unable to activate your license due to network restrictions, please email %3$s first including your license key and then describing your issue.</p>"
+msgstr ""
+
+#: includes/Admin/i18n.php:123
+msgid "Support and updates require an active license. Please activate your license to receive support."
+msgstr ""
+
+#: includes/Admin/i18n.php:124
+msgid "Note: the index is automatically kept up to date and maintained for optimization"
+msgstr ""
+
+#: includes/Admin/i18n.php:125
+msgid "The index needs to be rebuilt."
+msgstr ""
+
+#: includes/Admin/i18n.php:127
+msgid "After certain engine configuration changes the index must be rebuilt. <a href=\"%s\" target=\"_blank\">View&nbsp;Docs</a>"
+msgstr ""
+
+#: includes/Admin/i18n.php:130
+msgid "Indexer BLOCKED by HTTP Basic Authentication!"
+msgstr ""
+
+#: includes/Admin/i18n.php:131
+msgid "The indexer is paused."
+msgstr ""
+
+#: includes/Admin/i18n.php:133
+msgid "You can unpause the indexer from the Settings. <a href=\"%s\" target=\"_blank\">View&nbsp;Docs</a>"
+msgstr ""
+
+#: includes/Admin/i18n.php:136
+msgid "Custom content Sources cannot be used in the Default engine"
+msgstr ""
+
+#: includes/Admin/i18n.php:138
+msgid "Disregard keyword suffixes when searches are performed. <a href=\"%s\" target=\"_blank\">View&nbsp;Docs</a>"
+msgstr ""
+
+#: includes/Admin/i18n.php:141
+msgid "There was a problem activating your license. Please ensure this server can communicate with searchwp.com and try again."
+msgstr ""
+
+#: includes/Admin/i18n.php:142
+msgid "There was a problem deactivating your license. Please ensure this server can communicate with searchwp.com and try again."
+msgstr ""
+
+#. Translators: 1st placeholder is the label of the Attribute, 2nd placeholder is the label of the Engine.
+#: includes/Admin/i18n.php:145
+msgid "Manage %1$s Attributes (%2$s Engine)"
+msgstr ""
+
+#: includes/Admin/i18n.php:149
+msgid "The following queries have been ignored both when logging and displaying statistics."
+msgstr ""
+
+#: includes/Admin/i18n.php:150
+msgid "There are no ignored queries at this time."
+msgstr ""
+
+#. Translators: first placeholder is the SearchWP recommended RAM amount, second placeholder is the WordPress memory limit, third placeholder is the RAM available to PHP.
+#: includes/Admin/i18n.php:153
+msgid "SearchWP recommends at least %1$s of memory. WordPress is set to use %2$s but there is %3$s available."
+msgstr ""
+
+#: includes/Admin/i18n.php:158
+msgid "To enable SearchWP, please save your initial settings which builds the index"
+msgstr ""
+
+#: includes/Admin/i18n.php:159
+msgid "In order for results to be returned, you must add Attributes to be searched."
+msgstr ""
+
+#: includes/Admin/i18n.php:161
+msgid "Use Rules to define what should or should not be included in your site search using different criteria. <a href=\"%s\" target=\"_blank\">View&nbsp;Docs</a>"
+msgstr ""
+
+#. Translators: placeholder is the label of the Rule.
+#: includes/Admin/i18n.php:166
+msgid "There are currently no rules for %s."
+msgstr ""
+
+#: includes/Admin/i18n.php:169
+msgid "In order for this engine to return results, you must add at least one source"
+msgstr ""
+
+#: includes/Admin/i18n.php:171
+msgid "This content type will be searched as part of this engine. <a href=\"%s\" target=\"_blank\">View&nbsp;Docs</a>"
+msgstr ""
+
+#: includes/Admin/i18n.php:174
+msgid "There are currently no stopwords."
+msgstr ""
+
+#: includes/Admin/i18n.php:175
+msgid "There are no suggested stopwords to add at this time."
+msgstr ""
+
+#: includes/Admin/i18n.php:176
+msgid "There are currently no synonyms."
+msgstr ""
+
+#: includes/Admin/i18n.php:178
+msgid "<strong>Only show</strong> entries if:"
+msgstr ""
+
+#. Translators: 1st placeholder opens the link, 2nd placeholder closes it.
+#: includes/Admin/i18n.php:184
+msgid "Stopwords are <em>ignored</em> so as to improve relevancy and performance. %1$sMore info%2$s"
+msgstr ""
+
+#: includes/Admin/i18n.php:190
+msgid "The following terms may be too common to have a positive effect on searches, consider adding them as Stopwords."
+msgstr ""
+
+#: includes/Admin/i18n.php:191
+msgid "The index does not appear to be building, you may want to enable the alternate indexer:"
+msgstr ""
+
+#. Translators: 1st placeholder opens the link, 2nd placeholder closes it.
+#: includes/Admin/i18n.php:195
+msgid "Synonyms facilitate <em>replacement</em> of search terms. Use <code>*</code> wildcard for partial matching. %1$sMore info%2$s"
+msgstr ""
+
+#: includes/Admin/i18n.php:201
+#: includes/Admin/Views/GlobalRulesView.php:230
+#: includes/Admin/Views/GlobalRulesView.php:346
+#: includes/Admin/Views/GlobalRulesView.php:467
+msgid "When enabled, original Search Term(s) will be removed"
+msgstr ""
+
+#: includes/Admin/i18n.php:202
+#: includes/Admin/Views/GlobalRulesView.php:208
+#: includes/Admin/Views/GlobalRulesView.php:312
+#: includes/Admin/Views/GlobalRulesView.php:433
+msgid "Term(s) that are synonymous with the Search Term(s)"
+msgstr ""
+
+#: includes/Admin/i18n.php:203
+#: includes/Admin/Views/GlobalRulesView.php:184
+#: includes/Admin/Views/GlobalRulesView.php:282
+#: includes/Admin/Views/GlobalRulesView.php:403
+msgid "What visitors search for (separate different search terms by commas)"
+msgstr ""
+
+#: includes/Admin/i18n.php:204
+msgid "Are you sure you want to rebuild the index? This cannot be undone!"
+msgstr ""
+
+#. Translators: 1st placeholder is the name of a Source.
+#: includes/Admin/i18n.php:207
+msgid "Save %1$s Attributes"
+msgstr ""
+
+#: includes/Admin/i18n.php:210
+msgid "Please copy and paste this System Information when requested"
+msgstr ""
+
+#: includes/Admin/i18n.php:211
+msgid "If the indexer appears to be stuck, first review the PHP error log to see if anything needs to be fixed before waking it up. The indexer can become stuck when customizations are not working as expected."
+msgstr ""
+
+#: includes/Admin/i18n.php:212
+msgid "Thank you for activating SearchWP!"
+msgstr ""
+
+#: includes/Admin/i18n.php:213
+msgid "SearchWP is currently indexing the available content to make your search better!"
+msgstr ""
+
+#: includes/Admin/i18n.php:214
+msgid "SearchWP has indexed the available content to make your search better!"
+msgstr ""
+
+#. Translators: 1st placeholder opens the link, 2nd placeholder closes it.
+#: includes/Admin/i18n.php:218
+msgid "<p>A default Engine has been generated as a starting point for you to customize. Once indexing is over, SearchWP will integrate into your current search and provide terrific search results automatically!</p><p>To find out more about customizing SearchWP, please %1$sreview the documentation%2$s.</p><p class=\"description\">Thank you!</p>"
+msgstr ""
+
+#. Translators: 1st placeholder opens the link, 2nd placeholder closes it.
+#: includes/Admin/i18n.php:227
+msgid "Your settings from SearchWP 3.x have been migrated. To delete legacy data from SearchWP 3.x please use %1$sthis Extension%2$s."
+msgstr ""
+
+#. Translators: 1st placeholder opens the link, 2nd placeholder closes it.
+#: includes/Admin/i18n.php:236
+msgid "All data from SearchWP 3.x has been migrated! Legacy data can be removed with %1$sthis Extension%2$s."
+msgstr ""
+
+#: includes/Admin/i18n.php:243
+msgid "Statistics have <strong>NOT</strong> been migrated as it may take some time to do so."
+msgstr ""
+
+#. Translators: this is the suffix for the Statistics tooltip.
+#: includes/Admin/i18n.php:247
+msgid " Searches"
+msgstr ""
+
+#: includes/Admin/i18n.php:248
+msgid "(This setting can be changed at any time on the Advanced tab of the SearchWP settings screen)"
+msgstr ""
+
+#: includes/Admin/i18n.php:249
+msgid "Actions & Settings"
+msgstr ""
+
+#: includes/Admin/i18n.php:250
+msgid "Actions"
+msgstr ""
+
+#: includes/Admin/i18n.php:252
+#: includes/Admin/Views/AboutUsView.php:635
+#: includes/Admin/Views/ExtensionsView.php:440
+msgid "Active"
+msgstr ""
+
+#: includes/Admin/i18n.php:253
+#: includes/Admin/Views/ResultsTemplatesView.php:251
+#: includes/Admin/Views/SearchFormsView.php:235
+msgid "Add New"
+msgstr ""
+
+#: includes/Admin/i18n.php:254
+msgid "Add Rule"
+msgstr ""
+
+#: includes/Admin/i18n.php:255
+msgid "Add Stopword"
+msgstr ""
+
+#: includes/Admin/i18n.php:256
+msgid "Add"
+msgstr ""
+
+#: includes/Admin/i18n.php:257
+msgid "Add/Remove Attributes"
+msgstr ""
+
+#: includes/Admin/i18n.php:258
+msgid "Admin Engine"
+msgstr ""
+
+#: includes/Admin/i18n.php:259
+msgid "Advanced Settings"
+msgstr ""
+
+#: includes/Admin/i18n.php:260
+msgid "AND"
+msgstr ""
+
+#: includes/Admin/i18n.php:261
+msgid "Applicable Attribute Relevance"
+msgstr ""
+
+#: includes/Admin/i18n.php:262
+msgid "Are you sure you want to delete this engine?"
+msgstr ""
+
+#: includes/Admin/i18n.php:263
+msgid "Are you sure? The existing background process will be destroyed and then restarted."
+msgstr ""
+
+#: includes/Admin/i18n.php:264
+msgid "Attributes"
+msgstr ""
+
+#: includes/Admin/i18n.php:265
+msgid "Attributes to search (slider sets relevance weight)"
+msgstr ""
+
+#: includes/Admin/i18n.php:266
+msgid "Automatic \"Did you mean?\" corrections"
+msgstr ""
+
+#: includes/Admin/i18n.php:267
+msgid "Automatically highlight search terms when possible"
+msgstr ""
+
+#: includes/Admin/i18n.php:268
+msgid "Cancel"
+msgstr ""
+
+#: includes/Admin/i18n.php:269
+msgid "Clear Stopwords"
+msgstr ""
+
+#: includes/Admin/i18n.php:270
+msgid "Close"
+msgstr ""
+
+#: includes/Admin/i18n.php:271
+msgid "Collapse Sources"
+msgstr ""
+
+#: includes/Admin/i18n.php:272
+msgid "Continue to queue (but do not apply) delta index updates"
+msgstr ""
+
+#: includes/Admin/i18n.php:273
+msgid "Copied!"
+msgstr ""
+
+#: includes/Admin/i18n.php:274
+msgid "Copy to clipboard"
+msgstr ""
+
+#: includes/Admin/i18n.php:275
+#: includes/Admin/Views/ExtensionsView.php:441
+msgid "Deactivate"
+msgstr ""
+
+#: includes/Admin/i18n.php:276
+msgid "Debugging enabled"
+msgstr ""
+
+#: includes/Admin/i18n.php:277
+msgid "Delete Engine"
+msgstr ""
+
+#: includes/Admin/i18n.php:278
+msgid "Delete parsed document content when rebuilding Index"
+msgstr ""
+
+#: includes/Admin/i18n.php:279
+msgid "Delete"
+msgstr ""
+
+#: includes/Admin/i18n.php:280
+#: includes/Admin/Wizards/Embed-Wizard-Tooltip.php:37
+msgid "Done"
+msgstr ""
+
+#: includes/Admin/i18n.php:281
+msgid "Edit Rules"
+msgstr ""
+
+#: includes/Admin/i18n.php:282
+msgid "Engine Label"
+msgstr ""
+
+#: includes/Admin/i18n.php:283
+msgid "Engine Name"
+msgstr ""
+
+#: includes/Admin/i18n.php:284
+msgid "Settings import complete"
+msgstr ""
+
+#: includes/Admin/i18n.php:285
+msgid "Exclude entries if:"
+msgstr ""
+
+#: includes/Admin/i18n.php:286
+msgid "Existing settings of the same type will be overwritten. Continue?"
+msgstr ""
+
+#: includes/Admin/i18n.php:287
+msgid "Expand Sources"
+msgstr ""
+
+#: includes/Admin/i18n.php:288
+msgid "Export"
+msgstr ""
+
+#: includes/Admin/i18n.php:289
+msgid "Find partial matches when search terms yield no results"
+msgstr ""
+
+#: includes/Admin/i18n.php:290
+msgid "Fix this"
+msgstr ""
+
+#: includes/Admin/i18n.php:291
+#: includes/Admin/Views/SystemInfoView.php:111
+msgid "Get Help"
+msgstr ""
+
+#: includes/Admin/i18n.php:292
+#: includes/Admin/Views/MiscSettingsView.php:119
+msgid "Hide Announcements"
+msgstr ""
+
+#: includes/Admin/i18n.php:293
+#: includes/Admin/Views/MiscSettingsView.php:123
+msgid "Disable Email Summaries"
+msgstr ""
+
+#: includes/Admin/i18n.php:294
+msgid "Hide plugin announcements and update details"
+msgstr ""
+
+#: includes/Admin/i18n.php:295
+msgid "Highlight terms in results"
+msgstr ""
+
+#: includes/Admin/i18n.php:296
+#: includes/Admin/Views/DiagnosticsView.php:145
+#: includes/Sources/Post.php:744
+#: includes/Sources/Taxonomy.php:181
+msgid "ID"
+msgstr ""
+
+#: includes/Admin/i18n.php:297
+msgid "If you are customizing Document Content, PDF Metadata, or image EXIF in any way, you may want to change that behavior and have SearchWP re-parse that content when rebuilding the index."
+msgstr ""
+
+#: includes/Admin/i18n.php:298
+msgid "Import Settings"
+msgstr ""
+
+#: includes/Admin/i18n.php:299
+msgid "Import"
+msgstr ""
+
+#: includes/Admin/i18n.php:300
+msgid "In order to optimize index rebuilds, SearchWP does not purge extracted Document Content, PDF Metadata, or image EXIF data by default."
+msgstr ""
+
+#: includes/Admin/i18n.php:301
+#: includes/Admin/Views/AboutUsView.php:641
+#: includes/Admin/Views/ExtensionsView.php:447
+msgid "Inactive"
+msgstr ""
+
+#: includes/Admin/i18n.php:302
+msgid "Index everything regardless of token length"
+msgstr ""
+
+#: includes/Admin/i18n.php:303
+msgid "Index expanded Shortcode output (at the time of indexing)"
+msgstr ""
+
+#: includes/Admin/i18n.php:304
+msgid "Index Status"
+msgstr ""
+
+#: includes/Admin/i18n.php:305
+msgid "Indexed"
+msgstr ""
+
+#: includes/Admin/i18n.php:306
+msgid "Indexer communication error. See console."
+msgstr ""
+
+#: includes/Admin/i18n.php:307
+msgid "Indexer Paused"
+msgstr ""
+
+#: includes/Admin/i18n.php:308
+msgid "is"
+msgstr ""
+
+#: includes/Admin/i18n.php:309
+msgid "Keyword Stems"
+msgstr ""
+
+#: includes/Admin/i18n.php:310
+msgid "Last Activity"
+msgstr ""
+
+#: includes/Admin/i18n.php:311
+msgid "Leaving this parsed content in place speeds up index rebuilds"
+msgstr ""
+
+#: includes/Admin/i18n.php:312
+msgid "License"
+msgstr ""
+
+#: includes/Admin/i18n.php:313
+msgid "Log information during indexing and searching for review"
+msgstr ""
+
+#: includes/Admin/i18n.php:314
+msgid "Manage Attributes"
+msgstr ""
+
+#: includes/Admin/i18n.php:315
+msgid "Manage Ignored Queries"
+msgstr ""
+
+#: includes/Admin/i18n.php:316
+msgid "Manage Ignored"
+msgstr ""
+
+#: includes/Admin/i18n.php:317
+msgid "Max"
+msgstr ""
+
+#: includes/Admin/i18n.php:318
+msgid "Migrate Statistics"
+msgstr ""
+
+#: includes/Admin/i18n.php:319
+msgid "Min"
+msgstr ""
+
+#: includes/Admin/i18n.php:320
+msgid "More Info"
+msgstr ""
+
+#: includes/Admin/i18n.php:321
+msgid "Omitted Entries"
+msgstr ""
+
+#: includes/Admin/i18n.php:322
+msgid "Omitted"
+msgstr ""
+
+#: includes/Admin/i18n.php:323
+msgid "Only show entries if:"
+msgstr ""
+
+#: includes/Admin/i18n.php:324
+msgid "Options"
+msgstr ""
+
+#: includes/Admin/i18n.php:329
+msgid "Or choose from the following shortcuts"
+msgstr ""
+
+#: includes/Admin/i18n.php:330
+msgid "OR"
+msgstr ""
+
+#: includes/Admin/i18n.php:331
+msgid "Parse Shortcodes when indexing"
+msgstr ""
+
+#: includes/Admin/i18n.php:332
+msgid "Partial matches (fuzzy when necessary)"
+msgstr ""
+
+#: includes/Admin/i18n.php:333
+msgid "Performing migration, please wait..."
+msgstr ""
+
+#: includes/Admin/i18n.php:334
+msgid "Prevalence"
+msgstr ""
+
+#: includes/Admin/i18n.php:335
+msgid "Process less data per index pass (less resource intensive, but slower)"
+msgstr ""
+
+#: includes/Admin/i18n.php:336
+msgid "Query to ignore, use * as wildcard"
+msgstr ""
+
+#. translators: %s: Query number.
+#: includes/Admin/i18n.php:337
+#: includes/Debug/Console/Panels.php:55
+#: includes/Debug/Console/Panels.php:83
+#: includes/Statistics.php:359
+#: includes/Summaries/Templates/summary-body.php:151
+msgid "Query"
+msgid_plural "Query %s"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/Admin/i18n.php:338
+msgid "Queued updates will be processed immediately when the indexer is unpaused"
+msgstr ""
+
+#: includes/Admin/i18n.php:339
+msgid "Rebuild Index"
+msgstr ""
+
+#: includes/Admin/i18n.php:340
+msgid "Reduced indexer aggressiveness"
+msgstr ""
+
+#: includes/Admin/i18n.php:341
+msgid "Reintroduce"
+msgstr ""
+
+#: includes/Admin/i18n.php:342
+msgid "Remove"
+msgstr ""
+
+#: includes/Admin/i18n.php:343
+msgid "Remove all data on uninstall"
+msgstr ""
+
+#: includes/Admin/i18n.php:344
+msgid "Remove all traces of SearchWP when it is deactivated and deleted from the Plugins page"
+msgstr ""
+
+#: includes/Admin/i18n.php:345
+msgid "Remove extracted Document Content, PDF Metadata, and image EXIF data and re-parse when rebuilding Index"
+msgstr ""
+
+#: includes/Admin/i18n.php:346
+msgid "Remove minimum word length"
+msgstr ""
+
+#: includes/Admin/i18n.php:347
+msgid "Remove stored Document Content, PDF Metadata, and image EXIF when rebuilding index"
+msgstr ""
+
+#: includes/Admin/i18n.php:348
+msgid "Replace"
+msgstr ""
+
+#: includes/Admin/i18n.php:349
+msgid "Reset"
+msgstr ""
+
+#: includes/Admin/i18n.php:350
+msgid "Resetting index..."
+msgstr ""
+
+#: includes/Admin/i18n.php:351
+msgid "Restore Defaults"
+msgstr ""
+
+#: includes/Admin/i18n.php:352
+msgid "Rules"
+msgstr ""
+
+#: includes/Admin/i18n.php:353
+msgid "Save Engines"
+msgstr ""
+
+#: includes/Admin/i18n.php:354
+msgid "Save Settings"
+msgstr ""
+
+#: includes/Admin/i18n.php:355
+#: includes/Admin/Views/ResultsTemplatesView.php:420
+#: includes/Admin/Views/SearchFormsView.php:366
+msgid "Save"
+msgstr ""
+
+#: includes/Admin/i18n.php:356
+msgid "Saving settings FAILED! View console for more information"
+msgstr ""
+
+#: includes/Admin/i18n.php:357
+msgid "Saving engine settings FAILED!"
+msgstr ""
+
+#: includes/Admin/i18n.php:358
+msgid "Saving Engines..."
+msgstr ""
+
+#: includes/Admin/i18n.php:359
+msgid "Search Term(s)"
+msgstr ""
+
+#: includes/Admin/i18n.php:360
+msgid "Search these sources:"
+msgstr ""
+
+#: includes/Admin/i18n.php:361
+msgid "Searches over the past 30 days"
+msgstr ""
+
+#: includes/Admin/i18n.php:362
+#: includes/Summaries/Templates/summary-body.php:152
+msgid "Searches"
+msgstr ""
+
+#: includes/Admin/i18n.php:363
+msgid "SearchWP Advanced"
+msgstr ""
+
+#: includes/Admin/i18n.php:364
+msgid "SearchWP Engines"
+msgstr ""
+
+#: includes/Admin/i18n.php:365
+msgid "SearchWP Settings"
+msgstr ""
+
+#: includes/Admin/i18n.php:366
+#: includes/Admin/Views/StatisticsView.php:191
+msgid "SearchWP Statistics"
+msgstr ""
+
+#: includes/Admin/i18n.php:367
+msgid "SearchWP Support"
+msgstr ""
+
+#: includes/Admin/i18n.php:368
+msgid "SearchWP was unable to index the following content due to an indexing failure. Reviewing server logs may expose the reason for failure."
+msgstr ""
+
+#: includes/Admin/i18n.php:369
+msgid "Settings update FAILED"
+msgstr ""
+
+#: includes/Admin/i18n.php:370
+#: includes/Admin/NavTab.php:103
+#: includes/Admin/OptionsView.php:410
+#: assets/gutenberg/build/search-form/index.js:1
+#: assets/gutenberg/src/search-form/edit.js:43
+msgid "Settings"
+msgstr ""
+
+#: includes/Admin/i18n.php:371
+msgid "Settings Transfer"
+msgstr ""
+
+#: includes/Admin/i18n.php:372
+msgid "Sort Alphabetically"
+msgstr ""
+
+#: includes/Admin/i18n.php:373
+msgid "Sort ASC"
+msgstr ""
+
+#: includes/Admin/i18n.php:374
+msgid "Sort DESC"
+msgstr ""
+
+#: includes/Admin/i18n.php:375
+#: includes/Admin/Views/DiagnosticsView.php:181
+msgid "Source"
+msgstr ""
+
+#: includes/Admin/i18n.php:376
+msgid "Sources & Settings"
+msgstr ""
+
+#: includes/Admin/i18n.php:377
+msgid "Sources"
+msgstr ""
+
+#: includes/Admin/i18n.php:378
+msgid "Statistic"
+msgstr ""
+
+#: includes/Admin/i18n.php:379
+msgid "Stopwords"
+msgstr ""
+
+#: includes/Admin/i18n.php:380
+msgid "Suggested Stopwords"
+msgstr ""
+
+#: includes/Admin/i18n.php:381
+msgid "Support \"quoted/phrase searches\""
+msgstr ""
+
+#: includes/Admin/i18n.php:382
+#: includes/Admin/Views/SystemInfoView.php:36
+msgid "Support"
+msgstr ""
+
+#: includes/Admin/i18n.php:383
+msgid "Synonym(s)"
+msgstr ""
+
+#: includes/Admin/i18n.php:384
+msgid "Synonyms"
+msgstr ""
+
+#: includes/Admin/i18n.php:385
+msgid "System Information"
+msgstr ""
+
+#: includes/Admin/i18n.php:386
+msgid "Term"
+msgstr ""
+
+#. Translators: prefaced by (translation of) "transfer weight".
+#: includes/Admin/i18n.php:387
+msgid "There are no omitted entries at this time."
+msgstr ""
+
+#: includes/Admin/i18n.php:388
+msgid "to entry ID"
+msgstr ""
+
+#. Translators: prefaced by (translation of) "transfer weight".
+#: includes/Admin/i18n.php:389
+msgid "Entry ID"
+msgstr ""
+
+#. Translators: placeholder is the label of the Source.
+#: includes/Admin/i18n.php:392
+msgid "Enter a %s ID to transfer the weight to."
+msgstr ""
+
+#: includes/Admin/i18n.php:395
+msgid "Tokenize regex pattern matches"
+msgstr ""
+
+#: includes/Admin/i18n.php:396
+msgid "Total"
+msgstr ""
+
+#: includes/Admin/i18n.php:397
+msgid "Auto-delete log data older than"
+msgstr ""
+
+#: includes/Admin/i18n.php:398
+msgid "Type to search options..."
+msgstr ""
+
+#: includes/Admin/i18n.php:399
+msgid "Unignore"
+msgstr ""
+
+#: includes/Admin/i18n.php:400
+msgid "Update FAILED!"
+msgstr ""
+
+#: includes/Admin/i18n.php:401
+msgid "Use for Admin searches"
+msgstr ""
+
+#: includes/Admin/i18n.php:402
+msgid "Use keyword stems"
+msgstr ""
+
+#: includes/Admin/i18n.php:403
+msgid "Use the closest match for searches with no results and output a notice (requires partial matches)"
+msgstr ""
+
+#: includes/Admin/i18n.php:404
+#: includes/Sources/Attachment.php:558
+msgid "Value"
+msgstr ""
+
+#: includes/Admin/i18n.php:405
+msgid "View Suggestions"
+msgstr ""
+
+#: includes/Admin/i18n.php:406
+msgid "Wake Up Indexer"
+msgstr ""
+
+#: includes/Admin/i18n.php:407
+msgid "Waking indexer FAILED. View console for more information."
+msgstr ""
+
+#: includes/Admin/i18n.php:408
+msgid "Welcome"
+msgstr ""
+
+#: includes/Admin/i18n.php:409
+msgid "When enabled, additional tokens will be generated from regex pattern matches"
+msgstr ""
+
+#: includes/Admin/i18n.php:410
+msgid "When search terms are wrapped in double quotes, results will be limited to those with exact matches"
+msgstr ""
+
+#: includes/Admin/i18n.php:411
+msgid "Would you prefer that SearchWP remove all stored Document Content, PDF Metadata, and image EXIF data so it can be re-parsed during Index rebuilds?"
+msgstr ""
+
+#: includes/Admin/LegacyMetricsCompat.php:120
+#: includes/Admin/LegacyMetricsCompat.php:132
+msgid "Metrics"
+msgstr ""
+
+#: includes/Admin/LegacyMetricsCompat.php:200
+msgid "SearchWP Metrics"
+msgstr ""
+
+#: includes/Admin/Notifications/Notifications.php:158
+#: includes/Admin/Notifications/Notifications.php:204
+#: includes/Admin/Notifications/Notifications.php:226
+msgid "Notifications"
+msgstr ""
+
+#: includes/Admin/Notifications/Notifications.php:256
+msgid "Unread Notifications"
+msgstr ""
+
+#: includes/Admin/Notifications/Notifications.php:291
+msgid "Fancy meeting you here!"
+msgstr ""
+
+#: includes/Admin/Notifications/Notifications.php:292
+msgid "You have no new notifications."
+msgstr ""
+
+#: includes/Admin/Notifications/Notifications.php:342
+#: includes/Admin/Views/ResultsTemplatesView.php:1832
+#: includes/Admin/Views/SearchFormsView.php:1698
+msgid "Dismiss"
+msgstr ""
+
+#: includes/Admin/OptionsView.php:400
+#: includes/Admin/Views/SearchFormsView.php:38
+#: includes/Admin/Views/SearchFormsView.php:232
+msgid "Search Forms"
+msgstr ""
+
+#: includes/Admin/OptionsView.php:415
+#: includes/Admin/Views/ResultsTemplatesView.php:248
+msgid "Templates"
+msgstr ""
+
+#: includes/Admin/OptionsView.php:425
+msgid "Extensions"
+msgstr ""
+
+#: includes/Admin/OptionsView.php:430
+msgid "Tools"
+msgstr ""
+
+#: includes/Admin/OptionsView.php:435
+#: includes/Admin/Views/AboutUsView.php:43
+msgid "About Us"
+msgstr ""
+
+#: includes/Admin/OptionsView.php:443
+msgid "Upgrade to Pro"
+msgstr ""
+
+#: includes/Admin/OptionsView.php:454
+msgid "Add License Key"
+msgstr ""
+
+#: includes/Admin/OptionsView.php:496
+#: includes/Admin/OptionsView.php:550
+msgid "Search Statistics"
+msgstr ""
+
+#: includes/Admin/OptionsView.php:497
+#: includes/Admin/OptionsView.php:551
+msgid "Search Stats"
+msgstr ""
+
+#: includes/Admin/OptionsView.php:575
+msgid "<p>Cross-site searches are possible in SearchWP. Any Engine from any site can be used for a cross-site search.</p><p><strong>Note</strong>: SearchWP's Engines control what is indexed on each sub-site. If the Engine you are using to perform the search has different Sources/Attributes/Rules than the Engine(s) on the sub-sites you are searching the <em>results may not be accurate</em>.</p><p>For example: if Posts have been added to the Engine you are using for the search, but a sub-site does not have an Engine with Posts enabled, <strong>that sub-site will not return Posts</strong>.</p><p>For a comprehensive cross-site search, ensure that <em>all sites</em> share a similar configuration and applicable Engine.</p><p><a href=\"https://searchwp.com/?p=288269\" target=\"_blank\">More information</a></p>"
+msgstr ""
+
+#: includes/Admin/OptionsView.php:728
+msgid "license key now"
+msgstr ""
+
+#: includes/Admin/OptionsView.php:951
+msgid "Help"
+msgstr ""
+
+#: includes/Admin/SearchWPTracking.php:117
+msgid "Once Weekly"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:89
+msgid "Could not install the plugin. Please download and install it manually."
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:112
+msgid "OptinMonster"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:113
+msgid "Instantly get more subscribers, leads, and sales with the #1 conversion optimization toolkit. Create high converting popups, announcement bars, spin a wheel, and more with smart targeting and personalization."
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:120
+msgid "WPForms"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:121
+#: includes/Admin/Views/AboutUsView.php:127
+msgid "The best drag & drop WordPress form builder. Easily create beautiful contact forms, surveys, payment forms, and more with our 100+ form templates. Trusted by over 5 million websites as the best forms plugin."
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:126
+msgid "WPForms Pro"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:135
+msgid "MonsterInsights"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:136
+#: includes/Admin/Views/AboutUsView.php:142
+msgid "The leading WordPress analytics plugin that shows you how people find and use your website, so you can make data driven decisions to grow your business. Properly set up Google Analytics without writing code."
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:141
+msgid "MonsterInsights Pro"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:150
+msgid "WP Mail SMTP"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:151
+#: includes/Admin/Views/AboutUsView.php:157
+msgid "Improve your WordPress email deliverability and make sure that your website emails reach user's inbox with the #1 SMTP plugin for WordPress. Over 3 million websites use it to fix WordPress email issues."
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:156
+msgid "WP Mail SMTP Pro"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:165
+msgid "AIOSEO"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:166
+#: includes/Admin/Views/AboutUsView.php:172
+msgid "The original WordPress SEO plugin and toolkit that improves your website's search rankings. Comes with all the SEO features like Local SEO, WooCommerce SEO, sitemaps, SEO optimizer, schema, and more."
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:171
+msgid "AIOSEO Pro"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:180
+msgid "SeedProd"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:181
+#: includes/Admin/Views/AboutUsView.php:187
+msgid "The fastest drag & drop landing page builder for WordPress. Create custom landing pages without writing code, connect them with your CRM, collect subscribers, and grow your audience. Trusted by 1 million sites."
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:186
+msgid "SeedProd Pro"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:195
+msgid "RafflePress"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:196
+#: includes/Admin/Views/AboutUsView.php:202
+msgid "Turn your website visitors into brand ambassadors! Easily grow your email list, website traffic, and social media followers with the most powerful giveaways & contests plugin for WordPress."
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:201
+msgid "RafflePress Pro"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:210
+msgid "PushEngage"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:211
+msgid "Connect with your visitors after they leave your website with the leading web push notification software. Over 10,000+ businesses worldwide use PushEngage to send 9 billion notifications each month."
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:218
+msgid "Smash Balloon Instagram Feeds"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:219
+#: includes/Admin/Views/AboutUsView.php:225
+msgid "Easily display Instagram content on your WordPress site without writing any code. Comes with multiple templates, ability to show content from multiple accounts, hashtags, and more. Trusted by 1 million websites."
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:224
+msgid "Smash Balloon Instagram Feeds Pro"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:233
+msgid "Smash Balloon Facebook Feeds"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:234
+#: includes/Admin/Views/AboutUsView.php:240
+msgid "Easily display Facebook content on your WordPress site without writing any code. Comes with multiple templates, ability to embed albums, group content, reviews, live videos, comments, and reactions."
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:239
+msgid "Smash Balloon Facebook Feeds Pro"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:248
+msgid "Smash Balloon YouTube Feeds"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:249
+#: includes/Admin/Views/AboutUsView.php:255
+msgid "Easily display YouTube videos on your WordPress site without writing any code. Comes with multiple layouts, ability to embed live streams, video filtering, ability to combine multiple channel videos, and more."
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:254
+msgid "Smash Balloon YouTube Feeds Pro"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:263
+msgid "Smash Balloon Twitter Feeds"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:264
+#: includes/Admin/Views/AboutUsView.php:270
+msgid "Easily display Twitter content in WordPress without writing any code. Comes with multiple layouts, ability to combine multiple Twitter feeds, Twitter card support, tweet moderation, and more."
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:269
+msgid "Smash Balloon Twitter Feeds Pro"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:278
+msgid "TrustPulse"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:279
+msgid "Boost your sales and conversions by up to 15% with real-time social proof notifications. TrustPulse helps you show live user activity and purchases to help convince other users to purchase."
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:286
+msgid "AffiliateWP"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:287
+msgid "The #1 affiliate management plugin for WordPress. Easily create an affiliate program for your eCommerce store or membership site within minutes and start growing your sales with the power of referral marketing."
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:294
+msgid "WP Simple Pay"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:295
+#: includes/Admin/Views/AboutUsView.php:301
+msgid "The #1 Stripe payments plugin for WordPress. Start accepting one-time and recurring payments on your WordPress site without setting up a shopping cart. No code required."
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:300
+msgid "WP Simple Pay Pro"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:309
+msgid "Easy Digital Downloads"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:310
+msgid "The best WordPress eCommerce plugin for selling digital downloads. Start selling eBooks, software, music, digital art, and more within minutes. Accept payments, manage subscriptions, advanced access control, and more."
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:317
+msgid "Sugar Calendar"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:318
+#: includes/Admin/Views/AboutUsView.php:324
+msgid "A simple & powerful event calendar plugin for WordPress that comes with all the event management features including payments, scheduling, timezones, ticketing, recurring events, and more."
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:323
+msgid "Sugar Calendar Pro"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:476
+msgid "Hello and welcome to SearchWP, the best WordPress search plugin. At SearchWP, we make all your content on your site discoverable for visitor searches."
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:480
+msgid "The reality is that the default WordPress search form doesn't surface all your content. Custom fields are completely ignored and valuable metadata isn't included in search results."
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:484
+msgid "Our goal is to eliminate visitor confusion and frustration by providing the most accurate search results every time a search query is made."
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:488
+msgid "SearchWP is brought to you by the same team that's behind the largest WordPress resource site, WPBeginner, the most popular lead-generation software, OptinMonster, the best WordPress analytics plugin, MonsterInsights, and more!"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:492
+msgid "Yup, we know a thing or two about building awesome products that customers love!"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:559
+msgid "Plugin image"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:606
+#: includes/Admin/Views/ExtensionsView.php:414
+msgid "Status"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:636
+msgid "Activated"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:647
+#: includes/Admin/Views/ExtensionsView.php:454
+msgid "Not Installed"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:648
+msgid "Install Plugin"
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:665
+#: includes/Admin/Views/ExtensionsView.php:473
+#: includes/Admin/Wizards/Onboarding.php:1627
+msgid "There was an error while performing your request."
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:672
+msgid "Could not install the plugin. Please download it from searchwp.com and install it manually."
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:705
+msgid "Plugin installed."
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:720
+msgid "Plugin installed & activated."
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:758
+#: includes/Admin/Views/ExtensionsView.php:567
+msgid "Unable to connect to the filesystem. Please confirm your credentials."
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:780
+#: includes/Admin/Views/ExtensionsView.php:589
+#: includes/Admin/Wizards/Onboarding.php:1729
+msgid "Plugin activation is disabled for you on this site."
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:783
+msgid "Could not activate the plugin. Please activate it on the Plugins page."
+msgstr ""
+
+#: includes/Admin/Views/AboutUsView.php:803
+msgid "Plugin activated."
+msgstr ""
+
+#: includes/Admin/Views/DiagnosticsView.php:41
+msgid "Diagnostics"
+msgstr ""
+
+#: includes/Admin/Views/DiagnosticsView.php:113
+msgid "View Indexed Tokens for Source Entry"
+msgstr ""
+
+#: includes/Admin/Views/DiagnosticsView.php:125
+msgid "View indexed tokens for a specific source entry."
+msgstr ""
+
+#: includes/Admin/Views/DiagnosticsView.php:131
+msgid "Source Entry"
+msgstr ""
+
+#: includes/Admin/Views/DiagnosticsView.php:148
+msgid "View Tokens"
+msgstr ""
+
+#: includes/Admin/Views/DiagnosticsView.php:152
+msgid "Please choose the applicable Source and enter an Entry ID"
+msgstr ""
+
+#: includes/Admin/Views/DiagnosticsView.php:163
+msgid "List Unindexed Entries"
+msgstr ""
+
+#: includes/Admin/Views/DiagnosticsView.php:175
+msgid "View unindexed entries for a specific source."
+msgstr ""
+
+#: includes/Admin/Views/DiagnosticsView.php:194
+msgid "View List"
+msgstr ""
+
+#: includes/Admin/Views/DiagnosticsView.php:198
+msgid "Please choose the applicable Source. Results limited to 100."
+msgstr ""
+
+#: includes/Admin/Views/DiagnosticsView.php:223
+msgid "Invalid source or ID."
+msgstr ""
+
+#: includes/Admin/Views/DiagnosticsView.php:244
+msgid "Invalid source."
+msgstr ""
+
+#: includes/Admin/Views/EnginesView.php:39
+msgid "Engines"
+msgstr ""
+
+#: includes/Admin/Views/ExtensionsView.php:84
+#: includes/Admin/Views/ExtensionsView.php:480
+#: includes/Admin/Wizards/Onboarding.php:1634
+msgid "Could not install the extension. Please download it from searchwp.com and install it manually."
+msgstr ""
+
+#. translators: %s - SearchWP plugin settings URL.
+#: includes/Admin/Views/ExtensionsView.php:124
+msgid "To access extensions please enter and activate your SearchWP license key in the plugin <a href=\"%s\">settings</a>."
+msgstr ""
+
+#: includes/Admin/Views/ExtensionsView.php:144
+msgid "SearchWP Extensions"
+msgstr ""
+
+#: includes/Admin/Views/ExtensionsView.php:146
+msgid "Search Extensions"
+msgstr ""
+
+#. translators: %s - SearchWP.com Account page URL.
+#: includes/Admin/Views/ExtensionsView.php:253
+msgid "Want to get even more features? <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\">Upgrade your SearchWP account</a> and unlock the following extensions."
+msgstr ""
+
+#: includes/Admin/Views/ExtensionsView.php:274
+msgid "Unlock More Features..."
+msgstr ""
+
+#: includes/Admin/Views/ExtensionsView.php:313
+msgid "Extension image"
+msgstr ""
+
+#: includes/Admin/Views/ExtensionsView.php:321
+msgid "Learn more"
+msgstr ""
+
+#: includes/Admin/Views/ExtensionsView.php:378
+msgid "Upgrade"
+msgstr ""
+
+#: includes/Admin/Views/ExtensionsView.php:455
+msgid "Install"
+msgstr ""
+
+#: includes/Admin/Views/ExtensionsView.php:514
+msgid "Extension installed."
+msgstr ""
+
+#: includes/Admin/Views/ExtensionsView.php:529
+msgid "Extension installed & activated."
+msgstr ""
+
+#: includes/Admin/Views/ExtensionsView.php:592
+#: includes/Admin/Wizards/Onboarding.php:1732
+msgid "Could not activate the extension. Please activate it on the Plugins page."
+msgstr ""
+
+#: includes/Admin/Views/ExtensionsView.php:612
+msgid "Extension activated."
+msgstr ""
+
+#: includes/Admin/Views/ExtensionsView.php:630
+msgid "Plugin deactivation is disabled for you on this site."
+msgstr ""
+
+#: includes/Admin/Views/ExtensionsView.php:633
+msgid "Could not deactivate the extension. Please deactivate from the Plugins page."
+msgstr ""
+
+#: includes/Admin/Views/ExtensionsView.php:649
+msgid "Extension deactivated."
+msgstr ""
+
+#: includes/Admin/Views/GeneralSettingsView.php:36
+msgid "General"
+msgstr ""
+
+#: includes/Admin/Views/GeneralSettingsView.php:97
+msgid "Partial Matches"
+msgstr ""
+
+#: includes/Admin/Views/GeneralSettingsView.php:98
+msgid "Find partial matches when search terms yield no results. Spelling corrections are applied if necessary."
+msgstr ""
+
+#: includes/Admin/Views/GeneralSettingsView.php:101
+msgid "Closest Match"
+msgstr ""
+
+#: includes/Admin/Views/GeneralSettingsView.php:102
+msgid "Use the closest match for searches that yield no results and output a notice (requires Partial Matches)."
+msgstr ""
+
+#: includes/Admin/Views/GeneralSettingsView.php:105
+msgid "\"Quoted\" Searches"
+msgstr ""
+
+#: includes/Admin/Views/GeneralSettingsView.php:106
+msgid "When search terms are wrapped in double quotes, results will be limited to those with exact matches."
+msgstr ""
+
+#: includes/Admin/Views/GeneralSettingsView.php:109
+msgid "Highlight Terms"
+msgstr ""
+
+#: includes/Admin/Views/GeneralSettingsView.php:110
+msgid "Automatically highlight terms in search results when possible."
+msgstr ""
+
+#: includes/Admin/Views/GeneralSettingsView.php:113
+msgid "Parse Shortcodes"
+msgstr ""
+
+#: includes/Admin/Views/GeneralSettingsView.php:114
+msgid "Index expanded Shortcode output (at the time of indexing)."
+msgstr ""
+
+#: includes/Admin/Views/GeneralSettingsView.php:153
+msgid "License Key"
+msgstr ""
+
+#: includes/Admin/Views/GeneralSettingsView.php:166
+msgid "Remove Key"
+msgstr ""
+
+#: includes/Admin/Views/GeneralSettingsView.php:168
+#: includes/Admin/Wizards/Onboarding.php:644
+msgid "Verify Key"
+msgstr ""
+
+#: includes/Admin/Views/GeneralSettingsView.php:325
+#: includes/Admin/Views/GeneralSettingsView.php:331
+#: includes/Admin/Views/GettingStartedView.php:211
+msgid "Get SearchWP Pro Today and Unlock all the Powerful Features"
+msgstr ""
+
+#: includes/Admin/Views/GeneralSettingsView.php:326
+#: includes/Admin/Wizards/Onboarding.php:1004
+msgid "Buy SearchWP Pro Today »"
+msgstr ""
+
+#: includes/Admin/Views/GeneralSettingsView.php:332
+#: includes/Admin/Wizards/Onboarding.php:1009
+msgid "Get SearchWP Pro Today »"
+msgstr ""
+
+#: includes/Admin/Views/GeneralSettingsView.php:334
+#: includes/Admin/Wizards/Onboarding.php:1011
+msgid "<strong>Bonus:</strong> SearchWP Standard users get up to <span class=\"green\">$200 off their upgrade price</span>, automatically applied at checkout!"
+msgstr ""
+
+#: includes/Admin/Views/GeneralSettingsView.php:338
+#: includes/Admin/Views/GettingStartedView.php:138
+msgid "Upgrade to SearchWP All Access Bundle today and use SearchWP on up to 100 websites!"
+msgstr ""
+
+#: includes/Admin/Views/GeneralSettingsView.php:339
+#: includes/Admin/Views/GettingStartedView.php:144
+#: includes/Admin/Views/GettingStartedView.php:147
+msgid "Get SearchWP All Access Bundle Now »"
+msgstr ""
+
+#: includes/Admin/Views/GeneralSettingsView.php:341
+msgid "<strong>Bonus:</strong> SearchWP Pro users get up to <span class=\"green\">$300 off their upgrade price</span>, automatically applied at checkout!"
+msgstr ""
+
+#: includes/Admin/Views/GeneralSettingsView.php:346
+msgid "Thank you for using SearchWP! ❤️"
+msgstr ""
+
+#: includes/Admin/Views/GeneralSettingsView.php:361
+msgid "WooCommerce & Easy Digital Downloads support"
+msgstr ""
+
+#: includes/Admin/Views/GeneralSettingsView.php:362
+msgid "Advanced search Metrics and insights on visitor activity"
+msgstr ""
+
+#: includes/Admin/Views/GeneralSettingsView.php:363
+msgid "Click tracking to know what search results users are picking"
+msgstr ""
+
+#: includes/Admin/Views/GeneralSettingsView.php:364
+msgid "Multi-language search support with WPML and Polylang"
+msgstr ""
+
+#: includes/Admin/Views/GeneralSettingsView.php:367
+msgid "Increased activation limit (use SearchWP on more sites!)"
+msgstr ""
+
+#: includes/Admin/Views/GeneralSettingsView.php:368
+msgid "Granular customization of search results order"
+msgstr ""
+
+#: includes/Admin/Views/GeneralSettingsView.php:369
+msgid "Related block to display similar search results"
+msgstr ""
+
+#: includes/Admin/Views/GeneralSettingsView.php:370
+msgid "Conditional redirects based on the search request"
+msgstr ""
+
+#: includes/Admin/Views/GettingStartedView.php:35
+msgid "Getting Started"
+msgstr ""
+
+#: includes/Admin/Views/GettingStartedView.php:83
+#: includes/Admin/Views/GettingStartedView.php:92
+msgid "Configuring Your First Search Engine"
+msgstr ""
+
+#: includes/Admin/Views/GettingStartedView.php:87
+msgid "To get started with SearchWP, click on one of our helpful documentation tutorials below to learn how you can configure your search engines to surface all the valuable content on your site."
+msgstr ""
+
+#: includes/Admin/Views/GettingStartedView.php:98
+msgid "Configuring Synonyms and Stopwords"
+msgstr ""
+
+#: includes/Admin/Views/GettingStartedView.php:104
+msgid "Configuring Fuzzy Matches, Did You Mean? and More"
+msgstr ""
+
+#: includes/Admin/Views/GettingStartedView.php:110
+msgid "Analyzing Search Statistics"
+msgstr ""
+
+#: includes/Admin/Views/GettingStartedView.php:118
+#: includes/Admin/Views/WelcomeView.php:180
+msgid "SearchWP Engine Overview"
+msgstr ""
+
+#: includes/Admin/Views/GettingStartedView.php:153
+msgid "<strong>Bonus:</strong> SearchWP Pro users get up to <span class=\"swp-text-green\">$300 off their upgrade price</span>, automatically applied at checkout!"
+msgstr ""
+
+#: includes/Admin/Views/GettingStartedView.php:180
+msgid "Get SearchWP Pro And Unlock All The Powerful Features"
+msgstr ""
+
+#: includes/Admin/Views/GettingStartedView.php:184
+msgid "Upgrade to SearchWP Pro to unlock all the awesome features and experience why SearchWP is consistently rated the best WordPress search plugin."
+msgstr ""
+
+#: includes/Admin/Views/GettingStartedView.php:188
+msgid "We know that you will truly love SearchWP Pro. It’s used on over 30,000 smart WordPress websites and is consistently rated 5-stars"
+msgstr ""
+
+#: includes/Admin/Views/GettingStartedView.php:188
+msgid "by our customers."
+msgstr ""
+
+#: includes/Admin/Views/GettingStartedView.php:196
+msgid "Search related content"
+msgstr ""
+
+#: includes/Admin/Views/GettingStartedView.php:197
+msgid "Cross-site multisite search"
+msgstr ""
+
+#: includes/Admin/Views/GettingStartedView.php:198
+msgid "Search ecommerce product data"
+msgstr ""
+
+#: includes/Admin/Views/GettingStartedView.php:199
+msgid "Search custom database tables and other custom content"
+msgstr ""
+
+#: includes/Admin/Views/GettingStartedView.php:200
+msgid "Conditional search redirects"
+msgstr ""
+
+#: includes/Admin/Views/GettingStartedView.php:202
+msgid "WPML integration support"
+msgstr ""
+
+#: includes/Admin/Views/GettingStartedView.php:203
+msgid "Advanced Custom Fields (ACF) support"
+msgstr ""
+
+#: includes/Admin/Views/GettingStartedView.php:204
+msgid "Advanced search metrics and insights"
+msgstr ""
+
+#: includes/Admin/Views/GettingStartedView.php:205
+msgid "Custom search result ordering"
+msgstr ""
+
+#: includes/Admin/Views/GettingStartedView.php:206
+msgid "Additional popular plugin integrations"
+msgstr ""
+
+#: includes/Admin/Views/GettingStartedView.php:216
+msgid "Bonus: SearchWP users get up to"
+msgstr ""
+
+#: includes/Admin/Views/GettingStartedView.php:216
+msgid "automatically applied at checkout."
+msgstr ""
+
+#: includes/Admin/Views/GlobalRulesView.php:36
+msgid "Global Rules"
+msgstr ""
+
+#: includes/Admin/Views/ImportExportView.php:35
+msgid "Import/Export"
+msgstr ""
+
+#: includes/Admin/Views/MiscSettingsView.php:35
+msgid "Misc"
+msgstr ""
+
+#: includes/Admin/Views/MiscSettingsView.php:92
+msgid "Debugging"
+msgstr ""
+
+#: includes/Admin/Views/MiscSettingsView.php:93
+msgid "Log indexing and searching activity. Debug logs are saved in <em>/wp-content/uploads/searchwp-logs/</em>. Debug Panel is available from the frontend admin bar."
+msgstr ""
+
+#: includes/Admin/Views/MiscSettingsView.php:96
+msgid "Split Pattern Keywords"
+msgstr ""
+
+#: includes/Admin/Views/MiscSettingsView.php:98
+msgid "SearchWP detects typical pattern keywords (SKUs, dates, initials, etc) and keeps them as one token without splitting. Enable this option to split these keywords and generate additional smaller tokens. <a href=\"%s\" target=\"_blank\">View&nbsp;Docs</a>"
+msgstr ""
+
+#: includes/Admin/Views/MiscSettingsView.php:103
+msgid "Remove Minimum Word Length"
+msgstr ""
+
+#: includes/Admin/Views/MiscSettingsView.php:104
+msgid "Index everything regardless of token length."
+msgstr ""
+
+#: includes/Admin/Views/MiscSettingsView.php:107
+msgid "Pause Indexing"
+msgstr ""
+
+#: includes/Admin/Views/MiscSettingsView.php:108
+msgid "When paused, any new or updated content will not be included in the search results. The indexing will resume once the indexer is unpaused."
+msgstr ""
+
+#: includes/Admin/Views/MiscSettingsView.php:111
+msgid "Reduce Indexer Load"
+msgstr ""
+
+#: includes/Admin/Views/MiscSettingsView.php:112
+msgid "Process less data per index pass (less resource intensive, but slower)."
+msgstr ""
+
+#: includes/Admin/Views/MiscSettingsView.php:115
+msgid "Re-parse Document Content"
+msgstr ""
+
+#: includes/Admin/Views/MiscSettingsView.php:116
+msgid "Remove extracted Document Content, PDF Metadata, and image EXIF data and re-parse when rebuilding Index. Leaving this parsed content in place speeds up index rebuilds."
+msgstr ""
+
+#: includes/Admin/Views/MiscSettingsView.php:120
+msgid "Hide plugin announcements and update details."
+msgstr ""
+
+#: includes/Admin/Views/MiscSettingsView.php:124
+msgid "Disable weekly Email Summaries."
+msgstr ""
+
+#: includes/Admin/Views/MiscSettingsView.php:127
+msgid "Uninstall SearchWP"
+msgstr ""
+
+#: includes/Admin/Views/MiscSettingsView.php:128
+msgid "Remove all traces of SearchWP when it is deactivated and deleted from the Plugins page."
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:43
+msgid "Search Results"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:260
+#: includes/Admin/Views/SearchFormsView.php:244
+#: includes/Sources/Taxonomy.php:115
+msgid "Name"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:264
+#: includes/Admin/Views/SearchFormsView.php:248
+msgid "Type"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:268
+#: includes/Admin/Views/ResultsTemplatesView.php:1391
+#: includes/Admin/Views/SearchFormsView.php:252
+#: includes/Admin/Views/SearchFormsView.php:1416
+msgid "Shortcode"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:272
+#: includes/Admin/Views/SearchFormsView.php:256
+msgid "Action"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:282
+msgid "No template found. Let`s create one!"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:416
+#: includes/Admin/Views/SearchFormsView.php:362
+msgid "Embed"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:442
+#: includes/Admin/Views/SearchFormsView.php:378
+msgid "Choose a theme"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:458
+#: includes/Admin/Views/SearchFormsView.php:398
+msgid "Layout Theme"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:489
+msgid "Minimal"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:498
+msgid "Compact"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:507
+msgid "Columns"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:516
+#: includes/Admin/Views/ResultsTemplatesView.php:821
+msgid "Medium"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:525
+msgid "Rich"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:534
+#: includes/Admin/Views/SearchFormsView.php:467
+msgid "Combined"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:552
+#: includes/Admin/Views/SearchFormsView.php:476
+msgid "Theme Preview"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:557
+msgid "Search Results for \"Mockup\""
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:566
+msgid "Found 3 results"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:592
+msgid "Create Mockups - Balsamiq Wireframes"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:597
+msgid "It’s like sketching on a whiteboard. Go On, Unleash Your Creativity! Life’s too short for bad software."
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:607
+#: includes/Admin/Views/ResultsTemplatesView.php:931
+#: includes/Templates/Frontend.php:389
+msgid "Read More"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:622
+msgid "Prev"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:635
+#: includes/Admin/Wizards/Onboarding.php:319
+#: includes/Admin/Wizards/Onboarding.php:457
+#: includes/Admin/Wizards/Onboarding.php:557
+#: includes/Admin/Wizards/Onboarding.php:751
+#: includes/Admin/Wizards/Onboarding.php:807
+msgid "Next"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:658
+#: includes/Admin/Views/SearchFormsView.php:573
+msgid "Custom Styling"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:697
+msgid "Layout Style"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:709
+msgid "Grid"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:717
+msgid "List"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:725
+msgid "Choose the maximum number of results on each row"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:731
+msgid "2"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:735
+msgid "3"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:739
+msgid "4"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:743
+msgid "5"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:747
+msgid "6"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:751
+msgid "7"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:757
+#: includes/Admin/Views/ResultsTemplatesView.php:1077
+msgid "Results"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:783
+msgid "Basic styling"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:789
+msgid "Adjust the appearance of the elements"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:797
+#: includes/Sources/Attachment.php:91
+#: includes/Sources/Taxonomy.php:124
+msgid "Description"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:812
+msgid "Image"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:819
+msgid "None"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:820
+msgid "Small"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:822
+msgid "Large"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:831
+msgid "Title Style"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:839
+#: includes/Admin/Views/ResultsTemplatesView.php:872
+msgid "Color"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:850
+#: includes/Admin/Views/ResultsTemplatesView.php:882
+msgid "Font size"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:864
+msgid "Price Style"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:911
+msgid "Button"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:926
+#: includes/Admin/Views/ResultsTemplatesView.php:1184
+msgid "Button Label"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:938
+#: includes/Admin/Views/ResultsTemplatesView.php:1197
+#: includes/Admin/Views/SearchFormsView.php:1215
+msgid "Button Style"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:946
+#: includes/Admin/Views/ResultsTemplatesView.php:1205
+msgid "Background Color"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:956
+#: includes/Admin/Views/ResultsTemplatesView.php:1215
+#: includes/Admin/Views/SearchFormsView.php:1299
+msgid "Font Color"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:966
+#: includes/Admin/Views/ResultsTemplatesView.php:1225
+#: includes/Admin/Views/SearchFormsView.php:1185
+#: includes/Admin/Views/SearchFormsView.php:1312
+msgid "Font"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:994
+msgid "Link Settings"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1000
+msgid "Configure how links behave in search results"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1008
+msgid "Open Links in New Tab"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1019
+msgid "When enabled, search result links will open in a new browser tab/window"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1029
+msgid "Link media files directly"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1040
+msgid "When enabled, media file links will point directly to the file instead of the media attachment page"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1065
+msgid "Results per Page"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1072
+msgid "Choose how many maximum results you want to show per page"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1102
+msgid "Total Results Notice"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1113
+msgid "Display a notice at the top of search results showing the total number of found results"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1117
+msgid "Found %total% results for \"%query%\""
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1120
+msgid "Customize the notice text. Use %total% for the number of results and %query% for the search term."
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1145
+msgid "Pagination"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1151
+msgid "Adjust the appearance of the pagination elements"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1159
+msgid "Ajax Load More"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1169
+msgid "When enabled, the pagination will be replaced by an Ajax powered Load More button"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1189
+#: includes/Templates/Frontend.php:511
+msgid "Load More"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1246
+msgid "Pagination style"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1257
+msgid "No Box"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1265
+msgid "Boxed"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1273
+msgid "Circular"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1281
+msgid "Previous Label"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1283
+#: includes/Admin/Views/ResultsTemplatesView.php:1292
+#: includes/Admin/Views/SearchFormsView.php:1272
+msgid "Label"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1290
+msgid "Next Label"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1320
+#: includes/Admin/Views/ResultsTemplatesView.php:1526
+#: includes/Admin/Views/ResultsTemplatesView.php:1598
+#: includes/Admin/Views/SearchFormsView.php:1345
+#: includes/Admin/Views/SearchFormsView.php:1551
+#: includes/Admin/Views/SearchFormsView.php:1623
+msgid "Embed in a Page"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1336
+msgid "We can help embed your results template with just a few clicks!"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1337
+#: includes/Admin/Views/ResultsTemplatesView.php:1491
+msgid "Would you like to embed your results template in an existing page, or create a new one?"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1347
+msgid "Embed Results Template"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1373
+#: includes/Admin/Views/SearchFormsView.php:1398
+msgid "Gutenberg Block"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1412
+#: includes/Admin/Views/SearchFormsView.php:1437
+msgid "PHP Code"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1423
+#: includes/Admin/Views/SearchFormsView.php:1448
+msgid "To add this block, edit a page or post and search for “SearchWP” block."
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1440
+#: includes/Admin/Views/ResultsTemplatesView.php:1464
+#: includes/Admin/Views/SearchFormsView.php:1465
+#: includes/Admin/Views/SearchFormsView.php:1489
+msgid "Copy"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1451
+#: includes/Admin/Views/SearchFormsView.php:1476
+msgid "Use the following PHP code anywhere in your post to display created field"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1483
+#: includes/Admin/Views/SearchFormsView.php:1508
+msgid "Embed Terms"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1497
+#: includes/Admin/Views/ResultsTemplatesView.php:1552
+#: includes/Admin/Views/SearchFormsView.php:1522
+#: includes/Admin/Views/SearchFormsView.php:1577
+msgid "Select Existing Page"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1501
+#: includes/Admin/Views/SearchFormsView.php:1526
+msgid "Or"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1505
+#: includes/Admin/Views/ResultsTemplatesView.php:1624
+#: includes/Admin/Views/SearchFormsView.php:1530
+#: includes/Admin/Views/SearchFormsView.php:1649
+msgid "Create New Page"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1542
+msgid "Select the page you would like to embed your results template in."
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1564
+#: includes/Admin/Views/SearchFormsView.php:1589
+msgid "Select a Page"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1572
+#: includes/Admin/Views/ResultsTemplatesView.php:1636
+#: includes/Admin/Views/SearchFormsView.php:1597
+#: includes/Admin/Views/SearchFormsView.php:1661
+msgid "Let’s Go!"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1579
+#: includes/Admin/Views/ResultsTemplatesView.php:1643
+#: includes/Admin/Views/SearchFormsView.php:1604
+#: includes/Admin/Views/SearchFormsView.php:1668
+msgid "Go Back"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1614
+#: includes/Admin/Views/SearchFormsView.php:1639
+msgid "What would you like to call the new page?"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1633
+#: includes/Admin/Views/SearchFormsView.php:1658
+msgid "Name your page"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1670
+msgid "Promoted Search Ads"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1686
+msgid "Enable Promoted Ads"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1701
+msgid "Ad Content"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1727
+msgid "Ad Position"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1734
+msgid "Display the ad after this many results, or after the last one if fewer."
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1826
+#: includes/Admin/Views/SearchFormsView.php:1692
+msgid "Heads up! Your SearchWP license is not active or expired."
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1827
+msgid "An active license is needed to create more Results Templates."
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1828
+#: includes/Admin/Views/SearchFormsView.php:1694
+msgid "Activate your SearchWP license now to access new features & extensions, plugin updates (including security improvements), and our world class support!"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1830
+#: includes/Admin/Views/SearchFormsView.php:1696
+msgid "Get New License"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1831
+#: includes/Admin/Views/SearchFormsView.php:1697
+msgid "Renew Now"
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1834
+#: includes/Admin/Views/SearchFormsView.php:1700
+msgid "Already have a key? Click here to activate your license."
+msgstr ""
+
+#: includes/Admin/Views/ResultsTemplatesView.php:1921
+#: includes/Admin/Views/SearchFormsView.php:1774
+msgid "Incorrect usage of this operation."
+msgstr ""
+
+#. translators: %d - a post ID.
+#: includes/Admin/Views/ResultsTemplatesView.php:2112
+#: includes/Admin/Views/SearchFormsView.php:1961
+msgid "#%d (no title)"
+msgstr ""
+
+#. translators: %s - link to the SearchWP documentation page.
+#: includes/Admin/Views/ResultsTemplatesView.php:2277
+msgid "Click the plus button, search for SearchWP, click the Results block to<br>embed it. <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\">Learn More</a>"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:266
+msgid "No forms found. Let`s create one!"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:415
+msgid "Basic"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:428
+#: includes/Admin/Views/SearchFormsView.php:595
+msgid "Category Search"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:441
+#: includes/Admin/Views/SearchFormsView.php:620
+msgid "Quick Search"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:454
+#: includes/Admin/Views/SearchFormsView.php:508
+#: includes/Admin/Views/SearchFormsView.php:645
+#: includes/Forms/Frontend.php:457
+msgid "Advanced Search"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:486
+msgid "Category"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:489
+#: includes/Admin/Views/SearchFormsView.php:958
+msgid "Enter keyword and search"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:494
+#: includes/Admin/Views/SearchFormsView.php:1275
+#: includes/Forms/Frontend.php:188
+#: includes/Forms/Frontend.php:383
+#: includes/Forms/Frontend.php:425
+#: includes/Summaries/Templates/summary-body.php:83
+msgid "Search"
+msgid_plural "Total Searches"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/Admin/Views/SearchFormsView.php:534
+msgid "Popular searches:"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:538
+msgid "Website"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:542
+msgid "SEO"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:546
+msgid "Performance"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:550
+msgid "Networking"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:670
+#: includes/Forms/Frontend.php:127
+#: includes/Forms/Frontend.php:401
+#: includes/Forms/Frontend.php:402
+msgid "Voice Search"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:695
+msgid "Automatic Form Submission"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:712
+msgid "Submit the search form automatically after speech recognition succeeds."
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:733
+msgid "Engine"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:762
+msgid "Results Page"
+msgstr ""
+
+#. translators: %s: Custom name of search input.
+#: includes/Admin/Views/SearchFormsView.php:778
+msgid "Custom: %s"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:785
+msgid "Site Default"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:799
+msgid "Target Page"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:813
+msgid "SearchWP Default"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:830
+#: includes/Integrations/PageBuilderBlocks.php:159
+#: assets/gutenberg/build/results-template/index.js:1
+#: assets/gutenberg/src/results-template/edit.js:58
+msgid "Template"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:853
+msgid "Edit Templates"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:864
+msgid "Include Search Form"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:875
+msgid "Include a search form in the page header."
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:894
+msgid "Type of search"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:923
+msgid "Select Category"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:951
+msgid "Field Label"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:969
+msgid "Search Button"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:1001
+msgid "Quick Search Items"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:1011
+msgid "Include search items from selecting multiple"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:1063
+msgid "Advanced Search Filter/s"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:1073
+msgid "Authors"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:1074
+msgid "Post Types"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:1075
+msgid "Tags"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:1102
+msgid "Form Style"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:1120
+#: includes/Admin/Views/SearchFormsView.php:1233
+msgid "No Style"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:1133
+msgid "Rectangle"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:1146
+msgid "Rounded"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:1159
+msgid "Underlined"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:1172
+msgid "Border Color"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:1246
+msgid "Filled"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:1259
+msgid "Stroked"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:1286
+msgid "Background"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:1361
+msgid "We can help embed your search form with just a few clicks!"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:1362
+#: includes/Admin/Views/SearchFormsView.php:1516
+msgid "Would you like to embed your search form in an existing page, or create a new one?"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:1372
+msgid "Embed Search Form"
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:1567
+msgid "Select the page you would like to embed your search form in."
+msgstr ""
+
+#: includes/Admin/Views/SearchFormsView.php:1693
+msgid "An active license is needed to create more Search Forms."
+msgstr ""
+
+#. translators: %s - link to the SearchWP documentation page.
+#: includes/Admin/Views/SearchFormsView.php:2184
+msgid "Click the plus button, search for SearchWP, click the Form block to<br>embed it. <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\">Learn More</a>"
+msgstr ""
+
+#: includes/Admin/Views/StatisticsView.php:236
+msgid "Upgrade to PRO Today to Unlock Metrics"
+msgstr ""
+
+#: includes/Admin/Views/StatisticsView.php:244
+#: includes/Admin/Views/StatisticsView.php:271
+msgid "Get SearchWP Metrics Today"
+msgstr ""
+
+#: includes/Admin/Views/StatisticsView.php:254
+msgid "Get Metrics Extension Today and Unlock Advanced Search Tracking"
+msgstr ""
+
+#: includes/Admin/Views/StatisticsView.php:256
+msgid "Take the next step in tracking your search statistics with the Metrics extension!"
+msgstr ""
+
+#: includes/Admin/Views/StatisticsView.php:257
+msgid "Get a unique insight into your visitors' search behavior with advanced tools like click tracking and custom reporting."
+msgstr ""
+
+#: includes/Admin/Views/StatisticsView.php:262
+msgid "Zoom into your data: structure your report by date range, search queries, engines, or everything at once."
+msgstr ""
+
+#: includes/Admin/Views/StatisticsView.php:263
+msgid "Analyze popular searches and discover which results users clicked for every query."
+msgstr ""
+
+#: includes/Admin/Views/StatisticsView.php:264
+msgid "Automatically move your most clicked content to the top of search results."
+msgstr ""
+
+#: includes/Admin/Views/StatisticsView.php:265
+msgid "Check queries with no results for new content ideas preventing failed searches."
+msgstr ""
+
+#: includes/Admin/Views/StatisticsView.php:266
+msgid "Use unique, actionable advice based on your website data to make your best content shine."
+msgstr ""
+
+#: includes/Admin/Views/StatisticsView.php:267
+msgid "Blocklist the unwanted search queries to keep your search reports clean and focused."
+msgstr ""
+
+#: includes/Admin/Views/StatisticsView.php:268
+msgid "Get in-depth metrics for every engine: total searches, searches per user, average click rank, etc."
+msgstr ""
+
+#: includes/Admin/Views/SystemInfoView.php:93
+#: includes/Admin/Views/SystemInfoView.php:174
+msgid "System Info"
+msgstr ""
+
+#: includes/Admin/Views/SystemInfoView.php:129
+msgid "View Documentation"
+msgstr ""
+
+#: includes/Admin/Views/SystemInfoView.php:133
+msgid "Browse documentation, reference material, and tutorials for SearchWP."
+msgstr ""
+
+#: includes/Admin/Views/SystemInfoView.php:137
+msgid "View All Documentation"
+msgstr ""
+
+#: includes/Admin/Views/SystemInfoView.php:151
+msgid "Get Support"
+msgstr ""
+
+#: includes/Admin/Views/SystemInfoView.php:155
+msgid "Submit a ticket and our world-class support team will be in touch soon."
+msgstr ""
+
+#: includes/Admin/Views/SystemInfoView.php:159
+msgid "Submit a Support Ticket"
+msgstr ""
+
+#: includes/Admin/Views/SystemInfoView.php:182
+msgid "Copy to Clipboard"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:91
+#: includes/Admin/Views/WelcomeView.php:92
+#: includes/Admin/Views/WelcomeView.php:167
+msgid "Welcome to SearchWP"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:171
+msgid "Thank you for choosing SearchWP - the best WordPress search plugin!"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:189
+msgid "SearchWP supercharges search by making all your content discoverable! Start by taking our step-by-step onboarding wizard or dive right into customizing your first search engine."
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:194
+#: includes/Admin/Views/WelcomeView.php:525
+msgid "Start Onboarding Wizard"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:198
+msgid "Customize Your Search Engine"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:212
+msgid "SearchWP Features & Addons"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:216
+msgid ""
+"SearchWP is both easy to use and extremely powerful.\n"
+"\t\t\t\t\t\tWe have tons of helpful features to surface all your valuable content to visitor search queries."
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:228
+msgid "PDF & Office Doc Indexing"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:232
+msgid ""
+"Index the content of PDF, Office,\n"
+"\t\t\t\t\t\t\t\t\tand text documents in your WordPress Media library."
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:243
+msgid "Automatic Integration"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:247
+msgid ""
+"SearchWP's default engine uses your existing\n"
+"\t\t\t\t\t\t\t\t\tWordPress native search forms and results template."
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:258
+msgid "Multiple Search Engines"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:262
+msgid ""
+"Configure individual search engines,\n"
+"\t\t\t\t\t\t\t\t\teach with their own settings to meet your needs.\n"
+"\t\t\t\t\t\t\t\t\tEasily integrate into your theme with step-by-step instructions."
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:274
+msgid "Keyword Stemming"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:278
+msgid "Show better results by using keyword stems instead of exact term matches."
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:288
+msgid "Search Everything"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:292
+msgid ""
+"Search your product details, Custom Fields content,\n"
+"\t\t\t\t\t\t\t\t\tShortcode output, custom database table content,\n"
+"\t\t\t\t\t\t\t\t\tcross-site multisite search, and more!"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:304
+msgid "Advanced Custom Fields Support"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:308
+msgid ""
+"Stop ignoring content stored in Advanced Custom\n"
+"\t\t\t\t\t\t\t\t\tFields when searching your site."
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:319
+msgid "WooCommerce Integration"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:323
+msgid ""
+"Stop losing money when your customers\n"
+"\t\t\t\t\t\t\t\t\tcan't search by your product details!"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:334
+msgid "Exclude or Attribute Results"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:338
+msgid ""
+"Easily exclude content from search results,\n"
+"\t\t\t\t\t\t\t\t\tor attribute findings to more appropriate results."
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:349
+msgid "Search Statistics and Insights"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:353
+msgid ""
+"Log searches to find out what\n"
+"\t\t\t\t\t\t\t\t\tyour visitors are searching for and (not?) finding."
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:364
+msgid "Easy Algorithm Customization"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:368
+msgid ""
+"Easily customize how results are ranked using\n"
+"\t\t\t\t\t\t\t\t\tSearchWP's intuitive interface and weighting system."
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:379
+msgid "bbPress Integration"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:383
+msgid ""
+"Improve the usefulness of your forums\n"
+"\t\t\t\t\t\t\t\t\tby implementing a powerful, relevant search."
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:394
+msgid "WP Job Manager Integration"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:398
+msgid ""
+"Allow visitors to search for Listing metadata,\n"
+"\t\t\t\t\t\t\t\t\twhich is otherwise ignored by WordPress."
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:409
+msgid "Easy Digital Downloads Integration"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:413
+msgid "Make sure your customers are finding your products easily and effectively."
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:423
+msgid "Suggest a Feature"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:427
+msgid "Did something get left out? Please feel free to inquire about additional features!"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:436
+msgid "See All Features"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:445
+msgid "Upgrade to SearchWP PRO Today!"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:450
+msgid "Related Content"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:451
+msgid "MultiSite Search"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:452
+msgid "eCommerce Data"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:453
+msgid "Custom Content"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:454
+msgid "Conditional Redirects"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:458
+msgid "WPML Support"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:459
+msgid "ACF Support"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:460
+msgid "Metrics & Insights"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:461
+msgid "Result Ordering"
+msgstr ""
+
+#: includes/Admin/Views/WelcomeView.php:462
+msgid "Plugin Integrations"
+msgstr ""
+
+#: includes/Admin/Wizards/Embed-Wizard-Tooltip.php:16
+msgid "Add a Block"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:97
+#: includes/Admin/Wizards/Onboarding.php:98
+msgid "SearchWP Onboarding Wizard"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:183
+msgid "Close and Exit Wizard Without Saving"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:204
+msgid "Welcome to the SearchWP Setup Wizard!"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:205
+msgid "SearchWP makes it easy to configure your site`s search settings without the need to hire an expert. And it takes less than 10 minutes too! We pre-selected the most popular search sources to make it even faster!"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:211
+msgid "Sources enabled by default:"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:220
+msgid "Other searchable sources:"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:231
+msgid "To customize enabled search sources list click \"Make Changes\"."
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:232
+msgid "Click \"Accept Default\" if the default selection looks good to you. SearchWP will save the changes and automatically create a Search Form you can put anywhere on your site."
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:238
+msgid "Make Changes"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:239
+msgid "Accept Default"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:276
+msgid "Search Engine Configuration"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:277
+msgid "The SearchWP Default engine is already configured and currently powers your searches instead of the WP native search. Customize the sources for the Default engine below or select Custom sources to create a separate Supplemental engine."
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:283
+msgid "Default engine sources:"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:296
+msgid "Custom sources:"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:311
+msgid "SearchWP will save the changes and automatically create a customizable Search Form you can put anywhere on your site."
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:312
+msgid "A separate Supplemental engine will be created to handle the Custom sources. It will include all sources selected on this screen. To utilize the new engine use the Supplemental Search Form. SearchWP will automatically create this form for you."
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:318
+#: includes/Admin/Wizards/Onboarding.php:456
+#: includes/Admin/Wizards/Onboarding.php:556
+#: includes/Admin/Wizards/Onboarding.php:674
+#: includes/Admin/Wizards/Onboarding.php:743
+#: includes/Admin/Wizards/Onboarding.php:803
+msgid "Back"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:392
+msgid "SearchWP Integrations"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:393
+msgid "SearchWP deeply integrates with your existing WP themes and plugins!"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:397
+#: includes/Admin/Wizards/Onboarding.php:513
+msgid "Activated:"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:408
+#: includes/Admin/Wizards/Onboarding.php:524
+msgid "Recommended:"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:420
+#: includes/Admin/Wizards/Onboarding.php:536
+#: includes/Admin/Wizards/Onboarding.php:626
+#: includes/Admin/Wizards/Onboarding.php:705
+#: includes/Admin/Wizards/Onboarding.php:789
+msgid "PRO"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:433
+msgid "Currently your website doesn`t require any specific integrations, but SearchWP offers dedicated integration packages for many popular WP products:"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:444
+msgid "If you decide to use any of these products in the future, the integrations can be installed from the SearchWP Extensions page."
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:447
+msgid "SearchWP also provides powerful integrations with these WP products:"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:508
+msgid "SearchWP Features"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:509
+msgid "SearchWP has additional Feature packages to extend its functionality!"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:548
+msgid "SearchWP also provides more powerful extensions that can be installed from the Extensions menu:"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:616
+#: includes/Admin/Wizards/Onboarding.php:690
+#: includes/Admin/Wizards/Onboarding.php:767
+msgid "SearchWP License Key"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:620
+msgid "SearchWP license is required to unlock the following features:"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:631
+#: includes/Admin/Wizards/Onboarding.php:708
+msgid "IMPORTANT: You won`t have access to this functionality until the extensions have been unlocked and installed."
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:634
+msgid "An active license is needed to access new features & extensions, plugin updates (including security improvements), and our world class support!"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:640
+msgid "Already have a license? Simply enter your license key below!"
+msgstr ""
+
+#. translators: %1$s - Searchwp.com Account Dashboard URL; %2$s - SearchWP Pricing Page URL.
+#: includes/Admin/Wizards/Onboarding.php:654
+msgid "Your license key can be found in your <a href=\"%1$s\" target=\"_blank\" rel=\"noopener noreferrer\">SearchWP Account Dashboard</a>. Don’t have a license? <a href=\"%2$s\" target=\"_blank\" rel=\"noopener noreferrer\">Sign up today!</a>"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:675
+msgid "Skip this Step"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:693
+#: includes/Admin/Wizards/Onboarding.php:770
+msgid "SearchWP license is active!"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:702
+msgid "SearchWP Pro license is required to unlock the following features:"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:710
+msgid "Get access to SearchWP Pro extensions by upgrading your Standard license to Pro!"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:718
+msgid "To access SearchWP Pro features enter your Pro license key below."
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:722
+msgid "Verify Pro Key"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:730
+msgid "The following features are unlocked and will be installed/activated:"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:745
+msgid "Install Unlocked Only"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:748
+msgid "Skip Pro Installation"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:771
+msgid "Active license gives you access to new features, extensions, plugin updates (including security improvements), and our world class support!"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:775
+msgid "Your license key level is"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:783
+msgid "The following features will be installed and activated once you click \"Install Extensions\" button:"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:796
+msgid "Click Next to get to the final step!"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:805
+msgid "Install Extensions"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:844
+msgid "Congratulations, you`re all set!"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:845
+msgid "The Onboarding is completed: SearchWP configured Search Engines, created Search Forms and installed selected extensions for you."
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:848
+msgid "Here`s what we recommend to do next:"
+msgstr ""
+
+#. translators: %1$s - SearchWP Search Forms URL.
+#: includes/Admin/Wizards/Onboarding.php:855
+msgid "View and Embed your <a href=\"%1$s\" target=\"_blank\" rel=\"noopener noreferrer\">Search Forms</a>."
+msgstr ""
+
+#. translators: %1$s - SearchWP Templates URL.
+#: includes/Admin/Wizards/Onboarding.php:873
+msgid "Customize SearchWP <a href=\"%1$s\" target=\"_blank\" rel=\"noopener noreferrer\">Search Results Page</a>."
+msgstr ""
+
+#. translators: %1$s - SearchWP Algorithm URL.
+#: includes/Admin/Wizards/Onboarding.php:891
+msgid "Fine-tune your <a href=\"%1$s\" target=\"_blank\" rel=\"noopener noreferrer\">Search Engine</a> settings."
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:908
+msgid "Discover more powerful features by reading our blog:"
+msgstr ""
+
+#. translators: %1$s - Search Forms Documentation URL.
+#: includes/Admin/Wizards/Onboarding.php:915
+msgid "Read Search Forms <a href=\"%1$s\" target=\"_blank\" rel=\"noopener noreferrer\">documentation</a> to unlock its full potential."
+msgstr ""
+
+#. translators: %1$s - Live Autocomplete Article URL.
+#: includes/Admin/Wizards/Onboarding.php:933
+msgid "Check how you can add <a href=\"%1$s\" target=\"_blank\" rel=\"noopener noreferrer\">live autocomplete</a> to your search forms."
+msgstr ""
+
+#. translators: %1$s - Search PDF Article URL.
+#: includes/Admin/Wizards/Onboarding.php:951
+msgid "See how you can make your <a href=\"%1$s\" target=\"_blank\" rel=\"noopener noreferrer\">PDFs searchable</a>."
+msgstr ""
+
+#. translators: %1$s - Searchwp.com Account Support URL.
+#: includes/Admin/Wizards/Onboarding.php:972
+msgid "If you have questions, or need further assistance with the setup, let us know via <a href=\"%1$s\" target=\"_blank\" rel=\"noopener noreferrer\">Support Form</a>!"
+msgstr ""
+
+#: includes/Admin/Wizards/Onboarding.php:990
+msgid "Finish and go to the Search Forms"
+msgstr ""
+
+#: includes/Attribute.php:126
+#: includes/Attribute.php:134
+msgid "Missing data property for SearchWP Attribute:"
+msgstr ""
+
+#: includes/Attribute.php:127
+#: includes/Attribute.php:135
+msgid "SearchWP Attribute Error"
+msgstr ""
+
+#: includes/BackgroundProcess.php:72
+msgid "Every %d Minutes"
+msgstr ""
+
+#: includes/Debug/Console/Console.php:81
+msgid "SearchWP Debug"
+msgstr ""
+
+#: includes/Debug/Console/Console.php:128
+msgid "SearchWP Console"
+msgstr ""
+
+#: includes/Debug/Console/Console.php:130
+msgid "Close Console"
+msgstr ""
+
+#: includes/Debug/Console/Panels.php:85
+msgid "NO QUERIES"
+msgstr ""
+
+#: includes/Debug/Console/Panels.php:101
+msgid "Errors"
+msgstr ""
+
+#: includes/Debug/Console/Panels.php:107
+msgid "Logs"
+msgstr ""
+
+#: includes/Debug/Console/Panels.php:131
+msgid "String"
+msgstr ""
+
+#: includes/Debug/Console/Panels.php:138
+msgid "Tokens"
+msgstr ""
+
+#: includes/Debug/Console/Panels.php:148
+msgid "Phrase"
+msgstr ""
+
+#: includes/Debug/Console/Panels.php:158
+msgid "And"
+msgstr ""
+
+#: includes/Debug/Console/Panels.php:167
+msgid "Final"
+msgstr ""
+
+#: includes/Debug/Console/Panels.php:175
+msgid "Relevance"
+msgstr ""
+
+#: includes/Debug/Console/Panels.php:275
+#: includes/Debug/Console/Panels.php:657
+msgid "NONE"
+msgstr ""
+
+#: includes/Engine.php:75
+msgid "Invalid SearchWP engine name"
+msgstr ""
+
+#: includes/Engine.php:148
+msgid "Invalid SearchWP engine Source(s)"
+msgstr ""
+
+#: includes/Forms/Frontend.php:128
+msgid "Listening…"
+msgstr ""
+
+#: includes/Forms/Frontend.php:129
+msgid "Processing…"
+msgstr ""
+
+#: includes/Forms/Frontend.php:130
+msgid "No speech detected. Please try speaking again."
+msgstr ""
+
+#: includes/Forms/Frontend.php:131
+msgid "Microphone not found or unavailable."
+msgstr ""
+
+#: includes/Forms/Frontend.php:132
+msgid "Microphone permission denied. Please allow access."
+msgstr ""
+
+#: includes/Forms/Frontend.php:133
+msgid "Network error. Please check your connection."
+msgstr ""
+
+#: includes/Forms/Frontend.php:134
+msgid "Voice search cancelled."
+msgstr ""
+
+#: includes/Forms/Frontend.php:135
+msgid "Speech recognition service unavailable."
+msgstr ""
+
+#: includes/Forms/Frontend.php:136
+msgid "Voice search error. Please try again."
+msgstr ""
+
+#: includes/Forms/Frontend.php:349
+msgid "Filter by category"
+msgstr ""
+
+#: includes/Forms/Frontend.php:350
+msgid "Any Category"
+msgstr ""
+
+#: includes/Forms/Frontend.php:453
+msgid "Toggle advanced search options"
+msgstr ""
+
+#: includes/Forms/Frontend.php:463
+msgid "Advanced search filters"
+msgstr ""
+
+#: includes/Forms/Frontend.php:495
+#: includes/Summaries/Templates/summary-body.php:144
+msgid "Popular searches"
+msgstr ""
+
+#: includes/Forms/Frontend.php:532
+msgid "Filter by author"
+msgstr ""
+
+#: includes/Forms/Frontend.php:533
+msgid "Any Author"
+msgstr ""
+
+#: includes/Forms/Frontend.php:574
+msgid "Filter by tag"
+msgstr ""
+
+#: includes/Forms/Frontend.php:575
+msgid "Any Tag"
+msgstr ""
+
+#: includes/Forms/Frontend.php:633
+msgid "Filter by post type"
+msgstr ""
+
+#: includes/Forms/Frontend.php:634
+msgid "Any Post Type"
+msgstr ""
+
+#. translators: %d: Form id.
+#: includes/Forms/Storage.php:68
+msgid "Search Form %d"
+msgstr ""
+
+#: includes/Index/Controller.php:448
+#: includes/Utils.php:122
+msgid "Invalid SearchWP Source name"
+msgstr ""
+
+#. Translators: placeholder is a human readable time reference e.g. "ten hours"
+#: includes/Index/Controller.php:1257
+msgid "%s ago"
+msgstr ""
+
+#: includes/Index/Controller.php:1262
+msgid "Waiting in network queue"
+msgstr ""
+
+#: includes/Integrations/PageBuilderBlocks.php:148
+#: includes/Integrations/PageBuilderBlocks/Divi/Init.php:137
+msgid "Search Form"
+msgstr ""
+
+#: includes/Integrations/PageBuilderBlocks.php:149
+msgid "Form Settings"
+msgstr ""
+
+#: includes/Integrations/PageBuilderBlocks.php:150
+#: includes/Integrations/PageBuilderBlocks/Bricks/SearchForms.php:105
+msgid "Select Form"
+msgstr ""
+
+#: includes/Integrations/PageBuilderBlocks.php:151
+msgid "SearchWP Form"
+msgstr ""
+
+#: includes/Integrations/PageBuilderBlocks.php:152
+msgid "Select a search form from the settings."
+msgstr ""
+
+#: includes/Integrations/PageBuilderBlocks.php:153
+msgid "No forms available"
+msgstr ""
+
+#: includes/Integrations/PageBuilderBlocks.php:154
+msgid "Display a SearchWP search form."
+msgstr ""
+
+#: includes/Integrations/PageBuilderBlocks.php:156
+msgid "SearchWP Results"
+msgstr ""
+
+#: includes/Integrations/PageBuilderBlocks.php:157
+msgid "Results Settings"
+msgstr ""
+
+#: includes/Integrations/PageBuilderBlocks.php:158
+msgid "Results Template"
+msgstr ""
+
+#: includes/Integrations/PageBuilderBlocks.php:160
+#: assets/gutenberg/build/results-template/index.js:1
+#: assets/gutenberg/src/results-template/edit.js:64
+msgid "Search Engine"
+msgstr ""
+
+#: includes/Integrations/PageBuilderBlocks.php:161
+#: assets/gutenberg/build/results-template/index.js:1
+#: assets/gutenberg/src/results-template/edit.js:28
+#: assets/gutenberg/src/results-template/edit.js:48
+msgid "Set by Search Form"
+msgstr ""
+
+#: includes/Integrations/PageBuilderBlocks.php:162
+msgid "Search results are based on your form settings and typically don't require changes. Use this settings only if you need to override the form settings."
+msgstr ""
+
+#: includes/Integrations/PageBuilderBlocks.php:163
+#: includes/Integrations/PageBuilderBlocks/Breakdance/SearchResults/ssr.php:23
+msgid "Search results will appear here, based on the settings of the Search Form pointing to this page (see the Search Form's \"Target Page\" setting)."
+msgstr ""
+
+#: includes/Integrations/PageBuilderBlocks.php:164
+msgid "Display SearchWP search results."
+msgstr ""
+
+#. translators: %d: Form ID.
+#: includes/Integrations/PageBuilderBlocks.php:217
+msgid "Form #%d"
+msgstr ""
+
+#. translators: %d: Template ID.
+#: includes/Integrations/PageBuilderBlocks.php:245
+msgid "Template #%d"
+msgstr ""
+
+#. translators: %d: Engine ID.
+#: includes/Integrations/PageBuilderBlocks.php:273
+msgid "Engine #%d"
+msgstr ""
+
+#: includes/Integrations/PageBuilderBlocks/Bricks/SearchForms.php:101
+msgid "Search form"
+msgstr ""
+
+#: includes/Integrations/PageBuilderBlocks/Divi/Init.php:135
+msgid "Search results will appear here, based on the settings of the"
+msgstr ""
+
+#: includes/Integrations/PageBuilderBlocks/Divi/Init.php:136
+msgid "pointing to this page (see the Search Form's \"Target Page\" setting)."
+msgstr ""
+
+#: includes/License.php:187
+#: includes/License.php:327
+msgid "An error occurred, please try again."
+msgstr ""
+
+#. Translators: %s is the date the license expired.
+#: includes/License.php:343
+msgid "Your license key expired on %s"
+msgstr ""
+
+#: includes/License.php:350
+msgid "Your license key has been disabled"
+msgstr ""
+
+#: includes/License.php:354
+#: includes/License.php:378
+msgid "Invalid license"
+msgstr ""
+
+#: includes/License.php:359
+msgid "Your license is not active for this URL"
+msgstr ""
+
+#: includes/License.php:368
+msgid "Your license key has reached its activation limit"
+msgstr ""
+
+#: includes/License.php:372
+#: includes/License.php:376
+msgid "An error occurred, please try again"
+msgstr ""
+
+#: includes/License.php:391
+msgid "Lifetime license"
+msgstr ""
+
+#. Translators: First placeholder is the date of license expiration, second placeholder is the time until the license expires.
+#: includes/License.php:395
+msgid "Active until %s (%s)"
+msgstr ""
+
+#: includes/Mod.php:138
+msgid "\\SearchWP\\Mod cannot be instantiated until the wp_loaded action has fired."
+msgstr ""
+
+#: includes/Query.php:260
+msgid "\\SearchWP\\Query cannot be instantiated until the wp_loaded action has fired."
+msgstr ""
+
+#: includes/Query.php:274
+msgid "\\SearchWP\\Query cannot be instantiated until the initial settings have been saved."
+msgstr ""
+
+#: includes/Query.php:325
+msgid "Invalid SearchWP Engine"
+msgstr ""
+
+#: includes/Query.php:329
+msgid "Review SearchWP Documentation"
+msgstr ""
+
+#: includes/Query.php:492
+msgid "Invalid engine provided to \\SearchWP\\Query"
+msgstr ""
+
+#: includes/Rule.php:138
+msgid "Invalid name for SearchWP Rule:"
+msgstr ""
+
+#: includes/Rule.php:139
+#: includes/Rule.php:147
+msgid "SearchWP Rule Error"
+msgstr ""
+
+#: includes/Rule.php:146
+msgid "Missing application handler for SearchWP Rule:"
+msgstr ""
+
+#. Translators: Placeholder is the revised search string.
+#: includes/SearchWP.php:496
+msgid "Showing results for <em class=\"searchwp-suggested-revision-query\">%s</em>"
+msgstr ""
+
+#: includes/Source.php:311
+msgid "To Entry ID"
+msgstr ""
+
+#: includes/Source.php:337
+msgid "Transfer Weight"
+msgstr ""
+
+#: includes/Source.php:339
+msgid "When a %s entry matches a search, the designated entry in the weight transfer option will be displayed in its place. <a href=\"%s\" target=\"_blank\">View&nbsp;Docs</a>"
+msgstr ""
+
+#: includes/Sources/Attachment.php:30
+msgid "Document Content"
+msgstr ""
+
+#: includes/Sources/Attachment.php:45
+#: includes/Sources/Attachment.php:553
+msgid "PDF Metadata"
+msgstr ""
+
+#: includes/Sources/Attachment.php:61
+msgid "Image EXIF"
+msgstr ""
+
+#: includes/Sources/Attachment.php:90
+#: includes/Sources/Post.php:217
+msgid "Content"
+msgstr ""
+
+#: includes/Sources/Attachment.php:93
+#: includes/Sources/Post.php:267
+msgid "Excerpt"
+msgstr ""
+
+#: includes/Sources/Attachment.php:94
+msgid "Caption"
+msgstr ""
+
+#: includes/Sources/Attachment.php:168
+msgid "File Type"
+msgstr ""
+
+#: includes/Sources/Attachment.php:172
+msgid "All Documents"
+msgstr ""
+
+#: includes/Sources/Attachment.php:173
+msgid "PDFs"
+msgstr ""
+
+#: includes/Sources/Attachment.php:174
+msgid "Plain Text"
+msgstr ""
+
+#: includes/Sources/Attachment.php:175
+msgid "Images"
+msgstr ""
+
+#: includes/Sources/Attachment.php:176
+msgid "Videos"
+msgstr ""
+
+#: includes/Sources/Attachment.php:177
+msgid "Audio"
+msgstr ""
+
+#: includes/Sources/Attachment.php:178
+msgid "Office Documents"
+msgstr ""
+
+#: includes/Sources/Attachment.php:179
+msgid "OpenOffice Documents"
+msgstr ""
+
+#: includes/Sources/Attachment.php:180
+msgid "iWork Documents"
+msgstr ""
+
+#: includes/Sources/Attachment.php:268
+msgid "Filename"
+msgstr ""
+
+#: includes/Sources/Attachment.php:271
+msgid "Rule will apply if ANY part of the filename matches (includes upload path, excluding upload base, and is case-insensitive)"
+msgstr ""
+
+#: includes/Sources/Attachment.php:453
+msgid "SearchWP Document Content"
+msgstr ""
+
+#: includes/Sources/Attachment.php:463
+msgid "This document is currently in the index queue, but has not yet been processed by SearchWP."
+msgstr ""
+
+#: includes/Sources/Attachment.php:469
+msgid "Note: SearchWP was unable to extract content from this document."
+msgstr ""
+
+#: includes/Sources/Attachment.php:482
+msgid "The content below will be indexed for this file. If you are experiencing unexpected search results, ensure accuracy here."
+msgstr ""
+
+#: includes/Sources/Attachment.php:483
+msgid "If you edit this content and update this Attachment, the changes will persist and be indexed."
+msgstr ""
+
+#: includes/Sources/Attachment.php:501
+msgid "<strong>NOTE:</strong> This content is too long to display (%s). Here is a <strong>sample from the indexed content</strong>:"
+msgstr ""
+
+#: includes/Sources/Attachment.php:512
+msgid "To override this limit you must add the following to your theme's <code>functions.php</code> which will lift this limit:"
+msgstr ""
+
+#: includes/Sources/Attachment.php:557
+msgid "Key"
+msgstr ""
+
+#: includes/Sources/Comment.php:52
+msgid "Comments"
+msgstr ""
+
+#: includes/Sources/Comment.php:53
+#: includes/Sources/Comment.php:62
+msgid "Comment"
+msgstr ""
+
+#: includes/Sources/Comment.php:74
+msgid "Author Name"
+msgstr ""
+
+#: includes/Sources/Comment.php:81
+msgid "Author Email"
+msgstr ""
+
+#: includes/Sources/Comment.php:89
+#: includes/Sources/Post.php:288
+#: includes/Sources/Taxonomy.php:141
+#: includes/Sources/User.php:89
+msgid "Custom Fields"
+msgstr ""
+
+#: includes/Sources/Comment.php:91
+#: includes/Sources/Post.php:290
+#: includes/Sources/Taxonomy.php:143
+#: includes/Sources/User.php:91
+msgid "Tip: Match multiple keys using * as wildcard and hitting Enter"
+msgstr ""
+
+#. Translators: placeholder is singular post type label.
+#: includes/Sources/Comment.php:236
+#: includes/Sources/Post.php:457
+msgid "To %s Parent"
+msgstr ""
+
+#: includes/Sources/Comment.php:290
+msgid "Note: Comment relevance is automatically transferred to its parent, causing the Comment parent (e.g. post or page) to be returned as a result."
+msgstr ""
+
+#: includes/Sources/Comment.php:607
+#: includes/Sources/Post.php:1623
+msgid "Any Meta Key"
+msgstr ""
+
+#: includes/Sources/Post.php:73
+#: includes/Sources/Post.php:84
+msgid "Invalid post type for SearchWP Source Post:"
+msgstr ""
+
+#: includes/Sources/Post.php:74
+#: includes/Sources/Post.php:85
+msgid "SearchWP Source Error"
+msgstr ""
+
+#. Translators: %s is the plural label of a post type.
+#: includes/Sources/Post.php:136
+msgid "Note: by default %s are set to be excluded from search. Enabling %s overrides this."
+msgstr ""
+
+#: includes/Sources/Post.php:208
+msgid "Title"
+msgstr ""
+
+#: includes/Sources/Post.php:251
+#: includes/Sources/Taxonomy.php:133
+msgid "Slug"
+msgstr ""
+
+#: includes/Sources/Post.php:276
+msgid "Author"
+msgstr ""
+
+#: includes/Sources/Post.php:370
+msgid "Taxonomies"
+msgstr ""
+
+#. Translators: placeholder is singular post type label.
+#. Translators: placeholder is singular taxonomy label.
+#: includes/Sources/Post.php:432
+#: includes/Sources/Taxonomy.php:212
+msgid "To %s ID"
+msgstr ""
+
+#: includes/Sources/Post.php:664
+msgid "Taxonomy"
+msgstr ""
+
+#: includes/Sources/Post.php:719
+msgid "Publish Date"
+msgstr ""
+
+#: includes/Sources/Post.php:720
+msgid "Any strtotime()-compatible string e.g. \"6 months ago\""
+msgstr ""
+
+#: includes/Sources/Post.php:767
+msgid "Ancestor ID"
+msgstr ""
+
+#: includes/Sources/Post.php:768
+msgid "Ancestor and all descendants will apply to this Rule, comma separate multiple ancestors"
+msgstr ""
+
+#: includes/Sources/Post.php:794
+msgid "Post Parent ID"
+msgstr ""
+
+#: includes/Sources/Post.php:795
+msgid "Applies only to children, add another Rule to consider Post Parent itself if necessary"
+msgstr ""
+
+#: includes/Sources/User.php:52
+msgid "Users"
+msgstr ""
+
+#: includes/Sources/User.php:53
+#: includes/Sources/User.php:59
+#: includes/Summaries/Templates/summary-body.php:72
+msgid "User"
+msgid_plural "Users"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/Sources/User.php:69
+msgid "First Name"
+msgstr ""
+
+#: includes/Sources/User.php:79
+msgid "Last Name"
+msgstr ""
+
+#: includes/Sources/User.php:185
+msgid "Role"
+msgstr ""
+
+#: includes/Statistics.php:301
+msgid "No Results Searches"
+msgstr ""
+
+#: includes/Statistics.php:310
+msgid "Today"
+msgstr ""
+
+#: includes/Statistics.php:317
+msgid "This Month"
+msgstr ""
+
+#: includes/Statistics.php:324
+msgid "This Year"
+msgstr ""
+
+#: includes/Statistics.php:351
+msgid "No searches for this time period."
+msgstr ""
+
+#: includes/Statistics.php:360
+msgid "Count"
+msgstr ""
+
+#: includes/Summaries/Client.php:67
+msgid "Weekly"
+msgstr ""
+
+#: includes/Summaries/Client.php:68
+msgid "Periodic"
+msgstr ""
+
+#. translators: %1$s - interval label like 'Weekly' or 'Periodic', %2$s - site domain.
+#: includes/Summaries/Client.php:72
+msgid "Your %1$s SearchWP Summary for %2$s"
+msgstr ""
+
+#: includes/Summaries/Client.php:148
+msgid "Weekly SearchWP Email Summaries"
+msgstr ""
+
+#: includes/Summaries/Templates/summary-body.php:40
+msgid "Hi there!"
+msgstr ""
+
+#: includes/Summaries/Templates/summary-body.php:43
+msgid "week"
+msgstr ""
+
+#: includes/Summaries/Templates/summary-body.php:43
+msgid "period"
+msgstr ""
+
+#. translators: placeholder is an interval label like 'week' or 'period'.
+#: includes/Summaries/Templates/summary-body.php:47
+msgid "Let’s see how your site search performed in the past %s."
+msgstr ""
+
+#: includes/Summaries/Templates/summary-body.php:60
+msgid "Overview"
+msgstr ""
+
+#: includes/Summaries/Templates/summary-body.php:94
+msgid "Searches with no results"
+msgstr ""
+
+#: includes/Summaries/Templates/summary-body.php:105
+msgid "Result Viewed"
+msgid_plural "Results Viewed"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/Summaries/Templates/summary-body.php:116
+msgid "Average Searches per user"
+msgstr ""
+
+#: includes/Summaries/Templates/summary-body.php:127
+msgid "Average Clicks per search"
+msgstr ""
+
+#: includes/Summaries/Templates/summary-body.php:133
+msgid "There were no searches in the past week."
+msgstr ""
+
+#: includes/Summaries/Templates/summary-body.php:144
+msgid "Popular searches across all engines"
+msgstr ""
+
+#: includes/Summaries/Templates/summary-body.php:168
+msgid "It appears you do not have any popular search yet."
+msgstr ""
+
+#: includes/Summaries/Templates/summary-body.php:190
+msgid "Notification"
+msgstr ""
+
+#: includes/Summaries/Templates/summary-body.php:237
+msgid "Info"
+msgstr ""
+
+#. translators: %1$s - site URL, %2$s - link to the documentation.
+#: includes/Summaries/Templates/summary-footer.php:20
+msgid "This email was auto-generated and sent from %1$s. Learn <a href=\"%2$s\">how to disable.</a>"
+msgstr ""
+
+#: includes/Templates/Frontend.php:295
+msgid "No results found, please search again."
+msgstr ""
+
+#: includes/Templates/Frontend.php:441
+msgid "Found %total% results for %query%"
+msgstr ""
+
+#: includes/Templates/Frontend.php:491
+msgid "Results navigation"
+msgstr ""
+
+#: includes/Templates/Frontend.php:558
+msgid "Missing required parameters"
+msgstr ""
+
+#: includes/Templates/Frontend.php:573
+msgid "Invalid template ID"
+msgstr ""
+
+#: includes/Templates/Frontend.php:582
+msgid "Template not found"
+msgstr ""
+
+#. translators: %s is the search term.
+#: includes/Templates/Frontend.php:665
+#: includes/Templates/Frontend.php:693
+msgid "Search results for: %s"
+msgstr ""
+
+#. translators: %s is the URL to the Search Forms page.
+#: includes/Templates/Frontend.php:1210
+msgid "Search results will appear here, based on the settings of the <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\">Search Form</a> pointing to this page (see the Search Form's \"Target Page\" setting)."
+msgstr ""
+
+#. translators: %d: Form id.
+#: includes/Templates/Storage.php:84
+msgid "Results Template %d"
+msgstr ""
+
+#: includes/Upgrader.php:261
+msgid "Default"
+msgstr ""
+
+#: includes/Utils.php:115
+msgid "Invalid post type"
+msgstr ""
+
+#: includes/Utils.php:288
+msgid "Baseline Relevance"
+msgstr ""
+
+#: includes/Utils.php:289
+msgid "Increased Relevance"
+msgstr ""
+
+#: includes/Utils.php:290
+msgid "Highest Relevance"
+msgstr ""
+
+#: includes/Utils.php:2025
+msgid "Not indexed"
+msgstr ""
+
+#. Translators: 1st placeholder is how long ago an entry was indexed.
+#: includes/Utils.php:2029
+msgid "Indexed %1$s ago"
+msgstr ""
+
+#. Translators: 1st placeholder is how long ago an entry was queued.
+#: includes/Utils.php:2035
+msgid "Queued for indexing %1$s ago"
+msgstr ""
+
+#. Translators: 1st placeholder is how long ago an entry was omitted.
+#: includes/Utils.php:2041
+msgid "Omitted from indexing %1$s ago"
+msgstr ""
+
+#: index.php:43
+msgid "SearchWP requires PHP 7.2 or higher and as a result has been deactivated. Please contact your host to upgrade PHP before activating this plugin."
+msgstr ""
+
+#: index.php:77
+msgid "SearchWP requires WordPress 5.3 or higher and as a result has been deactivated. Please upgrade WordPress before activating this plugin."
+msgstr ""
+
+#. Translators: placeholder is the number "1"
+#: index.php:90
+msgid "SearchWP requires %s %s or higher and as a result has been deactivated. Please contact your host to upgrade %s before activating this plugin."
+msgstr ""
+
+#: assets/gutenberg/build/results-template/index.js:1
+#: assets/gutenberg/src/results-template/edit.js:10
+msgid "Search results are based on your form settings and typically don't require changes. Use the settings below only if you need to override the form settings."
+msgstr ""
+
+#: assets/gutenberg/build/results-template/index.js:1
+#: assets/gutenberg/src/results-template/edit.js:19
+msgid "Untitled Template"
+msgstr ""
+
+#: assets/gutenberg/build/results-template/index.js:1
+#: assets/gutenberg/src/results-template/edit.js:55
+msgid "Overrides"
+msgstr ""
+
+#: assets/gutenberg/build/search-form/index.js:1
+#: assets/gutenberg/src/search-form/edit.js:35
+msgid "Select a Form"
+msgstr ""
+
+#: assets/gutenberg/build/exclude-ui-preview/block.json
+#: assets/gutenberg/src/exclude-ui-preview/block.json
+msgctxt "block title"
+msgid "SearchWP Exclude UI Preview"
+msgstr ""
+
+#: assets/gutenberg/build/exclude-ui-preview/block.json
+#: assets/gutenberg/build/search-form/block.json
+#: assets/gutenberg/src/exclude-ui-preview/block.json
+#: assets/gutenberg/src/search-form/block.json
+msgctxt "block description"
+msgid "The best WordPress search you can find."
+msgstr ""
+
+#: assets/gutenberg/build/results-template/block.json
+#: assets/gutenberg/src/results-template/block.json
+msgctxt "block title"
+msgid "SearchWP Results"
+msgstr ""
+
+#: assets/gutenberg/build/results-template/block.json
+#: assets/gutenberg/src/results-template/block.json
+msgctxt "block description"
+msgid "Display SearchWP search results with a customizable template."
+msgstr ""
+
+#: assets/gutenberg/build/search-form/block.json
+#: assets/gutenberg/src/search-form/block.json
+msgctxt "block title"
+msgid "SearchWP Form"
 msgstr ""
