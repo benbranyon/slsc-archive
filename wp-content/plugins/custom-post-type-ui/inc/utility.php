@@ -558,7 +558,7 @@ add_filter( 'cptui_ads', 'cptui_default_ads' );
 /**
  * Adjust an ad URL's utm_source for the placement it's being rendered in.
  *
- * @since 1.19.1
+ * @since 1.20.0
  *
  * @param string $url       Original ad URL.
  * @param string $placement Placement key. Either 'sidebar' or 'about'.
@@ -574,7 +574,7 @@ function cptui_promo_url_for_placement( $url, $placement ) {
 /**
  * Render the large CPT UI Pro hero promo card.
  *
- * @since 1.19.1
+ * @since 1.20.0
  *
  * @param array  $ad        Ad data.
  * @param string $placement Placement context. Either 'sidebar' or 'about'.
@@ -625,7 +625,7 @@ function cptui_render_ad_hero( $ad, $placement = 'sidebar' ) {
  * Falls back to legacy image rendering for any third-party-filtered ads
  * that still use the old [ url, image, text ] shape.
  *
- * @since 1.19.1
+ * @since 1.20.0
  *
  * @param array  $ad        Ad data.
  * @param string $placement Placement context. Either 'sidebar' or 'about'.
@@ -1195,7 +1195,7 @@ function cptui_add_dialog_delete_content_type_confirm() {
 /**
  * Output a CPT UI Pro upsell message for use with admin notifications in "Add new ..." tab.
  *
- * @since 1.19.1
+ * @since 1.20.0
  *
  * @return string
  */
@@ -1211,7 +1211,7 @@ function cptui_add_new_pro_upsell_messaging() {
 /**
  * Output a CPT UI Pro upsell message for use with admin notifications in WP_List_Table views.
  *
- * @since 1.19.1
+ * @since 1.20.0
  *
  * @param string $post_type_slug
  *
@@ -1234,7 +1234,7 @@ function cptui_post_type_list_pro_upsell_messaging( $post_type_slug ) {
 /**
  * Conditionally output an admin notification for our CPT UI Pro upsell.
  *
- * @since 1.19.1
+ * @since 1.20.0
  */
 function cptui_pro_upsell_notification() {
 
@@ -1293,7 +1293,7 @@ function cptui_pro_upsell_notification() {
 /**
  * Whether the current user has dismissed the CPT UI Pro upsell notice.
  *
- * @since 1.19.1
+ * @since 1.20.0
  *
  * @return bool
  */
@@ -1315,7 +1315,7 @@ add_action( 'admin_notices', 'cptui_pro_upsell_notification', 11 );
  * editor screens for CPTUI-registered post types and only when CPT UI Pro is
  * not already active.
  *
- * @since 1.19.1
+ * @since 1.20.0
  */
 function cptui_enqueue_pro_panel_assets() {
 	if ( ! current_user_can( 'manage_options' ) ) {
@@ -1369,7 +1369,7 @@ add_action( 'enqueue_block_editor_assets', 'cptui_enqueue_pro_panel_assets' );
 /**
  * Register REST route used by the block editor panel to dismiss the Pro upsell.
  *
- * @since 1.19.1
+ * @since 1.20.0
  */
 function cptui_register_pro_panel_rest_route() {
 	register_rest_route(
@@ -1389,7 +1389,7 @@ add_action( 'rest_api_init', 'cptui_register_pro_panel_rest_route' );
 /**
  * REST callback that marks the Pro upsell as dismissed for the current user.
  *
- * @since 1.19.1
+ * @since 1.20.0
  *
  * @return WP_REST_Response
  */

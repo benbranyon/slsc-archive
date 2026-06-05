@@ -107,7 +107,7 @@ function cptui_settings() {
  * Hooked at priority 5 so it renders above the smaller "More from WebDevStudios"
  * ad row from cptui_pluginize_content() (priority 9).
  *
- * @since 1.19.1
+ * @since 1.20.0
  */
 function cptui_pro_callout_content() {
 
