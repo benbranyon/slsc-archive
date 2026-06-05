@@ -420,9 +420,10 @@ END
 
 	private function get_2fa_management_assets($embedded = false) {
 		$assets = array(
+			Model_Script::create('jquery-ui-dialog')->setRegistered(),
 			Model_Script::create('wordfence-ls-jquery.qrcode', Model_Asset::js('jquery.qrcode.min.js'), array('jquery'), WORDFENCE_LS_VERSION),
 		);
-		$assets[] = Model_Script::create('wordfence-ls-admin', Model_Asset::js('admin.js'), array('jquery'), WORDFENCE_LS_VERSION)
+		$assets[] = Model_Script::create('wordfence-ls-admin', Model_Asset::js('admin.js'), array('jquery', 'jquery-ui-dialog'), WORDFENCE_LS_VERSION)
 			->withTranslation('You have unsaved changes to your options. If you leave this page, those changes will be lost.', __('You have unsaved changes to your options. If you leave this page, those changes will be lost.', 'wordfence'))
 			->setTranslationObjectName('WFLS_ADMIN_TRANSLATIONS');
 		$registered = array(
@@ -434,10 +435,11 @@ END
 			$this->management_assets_registered = true;
 		}
 		$assets = array_merge($assets, $registered);
-		$assets[] = Model_Style::create('wordfence-ls-admin', Model_Asset::css('admin.css'), array(), WORDFENCE_LS_VERSION);
+		$assets[] = Model_Style::create('wp-jquery-ui-dialog')->setRegistered();
+		$assets[] = Model_Style::create('dashicons')->setRegistered();
+		$assets[] = Model_Style::create('wordfence-ls-admin', Model_Asset::css('admin.css'), array('wp-jquery-ui-dialog', 'dashicons'), WORDFENCE_LS_VERSION);
 		$assets[] = Model_Style::create('wordfence-ls-ionicons', Model_Asset::css('ionicons.css'), array(), WORDFENCE_LS_VERSION);
 		if ($embedded) {
-			$assets[] = Model_Style::create('dashicons');
 			$assets[] = Model_Style::create('wordfence-ls-embedded', Model_Asset::css('embedded.css'), array(), WORDFENCE_LS_VERSION);
 		}
 		else {
@@ -457,8 +459,6 @@ END
 
 	private function enqueue_2fa_management_assets($embedded = false) {
 		if ($this->management_assets_enqueued) { return; }
-		wp_enqueue_script('jquery-ui-dialog');
-		wp_enqueue_style('wp-jquery-ui-dialog');
 		foreach ($this->get_2fa_management_assets($embedded) as $asset) {
 			$asset->enqueue();
 		}

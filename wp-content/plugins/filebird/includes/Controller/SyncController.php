@@ -8,6 +8,13 @@ use FileBird\Model\Folder as FolderModel;
 
 class SyncController {
 	public function exportCSV( \WP_REST_Request $request ) {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return new \WP_Error( 
+				'rest_forbidden', 
+				__( 'Sorry, you are not allowed to export CSV.', 'filebird' ), 
+				array( 'status' => rest_authorization_required_code() ) 
+			);
+		}
 		$id = $request->get_param( 'id' );
 		if( !empty( $id ) ) {
 			$folders = get_option( 'filebird_backup_' . $id, array() );
@@ -120,6 +127,13 @@ class SyncController {
     }
 
     public function importCSV( \WP_REST_Request $request ) {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return new \WP_Error( 
+				'rest_forbidden', 
+				__( 'Sorry, you are not allowed to import CSV.', 'filebird' ), 
+				array( 'status' => rest_authorization_required_code() ) 
+			);
+		}
 		$data      = $this->readCSV( $request );
 		$createdBy = intval( $request->get_param( 'userId' ) );
 
@@ -138,6 +152,13 @@ class SyncController {
 	}
 
 	public function getImportCSVDetail( \WP_REST_Request $request ) {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return new \WP_Error( 
+				'rest_forbidden', 
+				__( 'Sorry, you are not allowed to get import CSV detail.', 'filebird' ), 
+				array( 'status' => rest_authorization_required_code() ) 
+			);
+		}
 		$data = $this->readCSV( $request );
 
 		$users = \get_users(

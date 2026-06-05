@@ -4790,7 +4790,7 @@ HTACCESS;
 		return array(
 			'ok'                  => 1,
 			'lastMessage'		  		=> $lastMessage,
-			'items'               => self::getLog()->getStatusEvents($_POST['lastctime']),
+			'items'               => isset($_POST['lastid']) ? self::getLog()->getStatusEvents(intval($_POST['lastid'])) : array(),
 			'currentScanID'       => wfScanner::shared()->lastScanTime(),
 			'signatureUpdateTime' => wfConfig::get('signatureUpdateTime'),
 			'scanFailed' 			  	=> $scanFailed,
@@ -6612,9 +6612,11 @@ JQUERY;
 		}
 	}
 	public static function menu_tools() {
+		$wrap = array();
 		$subpage = filter_input(INPUT_GET, 'subpage');
 		switch ($subpage) {
 			case 'livetraffic':
+				$wrap[] = 'wrap-fluid';
 				$content = self::_menu_tools_livetraffic();
 				break;
 				
@@ -6642,6 +6644,7 @@ JQUERY;
 				}
 				else {
 					$subpage = 'livetraffic';
+					$wrap[] = 'wrap-fluid';
 					$content = self::_menu_tools_livetraffic();
 				}
 		}

@@ -1,10 +1,10 @@
 === FileBird - WordPress Media Library Folders & File Manager ===
 Contributors: ninjateam
 Donate link: https://ninjateam.org/wordpress-media-library-folders/ 
-Tags: wordpress media library folders, wp media folders, media, media folders, file manager
+Tags: wordpress media library folders, organization, media, media folders, file manager
 Requires at least: 3.0
-Tested up to: 6.9
-Stable tag: 6.5.2
+Tested up to: 7.0
+Stable tag: 6.5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,7 +14,7 @@ Organize thousands of WordPress media files in folders / categories with ease.
 
 **#1 Best plugin of all time to categorize WordPress media library with folders.**
 
-Let's organize WordPress media library folders using a drag and drop organizer.
+✨**NEW!** Let's organize WordPress pages & posts using a drag and drop organizer.
 
 [**TEST DRIVE**](https://media-folder.ninjateam.org/create/) | [**GO PRO (Lifetime License)**](https://1.envato.market/FileBird-Premium) 💎
 
@@ -32,7 +32,7 @@ FileBird allows you to create virtual folders to [categorize your WordPress medi
 
 With FileBird, you can save time on WP media management, search for any files & folders, sort them out, add product image gallery, download/export media folders, etc. That’s a great way to boost your admin workflow and productivity.
 
-**NEW - Folder Tree Themes (PRO)**
+**Folder Tree Themes (PRO)**
 Instead of the traditional gray shade of folder icon, now you can transform your "Folderella" into **Dropbox** theme or **Windows 11** styling.
 
 **Download Media Folder (PRO)**
@@ -206,8 +206,22 @@ Happy Organizing! 😍
 7. Upload files to a specific folder
 8. FileBird gallery block settings
 
-
 == Changelog ==
+
+= May 22, 2026 – Version 6.5.4 =
+- Fixed: UI issues in WordPress 7.0
+- Fixed: Translation strings in several languages
+- Improved: UI elements in the Tools screen
+
+= May 11, 2026 - Version 6.5.3 =
+- Added: Folders for post/page (1 level folder supported) in FileBird free version
+- Added: File counter in both parent folder and subfolders in FileBird free version
+- Updated: Remove Document Library settings 
+- Updated: Hide "Create first folders" 3 months when user dismisses it
+- Improved: Compatible with WordPress 7.0
+- Improved: Compatible with FIFU plugin
+- Fixed: Block layout issue
+- Fixed: CSS issue on Zen Browser
 
 = Dec 5, 2025 - Version 6.5.2 =
 - Added: Auto rename when add new folder and it's name exists

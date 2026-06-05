@@ -27,7 +27,7 @@ else {
 	define('WORDFENCE_LS_FROM_CORE', ($wfCoreActive && isset($wfCoreLoading) && $wfCoreLoading));
 	
 	define('WORDFENCE_LS_VERSION', '1.1.16');
-	define('WORDFENCE_LS_BUILD_NUMBER', '1778081072');
+	define('WORDFENCE_LS_BUILD_NUMBER', '1778685035');
 
 	define('WORDFENCE_LS_PLUGIN_BASENAME', plugin_basename(__FILE__));
 	

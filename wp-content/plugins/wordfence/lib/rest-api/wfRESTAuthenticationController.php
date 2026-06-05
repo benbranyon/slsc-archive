@@ -35,11 +35,6 @@ class wfRESTAuthenticationController {
 			'callback' => array($this, 'authenticate'),
 			'permission_callback' => '__return_true',
 		));
-		register_rest_route('wordfence/v1', '/authenticate-premium', array(
-			'methods'  => WP_REST_Server::CREATABLE,
-			'callback' => array($this, 'authenticatePremium'),
-			'permission_callback' => '__return_true',
-		));
 	}
 
 	/**
@@ -114,70 +109,4 @@ class wfRESTAuthenticationController {
 		));
 		return $response;
 	}
-
-	/**
-	 * @param WP_REST_Request $request
-	 * @return mixed|WP_REST_Response
-	 */
-	public function authenticatePremium($request) {
-		require_once(WORDFENCE_PATH . '/lib/sodium_compat_fast.php');
-
-		// verify signature.
-		$data = $request->get_param('data');
-		$dataChunks = explode('|', $data, 2);
-		if (count($dataChunks) !== 2) {
-			return new WP_Error('rest_forbidden_context',
-				__('Data is invalid.', 'wordfence'),
-				array('status' => rest_authorization_required_code()));
-		}
-		if (!preg_match('/[0-9a-f]{64}/i', $dataChunks[0])) {
-			return new WP_Error('rest_forbidden_context',
-				__('Nonce format is invalid.', 'wordfence'),
-				array('status' => rest_authorization_required_code()));
-		}
-		if (!is_email($dataChunks[1])) {
-			return new WP_Error('rest_forbidden_context',
-				__('Email address is invalid.', 'wordfence'),
-				array('status' => rest_authorization_required_code()));
-		}
-
-		$adminEmail = $dataChunks[1];
-
-		$signature = $request->get_param('signature');
-		$nonce1 = self::generateNonce();
-		$nonce2 = self::generateNonce(-1);
-		$verfiedNonce = hash_equals($nonce1, $dataChunks[0]) || hash_equals($nonce2, $dataChunks[0]);
-
-		if (!$verfiedNonce) {
-			return new WP_Error('rest_forbidden_context',
-				__('Nonce is invalid.', 'wordfence'),
-				array('status' => rest_authorization_required_code()));
-		}
-		$signature = pack('H*', $signature);
-		if (!ParagonIE_Sodium_Compat::crypto_sign_verify_detached($signature, $data, WORDFENCE_CENTRAL_PUBLIC_KEY)) {
-			return new WP_Error('rest_forbidden_context',
-				__('Signature is invalid.', 'wordfence'),
-				array('status' => rest_authorization_required_code()));
-		}
-
-		$user_query = new WP_User_Query(array(
-			'role'           => 'administrator',
-			'search'         => $adminEmail,
-			'search_columns' => array('user_email')
-		));
-		$users = $user_query->get_results();
-		if (is_array($users) && count($users) === 1) {
-			$jwt = new wfJWT('wordfence-central-premium');
-			$jwt->addClaims(array('email' => $adminEmail));
-			$response = rest_ensure_response(array(
-				'token' => (string) $jwt,
-			));
-			return $response;
-		}
-
-		return new WP_Error('rest_forbidden_context',
-			__('Admin user with this email address not found.', 'wordfence'),
-			array('status' => rest_authorization_required_code()));
-	}
-
 }

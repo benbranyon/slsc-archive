@@ -29,29 +29,6 @@ abstract class wfRESTBaseController {
 
 	/**
 	 * @param WP_REST_Request $request
-	 * @return WP_Error|bool
-	 */
-	public function verifyTokenPremium($request) {
-		$validToken = $this->isTokenValid($request);
-
-		if ($validToken &&
-			!is_wp_error($validToken) &&
-			$this->tokenData['body']['sub'] === 'wordfence-central-premium'
-		) {
-			return true;
-		}
-
-		if (is_wp_error($validToken)) {
-			return $validToken;
-		}
-
-		return new WP_Error('rest_forbidden_context',
-			__('Token is invalid.', 'wordfence'),
-			array('status' => rest_authorization_required_code()));
-	}
-
-	/**
-	 * @param WP_REST_Request $request
 	 * @return bool|WP_Error
 	 */
 	public function isTokenValid($request) {

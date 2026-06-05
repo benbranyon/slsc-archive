@@ -59,11 +59,6 @@ class wfRESTConfigController extends wfRESTBaseController {
 			'callback'            => array($this, 'disconnect'),
 			'permission_callback' => array($this, 'verifyToken'),
 		));
-		register_rest_route('wordfence/v1', '/premium-connect', array(
-			'methods'             => WP_REST_Server::EDITABLE,
-			'callback'            => array($this, 'premiumConnect'),
-			'permission_callback' => array($this, 'verifyTokenPremium'),
-		));
 	}
 
 	/**
@@ -313,38 +308,6 @@ class wfRESTConfigController extends wfRESTBaseController {
 		self::disconnectConfig(!empty($this->tokenData['adminEmail']) ? $this->tokenData['adminEmail'] : self::WF_CENTRAL_USER_MARKER);
 		return rest_ensure_response(array(
 			'success' => true,
-		));
-	}
-
-	/**
-	 * @param WP_REST_Request $request
-	 * @return mixed|WP_REST_Response
-	 */
-	public function premiumConnect($request) {
-		require_once(WORDFENCE_PATH . '/lib/sodium_compat_fast.php');
-
-		// Store values sent by Central.
-		$wordfenceCentralPK = $request['public-key'];
-		$wordfenceCentralSiteData = $request['site-data'];
-		$wordfenceCentralSiteID = $request['site-id'];
-
-		$keypair = ParagonIE_Sodium_Compat::crypto_sign_keypair();
-		$publicKey = ParagonIE_Sodium_Compat::crypto_sign_publickey($keypair);
-		$secretKey = ParagonIE_Sodium_Compat::crypto_sign_secretkey($keypair);
-		wfConfig::set('wordfenceCentralSecretKey', $secretKey);
-
-		wfConfig::set('wordfenceCentralConnected', 1);
-		wfConfig::set('wordfenceCentralCurrentStep', 6);
-		wfConfig::set('wordfenceCentralPK', pack("H*", $wordfenceCentralPK));
-		wfConfig::set('wordfenceCentralSiteData', json_encode($wordfenceCentralSiteData));
-		wfConfig::set('wordfenceCentralSiteID', $wordfenceCentralSiteID);
-		wfConfig::set('wordfenceCentralConnectTime', time());
-		wfConfig::set('wordfenceCentralConnectEmail', !empty($this->tokenData['adminEmail']) ? $this->tokenData['adminEmail'] : null);
-
-		// Return values created by Wordfence.
-		return rest_ensure_response(array(
-			'success'    => true,
-			'public-key' => ParagonIE_Sodium_Compat::bin2hex($publicKey),
 		));
 	}
 }
