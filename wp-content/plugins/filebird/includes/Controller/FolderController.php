@@ -54,6 +54,14 @@ class FolderController extends Controller {
 	}
 
 	public function createFolder( \WP_REST_Request $request ) {
+		if ( ! current_user_can( 'upload_files' ) ) {
+			return new \WP_Error( 
+				'rest_forbidden', 
+				__( 'Sorry, you are not allowed to manage folders.', 'filebird' ), 
+				array( 'status' => rest_authorization_required_code() ) 
+			);
+		}
+
 		$name   = $request->get_param( 'title' );
 		$parent = $request->get_param( 'parent' );
 		$name   = isset( $name ) ? sanitize_text_field( wp_unslash( $name ) ) : '';
@@ -61,7 +69,7 @@ class FolderController extends Controller {
 		if ( $name != '' && $parent != '' ) {
 			$insert = FolderModel::newUniqueFolder( $name, $parent );
 			if ( $insert !== false ) {
-				return rest_ensure_response( $insert );
+				return rest_ensure_response( array( $insert ) );
 			} else {
 				return new \WP_Error( 'folder_name_exist', __( 'A folder with this name already exists. Please choose another one.', 'filebird' ) );
 			}
@@ -71,6 +79,13 @@ class FolderController extends Controller {
 	}
 
 	public function updateFolder( \WP_REST_Request $request ) {
+		if ( ! current_user_can( 'upload_files' ) ) {
+			return new \WP_Error( 
+				'rest_forbidden', 
+				__( 'Sorry, you are not allowed to manage folders.', 'filebird' ), 
+				array( 'status' => rest_authorization_required_code() ) 
+			);
+		}
 		$id     = $request->get_param( 'id' );
 		$parent = $request->get_param( 'parent' );
 		$name   = $request->get_param( 'title' );
@@ -96,6 +111,13 @@ class FolderController extends Controller {
 	public function updateFolderOrder( \WP_REST_Request $request ) {
 		global $wpdb;
 
+		if ( ! current_user_can( 'upload_files' ) ) {
+			return new \WP_Error( 
+				'rest_forbidden', 
+				__( 'Sorry, you are not allowed to manage folders.', 'filebird' ), 
+				array( 'status' => rest_authorization_required_code() ) 
+			);
+		}
 		$data = array(
 			'dropPosition' => $request->get_param( 'dropPosition' ),
 			'dropNodeId'   => $request->get_param( 'dropNodeId' ),
@@ -283,6 +305,13 @@ class FolderController extends Controller {
 	}
 
 	public function deleteFolder( \WP_REST_Request $request ) {
+		if ( ! current_user_can( 'upload_files' ) ) {
+			return new \WP_Error( 
+				'rest_forbidden', 
+				__( 'Sorry, you are not allowed to manage folders.', 'filebird' ), 
+				array( 'status' => rest_authorization_required_code() ) 
+			);
+		}
 		$ids  = $request->get_param( 'ids' );
 		$lang = sanitize_key( $request->get_param( 'language' ) );
 
@@ -306,6 +335,13 @@ class FolderController extends Controller {
 	}
 
 	public function assignFolder( \WP_REST_Request $request ) {
+		if ( ! current_user_can( 'upload_files' ) ) {
+			return new \WP_Error( 
+				'rest_forbidden', 
+				__( 'Sorry, you are not allowed to manage folders.', 'filebird' ), 
+				array( 'status' => rest_authorization_required_code() ) 
+			);
+		}
 		$folderId = $request->get_param( 'folderId' );
 		$ids      = $request->get_param( 'ids' );
 		$lang     = sanitize_key( $request->get_param( 'language' ) );

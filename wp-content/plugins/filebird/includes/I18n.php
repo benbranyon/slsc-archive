@@ -6,11 +6,21 @@ defined( 'ABSPATH' ) || exit;
  * I18n Logic
  */
 class I18n {
+	private static $loaded = false;
 	public function __construct() {
-		add_action( 'init', array( $this, 'loadPluginTextdomain' ) );
+		if ( did_action( 'init' ) ) {
+			// init already fired (e.g. REST/AJAX context): load immediately.
+			$this->loadPluginTextdomain();
+		} else {
+			add_action( 'init', array( $this, 'loadPluginTextdomain' ) );
+		}
 	}
 
 	public function loadPluginTextdomain() {
+		if ( self::$loaded ) {
+			return;
+		}
+		self::$loaded = true;
 		if ( function_exists( 'determine_locale' ) ) {
 			$locale = determine_locale();
 		} else {
@@ -18,8 +28,7 @@ class I18n {
 		}
 		unload_textdomain( 'filebird' );
 		load_textdomain( 'filebird', WP_LANG_DIR . '/plugins/filebird-' . $locale . '.mo' );
-		load_plugin_textdomain( 'filebird', false, NJFB_PLUGIN_PATH . '/i18n/languages/' );
-	}
+		load_plugin_textdomain( 'filebird', false, dirname( plugin_basename( NJFB_PLUGIN_FILE ) ) . '/i18n/languages/' );	}
 
 	public static function getTranslation() {
 		$translation = array(
@@ -199,7 +208,7 @@ class I18n {
 			<a
 			  target="_blank"
 			  href="https://ninjateam.gitbook.io/filebird/integrations/developer-zone/apis"
-			  rel="noreferrer"
+			  rel="noreferrer noopener"
 			>here</a>.',
                 'filebird'
                 ),
@@ -244,7 +253,7 @@ class I18n {
 			'display_folder_id'                 => __( 'Display folder ID', 'filebird' ),
 			'hide_folder_id'                    => __( 'Hide folder ID', 'filebird' ),
 			'active_your_license'               => __( 'Activate Your License!', 'filebird' ),
-			'explore_filebird'                  => __( 'Explore the best of FileBird', 'filebird' ),
+			'explore_filebird'                  => __( 'Explore the best of FileBird:', 'filebird' ),
 			'feature_1'                         => __( 'Download entire folders in ZIP', 'filebird' ),
 			'feature_2'                         => __( 'Advanced third-party compatibility', 'filebird' ),
 			'feature_3'                         => __( 'Sort files and folders', 'filebird' ),
@@ -283,13 +292,17 @@ class I18n {
 			'document_library'                  => __( 'Document Library', 'filebird' ),
 			'enable_cache_optimization'         => __( 'Enable cache optimization', 'filebird' ),
 			'select_theme'                      => __( 'Select theme', 'filebird' ),
-			'by'                                => __( 'By', 'filebird' ),
-			'lifetime_license'                  => __( 'Lifetime license', 'filebird' ),
+			'lifetime_license'                  => __( 'Lifetime License', 'filebird' ),
 			'pro'                               => __( 'PRO', 'filebird' ),
 			'no_folders_export'                 => __( 'There are no folders to export.', 'filebird' ),
 			'searching_folder_api'              => __( 'Switch from searching using JavaScript to using an API', 'filebird' ),
+			'enable_search_api'                 => __( 'Enable searching for folder names using API', 'filebird' ),
 			'folders_for_media_library'         => __( 'Folders for media library', 'filebird' ),
 			'folders_for_post_types'            => __( 'Folders for post types', 'filebird' ),
+			'select_post_types_scan'            => __( 'Select post types to scan', 'filebird' ),
+			'scan'                              => __( 'Scan', 'filebird' ),
+			'search'                            => __( 'Search', 'filebird' ),
+			'no_posts_found'                    => __( 'No posts found!', 'filebird' ),
 		);
 		return $translation;
 	}

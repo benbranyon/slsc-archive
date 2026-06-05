@@ -68,8 +68,14 @@ $styles  = '--columns: ' . esc_attr( $attributes['columns'] ) . ';';
 $styles .= '--space: ' . esc_attr( $attributes['spaceAroundImage'] ) . 'px;';
 $styles .= '--min-width: ' . esc_attr( $attributes['imgMinWidth'] ) . 'px;';
 
-$html  = '';
-$html .= '<ul class="' . esc_attr( $ulClass ) . '" style="' . $styles . '">';
+$html = '';
+$wrapper_attributes = get_block_wrapper_attributes(
+	array(
+		'class' => $ulClass,
+		'style' => $styles,
+	)
+);
+$html .= '<ul ' . $wrapper_attributes . '>';
 
 $lis = array();
 foreach ( $posts as $post ) {

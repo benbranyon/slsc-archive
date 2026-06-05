@@ -205,11 +205,8 @@ class Folder {
         global $wpdb;
 		$check_author = apply_filters( 'fbv_will_check_author', true );
         
-		// Build WHERE conditions to match getCount() behavior
 		$where_conditions = array( "posts.post_status != 'trash'" );
-		
-		// Apply same filters as getCount() to exclude Elementor screenshots and other excluded items
-		$where_conditions = apply_filters( 'fbv_get_count_where_query', $where_conditions );
+		$where_conditions = array_merge( $where_conditions, Helpers::buildExclusionConditions() );
 		
 		// Convert array to string for WHERE clause
 		$where_clause = implode( ' AND ', $where_conditions );
@@ -409,7 +406,7 @@ class Folder {
 	 */
 	public static function findUniqueFolderName( $base_name, $parent, $folder_id = null, $counter = 1 ) {
 		global $wpdb;
-		$max_attempts = 1000; // Safety limit to prevent infinite loop
+		$max_attempts = 15; // Safety limit to prevent infinite loop
 		
 		while ( $counter <= $max_attempts ) {
 			$new_name = $base_name . ' (' . $counter . ')';
