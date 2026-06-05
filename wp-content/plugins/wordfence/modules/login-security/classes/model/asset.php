@@ -18,22 +18,19 @@ abstract class Model_Asset {
 	}
 
 	public function getSourceUrl() {
-		if (empty($this->source))
-			return null;
-		$url = $this->source;
-		if (is_string($this->version))
-			$url = add_query_arg('ver', $this->version, $this->source);
-		return $url;
+		return $this->buildSourceUrl();
 	}
 
 	public abstract function enqueue(); 
 
 	public abstract function isEnqueued();
 
+	public abstract function isDone();
+
 	public abstract function renderInline();
 
 	public function renderInlineIfNotEnqueued() {
-		if (!$this->isEnqueued())
+		if (!$this->isEnqueued() && !$this->isDone())
 			$this->renderInline();
 	}
 
@@ -44,6 +41,32 @@ abstract class Model_Asset {
 
 	public function register() {
 		return $this->setRegistered();
+	}
+
+	protected function buildSourceUrl($source = null, $version = null, $baseURL = null, $contentURL = null, $defaultVersion = null) {
+		if ($source === null) {
+			$source = $this->source;
+		}
+		if ($version === null) {
+			$version = $this->version;
+		}
+		if (empty($source)) {
+			return null;
+		}
+
+		$url = $source;
+		if (!empty($baseURL) && !preg_match('|^(https?:)?//|', $url) && !( !empty($contentURL) && strpos($url, $contentURL) === 0)) {
+			$url = rtrim($baseURL, '/') . '/' . ltrim($url, '/');
+		}
+
+		if ($version === false) {
+			$version = $defaultVersion;
+		}
+		if (is_scalar($version) && strlen((string) $version)) {
+			$url = add_query_arg('ver', $version, $url);
+		}
+
+		return $url;
 	}
 
 	public static function js($file) {

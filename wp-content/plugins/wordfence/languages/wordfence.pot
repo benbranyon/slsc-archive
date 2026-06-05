@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Wordfence Security 8.2.1\n"
+"Project-Id-Version: Wordfence Security 8.2.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/src\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-06T15:24:36+00:00\n"
+"POT-Creation-Date: 2026-05-13T15:10:39+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wordfence\n"
@@ -1280,7 +1280,7 @@ msgstr ""
 
 #: lib/menu_options.php:155
 #: lib/menu_options.php:165
-#: lib/menu_tools.php:19
+#: lib/menu_tools.php:20
 #: lib/menu_tools_importExport.php:7
 #: lib/menu_tools_importExport.php:13
 #: lib/wfJavascriptBridge.php:530
@@ -1437,7 +1437,7 @@ msgstr ""
 msgid "View Documentation"
 msgstr ""
 
-#: lib/menu_tools.php:14
+#: lib/menu_tools.php:15
 #: lib/menu_tools_twoFactor.php:14
 #: lib/menu_tools_twoFactor.php:23
 #: models/page/wfPage.php:117
@@ -1446,7 +1446,7 @@ msgstr ""
 msgid "Two-Factor Authentication"
 msgstr ""
 
-#: lib/menu_tools.php:16
+#: lib/menu_tools.php:17
 #: lib/wfJavascriptBridge.php:593
 #: lib/wordfenceClass.php:6489
 #: models/page/wfPage.php:119
@@ -1454,7 +1454,7 @@ msgid "Live Traffic"
 msgstr ""
 
 #. translators: preceded by a firewlal action, followed by a URL
-#: lib/menu_tools.php:17
+#: lib/menu_tools.php:18
 #: lib/menu_tools_auditlog.php:16
 #: lib/menu_tools_auditlog.php:22
 #: lib/wfJavascriptBridge.php:162
@@ -1462,7 +1462,7 @@ msgstr ""
 msgid "Audit Log"
 msgstr ""
 
-#: lib/menu_tools.php:18
+#: lib/menu_tools.php:19
 #: lib/menu_tools_whois.php:7
 #: lib/menu_tools_whois.php:16
 #: lib/wfJavascriptBridge.php:1109
@@ -1470,7 +1470,7 @@ msgstr ""
 msgid "Whois Lookup"
 msgstr ""
 
-#: lib/menu_tools.php:20
+#: lib/menu_tools.php:21
 #: lib/menu_tools_diagnostic.php:24
 #: lib/wfDiagnostic.php:1173
 #: lib/wfJavascriptBridge.php:307
@@ -2131,50 +2131,37 @@ msgstr ""
 msgid "To connect your site your site to Wordfence Central, use the link below:"
 msgstr ""
 
-#: lib/rest-api/wfRESTAuthenticationController.php:67
+#: lib/rest-api/wfRESTAuthenticationController.php:62
 msgid "Site is not connected to Wordfence Central."
 msgstr ""
 
-#: lib/rest-api/wfRESTAuthenticationController.php:76
-#: lib/rest-api/wfRESTAuthenticationController.php:130
+#: lib/rest-api/wfRESTAuthenticationController.php:71
 msgid "Data is invalid."
 msgstr ""
 
-#: lib/rest-api/wfRESTAuthenticationController.php:81
-#: lib/rest-api/wfRESTAuthenticationController.php:135
+#: lib/rest-api/wfRESTAuthenticationController.php:76
 msgid "Nonce format is invalid."
 msgstr ""
 
+#: lib/rest-api/wfRESTAuthenticationController.php:81
 #: lib/rest-api/wfRESTAuthenticationController.php:86
-#: lib/rest-api/wfRESTAuthenticationController.php:91
 msgid "Site ID is invalid."
 msgstr ""
 
-#: lib/rest-api/wfRESTAuthenticationController.php:102
-#: lib/rest-api/wfRESTAuthenticationController.php:153
+#: lib/rest-api/wfRESTAuthenticationController.php:97
 msgid "Nonce is invalid."
 msgstr ""
 
-#: lib/rest-api/wfRESTAuthenticationController.php:108
-#: lib/rest-api/wfRESTAuthenticationController.php:159
+#: lib/rest-api/wfRESTAuthenticationController.php:103
 msgid "Signature is invalid."
 msgstr ""
 
-#: lib/rest-api/wfRESTAuthenticationController.php:140
-msgid "Email address is invalid."
-msgstr ""
-
-#: lib/rest-api/wfRESTAuthenticationController.php:179
-msgid "Admin user with this email address not found."
-msgstr ""
-
 #: lib/rest-api/wfRESTBaseController.php:26
-#: lib/rest-api/wfRESTBaseController.php:49
-#: lib/rest-api/wfRESTBaseController.php:81
+#: lib/rest-api/wfRESTBaseController.php:58
 msgid "Token is invalid."
 msgstr ""
 
-#: lib/rest-api/wfRESTBaseController.php:64
+#: lib/rest-api/wfRESTBaseController.php:41
 msgid "Authorization header format is invalid."
 msgstr ""
 
@@ -2187,8 +2174,8 @@ msgid "Specific config options to set."
 msgstr ""
 
 #. translators: Error message.
-#: lib/rest-api/wfRESTConfigController.php:225
-#: lib/rest-api/wfRESTConfigController.php:268
+#: lib/rest-api/wfRESTConfigController.php:220
+#: lib/rest-api/wfRESTConfigController.php:263
 #: lib/wordfenceClass.php:4400
 #: modules/login-security/classes/controller/ajax.php:394
 #, php-format
@@ -2196,29 +2183,29 @@ msgid "An error occurred while saving the configuration: %s"
 msgstr ""
 
 #. translators: Error message.
-#: lib/rest-api/wfRESTConfigController.php:236
-#: lib/rest-api/wfRESTConfigController.php:279
+#: lib/rest-api/wfRESTConfigController.php:231
+#: lib/rest-api/wfRESTConfigController.php:274
 #: lib/wordfenceClass.php:4409
 #: modules/login-security/classes/controller/ajax.php:402
 #, php-format
 msgid "Errors occurred while saving the configuration: %s"
 msgstr ""
 
-#: lib/rest-api/wfRESTConfigController.php:241
-#: lib/rest-api/wfRESTConfigController.php:284
+#: lib/rest-api/wfRESTConfigController.php:236
+#: lib/rest-api/wfRESTConfigController.php:279
 #: lib/wordfenceClass.php:4414
 #: modules/login-security/classes/controller/ajax.php:408
 msgid "Errors occurred while saving the configuration."
 msgstr ""
 
 #. translators: Error message.
-#: lib/rest-api/wfRESTConfigController.php:257
-#: lib/rest-api/wfRESTConfigController.php:298
+#: lib/rest-api/wfRESTConfigController.php:252
+#: lib/rest-api/wfRESTConfigController.php:293
 #, php-format
 msgid "A server error occurred while saving the configuration: %s"
 msgstr ""
 
-#: lib/rest-api/wfRESTConfigController.php:303
+#: lib/rest-api/wfRESTConfigController.php:298
 msgid "Validation error: 'fields' parameter is empty or not an array."
 msgstr ""
 
@@ -2332,41 +2319,41 @@ msgid "Wordfence activity for %1$s on %2$s"
 msgstr ""
 
 #: lib/wfActivityReport.php:586
-#: lib/wordfenceClass.php:8143
+#: lib/wordfenceClass.php:8146
 msgid "Blocked because the IP is blocklisted"
 msgstr ""
 
 #. translators: Reason for firewall action.
 #: lib/wfActivityReport.php:589
-#: lib/wordfenceClass.php:8146
+#: lib/wordfenceClass.php:8149
 #, php-format
 msgid "Blocked for %s"
 msgstr ""
 
 #. translators: 1. Reason for firewall action. 2. Input parameter. 2. Input parameter value.
 #: lib/wfActivityReport.php:601
-#: lib/wordfenceClass.php:8160
+#: lib/wordfenceClass.php:8163
 #, php-format
 msgid "Blocked for %1$s in query string: %2$s = %3$s"
 msgstr ""
 
 #. translators: 1. Reason for firewall action. 2. Input parameter. 2. Input parameter value.
 #: lib/wfActivityReport.php:604
-#: lib/wordfenceClass.php:8165
+#: lib/wordfenceClass.php:8168
 #, php-format
 msgid "Blocked for %1$s in POST body: %2$s = %3$s"
 msgstr ""
 
 #. translators: 1. Reason for firewall action. 2. Input parameter. 2. Input parameter value.
 #: lib/wfActivityReport.php:607
-#: lib/wordfenceClass.php:8170
+#: lib/wordfenceClass.php:8173
 #, php-format
 msgid "Blocked for %1$s in cookie: %2$s = %3$s"
 msgstr ""
 
 #. translators: 1. Reason for firewall action. 2. Input parameter. 2. Input parameter value.
 #: lib/wfActivityReport.php:610
-#: lib/wordfenceClass.php:8175
+#: lib/wordfenceClass.php:8178
 #, php-format
 msgid "Blocked for %1$s in file: %2$s = %3$s"
 msgstr ""
@@ -2383,7 +2370,7 @@ msgstr ""
 #: lib/wfSupportController.php:464
 #: lib/wordfenceClass.php:6167
 #: lib/wordfenceClass.php:6203
-#: lib/wordfenceClass.php:8780
+#: lib/wordfenceClass.php:8783
 #: modules/login-security/classes/model/notice.php:41
 msgid "Dismiss"
 msgstr ""
@@ -7921,7 +7908,7 @@ msgstr ""
 
 #. translators: Localized date.
 #: lib/wfJavascriptBridge.php:664
-#: lib/wordfenceClass.php:8788
+#: lib/wordfenceClass.php:8791
 msgid "Nice work! The firewall is now optimized."
 msgstr ""
 
@@ -8965,8 +8952,8 @@ msgstr ""
 
 #. translators: WordPress username.
 #: lib/wfJavascriptBridge.php:942
-#: lib/wordfenceClass.php:8790
-#: lib/wordfenceClass.php:8806
+#: lib/wordfenceClass.php:8793
+#: lib/wordfenceClass.php:8809
 msgid "The changes have not yet taken effect. If you are using LiteSpeed or IIS as your web server or CGI/FastCGI interface, you may need to wait a few minutes for the changes to take effect since the configuration files are sometimes cached. You also may need to select a different server configuration in order to complete this step, but wait for a few minutes before trying. You can try refreshing this page."
 msgstr ""
 
@@ -9319,12 +9306,12 @@ msgid "Uninstall Wordfence Firewall"
 msgstr ""
 
 #: lib/wfJavascriptBridge.php:1030
-#: lib/wordfenceClass.php:8803
+#: lib/wordfenceClass.php:8806
 msgid "Uninstallation from this site was successful! The Wordfence Firewall is still active because it is installed in another WordPress installation."
 msgstr ""
 
 #: lib/wfJavascriptBridge.php:1031
-#: lib/wordfenceClass.php:8800
+#: lib/wordfenceClass.php:8803
 msgid "Uninstallation was successful!"
 msgstr ""
 
@@ -9829,7 +9816,7 @@ msgid "You forgot to include a reason you're blocking this IP range. We ask you 
 msgstr ""
 
 #: lib/wfJavascriptBridge.php:1161
-#: modules/login-security/classes/controller/wordfencels.php:426
+#: modules/login-security/classes/controller/wordfencels.php:427
 msgid "You have unsaved changes to your options. If you leave this page, those changes will be lost."
 msgstr ""
 
@@ -9900,16 +9887,16 @@ msgstr ""
 
 #. translators: WordPress admin panel URL.
 #: lib/wfJavascriptBridge.php:1275
-#: lib/wordfenceClass.php:6717
-#: lib/wordfenceClass.php:6772
+#: lib/wordfenceClass.php:6720
+#: lib/wordfenceClass.php:6775
 #, php-format
 msgid "<a href=\"%s\">Click here</a> to rebuild the configuration file."
 msgstr ""
 
 #. translators: File path.
 #: lib/wfJavascriptBridge.php:1279
-#: lib/wordfenceClass.php:6728
-#: lib/wordfenceClass.php:6783
+#: lib/wordfenceClass.php:6731
+#: lib/wordfenceClass.php:6786
 #, php-format
 msgid "We were unable to write to %s which the WAF uses for storage. Please update permissions on the parent directory so the web server can write to it."
 msgstr ""
@@ -11905,9 +11892,9 @@ msgstr ""
 #: lib/wordfenceClass.php:4511
 #: lib/wordfenceClass.php:5047
 #: lib/wordfenceClass.php:5078
-#: lib/wordfenceClass.php:7206
-#: lib/wordfenceClass.php:7241
-#: lib/wordfenceClass.php:7302
+#: lib/wordfenceClass.php:7209
+#: lib/wordfenceClass.php:7244
+#: lib/wordfenceClass.php:7305
 msgid "We could not find that issue in our database."
 msgstr ""
 
@@ -12388,50 +12375,50 @@ msgstr ""
 msgid "Malware URLs"
 msgstr ""
 
-#: lib/wordfenceClass.php:6738
-#: lib/wordfenceClass.php:6793
+#: lib/wordfenceClass.php:6741
+#: lib/wordfenceClass.php:6796
 msgid "An error occured when fetching the WAF configuration from the database."
 msgstr ""
 
 #. translators: Plugin name.
-#: lib/wordfenceClass.php:6815
+#: lib/wordfenceClass.php:6818
 #, php-format
 msgid "The Wordfence Live Traffic feature has been disabled because you have %s active which is not compatible with Wordfence Live Traffic."
 msgstr ""
 
 #. translators: 1. Plugin name.
-#: lib/wordfenceClass.php:6817
+#: lib/wordfenceClass.php:6820
 #, php-format
 msgid "If you want to reenable Wordfence Live Traffic, you need to deactivate %1$s and then go to the Wordfence options page and reenable Live Traffic there. Wordfence does work with %1$s, however Live Traffic will be disabled and the Wordfence firewall will also count less hits per visitor because of the %1$s caching function. All other functions should work correctly."
 msgstr ""
 
 #. translators: File path.
-#: lib/wordfenceClass.php:6899
+#: lib/wordfenceClass.php:6902
 #, php-format
 msgid "The file <code>%s</code> was restored successfully."
 msgstr ""
 
-#: lib/wordfenceClass.php:6904
+#: lib/wordfenceClass.php:6907
 msgid "There was an error restoring the file."
 msgstr ""
 
-#: lib/wordfenceClass.php:6914
-#: lib/wordfenceClass.php:6937
+#: lib/wordfenceClass.php:6917
+#: lib/wordfenceClass.php:6940
 msgid "Return to scan results"
 msgstr ""
 
 #. translators: File path.
-#: lib/wordfenceClass.php:6923
+#: lib/wordfenceClass.php:6926
 #, php-format
 msgid "The file <code>%s</code> was deleted successfully."
 msgstr ""
 
-#: lib/wordfenceClass.php:6927
+#: lib/wordfenceClass.php:6930
 msgid "There was an error deleting the file."
 msgstr ""
 
 #. translators: IP address.
-#: lib/wordfenceClass.php:7032
+#: lib/wordfenceClass.php:7035
 #, php-format
 msgid ""
 "User IP: %s\n"
@@ -12439,221 +12426,221 @@ msgid ""
 msgstr ""
 
 #. translators: Domain name.
-#: lib/wordfenceClass.php:7035
+#: lib/wordfenceClass.php:7038
 #, php-format
 msgid ""
 "User hostname: %s\n"
 ""
 msgstr ""
 
-#: lib/wordfenceClass.php:7039
+#: lib/wordfenceClass.php:7042
 msgid "User location: "
 msgstr ""
 
-#: lib/wordfenceClass.php:7066
+#: lib/wordfenceClass.php:7069
 msgid "Wordfence Alert"
 msgstr ""
 
-#: lib/wordfenceClass.php:7068
+#: lib/wordfenceClass.php:7071
 msgid "Email Limit Reached"
 msgstr ""
 
 #. translators: %d: maximum alerts per hour
-#: lib/wordfenceClass.php:7069
+#: lib/wordfenceClass.php:7072
 #, php-format
 msgid "Wordfence is configured to send no more than %d alert(s) each hour. That limit has been reached and no further emails will be sent this hour."
 msgstr ""
 
 #. translators: URL to the WordPress admin panel.
-#: lib/wordfenceClass.php:7086
+#: lib/wordfenceClass.php:7089
 #, php-format
 msgid "No longer an administrator for this site? Click here to stop receiving security alerts: %s"
 msgstr ""
 
-#: lib/wordfenceClass.php:7127
+#: lib/wordfenceClass.php:7130
 msgid "The IP you provided must be in dotted quad notation or use ranges with square brackets. e.g. 10.11.12.13 or 10.11.12.[1-50]"
 msgstr ""
 
-#: lib/wordfenceClass.php:7146
+#: lib/wordfenceClass.php:7149
 msgid "Invalid email address provided"
 msgstr ""
 
-#: lib/wordfenceClass.php:7151
+#: lib/wordfenceClass.php:7154
 msgid "Test email sent successfully"
 msgstr ""
 
-#: lib/wordfenceClass.php:7152
+#: lib/wordfenceClass.php:7155
 msgid "Test email failed to send"
 msgstr ""
 
 #. translators: Localized date range.
-#: lib/wordfenceClass.php:7170
+#: lib/wordfenceClass.php:7173
 #, php-format
 msgid "Wordfence activity in the past %s"
 msgstr ""
 
-#: lib/wordfenceClass.php:7210
-#: lib/wordfenceClass.php:7214
-#: lib/wordfenceClass.php:7245
-#: lib/wordfenceClass.php:7272
-#: lib/wordfenceClass.php:7276
+#: lib/wordfenceClass.php:7213
+#: lib/wordfenceClass.php:7217
+#: lib/wordfenceClass.php:7248
+#: lib/wordfenceClass.php:7275
+#: lib/wordfenceClass.php:7279
 msgid "We could not find that user in the database."
 msgstr ""
 
-#: lib/wordfenceClass.php:7218
+#: lib/wordfenceClass.php:7221
 msgid "This user's email is the network admin email. It will need to be changed before deleting this user."
 msgstr ""
 
-#: lib/wordfenceClass.php:7268
+#: lib/wordfenceClass.php:7271
 msgid "We could not find that issue in the database."
 msgstr ""
 
-#: lib/wordfenceClass.php:7311
+#: lib/wordfenceClass.php:7314
 msgid "Wordfence could not find your .htaccess file."
 msgstr ""
 
-#: lib/wordfenceClass.php:7327
+#: lib/wordfenceClass.php:7330
 msgid "Updating the .htaccess did not fix the issue. You may need to add <code>Options -Indexes</code> to your httpd.conf if using Apache, or find documentation on how to disable directory listing for your web server."
 msgstr ""
 
-#: lib/wordfenceClass.php:7333
+#: lib/wordfenceClass.php:7336
 msgid "There was an error writing to your .htaccess file."
 msgstr ""
 
-#: lib/wordfenceClass.php:7412
+#: lib/wordfenceClass.php:7415
 msgid "Required parameters not sent."
 msgstr ""
 
-#: lib/wordfenceClass.php:7614
+#: lib/wordfenceClass.php:7617
 msgid "Allowlisted via Live Traffic"
 msgstr ""
 
-#: lib/wordfenceClass.php:7721
-#: lib/wordfenceClass.php:7802
+#: lib/wordfenceClass.php:7724
+#: lib/wordfenceClass.php:7805
 msgid "A valid server configuration was not provided."
 msgstr ""
 
-#: lib/wordfenceClass.php:7888
+#: lib/wordfenceClass.php:7891
 msgid "Extended Protection Mode has not been disabled. This may be because <code>auto_prepend_file</code> is configured somewhere else or the value is still cached by PHP."
 msgstr ""
 
 #. translators: 1. Number of attacks/blocks. 2. Time since.
-#: lib/wordfenceClass.php:8126
+#: lib/wordfenceClass.php:8129
 #, php-format
 msgid "The Wordfence Web Application Firewall has blocked %1$d attacks over the last %2$s."
 msgstr ""
 
-#: lib/wordfenceClass.php:8131
+#: lib/wordfenceClass.php:8134
 msgid "Wordfence is blocking these attacks, and we're sending this notice to make you aware that there is a higher volume of the attacks than usual. Additionally, the Wordfence Real-Time IP Blocklist can block known attackers' IP addresses automatically for Premium users, including any probing requests that may not be malicious on their own. All Wordfence users can also opt to block the attacking IPs manually if desired. As always, be sure to watch your scan results and keep your plugins, themes and WordPress core version updated."
 msgstr ""
 
-#: lib/wordfenceClass.php:8133
+#: lib/wordfenceClass.php:8136
 msgid "Below is a sample of these recent attacks:"
 msgstr ""
 
 #. translators: Dashboard URL
-#: lib/wordfenceClass.php:8757
+#: lib/wordfenceClass.php:8760
 #, php-format
 msgid "An error was detected with this site's configuration that is preventing a successful connection to Wordfence Central. Disconnecting from Central <a href=\"%s\">on the Wordfence Dashboard</a> and reconnecting may resolve it. If the issue persists, please contact Wordfence support."
 msgstr ""
 
 #. translators: %d maximum alerts per hour
-#: lib/wordfenceClass.php:8768
+#: lib/wordfenceClass.php:8771
 #, php-format
 msgid "The rate limit for alert emails of %d alert(s) per hour from Wordfence has been reached. No alerts will be sent for the remainer of the hour."
 msgstr ""
 
-#: lib/wordfenceClass.php:8774
+#: lib/wordfenceClass.php:8777
 msgid "To make your site as secure as possible, take a moment to optimize the Wordfence Web Application Firewall:"
 msgstr ""
 
-#: lib/wordfenceClass.php:8777
+#: lib/wordfenceClass.php:8780
 msgid "Optimizing the Wordfence Web Application Firewall may not be possible in the current environment. Some firewall rules cannot offer full protection on your hosting platform, but many will still work. You can attempt to configure the firewall if you believe the platform has been misidentified."
 msgstr ""
 
-#: lib/wordfenceClass.php:8779
+#: lib/wordfenceClass.php:8782
 msgid "Click here to configure"
 msgstr ""
 
 #. translators: Support URL.
-#: lib/wordfenceClass.php:8782
+#: lib/wordfenceClass.php:8785
 #, php-format
 msgid "If you cannot complete the setup process, <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"%s\">click here for help<span class=\"screen-reader-text\"> (opens in new tab)</span></a>."
 msgstr ""
 
 #. translators: Help URL.
-#: lib/wordfenceClass.php:8795
+#: lib/wordfenceClass.php:8798
 #, php-format
 msgid "The Wordfence Assistant plugin is currently installed. It should only be retained during use and should be removed once it's no longer needed. <a href=\"%s\" target=\"_blank\">Click here to learn more.</a>"
 msgstr ""
 
-#: lib/wordfenceClass.php:8811
+#: lib/wordfenceClass.php:8814
 msgid "The update was successful!"
 msgstr ""
 
-#: lib/wordfenceClass.php:8958
+#: lib/wordfenceClass.php:8961
 msgid "Auth grant is invalid."
 msgstr ""
 
-#: lib/wordfenceClass.php:8976
-#: lib/wordfenceClass.php:9065
+#: lib/wordfenceClass.php:8979
+#: lib/wordfenceClass.php:9068
 msgid "Internal error when connecting to Wordfence Central (see server error log)"
 msgstr ""
 
 #. translators: Error message.
-#: lib/wordfenceClass.php:8987
+#: lib/wordfenceClass.php:8990
 #, php-format
 msgid "Invalid response from Wordfence Central: %s"
 msgstr ""
 
 #. translators: JSON property.
-#: lib/wordfenceClass.php:8993
-#: lib/wordfenceClass.php:9006
+#: lib/wordfenceClass.php:8996
+#: lib/wordfenceClass.php:9009
 #, php-format
 msgid "Invalid response from Wordfence Central. Parameter %s not found in response."
 msgstr ""
 
-#: lib/wordfenceClass.php:9035
-#: lib/wordfenceClass.php:9216
+#: lib/wordfenceClass.php:9038
+#: lib/wordfenceClass.php:9219
 msgid "Access token not found."
 msgstr ""
 
-#: lib/wordfenceClass.php:9094
-#: lib/wordfenceClass.php:9176
+#: lib/wordfenceClass.php:9097
+#: lib/wordfenceClass.php:9179
 msgid "Invalid response from Wordfence Central."
 msgstr ""
 
-#: lib/wordfenceClass.php:9152
+#: lib/wordfenceClass.php:9155
 msgid "Auth grant not found."
 msgstr ""
 
 #. translators: site URL
-#: lib/wordfenceClass.php:9258
+#: lib/wordfenceClass.php:9261
 #, php-format
 msgid "The current site URL does not match the Wordfence Central connection information. Local connection information has been removed, but %s is still registered in Wordfence Central."
 msgstr ""
 
-#: lib/wordfenceClass.php:9264
+#: lib/wordfenceClass.php:9267
 msgid "Unable to communicate with Wordfence Central"
 msgstr ""
 
-#: lib/wordfenceClass.php:9482
+#: lib/wordfenceClass.php:9485
 msgid "We were unable to create the <code>wordfence-waf.php</code> file in the root of the WordPress installation. It's possible WordPress cannot write to the <code>wordfence-waf.php</code> file because of file permissions. Please verify the permissions are correct and retry the installation."
 msgstr ""
 
-#: lib/wordfenceClass.php:9574
-#: lib/wordfenceClass.php:9645
+#: lib/wordfenceClass.php:9577
+#: lib/wordfenceClass.php:9648
 msgid "We were unable to make changes to the .htaccess file. It's possible WordPress cannot write to the .htaccess file because of file permissions, which may have been set by another security plugin, or you may have set them manually. Please verify the permissions allow the web server to write to the file, and retry the installation."
 msgstr ""
 
 #. translators: File path.
-#: lib/wordfenceClass.php:9615
-#: lib/wordfenceClass.php:9663
+#: lib/wordfenceClass.php:9618
+#: lib/wordfenceClass.php:9666
 #, php-format
 msgid "We were unable to make changes to the %1$s file. It's possible WordPress cannot write to the %1$s file because of file permissions. Please verify the permissions are correct and retry the installation."
 msgstr ""
 
-#: lib/wordfenceClass.php:9679
+#: lib/wordfenceClass.php:9682
 msgid "We were unable to remove the <code>wordfence-waf.php</code> file in the root of the WordPress installation. It's possible WordPress cannot remove the <code>wordfence-waf.php</code> file because of file permissions. Please verify the permissions are correct and retry the removal."
 msgstr ""
 

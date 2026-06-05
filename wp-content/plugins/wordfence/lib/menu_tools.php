@@ -3,6 +3,7 @@ if (!defined('WORDFENCE_VERSION')) { exit; }
 /**
  * @var string $subpage
  * @var string $content
+ * @var array $wrap
  */
 ?>
 <?php if (!wfOnboardingController::shouldShowAttempt3() && wfConfig::get('touppPromptNeeded')): ?>
@@ -31,7 +32,7 @@ echo wfView::create('common/page-fixed-tabbar', array(
 				'tabs' => $tabs,
 ))->render();
 ?>
-<div class="wrap wordfence">
+<div class="wrap wordfence <?php echo esc_attr(implode(' ', $wrap)); ?>">
 	<div class="wf-container-fluid">
 		<div class="wf-row">
 			<div class="<?php echo wfStyle::contentClasses(); ?>">

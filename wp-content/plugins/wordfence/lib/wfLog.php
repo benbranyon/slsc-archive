@@ -781,17 +781,18 @@ class wfLog {
 		//$msg = '[' . sprintf('%.2f', memory_get_usage(true) / (1024 * 1024)) . '] ' . $msg;
 		$this->getDB()->queryWrite("insert into " . $this->statusTable . " (ctime, level, type, msg) values (%s, %d, '%s', '%s')", sprintf('%.6f', microtime(true)), $level, $type, $msg);
 	}
-	public function getStatusEvents($lastCtime){
-		if($lastCtime < 1){
-			$lastCtime = $this->getDB()->querySingle("select ctime from " . $this->statusTable . " order by ctime desc limit 1000,1");
-			if(! $lastCtime){
-				$lastCtime = 0;
+	public function getStatusEvents($lastID){
+		if($lastID < 1){
+			$lastID = $this->getDB()->querySingle("select id from " . $this->statusTable . " order by id desc limit 1000,1");
+			if(! $lastID){
+				$lastID = 0;
 			}
 		}
-		$results = $this->getDB()->querySelect("select ctime, level, type, msg from " . $this->statusTable . " where ctime > %f order by ctime asc", $lastCtime);
+		$results = $this->getDB()->querySelect("select id, ctime, level, type, msg from " . $this->statusTable . " where id > %d order by id asc", $lastID);
 		$timeOffset = 3600 * get_option('gmt_offset');
 		foreach($results as &$rec){
 			//$rec['timeAgo'] = wfUtils::makeTimeAgo(time() - $rec['ctime']);
+			$rec['id'] = (int) $rec['id'];
 			$rec['ctime'] = (float) $rec['ctime'];
 			$rec['level'] = (int) $rec['level'];
 			$rec['date'] = date('M d H:i:s', (int) $rec['ctime'] + $timeOffset);
