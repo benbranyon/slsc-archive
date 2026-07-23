@@ -116,11 +116,6 @@ class Folder {
 		$wpdb->query( "DELETE FROM {$wpdb->prefix}fbv WHERE created_by = " . (int) $author );
 	}
 
-	public static function rawInsert( $query ) {
-		global $wpdb;
-		$wpdb->query( 'INSERT INTO ' . self::getTable( self::$folder_table ) . ' ' . $query );
-	}
-
 	public static function getFoldersOfPost( $post_id ) {
 		global $wpdb;
 		return $wpdb->get_col( 'SELECT `folder_id` FROM ' . self::getTable( self::$relation_table ) . ' WHERE `attachment_id` = ' . (int) $post_id . ' GROUP BY `folder_id`' );
@@ -254,7 +249,8 @@ class Folder {
 	public static function assignFolder( int $folderId, array $attachmentIds, string $lang ) {
         global $wpdb;
 
-        $ids = implode( ',', $attachmentIds );
+		$ids = array_map( 'intval', $attachmentIds );
+        $ids = implode( ',', $ids );
 
         // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
         $cleanQuery = $wpdb->prepare(

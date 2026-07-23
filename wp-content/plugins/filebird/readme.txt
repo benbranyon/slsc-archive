@@ -4,7 +4,7 @@ Donate link: https://ninjateam.org/wordpress-media-library-folders/
 Tags: wordpress media library folders, organization, media, media folders, file manager
 Requires at least: 3.0
 Tested up to: 7.0
-Stable tag: 6.5.4
+Stable tag: 6.5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,9 +12,9 @@ Organize thousands of WordPress media files in folders / categories with ease.
 
 == Description ==
 
-**#1 Best plugin of all time to categorize WordPress media library with folders.**
+**The #1 WordPress plugin to organize your media library with folders.**
 
-✨**NEW!** Let's organize WordPress pages & posts using a drag and drop organizer.
+✨**NEW:** Organize WordPress pages and posts too, with the same drag-and-drop folders you already use for media.
 
 [**TEST DRIVE**](https://media-folder.ninjateam.org/create/) | [**GO PRO (Lifetime License)**](https://1.envato.market/FileBird-Premium) 💎
 
@@ -22,7 +22,7 @@ FileBird transforms your WordPress media library with intuitive folder organizat
 
 The free version allows you to create **unlimited main folders** and **subfolders**.
 
-📌 [Addons](https://ninjateam.org/downloads/filebird-cloud-integration-dropbox-and-google-drive/?utm_source=wp-org&utm_medium=filebird-addons) | [Compare FileBird Free vs Pro](https://ninjateam.gitbook.io/filebird/compare-filebird-free-and-pro)
+📌 [FileBird Cloud Extension](https://ninjateam.org/downloads/filebird-cloud-integration-dropbox-and-google-drive/?utm_source=wp-org&utm_medium=filebird-addons) | [Compare FileBird Free vs Pro](https://ninjateam.gitbook.io/filebird/compare-filebird-free-and-pro)
 
 [youtube https://www.youtube.com/watch?v=NjeEbqmMVwU]
 
@@ -182,6 +182,15 @@ No, it makes no changes to your images on the site's front end.
 = If I create a folder or category, does this override the default WordPress path `wp-content/uploads/`? =
 No, it does not. The plugin helps organize files into folders visually. Every file permalink/URL remains unchanged.
 
+= Can I migrate my existing folders from another plugin? =
+Yes. FileBird automatically detects and imports folder structures from Enhanced Media Library, WP Media Folder by JoomUnited, WordPress Media Library Folders by Max Foundry, Real Media Library, HappyFiles, and a few others. Your files stay in their folders after the switch without manual re-sorting.
+
+= Can I use folders for pages, posts, or WooCommerce products? =
+Yes. The free version includes basic folder support for posts and pages (one folder level). Deeper organization, including WooCommerce products, coupons, and other custom post types, plus multi-level folders for posts/pages, is available in FileBird Pro.
+
+= Is FileBird compatible with my page builder or theme? =
+FileBird's free version works inside the core Media Library, Elementor free version and block editor. Deeper integrations with page builders and themes (Elementor Pro, Divi, Avada, Beaver Builder, WPBakery, and others) are part of FileBird Pro. Check the [compatibility list](https://ninjateam.gitbook.io/filebird/compare-filebird-free-and-pro) for the full breakdown.
+
 = What happens to my site if I uninstall FileBird? =
 No worries, your website will be completely unaffected. Upon deactivation, all your files can be found in the default WordPress media library.
 
@@ -190,9 +199,6 @@ You can reach us here [https://ninjateam.org/support/](https://ninjateam.org/sup
 
 = Why should I buy the premium plugin? =
 If you wish to use FileBird folders in all premium page builders, you can [upgrade to FileBird PRO](https://codecanyon.net/item/media-folders-manager-for-wordpress/21715379?irgwc=1&clickid=ynBwuiXfXxyORfPwUx0Mo3QWUkiVPZQJY3UNU00&iradid=275988&irpid=418490&iradtype=ONLINE_TRACKING_LINK&irmptype=mediapartner&mp_value1=&utm_campaign=af_impact_radius_418490&utm_medium=affiliate&utm_source=impact_radius). Premium features include advanced sort & filtering for both files and folders, [download entire media folders](https://ninjateam.org/download-wordpress-media-library/), more themes, plugins & page builders supported.
-
-= Is that a one-time payment for FileBird Pro?
-Yes! FileBird lifetime license costs you a **one-time** fee, you can use it on a single site, and get unlimited updates.
 
 Happy Organizing! 😍
 
@@ -207,6 +213,9 @@ Happy Organizing! 😍
 8. FileBird gallery block settings
 
 == Changelog ==
+
+= Jun 19, 2026 - Version 6.5.5 =
+- Fixed: Compatibility issue with Admin Column (Pro version)
 
 = May 22, 2026 – Version 6.5.4 =
 - Fixed: UI issues in WordPress 7.0
