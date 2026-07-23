@@ -2,9 +2,9 @@
 # This file is distributed under the GPL-3.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: Disable Comments 2.7.0\n"
+"Project-Id-Version: Disable Comments 2.7.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/disable-comments\n"
-"POT-Creation-Date: 2026-04-05 06:41:05+00:00\n"
+"POT-Creation-Date: 2026-07-22 10:08:39+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -746,7 +746,11 @@ msgstr ""
 msgid "Disable Comment For WordPress Media Files"
 msgstr ""
 
-#: views/partials/_sidebar.php:129
+#: views/partials/_sidebar.php:141
+msgid "How To Exclude Disable Comments Settings Based On User Roles"
+msgstr ""
+
+#: views/partials/_sidebar.php:152
 msgid "Disable Comments For WordPress Pages"
 msgstr ""
 
